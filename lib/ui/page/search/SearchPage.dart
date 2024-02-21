@@ -272,11 +272,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                               Center(
                                 child: Column(
                                   children: <Widget>[
-                                    ElevatedButton(
-                                      //style: style,
-                                      onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
-                                      child: const Text('New Group Goal'),
-                                    ),
+
                                     Center(
                                         child: ListView.separated(
                                           scrollDirection: Axis.vertical,

@@ -12,6 +12,7 @@ import 'package:flutter_twitter_clone/ui/page/message/conversationInformation/co
 import 'package:flutter_twitter_clone/ui/page/message/newMessagePage.dart';
 import 'package:flutter_twitter_clone/ui/page/profile/follow/followerListPage.dart';
 import 'package:flutter_twitter_clone/ui/page/search/SearchPage.dart';
+import 'package:flutter_twitter_clone/ui/page/search/Search1.dart';
 import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/about/aboutTwitter.dart';
 import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/accessibility/accessibility.dart';
 import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/accountSettingsPage.dart';
@@ -118,6 +119,9 @@ class Routes {
       case "SearchPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => SearchPage());
+      case "Search1Page":
+        return CustomRoute<bool>(
+            builder: (BuildContext context) => Search1Page());
       /*case "ImageViewPge":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const ImageViewPge());*/

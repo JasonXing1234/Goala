@@ -19,6 +19,7 @@ import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
 import 'package:flutter_twitter_clone/ui/page/feed/suggestedUsers.dart';
 import 'package:flutter_twitter_clone/ui/page/message/chatListPage.dart';
 import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
+import 'package:flutter_twitter_clone/ui/page/search/Search1.dart';
 import 'package:flutter_twitter_clone/widgets/bottomMenuBar/bottomMenuBar.dart';
 import 'package:provider/provider.dart';
 
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
           refreshIndicatorKey: refreshIndicatorKey,
         );
       case 2:
-        return NotificationPage(scaffoldKey: _scaffoldKey);
+        return Search1Page(scaffoldKey: _scaffoldKey);
       case 3:
         return ChatListPage(scaffoldKey: _scaffoldKey);
       default:

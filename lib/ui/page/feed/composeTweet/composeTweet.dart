@@ -188,7 +188,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
         isGroupGoal: false,
         title: _titleController.text,
         description: _descriptionController.text,
-        dueDateTime: '',
         lanCode:
             (await GoogleTranslator().translate(_descriptionController.text))
                 .sourceLanguage
@@ -206,7 +205,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
             : widget.isRetweet
                 ? model!.key
                 : null,
-        userId: myUser.userId!);
+        userId: myUser.userId!, isCheckedIn: false, isPrivate: false, checkInList: [false]);
     return reply;
   }
 
