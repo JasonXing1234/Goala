@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_twitter_clone/helper/constant.dart';
@@ -20,6 +21,15 @@ import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_database/firebase_database.dart';
+import '../../../../state/authState.dart';
+import '../../../../state/authState.dart';
+import '../../../RoundedButton.dart';
+import '../../../constants.dart';
+>>>>>>> Stashed changes
 
 class ComposeTweetPage extends StatefulWidget {
   const ComposeTweetPage(
@@ -180,6 +190,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
         isGroupGoal: false,
+        isPrivate: false,
         title: _titleController.text,
         description: _descriptionController.text,
         lanCode:
@@ -199,7 +210,10 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
             : widget.isRetweet
                 ? model!.key
                 : null,
-        userId: myUser.userId!);
+        userId: myUser.userId!,
+        isCheckedIn: false,
+        checkInList: [false]
+    );
     return reply;
   }
 
@@ -401,63 +415,11 @@ class _ComposeTweet
       children: <Widget>[
         Stack(
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(left: 30),
-              margin: const EdgeInsets.only(left: 20, top: 20, bottom: 3),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 2.0,
-                    color: Colors.grey.shade400,
-                  ),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: context.width - 72,
-                    child: UrlText(
-                      text: viewState.model!.description ?? '',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      urlStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  UrlText(
-                    text:
-                        'Replying to ${viewState.model!.user!.userName ?? viewState.model!.user!.displayName}',
-                    style: TextStyle(
-                      color: TwitterColor.paleSky,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CircularImage(
-                    path: viewState.model!.user!.profilePic, height: 40),
-                const SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints:
-                      BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
-                  child: TitleText(viewState.model!.user!.displayName!,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      overflow: TextOverflow.ellipsis),
-                ),
+
                 const SizedBox(width: 3),
                 viewState.model!.user!.isVerified!
                     ? customIcon(
@@ -496,9 +458,6 @@ class _ComposeTweet
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          viewState.widget.isTweet
-              ? const SizedBox.shrink()
-              : _tweetCard(context),
           /*Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

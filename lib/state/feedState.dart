@@ -497,6 +497,16 @@ class FeedState extends AppState {
   Future<void> updateTweet(FeedModel model) async {
     await kDatabase.child('tweet').child(model.key!).set(model.toJson());
   }
+  Future<void> addPhoto(FeedModel model, String? url) async {
+    List tempString = [];
+    if(model.goalPhotoList != null) {
+      tempString = model.goalPhotoList!;
+    }
+    tempString.add(url);
+    await kDatabase.child('tweet').child(model.key!).update({
+      'goalPhotoList': tempString,
+    });
+  }
 
   /// Add/Remove like on a Tweet
   /// [postId] is tweet id, [userId] is user's id who like/unlike Tweet

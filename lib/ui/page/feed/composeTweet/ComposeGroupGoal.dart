@@ -20,6 +20,13 @@ import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import '../../../../state/profile_state.dart';
+import '../../../RoundedButton.dart';
+import '../../../constants.dart';
+>>>>>>> Stashed changes
 
 class ComposeGroupGoal extends StatefulWidget {
   const ComposeGroupGoal(
@@ -184,7 +191,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
         userName: authState.userModel!.userName);
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
+        isCheckedIn: false,
         isGroupGoal: true,
+        isPrivate: false,
         title: _titleController.text,
         description: _descriptionController.text,
         lanCode:
@@ -205,7 +214,13 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
             : widget.isRetweet
             ? model!.key
             : null,
+<<<<<<< Updated upstream
         userId: myUser.userId!);
+=======
+        userId: myUser.userId!,
+        dueDateTime: '',
+        checkInList: [false]);
+>>>>>>> Stashed changes
     return reply;
   }
 
@@ -531,9 +546,187 @@ class _ComposeTweet
           TextField(
             controller: viewState._descriptionController,
           ),
+<<<<<<< Updated upstream
           Text('Add User'),
           TextField(
             controller: viewState._addUserController,
+=======
+
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+            title:Center(child: Text('Add User'),),
+            children:[
+
+              /*MultiSelectBottomSheetField<UserModel?>(
+                key: _multiSelectKey,
+                initialChildSize: 0.7,
+                maxChildSize: 0.95,
+                title: Text("Friends"),
+                buttonText: Text("Your Friends"),
+                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
+                searchable: true,
+                validator: (values) {
+                  if (values == null || values.isEmpty) {
+                    return "Required";
+                  }
+                  List<String> names = values.map((e) => e!.userName!).toList();
+                  if (names.contains("Frog")) {
+                    return "Frogs are weird!";
+                  }
+                  return null;
+                },
+                onConfirm: (values) {
+                  List<String> temp = [];
+                  for(int i = 0; i < values.length; i++) {
+                     temp.add(values[i]!.userId!);
+                  }
+                    viewState.memberListTemp.addAll(temp);
+                  _multiSelectKey.currentState?.validate();
+                },
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (item) {
+                    viewState.memberListTemp.remove(item!.userId);
+                    _multiSelectKey.currentState?.validate();
+                  },
+                ),
+              ),*/
+              SizedBox(height: 40),
+              MultiSelectChipField<UserModel?>(
+                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend!.userName!)).toList(),
+                //initialValue: [_animals[4], _animals[7], _animals[9]],
+                title: Text("Friends"),
+                headerColor: Colors.black.withOpacity(0.5),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blue, width: 1.8),
+                ),
+                selectedChipColor: Colors.blue.withOpacity(0.5),
+                selectedTextStyle: TextStyle(color: Colors.blue[800]),
+                onTap: (values) {
+                  List<String> temp = [];
+                  for(int i = 0; i < values.length; i++) {
+                    temp.add(values[i]!.userId!);
+                    if(authState.userModel?.closenessMap == null){
+                      List<String?> tempList = [];
+                      tempList.add(values[i]!.userId! + ' ' + 1.toString());
+                      kDatabase
+                          .child('profile')
+                          .child(authState.userModel!.userId!)
+                          .child('closenessMap')
+                          .set(tempList);
+                      cprint('user added to following list', event: 'add_follow');
+                    }
+                    else {
+                      String tempString = authState.userModel!.closenessMap!
+                          .firstWhere((element) =>
+                          element.contains(values[i]!.userId!));
+                      int tempIndex = authState.userModel!.closenessMap!
+                          .indexWhere((element) =>
+                          element.contains(values[i]!.userId!));
+                      String uid = tempString.split(' ')[0];
+                      String closeness = tempString.split(' ')[1];
+                      closeness = (int.parse(closeness) + 1).toString();
+                      authState.userModel!.closenessMap![tempIndex] =
+                          uid + ' ' + closeness;
+                      kDatabase
+                          .child('profile')
+                          .child(authState.userModel!.userId!)
+                          .child('closenessMap')
+                          .set(authState.userModel!.closenessMap);
+                      cprint(
+                          'user added to following list', event: 'add_follow');
+                    }
+                  }
+                  viewState.memberListTemp.addAll(temp);
+                  _multiSelectKey.currentState?.validate();
+                },
+              ),
+              SizedBox(height: 40),
+
+            ]),
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:
+                Center(child: Text('Time'),),
+              children: [
+                SizedBox(
+                    height:20
+                ),
+                TabBar(
+                  labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                  controller: viewState._tabController,
+                  // give the indicator a decoration (color and border radius)
+                  indicator: BoxDecoration(
+
+                    borderRadius: BorderRadius.circular(
+                      9.0,
+                    ),
+                    color: Colors.black,
+                  ),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black,
+                  tabs: [
+                    Container(
+                      width: 300,
+                      child: Center(
+                        child:Text("Daily"),
+                      ),
+                    ),
+                    Container(
+                      width: 300,
+                      child: Center(child:
+                      Text("Weekly"),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                    height:20
+                ),
+                SizedBox(
+                  height: 100,
+                  child:
+                  TabBarView(
+                    controller: viewState._tabController,
+                    children: <Widget>[
+                      RoundedButton(
+                        color: Colors.black,
+                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        action: () async {
+                          TimeOfDay? newDate = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+
+                          );
+                          if (newDate == null) return;
+
+                        },
+                      ),
+                      RoundedButton(
+                        color: Colors.black,
+                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        action: () async {
+                          TimeOfDay? newDate = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+
+                          );
+                          if (newDate == null) return;
+
+                        },
+                      ),
+                    ],
+                  ),),
+                SizedBox(
+                  height: 20,
+                )
+              ]
+>>>>>>> Stashed changes
           ),
           Flexible(
             child: Stack(

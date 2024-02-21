@@ -436,7 +436,12 @@ class TweetBottomSheet {
                 userName: authState.userModel!.userName);
             // Prepare current Tweet model to reply
             FeedModel post = FeedModel(
+                isPrivate: false,
                 isGroupGoal: false,
+<<<<<<< Updated upstream
+=======
+                isCheckedIn: false,
+>>>>>>> Stashed changes
                 childRetwetkey: model.getTweetKeyToRetweet,
                 createdAt: DateTime.now().toUtc().toString(),
                 user: myUser,

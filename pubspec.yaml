@@ -22,6 +22,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  cron: ^0.6.0
   cupertino_icons: ^1.0.3
   dartz: ^0.10.0
   get_it: ^7.2.0
@@ -52,6 +53,7 @@ dependencies:
   translator: ^0.1.7
   firebase_core: ^2.24.2
   raised_buttons: ^0.0.2
+  cloud_functions: ^4.6.5
   # link_preview_generator: ^1.2.0
 
 dev_dependencies:
@@ -104,6 +106,21 @@ flutter:
     - family: TwitterIcon
       fonts:
         - asset: assets/fonts/icons.ttf
+<<<<<<< Updated upstream
+=======
+    - family: MyFlutterApp
+      fonts:
+        - asset: assets/fonts/MyFlutterApp.ttf
+    - family: BottomBar
+      fonts:
+        - asset: assets/fonts/BottomBar.ttf
+    - family: Search
+      fonts:
+        - asset: assets/fonts/Search.ttf
+    - family: Human
+      fonts:
+        - asset: assets/fonts/Human.ttf
+>>>>>>> Stashed changes
     - family: HelveticaNeue
       fonts:
         - asset: assets/fonts/HelveticaNeue.ttf

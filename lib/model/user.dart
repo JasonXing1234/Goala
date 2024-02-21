@@ -19,6 +19,7 @@ class UserModel extends Equatable {
   int? followers;
   int? following;
   int? groups;
+  List<String>? closenessMap;
   String? fcmToken;
   List<String>? followersList;
   List<String>? followingList;
@@ -46,7 +47,8 @@ class UserModel extends Equatable {
       this.followersList,
       this.followingList,
         this.grouplist,
-        this.groups
+        this.groups,
+        this.closenessMap
 
       });
 
@@ -79,6 +81,12 @@ class UserModel extends Equatable {
         followersList!.add(value);
       });
     }
+    if (map['closenessMap'] != null) {
+      closenessMap = <String>[];
+      map['closenessMap'].forEach((value) {
+        closenessMap!.add(value);
+      });
+    }
     followers = followersList != null ? followersList!.length : null;
     if (map['followerList'] != null) {
       followersList = <String>[];
@@ -88,7 +96,7 @@ class UserModel extends Equatable {
     }
     followers = followersList != null ? followersList!.length : null;
     if (map['grouplist'] != null) {
-      followingList = <String>[];
+      grouplist = <String>[];
       map['grouplist'].forEach((value) {
         grouplist!.add(value);
       });
@@ -117,7 +125,8 @@ class UserModel extends Equatable {
       'followerList': followersList,
       'followingList': followingList,
       'grouplist': grouplist,
-      'groups': grouplist
+      'groups': grouplist,
+      'closenessMap': closenessMap
     };
   }
 
@@ -142,6 +151,7 @@ class UserModel extends Equatable {
     List<String>? followingList,
     List<String>? followersList,
     List<String>? grouplist,
+    List<String>? closenessMap,
     int? groups
   }) {
     return UserModel(
@@ -165,6 +175,7 @@ class UserModel extends Equatable {
       followersList: followersList ?? this.followersList,
       followingList: followingList ?? this.followingList,
       grouplist: grouplist ?? this.grouplist,
+      closenessMap: closenessMap ?? this.closenessMap
     );
   }
 
@@ -198,6 +209,7 @@ class UserModel extends Equatable {
         followersList,
         followingList,
     grouplist,
-    groups
+    groups,
+    closenessMap
       ];
 }

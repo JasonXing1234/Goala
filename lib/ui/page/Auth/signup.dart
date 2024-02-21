@@ -144,7 +144,7 @@ class _SignupState extends State<Signup> {
     loader.showLoader(context);
     var state = Provider.of<AuthState>(context, listen: false);
     Random random = Random();
-    int randomNumber = random.nextInt(8);
+    int randomNumber = random.nextInt(7);
 
     UserModel user = UserModel(
       email: _emailController.text.toLowerCase(),
@@ -155,7 +155,7 @@ class _SignupState extends State<Signup> {
           .toString(),
       location: 'Somewhere in universe',
       profilePic: Constants.dummyProfilePicList[randomNumber],
-      isVerified: false,
+      isVerified: false
     );
     state
         .signUp(

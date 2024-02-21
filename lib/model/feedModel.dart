@@ -4,6 +4,8 @@ import 'package:flutter_twitter_clone/model/user.dart';
 
 class FeedModel {
   late bool isGroupGoal;
+  late bool isCheckedIn;
+  late bool isPrivate;
   String? key;
   String? parentkey;
   String? childRetwetkey;
@@ -18,13 +20,16 @@ class FeedModel {
   late String createdAt;
   String? imagePath;
   List<String>? tags;
+  List<String>? goalPhotoList;
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
-  String?
-  lanCode; //Saving the language of the tweet so to not translate to check which language
+  List<bool>? checkInList;
+  String? lanCode; //Saving the language of the tweet so to not translate to check which language
   UserModel? user;
   FeedModel(
       {required this.isGroupGoal,
+        required this.isCheckedIn,
+        required this.isPrivate,
         this.key,
         this.title,
         this.description,
@@ -37,7 +42,9 @@ class FeedModel {
         this.imagePath,
         this.likeList,
         this.tags,
+        this.goalPhotoList,
         this.memberList,
+        this.checkInList,
         this.user,
         this.replyTweetKeyList,
         this.parentkey,
@@ -46,6 +53,8 @@ class FeedModel {
   toJson() {
     return {
       "isGroupGoal": isGroupGoal,
+      "isCheckedIn": isCheckedIn,
+      "isPrivate": isPrivate,
       "userId": userId,
       "title": title,
       "description": description,
@@ -57,8 +66,10 @@ class FeedModel {
       "imagePath": imagePath,
       "likeList": likeList,
       "tags": tags,
+      "goalPhotoList": goalPhotoList,
       "memberList": memberList,
       "replyTweetKeyList": replyTweetKeyList,
+      "checkInList": checkInList,
       "user": user == null ? null : user!.toJson(),
       "parentkey": parentkey,
       "lanCode": lanCode,
@@ -68,6 +79,8 @@ class FeedModel {
 
   FeedModel.fromJson(Map<dynamic, dynamic> map) {
     isGroupGoal = map['isGroupGoal'];
+    isCheckedIn = map['isCheckedIn'];
+    isPrivate = map['isCheckedIn'];
     key = map['key'];
     title = map['title'];
     description = map['description'];
@@ -83,10 +96,22 @@ class FeedModel {
     user = UserModel.fromJson(map['user']);
     parentkey = map['parentkey'];
     childRetwetkey = map['childRetwetkey'];
+    if (map['checkInList'] != null) {
+      checkInList = <bool>[];
+      map['checkInList'].forEach((value) {
+        checkInList!.add(value);
+      });
+    }
     if (map['tags'] != null) {
       tags = <String>[];
       map['tags'].forEach((value) {
         tags!.add(value);
+      });
+    }
+    if (map['goalPhotoList'] != null) {
+      goalPhotoList = <String>[];
+      map['goalPhotoList'].forEach((value) {
+        goalPhotoList!.add(value);
       });
     }
     if (map["likeList"] != null) {

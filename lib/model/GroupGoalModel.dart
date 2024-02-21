@@ -1,6 +1,8 @@
 import 'package:flutter_twitter_clone/model/user.dart';
 
 class GroupGoalModel {
+  late bool isPrivate;
+  late bool isCheckedIn;
   String? key;
   String? parentkey;
   String? childRetwetkey;
@@ -19,9 +21,12 @@ class GroupGoalModel {
   String?
   lanCode; //Saving the language of the tweet so to not translate to check which language
   UserModel? user;
+  List<String>? goalPhotoList;
+  List<bool>? checkInList;
   GroupGoalModel(
       {this.key,
         this.description,
+        required this.isCheckedIn,
         required this.userId,
         this.likeCount,
         this.commentCount,
@@ -36,12 +41,16 @@ class GroupGoalModel {
         this.replyTweetKeyList,
         this.parentkey,
         this.lanCode,
-        this.childRetwetkey});
+        this.childRetwetkey,
+        this.goalPhotoList,
+        this.checkInList,
+      });
   toJson() {
     return {
       "userId": userId,
       "description": description,
       "likeCount": likeCount,
+      "isCheckedIn": isCheckedIn,
       "commentCount": commentCount ?? 0,
       "retweetCount": retweetCount ?? 0,
       "memberCount": memberCount ?? 0,
@@ -54,7 +63,9 @@ class GroupGoalModel {
       "user": user == null ? null : user!.toJson(),
       "parentkey": parentkey,
       "lanCode": lanCode,
-      "childRetwetkey": childRetwetkey
+      "childRetwetkey": childRetwetkey,
+      "checkInList": checkInList,
+      "goalPhotoList": goalPhotoList,
     };
   }
 
@@ -62,6 +73,7 @@ class GroupGoalModel {
     key = map['key'];
     description = map['description'];
     userId = map['userId'];
+    isCheckedIn = map['isCheckedIn'];
     likeCount = map['likeCount'] ?? 0;
     commentCount = map['commentCount'];
     retweetCount = map["retweetCount"] ?? 0;
@@ -77,6 +89,18 @@ class GroupGoalModel {
       tags = <String>[];
       map['tags'].forEach((value) {
         tags!.add(value);
+      });
+    }
+    if (map['goalPhotoList'] != null) {
+      goalPhotoList = <String>[];
+      map['goalPhotoList'].forEach((value) {
+        goalPhotoList!.add(value);
+      });
+    }
+    if (map['checkInList'] != null) {
+      checkInList = <bool>[];
+      map['checkInList'].forEach((value) {
+        checkInList!.add(value);
       });
     }
     if (map["likeList"] != null) {

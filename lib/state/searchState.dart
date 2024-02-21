@@ -2,8 +2,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_twitter_clone/helper/enum.dart';
 import 'package:flutter_twitter_clone/helper/utility.dart';
 import 'package:flutter_twitter_clone/model/user.dart';
+import 'package:provider/provider.dart';
 import '../model/feedModel.dart';
 import 'appState.dart';
+import 'authState.dart';
 
 class SearchState extends AppState {
   bool isBusy = false;
@@ -43,6 +45,7 @@ class SearchState extends AppState {
                 model.key = key;
                 _userlist!.add(model);
                 _userFilterList!.add(model);
+
               });
               _userFilterList!
                   .sort((x, y) => y.followers!.compareTo(x.followers!));
@@ -70,7 +73,7 @@ class SearchState extends AppState {
       // notifyListeners();
     }
   }
-  void getUsername(){
+  void getClosestFriends(){
 
   }
   List<FeedModel>? getTweetList(UserModel? userModel) {
@@ -181,5 +184,13 @@ class SearchState extends AppState {
       }
     }).toList();
     return list;
+  }
+  UserModel getSingleUserDetail(String uId) {
+
+    final user = _userlist!.firstWhere((x) => x.userId == uId);
+    return user;
+  }
+  List<UserModel>? getUserList() {
+    return _userlist;
   }
 }
