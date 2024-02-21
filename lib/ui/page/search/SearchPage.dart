@@ -14,7 +14,7 @@ import 'package:flutter_twitter_clone/widgets/customAppBar.dart';
 import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import '../../../model/feedModel.dart';
 import '../../../state/authState.dart';
 import '../../../state/feedState.dart';
@@ -76,7 +76,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
 
     //final List<FeedModel>? list = state.getTweetList(authState.userModel);
     return Scaffold(
-        //floatingActionButton: _floatingActionButton(context),
+      floatingActionButton: _floatingActionButton(context),
       body:
 
       RefreshIndicator(

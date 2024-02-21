@@ -182,7 +182,7 @@ class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMi
       },
       child: CustomAppBar2(
         scaffoldKey: widget.scaffoldKey,
-        icon: AppIcon.goalalogo,
+        icon: MyFlutterApp.goalalogo,
         //onActionPressed: onSettingIconPressed,
         onSearchChanged: (text) {
 

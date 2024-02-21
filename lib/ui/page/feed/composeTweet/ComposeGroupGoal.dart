@@ -211,7 +211,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
             : widget.isRetweet
             ? model!.key
             : null,
-        userId: myUser.userId!, dueDateTime: '');
+        userId: myUser.userId!, isCheckedIn: false, isPrivate: false);
     return reply;
   }
 
