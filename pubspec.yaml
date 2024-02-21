@@ -120,7 +120,6 @@ flutter:
     - family: Human
       fonts:
         - asset: assets/fonts/Human.ttf
->>>>>>> Stashed changes
     - family: HelveticaNeue
       fonts:
         - asset: assets/fonts/HelveticaNeue.ttf

@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'dart:math'as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -18,13 +18,10 @@ import 'package:provider/provider.dart';
 import '../../../model/feedModel.dart';
 import '../../../state/authState.dart';
 import '../../../state/feedState.dart';
-<<<<<<< Updated upstream
-=======
 import '../../../widgets/newWidget/rippleButton.dart';
 import '../feed/feedPostDetail.dart';
 import '../profile/profileImageView.dart';
 import '../taskDetail/TaskDetailPage.dart';
->>>>>>> Stashed changes
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, this.scaffoldKey}) : super(key: key);
@@ -57,13 +54,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     List<FeedModel>? GroupGoalList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
-<<<<<<< Updated upstream
-    var authState = Provider.of<AuthState>(context, listen:false);
-    String id = authState.userId!;
-    if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      list = feedstate.feedList!.where((x) => x.userId == id && x.isGroupGoal == false).toList();
-      GroupGoalList = feedstate.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
-=======
     var authState = Provider.of<AuthState>(context);
     //final ulist = state.userlist!.where((x) => authState.userModel!.followingList!.contains(x.userId) && x.followingList!.contains(authState.userModel!.userId));
     //Map<String, int>? friendMap = Map.fromIterable(ulist, key: (item) => item, value: (item) => 1);
@@ -81,7 +71,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
         authState.userModel!.closenessMap!.sort((a, b) =>
             a.split(' ')[1].compareTo(b.split(' ')[1]));
       }
->>>>>>> Stashed changes
     }
 
 
@@ -103,24 +92,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-<<<<<<< Updated upstream
-                title: Container(
-                  color: Colors.black,
-                  child: Text(authState.userModel!.displayName!,
-                      style: TextStyle(
-
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 19.0,
-                      )),
-                ),
-                background: CachedNetworkImage(
-                  imageUrl: 'https://www.foodandwine.com/thmb/h7XBIk5uparmVpDEyQ9oC7brCpA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/A-Feast-of-Apples-FT-2-MAG1123-980271d42b1a489bab239b1466588ca4.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-=======
                 background:
                 Container(
                   padding: const EdgeInsets.all(8.0),
@@ -203,7 +174,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                         )
 
                 )),),
->>>>>>> Stashed changes
             SliverToBoxAdapter(
               child: Container(
                 height: 800,
@@ -223,39 +193,19 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                             ),
                           ),
                           child: TabBar(
-<<<<<<< Updated upstream
-                            controller: _tabController,
-                            // give the indicator a decoration (color and border radius)
-                            indicator: BoxDecoration(
-=======
                             labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
                             controller: _tabController,
                             // give the indicator a decoration (color and border radius)
                             indicator: BoxDecoration(
                               color: Color(0xFF292A29),
->>>>>>> Stashed changes
                               borderRadius: BorderRadius.circular(
                                 25.0,
                               ),
-<<<<<<< Updated upstream
-                              color: Colors.green,
-=======
->>>>>>> Stashed changes
                             ),
                             labelColor: Colors.white,
                             //91F291
                             unselectedLabelColor: Colors.black,
                             tabs: [
-<<<<<<< Updated upstream
-                              // first tab [you can add an icon using the icon property]
-                              Tab(
-                                text: 'Personal Goals',
-                              ),
-
-                              // second tab [you can add an icon using the icon property]
-                              Tab(
-                                text: 'Group Goals',
-=======
                               Container(
                                 width: 400,
                                 color: Color(0x69DC9E),
@@ -269,7 +219,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                                 child: Center(child:
                                 Text("Group Goals"),
                                 ),
->>>>>>> Stashed changes
                               ),
                             ],
                           ),
@@ -280,34 +229,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                             controller: _tabController,
                             children: [
                               // first tab bar view widget
-<<<<<<< Updated upstream
-                              Center(
-                                child: Column(
-                          children: <Widget>[
-                          ElevatedButton(
-                          //style: style,
-                          onPressed: (){Navigator.of(context).pushNamed('/CreateFeedPage/tweet');},
-                          child: const Text('New Personal Goal'),
-                        ),
-                        Center(
-                          child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            addAutomaticKeepAlives: false,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) => _UserTile(tweet: list![index]),
-                            separatorBuilder: (_, index) => const Divider(
-                              height: 0,
-                            ),
-                            itemCount: list?.length ?? 0,
-                          ),
-                        ),
-                      ],
-                    )
-                                ),
-
-
-=======
                               Stack(
                                   children: <Widget>[
                                   Center(
@@ -332,7 +253,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                                   ),
                                 ]
                               ),
->>>>>>> Stashed changes
                               // second tab bar view widget
                               Center(
                                 child: Column(
@@ -402,19 +322,6 @@ class _UserTile extends StatelessWidget {
                 fontWeight: FontWeight.w800,
                 overflow: TextOverflow.ellipsis),
           ),
-<<<<<<< Updated upstream
-          const SizedBox(width: 3),
-          /*user.isVerified!
-              ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                  paddingIcon: 3,
-                )
-              : const SizedBox(width: 0),*/
-=======
           SizedBox (width: 5),
     SizedBox(
       height: 20,
@@ -448,7 +355,6 @@ class _UserTile extends StatelessWidget {
             },
           ),
     )
->>>>>>> Stashed changes
         ],
       ),
       subtitle: Text(tweet.description!),
@@ -483,8 +389,6 @@ class _UserTile extends StatelessWidget {
     );
   }
 }
-<<<<<<< Updated upstream
-=======
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
@@ -716,4 +620,3 @@ class FakeItem extends StatelessWidget {
     );
   }
 }
->>>>>>> Stashed changes
