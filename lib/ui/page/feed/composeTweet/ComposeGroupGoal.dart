@@ -20,13 +20,8 @@ import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../../../../state/profile_state.dart';
-import '../../../RoundedButton.dart';
-import '../../../constants.dart';
->>>>>>> Stashed changes
 
 class ComposeGroupGoal extends StatefulWidget {
   const ComposeGroupGoal(
@@ -48,6 +43,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
   late TextEditingController _descriptionController;
   late TextEditingController _titleController;
   late TextEditingController _addUserController;
+  late TabController _tabController;
   late final List<String> memberListTemp = [];
   @override
   void dispose() {
@@ -214,13 +210,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
             : widget.isRetweet
             ? model!.key
             : null,
-<<<<<<< Updated upstream
-        userId: myUser.userId!);
-=======
         userId: myUser.userId!,
-        dueDateTime: '',
         checkInList: [false]);
->>>>>>> Stashed changes
     return reply;
   }
 
@@ -414,6 +405,7 @@ class _ComposeTweet
   const _ComposeTweet(this.viewState) : super(viewState);
 
   final _ComposeTweetReplyPageState viewState;
+  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   Widget _tweetCard(BuildContext context) {
     return Row(
@@ -546,12 +538,6 @@ class _ComposeTweet
           TextField(
             controller: viewState._descriptionController,
           ),
-<<<<<<< Updated upstream
-          Text('Add User'),
-          TextField(
-            controller: viewState._addUserController,
-=======
-
           ExpansionTile(
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
@@ -559,43 +545,10 @@ class _ComposeTweet
               leading: Icon(Icons.edit),
             title:Center(child: Text('Add User'),),
             children:[
-
-              /*MultiSelectBottomSheetField<UserModel?>(
-                key: _multiSelectKey,
-                initialChildSize: 0.7,
-                maxChildSize: 0.95,
-                title: Text("Friends"),
-                buttonText: Text("Your Friends"),
-                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
-                searchable: true,
-                validator: (values) {
-                  if (values == null || values.isEmpty) {
-                    return "Required";
-                  }
-                  List<String> names = values.map((e) => e!.userName!).toList();
-                  if (names.contains("Frog")) {
-                    return "Frogs are weird!";
-                  }
-                  return null;
-                },
-                onConfirm: (values) {
-                  List<String> temp = [];
-                  for(int i = 0; i < values.length; i++) {
-                     temp.add(values[i]!.userId!);
-                  }
-                    viewState.memberListTemp.addAll(temp);
-                  _multiSelectKey.currentState?.validate();
-                },
-                chipDisplay: MultiSelectChipDisplay(
-                  onTap: (item) {
-                    viewState.memberListTemp.remove(item!.userId);
-                    _multiSelectKey.currentState?.validate();
-                  },
-                ),
-              ),*/
               SizedBox(height: 40),
               MultiSelectChipField<UserModel?>(
                 items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend!.userName!)).toList(),
+                key: _multiSelectKey,
                 //initialValue: [_animals[4], _animals[7], _animals[9]],
                 title: Text("Friends"),
                 headerColor: Colors.black.withOpacity(0.5),
@@ -694,10 +647,9 @@ class _ComposeTweet
                   TabBarView(
                     controller: viewState._tabController,
                     children: <Widget>[
-                      RoundedButton(
-                        color: Colors.black,
-                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                        action: () async {
+                      ElevatedButton(
+                        child: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
                           TimeOfDay? newDate = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.now(),
@@ -726,7 +678,6 @@ class _ComposeTweet
                   height: 20,
                 )
               ]
->>>>>>> Stashed changes
           ),
           Flexible(
             child: Stack(

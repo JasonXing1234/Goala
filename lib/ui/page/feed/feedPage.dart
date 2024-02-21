@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_twitter_clone/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
 import 'package:flutter_twitter_clone/helper/enum.dart';
 import 'package:flutter_twitter_clone/model/feedModel.dart';
 import 'package:flutter_twitter_clone/state/authState.dart';
@@ -20,29 +21,13 @@ class FeedPage extends StatelessWidget {
       : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey;
-
   final GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
-
-  Widget _floatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed('/CreateFeedPage/tweet');
-      },
-      child: customIcon(
-        context,
-        icon: AppIcon.fabTweet,
-        isTwitterIcon: true,
-        iconColor: Theme.of(context).colorScheme.onPrimary,
-        size: 25,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //floatingActionButton: _floatingActionButton(context),
-      backgroundColor: TwitterColor.mystic,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: TwitterColor.white,
       body: SafeArea(
         child: SizedBox(
           height: context.height,
@@ -73,10 +58,14 @@ class _FeedPageBody extends StatefulWidget {
   final GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
   State<_FeedPageBody> createState() => _FeedPageBodyState();
 }
-class _FeedPageBodyState extends State<_FeedPageBody> {
+class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMixin{
 
-
-
+  late TabController _tabController;
+  @override
+  void initState() {
+    _tabController = TabController(vsync: this, length: 500);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,233 +76,128 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
     String currentTweetId = '';
     bool ShowPage = false;
     if (state.feedList != null && state.feedList!.isNotEmpty) {
-        GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
+      GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
     }
     return Consumer<FeedState>(
       builder: (context, state, child) {
         final List<FeedModel>? list = state.getTweetList(authState.userModel);
-        return CustomScrollView(
-          slivers: <Widget>[
-            child!,
-            SliverAppBar(
-                //expandedHeight: 150.0,
-
-                actions: <Widget>[
-            Expanded(
-                //height: 100.0,
-                //width:300.0,
-                child:
-                  ListView(
-                  // This next line does the trick.
-                    scrollDirection: Axis.horizontal,
-                    children:
-                      GroupList!.map((model) {
-                        return ElevatedButton(
-                          onPressed: (){},
-                          child: Text(model!.title!),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                              // Change your radius here
-                              borderRadius: BorderRadius.circular(16),
+        return NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            // SliverAppBar and/or other sliver widgets go here
+            return <Widget>[
+              child!,
+              SliverAppBar(
+                  actions: <Widget>[
+                    Expanded(
+                        child:
+                        ListView(
+                          // This next line does the trick.
+                          scrollDirection: Axis.horizontal,
+                          children:
+                          GroupList!.asMap().entries.map((model) {
+                            return Row(children:[
+                              SizedBox(
+                                width:20,
                               ),
-                            ),
-                          ),
-                        );
-                        },
-                      ).toList(),
-                  )
-        )]
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 100.0,
-                child:
-                  ListView(
-                    // This next line does the trick.
-                    scrollDirection: Axis.horizontal,
-                    children:
-                    GroupList!.map(
-                            (model) {
-                          return Column (children: [
-                            ElevatedButton(
-                              onPressed: (){
-                                ShowPage = !ShowPage;
-                                  currentTweetId = model!.key!;
+                              ElevatedButton(
+                                onPressed: (){
+                                  setState(() {
+                                    //currentTweetId = model!.key!;
+                                    //ShowPage = !ShowPage;
+                                    state.getPostDetailFromDatabase(null, model: model.value);
+                                    _tabController.animateTo(model!.key);
+
+                                  });
                                 },
-                              child: Text(model!.title!),
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    // Change your radius here
-                                    borderRadius: BorderRadius.circular(16),
+                                child: Text(model!.value.title!),
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      // Change your radius here
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            model!.key! == currentTweetId ? Container(
-                                child: Text('hahahaha')
-                            ) : Container(
-                                child: Text('')
-                            )
-                          ]);
-                        },
-                      ).toList(),
-
-                  ),
-            )),
-            /*SliverPadding(
-                        padding: EdgeInsets.all(16.0),
-        sliver:SliverList(
-                        delegate: SliverChildListDelegate(
-
-                          //TODO: Add groups here
-
-                          list!.map(
-                            (model) {
-                              return Container(
-                                color: Colors.white,
-                                child: Tweet(
-                                  model: model,
-                                  trailing: TweetBottomSheet().tweetOptionIcon(
-                                      context,
-                                      model: model,
-                                      type: TweetType.Tweet,
-                                      scaffoldKey: scaffoldKey),
-                                  scaffoldKey: scaffoldKey,
-                                ),
-                              );
-                            },
+                              SizedBox(
+                                width:10,
+                              )
+                            ]);
+                          },
                           ).toList(),
+                        )
+                    ),
 
-                        ),
-                      )
-            )*/],
-        );
-      },
-      /*child:
-      RefreshIndicator(
-        onRefresh: () async {
-        state.getDataFromDatabase();
-        return Future.value();
-      },*/
-        child: CustomAppBar2(
-          scaffoldKey: widget.scaffoldKey,
-          icon: AppIcon.settings,
-          //onActionPressed: onSettingIconPressed,
-          onSearchChanged: (text) {
-
-            state.filterByUsername(text);
-          },
-        ),
-     // )
-      /*SliverAppBar(
-        floating: true,
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                scaffoldKey.currentState!.openDrawer();
-              },
-            );
-          },
-        ),
-        title: Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: TextField(
-              onChanged: onSearchChanged,
-              controller: textController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0, style: BorderStyle.none),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(25.0),
-                  ),
-                ),
-                hintText: 'Search..',
-                fillColor: AppColor.extraLightGrey,
-                filled: true,
-                focusColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  ]
               ),
-            )),
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        bottom: PreferredSize(
-          child: Container(
-            color: Colors.grey.shade200,
-            height: 1.0,
-          ),
-          preferredSize: const Size.fromHeight(0.0),
-        ),
-      ),*/
+            ];
+          },
+          body:
+          TabBarView(controller: _tabController,
+            children: GroupList!.asMap().entries.map((model) {
+              return Column(
+                  children:[
+                    ElevatedButton(
+                        onPressed: () {
+                          var state = Provider.of<FeedState>(context, listen: false);
+                          state.setTweetToReply = model.value;
+                          Navigator.of(context).pushNamed('/ComposeTweetPage');
+                        },
+                        child: Text('Post In Group')),
+                    Flexible(// wrap in Expanded
+                        child:
+                        ListView(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children:
+                          state.tweetReplyMap == null ||
+                              state.tweetReplyMap!.isEmpty ||
+                              state.tweetReplyMap![model!.value.key!] == null
+                              ? [
+                            Column(
+                                children: [
+                                  SizedBox(height:140),
+                                  Center(
+                                      child: Text(
+                                        'Explore Your Groups',
+                                        style: TextStyle(fontSize: 34),
+
+                                      )
+                                  )
+                                ]
+                            )
+
+                          ]
+                              :state.tweetReplyMap![model!.value.key!]!
+                              .map((x) => _commentRow(x))
+                              .toList(),
+                        )
+                    )]
+              );
+            },
+            ).toList(),),
+
+        );
+
+      },
+      child: CustomAppBar2(
+        scaffoldKey: widget.scaffoldKey,
+        icon: AppIcon.goalalogo,
+        //onActionPressed: onSettingIconPressed,
+        onSearchChanged: (text) {
+
+          state.filterByUsername(text);
+        },
+      ),
     );
   }
-}
-class SampleWidget extends StatefulWidget {
-  @override
-  _SampleWidgetState createState() => _SampleWidgetState();
-}
-
-class _SampleWidgetState extends State<SampleWidget> {
-
-
-  Widget _body(){
-    final state = Provider.of<FeedState>(context);
-    var authState = Provider.of<AuthState>(context, listen: false);
-    String id = authState.userId!;
-    List<FeedModel>? GroupList = [];
-    if (state.feedList != null && state.feedList!.isNotEmpty) {
-      GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
-    }
-    int _activeWidget = GroupList.length;
-    switch (_activeWidget) {
-      case 1:
-        return GestureDetector(
-            onTap: (){
-              setState(() {
-                _activeWidget = 2;
-              });
-            },
-            child: Container(
-              color: Colors.blue,
-              child: Text("I'm one"),
-            )
-        );
-      case 2 :
-        return GestureDetector(
-            onTap: (){
-              setState(() {
-                _activeWidget = 0;
-              });
-            },
-            child: Container(
-              color: Colors.green,
-              child: Text("I'm two"),
-            )
-        );
-      default:
-        return GestureDetector(
-            onTap: (){
-              setState(() {
-                _activeWidget = 1;
-              });
-            },
-            child: Container(
-              color: Colors.red,
-              child: Text("I'm zero"),
-            )
-        );
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: _body(),
+  Widget _commentRow(FeedModel model) {
+    return Tweet(
+      model: model,
+      type: TweetType.Reply,
+      trailing: TweetBottomSheet().tweetOptionIcon(context,
+          scaffoldKey: widget.scaffoldKey, model: model, type: TweetType.Reply),
+      scaffoldKey: widget.scaffoldKey,
     );
   }
 }

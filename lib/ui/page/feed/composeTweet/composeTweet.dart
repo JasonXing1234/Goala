@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_twitter_clone/helper/constant.dart';
@@ -21,15 +20,10 @@ import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../../../state/authState.dart';
 import '../../../../state/authState.dart';
-import '../../../RoundedButton.dart';
-import '../../../constants.dart';
->>>>>>> Stashed changes
 
 class ComposeTweetPage extends StatefulWidget {
   const ComposeTweetPage(
