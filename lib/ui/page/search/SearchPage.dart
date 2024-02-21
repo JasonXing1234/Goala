@@ -76,7 +76,22 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
 
     //final List<FeedModel>? list = state.getTweetList(authState.userModel);
     return Scaffold(
-      floatingActionButton: _floatingActionButton(context),
+      floatingActionButton: ExpandableFab(
+      distance: 112,
+      children: [
+        ActionButton(
+          onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
+          icon: const Icon(Icons.group),
+        ),
+        ActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed('/CreateFeedPage/tweet');
+          },
+          icon: const Icon(Icons.person),
+        ),
+
+      ],
+    ),
       body:
 
       RefreshIndicator(
