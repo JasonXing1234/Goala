@@ -20,10 +20,9 @@ import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
 import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_database/firebase_database.dart';
-import '../../../../state/authState.dart';
-import '../../../../state/authState.dart';
+
+import '../../../RoundedButton.dart';
+import '../../../constants.dart';
 
 class ComposeTweetPage extends StatefulWidget {
   const ComposeTweetPage(
@@ -36,7 +35,7 @@ class ComposeTweetPage extends StatefulWidget {
   _ComposeTweetReplyPageState createState() => _ComposeTweetReplyPageState();
 }
 
-class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
+class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerProviderStateMixin {
   bool isScrollingDown = false;
   late FeedModel? model;
   late ScrollController scrollController;
@@ -44,6 +43,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
   File? _image;
   late TextEditingController _descriptionController;
   late TextEditingController _titleController;
+  late TabController _tabController;
   @override
   void dispose() {
     scrollController.dispose();
@@ -60,7 +60,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
     _descriptionController = TextEditingController();
     _titleController = TextEditingController();
     scrollController.addListener(_scrollListener);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
+
   }
 
   _scrollListener() {
@@ -184,9 +186,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
         isGroupGoal: false,
-        isPrivate: false,
         title: _titleController.text,
         description: _descriptionController.text,
+        dueDateTime: '',
         lanCode:
             (await GoogleTranslator().translate(_descriptionController.text))
                 .sourceLanguage
@@ -204,10 +206,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
             : widget.isRetweet
                 ? model!.key
                 : null,
-        userId: myUser.userId!,
-        isCheckedIn: false,
-        checkInList: [false]
-    );
+        userId: myUser.userId!);
     return reply;
   }
 
@@ -409,11 +408,63 @@ class _ComposeTweet
       children: <Widget>[
         Stack(
           children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(left: 30),
+              margin: const EdgeInsets.only(left: 20, top: 20, bottom: 3),
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    width: 2.0,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    width: context.width - 72,
+                    child: UrlText(
+                      text: viewState.model!.description ?? '',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      urlStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  UrlText(
+                    text:
+                        'Replying to ${viewState.model!.user!.userName ?? viewState.model!.user!.displayName}',
+                    style: TextStyle(
+                      color: TwitterColor.paleSky,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
+                CircularImage(
+                    path: viewState.model!.user!.profilePic, height: 40),
+                const SizedBox(width: 10),
+                ConstrainedBox(
+                  constraints:
+                      BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
+                  child: TitleText(viewState.model!.user!.displayName!,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      overflow: TextOverflow.ellipsis),
+                ),
                 const SizedBox(width: 3),
                 viewState.model!.user!.isVerified!
                     ? customIcon(
@@ -445,6 +496,7 @@ class _ComposeTweet
 
   @override
   Widget build(BuildContext context) {
+
     var authState = Provider.of<AuthState>(context, listen: false);
     return Container(
       height: context.height,
@@ -452,6 +504,9 @@ class _ComposeTweet
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          viewState.widget.isTweet
+              ? const SizedBox.shrink()
+              : _tweetCard(context),
           /*Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -470,14 +525,126 @@ class _ComposeTweet
           Center(
             child: Text('New Goal'),
           ),
-          Text('Title'),
-          TextField(
-              controller: viewState._titleController,
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:Center(child: Text('Title'),),
+              children: [
+                TextFormField(
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  controller: viewState._titleController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: "title"),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ]
           ),
-          Text('Description'),
-          TextField(
-            controller: viewState._descriptionController,
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:Center(child: Text('Description'),),
+              children: [
+                TextFormField(
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  controller: viewState._descriptionController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: "description"),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ]
           ),
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:
+              Center(child: Text('Reminder Time'),),
+                children: [
+                  SizedBox(
+                      height:20
+                  ),
+                  TabBar(
+                    labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                    controller: viewState._tabController,
+                    // give the indicator a decoration (color and border radius)
+                    indicator: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(
+                        9.0,
+                      ),
+                      color: Colors.black,
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    tabs: [
+                      Container(
+                        width: 300,
+                        child: Center(
+                          child:Text("Daily"),
+                        ),
+                      ),
+                      Container(
+                        width: 300,
+                        child: Center(child:
+                        Text("Weekly"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height:20
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child:
+                  TabBarView(
+                    controller: viewState._tabController,
+                    children: <Widget>[
+                      RoundedButton(
+                        color: Colors.black,
+                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        action: () async {
+                          TimeOfDay? newDate = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+
+                          );
+                          if (newDate == null) return;
+
+                        },
+                      ),
+                      RoundedButton(
+                        color: Colors.black,
+                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        action: () async {
+                          TimeOfDay? newDate = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+
+                          );
+                          if (newDate == null) return;
+
+                        },
+                      ),
+                    ],
+                  ),),
+                  SizedBox(
+                    height: 20,
+                  )
+                ]
+          ),
+
           Flexible(
             child: Stack(
               children: <Widget>[
