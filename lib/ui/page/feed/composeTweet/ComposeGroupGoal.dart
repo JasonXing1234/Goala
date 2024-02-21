@@ -21,7 +21,8 @@ import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import '../../../../state/profile_state.dart';
+import '../../../RoundedButton.dart';
+import '../../../constants.dart';
 
 class ComposeGroupGoal extends StatefulWidget {
   const ComposeGroupGoal(
@@ -34,7 +35,7 @@ class ComposeGroupGoal extends StatefulWidget {
   _ComposeTweetReplyPageState createState() => _ComposeTweetReplyPageState();
 }
 
-class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
+class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerProviderStateMixin{
   bool isScrollingDown = false;
   late FeedModel? model;
   late ScrollController scrollController;
@@ -45,6 +46,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
   late TextEditingController _addUserController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -58,6 +60,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
   void initState() {
     var feedState = Provider.of<FeedState>(context, listen: false);
     model = feedState.tweetToReplyModel;
+    _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     _descriptionController = TextEditingController();
     _titleController = TextEditingController();
@@ -187,9 +190,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
         userName: authState.userModel!.userName);
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
-        isCheckedIn: false,
         isGroupGoal: true,
-        isPrivate: false,
         title: _titleController.text,
         description: _descriptionController.text,
         lanCode:
@@ -210,8 +211,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
             : widget.isRetweet
             ? model!.key
             : null,
-        userId: myUser.userId!,
-        checkInList: [false]);
+        userId: myUser.userId!, dueDateTime: '');
     return reply;
   }
 
@@ -405,7 +405,6 @@ class _ComposeTweet
   const _ComposeTweet(this.viewState) : super(viewState);
 
   final _ComposeTweetReplyPageState viewState;
-  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   Widget _tweetCard(BuildContext context) {
     return Row(
@@ -502,7 +501,18 @@ class _ComposeTweet
 
   @override
   Widget build(BuildContext context) {
+    final _multiSelectKey = GlobalKey<FormFieldState>();
     var authState = Provider.of<AuthState>(context, listen: false);
+    var searchstate = Provider.of<SearchState>(context);
+    List<UserModel?> selectedUsers = [];
+
+    List<UserModel?> FriendList = [];
+    if (authState.userModel!.followingList != null && authState.userModel!.followingList!.isNotEmpty) {
+      for(int i = 0; i < authState.userModel!.followingList!.length; i++) {
+        FriendList = searchstate.getuserDetail(authState.userModel!.followingList!);
+      }
+    }
+
     return Container(
       height: context.height,
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -527,85 +537,119 @@ class _ComposeTweet
               )
             ],
           ),*/
+
           Center(
             child: Text('New Goal'),
-          ),
-          Text('Title'),
-          TextField(
-            controller: viewState._titleController,
-          ),
-          Text('Description'),
-          TextField(
-            controller: viewState._descriptionController,
           ),
           ExpansionTile(
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
               leading: Icon(Icons.edit),
-            title:Center(child: Text('Add User'),),
-            children:[
-              SizedBox(height: 40),
-              MultiSelectChipField<UserModel?>(
-                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend!.userName!)).toList(),
-                key: _multiSelectKey,
-                //initialValue: [_animals[4], _animals[7], _animals[9]],
-                title: Text("Friends"),
-                headerColor: Colors.black.withOpacity(0.5),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue, width: 1.8),
+              title:Center(child: Text('Title'),),
+              children: [
+                TextFormField(
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  controller: viewState._titleController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: "title"),
                 ),
-                selectedChipColor: Colors.blue.withOpacity(0.5),
-                selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                onTap: (values) {
+                SizedBox(
+                  height: 20,
+                )
+              ]
+          ),
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:Center(child: Text('Description'),),
+              children: [
+                TextFormField(
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  controller: viewState._descriptionController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: "description"),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ]
+          ),
+          ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+              leading: Icon(Icons.edit),
+              title:Center(child: Text('Add User'),),
+              children:[
+
+                /*MultiSelectBottomSheetField<UserModel?>(
+                key: _multiSelectKey,
+                initialChildSize: 0.7,
+                maxChildSize: 0.95,
+                title: Text("Friends"),
+                buttonText: Text("Your Friends"),
+                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
+                searchable: true,
+                validator: (values) {
+                  if (values == null || values.isEmpty) {
+                    return "Required";
+                  }
+                  List<String> names = values.map((e) => e!.userName!).toList();
+                  if (names.contains("Frog")) {
+                    return "Frogs are weird!";
+                  }
+                  return null;
+                },
+                onConfirm: (values) {
                   List<String> temp = [];
                   for(int i = 0; i < values.length; i++) {
-                    temp.add(values[i]!.userId!);
-                    if(authState.userModel?.closenessMap == null){
-                      List<String?> tempList = [];
-                      tempList.add(values[i]!.userId! + ' ' + 1.toString());
-                      kDatabase
-                          .child('profile')
-                          .child(authState.userModel!.userId!)
-                          .child('closenessMap')
-                          .set(tempList);
-                      cprint('user added to following list', event: 'add_follow');
-                    }
-                    else {
-                      String tempString = authState.userModel!.closenessMap!
-                          .firstWhere((element) =>
-                          element.contains(values[i]!.userId!));
-                      int tempIndex = authState.userModel!.closenessMap!
-                          .indexWhere((element) =>
-                          element.contains(values[i]!.userId!));
-                      String uid = tempString.split(' ')[0];
-                      String closeness = tempString.split(' ')[1];
-                      closeness = (int.parse(closeness) + 1).toString();
-                      authState.userModel!.closenessMap![tempIndex] =
-                          uid + ' ' + closeness;
-                      kDatabase
-                          .child('profile')
-                          .child(authState.userModel!.userId!)
-                          .child('closenessMap')
-                          .set(authState.userModel!.closenessMap);
-                      cprint(
-                          'user added to following list', event: 'add_follow');
-                    }
+                     temp.add(values[i]!.userId!);
                   }
-                  viewState.memberListTemp.addAll(temp);
+                    viewState.memberListTemp.addAll(temp);
                   _multiSelectKey.currentState?.validate();
                 },
-              ),
-              SizedBox(height: 40),
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (item) {
+                    viewState.memberListTemp.remove(item!.userId);
+                    _multiSelectKey.currentState?.validate();
+                  },
+                ),
+              ),*/
+                SizedBox(height: 40),
+                MultiSelectChipField<UserModel?>(
+                  items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend!.userName!)).toList(),
+                  //initialValue: [_animals[4], _animals[7], _animals[9]],
+                  title: Text("Friends"),
+                  headerColor: Colors.black.withOpacity(0.5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue, width: 1.8),
+                  ),
+                  selectedChipColor: Colors.blue.withOpacity(0.5),
+                  selectedTextStyle: TextStyle(color: Colors.blue[800]),
+                  onTap: (values) {
+                    List<String> temp = [];
+                    for(int i = 0; i < values.length; i++) {
+                      temp.add(values[i]!.userId!);
+                    }
+                    viewState.memberListTemp.addAll(temp);
+                    _multiSelectKey.currentState?.validate();
+                  },
+                ),
+                SizedBox(height: 40),
 
-            ]),
+              ]),
           ExpansionTile(
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
               leading: Icon(Icons.edit),
               title:
-                Center(child: Text('Time'),),
+              Center(child: Text('Time'),),
               children: [
                 SizedBox(
                     height:20
@@ -647,9 +691,10 @@ class _ComposeTweet
                   TabBarView(
                     controller: viewState._tabController,
                     children: <Widget>[
-                      ElevatedButton(
-                        child: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
+                      RoundedButton(
+                        color: Colors.black,
+                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                        action: () async {
                           TimeOfDay? newDate = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.now(),
