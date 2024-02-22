@@ -622,7 +622,7 @@ class _ComposeTweet
               ),*/
                 SizedBox(height: 40),
                 MultiSelectChipField<UserModel?>(
-                  items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend!.userName!)).toList(),
+                  items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
                   //initialValue: [_animals[4], _animals[7], _animals[9]],
                   title: Text("Friends"),
                   headerColor: Colors.black.withOpacity(0.5),
