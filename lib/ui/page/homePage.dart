@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 
 import 'common/locator.dart';
 import 'common/sidebar.dart';
+import 'feed/feedPage1.dart';
 import 'notification/notificationPage.dart';
 import 'search/SearchPage.dart';
 
@@ -202,7 +203,10 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return Search1Page(scaffoldKey: _scaffoldKey);
       case 3:
-        return ChatListPage(scaffoldKey: _scaffoldKey);
+        return FeedPage1(scaffoldKey: _scaffoldKey,
+          refreshIndicatorKey: refreshIndicatorKey,);
+      /*case 3:
+        return ChatListPage(scaffoldKey: _scaffoldKey);*/
       default:
         return FeedPage(scaffoldKey: _scaffoldKey);
     }

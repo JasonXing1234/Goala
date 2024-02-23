@@ -54,14 +54,14 @@ class TweetIconsRow extends StatelessWidget {
               Navigator.of(context).pushNamed('/ComposeTweetPage');
             },
           ),
-          _iconWidget(context,
+          /*_iconWidget(context,
               text: isTweetDetail ? '' : model.retweetCount.toString(),
               icon: AppIcon.retweet,
               iconColor: iconColor,
               size: size ?? 20, onPressed: () {
             TweetBottomSheet().openRetweetBottomSheet(context,
                 type: type, model: model, scaffoldKey: scaffoldKey);
-          }),
+          }),*/
           _iconWidget(
             context,
             text: isTweetDetail ? '' : model.likeCount.toString(),

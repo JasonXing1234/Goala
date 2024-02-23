@@ -143,7 +143,7 @@ class Tweet extends StatelessWidget {
   }
 }
 
-class _TweetBody extends StatelessWidget {
+class _TweetBody extends StatefulWidget {
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -157,16 +157,36 @@ class _TweetBody extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<_TweetBody> createState() => _TweetBodyState();
+}
+
+class _TweetBodyState extends State<_TweetBody> {
+  late FeedModel? tempModel = widget.model;
+
+  @override
+  void initState() {
+    super.initState();
+    getParentModel();
+
+
+  }
+  Future <void> getParentModel() async {
+    var feedState = Provider.of<FeedState>(context, listen:false);
+    tempModel = await feedState.fetchTweet(widget.model.parentkey!);
+  }
+  @override
   Widget build(BuildContext context) {
-    double descriptionFontSize = type == TweetType.Tweet
+    var state = Provider.of<FeedState>(context, listen: false);
+    double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
-        : type == TweetType.Detail || type == TweetType.ParentTweet
+        : widget.type == TweetType.Detail || widget.type == TweetType.ParentTweet
             ? 18
             : 14;
     FontWeight descriptionFontWeight =
-        type == TweetType.Tweet || type == TweetType.Tweet
+        widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
             ? FontWeight.w400
             : FontWeight.w400;
+
     TextStyle textStyle = TextStyle(
         color: Colors.black,
         fontSize: descriptionFontSize,
@@ -175,80 +195,116 @@ class _TweetBody extends StatelessWidget {
         color: Colors.blue,
         fontSize: descriptionFontSize,
         fontWeight: descriptionFontWeight);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(width: 10),
-        SizedBox(
-          width: 40,
-          height: 40,
-          child: GestureDetector(
-            onTap: () {
-              // If tweet is displaying on someone's profile then no need to navigate to same user's profile again.
-              if (isDisplayOnProfile) {
-                return;
-              }
-              Navigator.push(
-                  context, ProfilePage.getRoute(profileId: model.userId));
-            },
-            child: CircularImage(path: model.user!.profilePic),
+    return FutureBuilder(
+        future: getParentModel(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+        // Future hasn't finished yet, return a placeholder
+        return Text('Loading');
+      }
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: GestureDetector(
+              onTap: () {
+                // If tweet is displaying on someone's profile then no need to navigate to same user's profile again.
+                if (widget.isDisplayOnProfile) {
+                  return;
+                }
+                Navigator.push(
+                    context,
+                    ProfilePage.getRoute(profileId: widget.model.userId));
+              },
+              child: CircularImage(path: widget.model.user!.profilePic),
+            ),
           ),
-        ),
-        const SizedBox(width: 20),
-        SizedBox(
-          width: context.width - 80,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                              minWidth: 0, maxWidth: context.width * .5),
-                          child: TitleText(model.user!.displayName!,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        const SizedBox(width: 3),
-                        model.user!.isVerified!
-                            ? customIcon(
-                                context,
-                                icon: AppIcon.blueTick,
-                                isTwitterIcon: true,
-                                iconColor: AppColor.primary,
-                                size: 13,
-                                paddingIcon: 3,
-                              )
-                            : const SizedBox(width: 0),
-                        SizedBox(
-                          width: model.user!.isVerified! ? 5 : 0,
-                        ),
-                        Flexible(
+          const SizedBox(width: 20),
+          SizedBox(
+            width: context.width - 80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minWidth: 0, maxWidth: context.width * .5),
+                            child: TitleText(widget.model.user!.displayName!,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          const SizedBox(width: 3),
+                          widget.model.user!.isVerified!
+                              ? customIcon(
+                            context,
+                            icon: AppIcon.blueTick,
+                            isTwitterIcon: true,
+                            iconColor: AppColor.primary,
+                            size: 13,
+                            paddingIcon: 3,
+                          )
+                              : const SizedBox(width: 0),
+                          SizedBox(
+                            width: widget.model.user!.isVerified! ? 5 : 0,
+                          ),
+                          /*Flexible(
                           child: customText(
                             '${model.user!.userName}',
                             style: TextStyles.userNameStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        customText(
-                          '· ${Utility.getChatTime(model.createdAt)}',
-                          style:
-                              TextStyles.userNameStyle.copyWith(fontSize: 12),
-                        ),
-                      ],
+                        ),*/
+                          const SizedBox(width: 4),
+                          customText(
+                            '· ${Utility.getChatTime(widget.model.createdAt)}',
+                            style:
+                            TextStyles.userNameStyle.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(child: trailing ?? const SizedBox()),
-                ],
-              ),
-              model.description == null
+                    Container(child: widget.trailing ?? const SizedBox()),
+                  ],
+                ),
+                CustomProgressBar(
+                    progress: widget.model.isHabit == false ? tempModel!
+                        .GoalAchieved! / tempModel!.GoalSum!
+                        : tempModel!.checkInList!.where((item) => item == true)
+                        .length / 8,
+                    height: 20,
+                    width: 200,
+                    backgroundColor: Colors.grey[300]!,
+                    progressColor: Colors.blue),
+                Text(widget.model.parentName!),
+                widget.model.goalPhotoList?.length != null ?
+                SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.model.goalPhotoList!.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.all(8.0),
+                          // Add some padding around each image
+                          child: Image.network(
+                            widget.model.goalPhotoList![index]!,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    )) : SizedBox(),
+                /*model.description == null
                   ? const SizedBox()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,13 +320,14 @@ class _TweetBody extends StatelessWidget {
                       ],
                     ),
               if (model.imagePath == null && model.description != null)
-                CustomLinkMediaInfo(text: model.description!),
-            ],
+                CustomLinkMediaInfo(text: model.description!), */
+              ],
+            ),
           ),
-        ),
-        const SizedBox(width: 10),
-      ],
-    );
+          const SizedBox(width: 10),
+        ],
+      );
+    });
   }
 }
 
@@ -389,6 +446,47 @@ class _TweetDetailBody extends StatelessWidget {
                   child: CustomLinkMediaInfo(text: model.description!),
                 )
             ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomProgressBar extends StatelessWidget {
+  final double width;
+  final double height;
+  final double progress;
+  final Color backgroundColor;
+  final Color progressColor;
+
+  const CustomProgressBar({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.progress,
+    required this.backgroundColor,
+    required this.progressColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        Container(
+          width: progress <= 1 ? width * progress : 0,
+          height: height,
+          decoration: BoxDecoration(
+            color: progressColor,
+            borderRadius: BorderRadius.circular(4),
           ),
         ),
       ],

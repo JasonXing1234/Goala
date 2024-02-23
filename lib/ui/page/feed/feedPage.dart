@@ -5,15 +5,10 @@ import 'package:flutter_twitter_clone/model/feedModel.dart';
 import 'package:flutter_twitter_clone/state/authState.dart';
 import 'package:flutter_twitter_clone/state/feedState.dart';
 import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/customLoader.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/emptyList.dart';
 import 'package:flutter_twitter_clone/widgets/tweet/tweet.dart';
 import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
-
 import '../../../widgets/CustomAppBar2.dart';
-import '../../../widgets/customAppBar.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage(
@@ -73,8 +68,6 @@ class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMi
     var authState = Provider.of<AuthState>(context, listen: false);
     String id = authState.userId!;
     List<FeedModel>? GroupList = [];
-    String currentTweetId = '';
-    bool ShowPage = false;
     if (state.feedList != null && state.feedList!.isNotEmpty) {
       GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
     }
@@ -102,11 +95,8 @@ class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMi
                               ElevatedButton(
                                 onPressed: (){
                                   setState(() {
-                                    //currentTweetId = model!.key!;
-                                    //ShowPage = !ShowPage;
                                     state.getPostDetailFromDatabase(null, model: model.value);
                                     _tabController.animateTo(model!.key);
-
                                   });
                                 },
                                 child: Text(model!.value.title!),
@@ -127,7 +117,6 @@ class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMi
                           ).toList(),
                         )
                     ),
-
                   ]
               ),
             ];
@@ -161,31 +150,26 @@ class _FeedPageBodyState extends State<_FeedPageBody> with TickerProviderStateMi
                                       child: Text(
                                         'Explore Your Groups',
                                         style: TextStyle(fontSize: 34),
-
                                       )
                                   )
                                 ]
                             )
-
                           ]
-                              :state.tweetReplyMap![model!.value.key!]!
-                              .map((x) => _commentRow(x))
-                              .toList(),
+                            :state.tweetReplyMap![model.value.key!]!
+                            .map((x) => _commentRow(x))
+                            .toList(),
                         )
                     )]
               );
             },
             ).toList(),),
-
         );
-
       },
       child: CustomAppBar2(
         scaffoldKey: widget.scaffoldKey,
         icon: MyFlutterApp.goalalogo,
         //onActionPressed: onSettingIconPressed,
         onSearchChanged: (text) {
-
           state.filterByUsername(text);
         },
       ),

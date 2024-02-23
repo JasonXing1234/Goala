@@ -43,10 +43,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   File? _image;
   late TextEditingController _descriptionController;
   late TextEditingController _titleController;
+  late TextEditingController _goalSumController;
   late TextEditingController _addUserController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
-
+  List<bool> isSelected = [true, false];
   @override
   void dispose() {
     scrollController.dispose();
@@ -63,6 +64,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
     _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     _descriptionController = TextEditingController();
+    _goalSumController = TextEditingController();
     _titleController = TextEditingController();
     _addUserController = TextEditingController();
     scrollController.addListener(_scrollListener);
@@ -211,12 +213,26 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
             : widget.isRetweet
             ? model!.key
             : null,
-        userId: myUser.userId!, isCheckedIn: false, isPrivate: false, checkInList: [false]);
+        userId: myUser.userId!, isCheckedIn: false, isPrivate: false,
+        checkInList: [false],
+        isHabit: isSelected[0] == false ? false : true,
+        GoalSum: int.parse(_goalSumController.text)
+    );
     return reply;
   }
 
   @override
   Widget build(BuildContext context) {
+    final _multiSelectKey = GlobalKey<FormFieldState>();
+    var authState = Provider.of<AuthState>(context, listen: false);
+    var searchstate = Provider.of<SearchState>(context);
+    List<UserModel?> selectedUsers = [];
+    List<UserModel?> FriendList = [];
+    if (authState.userModel!.followingList != null && authState.userModel!.followingList!.isNotEmpty) {
+      for(int i = 0; i < authState.userModel!.followingList!.length; i++) {
+        FriendList = searchstate.getuserDetail(authState.userModel!.followingList!);
+      }
+    }
     return Scaffold(
       appBar: CustomAppBar(
         title: customTitleText(''),
@@ -239,7 +255,232 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
           SingleChildScrollView(
             controller: scrollController,
             child:
-            widget.isRetweet ? _ComposeRetweet(this) : _ComposeTweet(this),
+            Container(
+              height: context.height,
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Center(
+                    child: widget.isTweet ? Text('New Goal') : Text('New Post'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ToggleButtons(
+                      borderColor: Colors.grey,
+                      fillColor: Colors.blue,
+                      borderWidth: 2,
+                      selectedBorderColor: Colors.blue,
+                      selectedColor: Colors.white,
+                      borderRadius: BorderRadius.circular(0),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text('Habit'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text('Goal'),
+                        ),
+                      ],
+                      onPressed: (int index) {
+                        setState(() {
+                          // Make sure only one tab is selected at a time
+                          for (int i = 0; i < isSelected.length; i++) {
+                            isSelected[i] = i == index;
+                          }
+
+                        });
+                      },
+                      isSelected: isSelected,
+                    ),
+                  ),
+                  ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+                      leading: Icon(Icons.edit),
+                      title:Center(child: Text('Title'),),
+                      children: [
+                        TextFormField(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _titleController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "title"),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ]
+                  ),
+                  ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+                      leading: Icon(Icons.edit),
+                      title:Center(child: Text('Description'),),
+                      children: [
+                        TextFormField(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _descriptionController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "description"),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ]
+                  ),
+                  if(widget.isTweet && isSelected[0] == false) ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+                      leading: Icon(Icons.edit),
+                      title:Center(child: Text('Goal Number'),),
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _goalSumController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "goal number"),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ]
+                  ),
+                  ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+                      leading: Icon(Icons.edit),
+                      title:Center(child: Text('Add User'),),
+                      children:[
+                        SizedBox(height: 40),
+                        MultiSelectChipField<UserModel?>(
+                          items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
+                          //initialValue: [_animals[4], _animals[7], _animals[9]],
+                          title: Text("Friends"),
+                          headerColor: Colors.black.withOpacity(0.5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue, width: 1.8),
+                          ),
+                          selectedChipColor: Colors.blue.withOpacity(0.5),
+                          selectedTextStyle: TextStyle(color: Colors.blue[800]),
+                          onTap: (values) {
+                            List<String> temp = [];
+                            for(int i = 0; i < values.length; i++) {
+                              temp.add(values[i]!.userId!);
+                            }
+                            memberListTemp.addAll(temp);
+                            _multiSelectKey.currentState?.validate();
+                          },
+                        ),
+                        SizedBox(height: 40),
+
+                      ]),
+                  ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
+                      leading: Icon(Icons.edit),
+                      title:
+                      Center(child: Text('Time'),),
+                      children: [
+                        SizedBox(
+                            height:20
+                        ),
+                        TabBar(
+                          labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                          controller: _tabController,
+                          // give the indicator a decoration (color and border radius)
+                          indicator: BoxDecoration(
+
+                            borderRadius: BorderRadius.circular(
+                              9.0,
+                            ),
+                            color: Colors.black,
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
+                          tabs: [
+                            Container(
+                              width: 300,
+                              child: Center(
+                                child:Text("Daily"),
+                              ),
+                            ),
+                            Container(
+                              width: 300,
+                              child: Center(child:
+                              Text("Weekly"),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                            height:20
+                        ),
+                        SizedBox(
+                          height: 100,
+                          child:
+                          TabBarView(
+                            controller: _tabController,
+                            children: <Widget>[
+                              RoundedButton(
+                                color: Colors.black,
+                                title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                                action: () async {
+                                  TimeOfDay? newDate = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+
+                                  );
+                                  if (newDate == null) return;
+
+                                },
+                              ),
+                              RoundedButton(
+                                color: Colors.black,
+                                title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
+                                action: () async {
+                                  TimeOfDay? newDate = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+
+                                  );
+                                  if (newDate == null) return;
+
+                                },
+                              ),
+                            ],
+                          ),),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ]
+                  ),
+                  Flexible(
+                    child: Stack(
+                      children: <Widget>[
+                        ComposeTweetImage(
+                          image: _image,
+                          onCrossIconPressed: _onCrossIconPressed,
+                        ),
+                        _UserList(
+                          list: Provider.of<SearchState>(context).userlist,
+                          textEditingController: _descriptionController,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -394,350 +635,6 @@ class _ComposeRetweet
             ),
           ),
           const SizedBox(height: 50)
-        ],
-      ),
-    );
-  }
-}
-
-class _ComposeTweet
-    extends WidgetView<ComposeGroupGoal, _ComposeTweetReplyPageState> {
-  const _ComposeTweet(this.viewState) : super(viewState);
-
-  final _ComposeTweetReplyPageState viewState;
-
-  Widget _tweetCard(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Stack(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(left: 30),
-              margin: const EdgeInsets.only(left: 20, top: 20, bottom: 3),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 2.0,
-                    color: Colors.grey.shade400,
-                  ),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: context.width - 72,
-                    child: UrlText(
-                      text: viewState.model!.description ?? '',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      urlStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  UrlText(
-                    text:
-                    'Replying to ${viewState.model!.user!.userName ?? viewState.model!.user!.displayName}',
-                    style: TextStyle(
-                      color: TwitterColor.paleSky,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CircularImage(
-                    path: viewState.model!.user!.profilePic, height: 40),
-                const SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints:
-                  BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
-                  child: TitleText(viewState.model!.user!.displayName!,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                const SizedBox(width: 3),
-                viewState.model!.user!.isVerified!
-                    ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                  paddingIcon: 3,
-                )
-                    : const SizedBox(width: 0),
-                SizedBox(width: viewState.model!.user!.isVerified! ? 5 : 0),
-                customText('${viewState.model!.user!.userName}',
-                    style: TextStyles.userNameStyle.copyWith(fontSize: 15)),
-                const SizedBox(width: 5),
-                Padding(
-                  padding: const EdgeInsets.only(top: 3),
-                  child: customText(
-                      '- ${Utility.getChatTime(viewState.model!.createdAt)}',
-                      style: TextStyles.userNameStyle.copyWith(fontSize: 12)),
-                )
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final _multiSelectKey = GlobalKey<FormFieldState>();
-    var authState = Provider.of<AuthState>(context, listen: false);
-    var searchstate = Provider.of<SearchState>(context);
-    List<UserModel?> selectedUsers = [];
-
-    List<UserModel?> FriendList = [];
-    if (authState.userModel!.followingList != null && authState.userModel!.followingList!.isNotEmpty) {
-      for(int i = 0; i < authState.userModel!.followingList!.length; i++) {
-        FriendList = searchstate.getuserDetail(authState.userModel!.followingList!);
-      }
-    }
-
-    return Container(
-      height: context.height,
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          viewState.widget.isTweet
-              ? const SizedBox.shrink()
-              : _tweetCard(context),
-          /*Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //CircularImage(path: authState.user?.photoURL, height: 40),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: _TextField(
-                  isTweet: widget.isTweet,
-                  textEditingController: viewState._textEditingController,
-                ),
-              )
-            ],
-          ),*/
-
-          Center(
-            child: Text('New Goal'),
-          ),
-          ExpansionTile(
-              collapsedIconColor: Colors.black,
-              iconColor: Colors.black,
-              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-              leading: Icon(Icons.edit),
-              title:Center(child: Text('Title'),),
-              children: [
-                TextFormField(
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                  cursorColor: Theme.of(context).colorScheme.secondary,
-                  controller: viewState._titleController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: "title"),
-                ),
-                SizedBox(
-                  height: 20,
-                )
-              ]
-          ),
-          ExpansionTile(
-              collapsedIconColor: Colors.black,
-              iconColor: Colors.black,
-              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-              leading: Icon(Icons.edit),
-              title:Center(child: Text('Description'),),
-              children: [
-                TextFormField(
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                  cursorColor: Theme.of(context).colorScheme.secondary,
-                  controller: viewState._descriptionController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: "description"),
-                ),
-                SizedBox(
-                  height: 20,
-                )
-              ]
-          ),
-          ExpansionTile(
-              collapsedIconColor: Colors.black,
-              iconColor: Colors.black,
-              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-              leading: Icon(Icons.edit),
-              title:Center(child: Text('Add User'),),
-              children:[
-
-                /*MultiSelectBottomSheetField<UserModel?>(
-                key: _multiSelectKey,
-                initialChildSize: 0.7,
-                maxChildSize: 0.95,
-                title: Text("Friends"),
-                buttonText: Text("Your Friends"),
-                items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
-                searchable: true,
-                validator: (values) {
-                  if (values == null || values.isEmpty) {
-                    return "Required";
-                  }
-                  List<String> names = values.map((e) => e!.userName!).toList();
-                  if (names.contains("Frog")) {
-                    return "Frogs are weird!";
-                  }
-                  return null;
-                },
-                onConfirm: (values) {
-                  List<String> temp = [];
-                  for(int i = 0; i < values.length; i++) {
-                     temp.add(values[i]!.userId!);
-                  }
-                    viewState.memberListTemp.addAll(temp);
-                  _multiSelectKey.currentState?.validate();
-                },
-                chipDisplay: MultiSelectChipDisplay(
-                  onTap: (item) {
-                    viewState.memberListTemp.remove(item!.userId);
-                    _multiSelectKey.currentState?.validate();
-                  },
-                ),
-              ),*/
-                SizedBox(height: 40),
-                MultiSelectChipField<UserModel?>(
-                  items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
-                  //initialValue: [_animals[4], _animals[7], _animals[9]],
-                  title: Text("Friends"),
-                  headerColor: Colors.black.withOpacity(0.5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue, width: 1.8),
-                  ),
-                  selectedChipColor: Colors.blue.withOpacity(0.5),
-                  selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                  onTap: (values) {
-                    List<String> temp = [];
-                    for(int i = 0; i < values.length; i++) {
-                      temp.add(values[i]!.userId!);
-                    }
-                    viewState.memberListTemp.addAll(temp);
-                    _multiSelectKey.currentState?.validate();
-                  },
-                ),
-                SizedBox(height: 40),
-
-              ]),
-          ExpansionTile(
-              collapsedIconColor: Colors.black,
-              iconColor: Colors.black,
-              tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-              leading: Icon(Icons.edit),
-              title:
-              Center(child: Text('Time'),),
-              children: [
-                SizedBox(
-                    height:20
-                ),
-                TabBar(
-                  labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
-                  controller: viewState._tabController,
-                  // give the indicator a decoration (color and border radius)
-                  indicator: BoxDecoration(
-
-                    borderRadius: BorderRadius.circular(
-                      9.0,
-                    ),
-                    color: Colors.black,
-                  ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Container(
-                      width: 300,
-                      child: Center(
-                        child:Text("Daily"),
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      child: Center(child:
-                      Text("Weekly"),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                    height:20
-                ),
-                SizedBox(
-                  height: 100,
-                  child:
-                  TabBarView(
-                    controller: viewState._tabController,
-                    children: <Widget>[
-                      RoundedButton(
-                        color: Colors.black,
-                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                        action: () async {
-                          TimeOfDay? newDate = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-
-                          );
-                          if (newDate == null) return;
-
-                        },
-                      ),
-                      RoundedButton(
-                        color: Colors.black,
-                        title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                        action: () async {
-                          TimeOfDay? newDate = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-
-                          );
-                          if (newDate == null) return;
-
-                        },
-                      ),
-                    ],
-                  ),),
-                SizedBox(
-                  height: 20,
-                )
-              ]
-          ),
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                ComposeTweetImage(
-                  image: viewState._image,
-                  onCrossIconPressed: viewState._onCrossIconPressed,
-                ),
-                _UserList(
-                  list: Provider.of<SearchState>(context).userlist,
-                  textEditingController: viewState._descriptionController,
-                )
-              ],
-            ),
-          ),
         ],
       ),
     );

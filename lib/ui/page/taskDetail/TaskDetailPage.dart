@@ -95,14 +95,15 @@ class _TaskDetailState extends State<TaskDetailPage> {
                           ),
                           ElevatedButton(
                               onPressed: () {
-                                setState(() {
-                                  isEditing = !isEditing;
-                                });
+                                var state = Provider.of<FeedState>(context, listen: false);
+                                state.setTweetToReply = tempFeed;
+                                Navigator.of(context).pushNamed('/ComposeTweetPage');
                               },
-                              child: isEditing == true ? Text('Finish') : Text('Edit')
+                              child: Text('Add Post')
+                              //isEditing == true ? Text('Finish') : Text('Edit')
                           ),
 
-                          tempFeed.goalPhotoList == null ? SizedBox() :
+                          /*tempFeed.goalPhotoList == null ? SizedBox() :
                           GridView.builder(
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
@@ -148,7 +149,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
                                 ),
                               );
                             },
-                          ),
+                          ),*/
                         ],
                     )
             )

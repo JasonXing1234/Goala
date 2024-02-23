@@ -4,11 +4,13 @@ import 'package:flutter_twitter_clone/model/user.dart';
 
 class FeedModel {
   late bool isGroupGoal;
+  late bool isHabit;
   late bool isCheckedIn;
   late bool isPrivate;
   String? key;
   String? parentkey;
   String? childRetwetkey;
+  String? parentName;
   String? title;
   String? description;
   late String userId;
@@ -17,10 +19,12 @@ class FeedModel {
   int? commentCount;
   int? retweetCount;
   int? memberCount;
+  int? GoalSum;
+  int? GoalAchieved;
   late String createdAt;
   String? imagePath;
   List<String>? tags;
-  List<String>? goalPhotoList;
+  List<String?>? goalPhotoList;
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
   List<bool>? checkInList;
@@ -30,7 +34,9 @@ class FeedModel {
       {required this.isGroupGoal,
         required this.isCheckedIn,
         required this.isPrivate,
+        required this.isHabit,
         this.key,
+        this.parentName,
         this.title,
         this.description,
         required this.userId,
@@ -38,6 +44,8 @@ class FeedModel {
         this.commentCount,
         this.retweetCount,
         this.memberCount,
+        this.GoalAchieved,
+        this.GoalSum,
         required this.createdAt,
         this.imagePath,
         this.likeList,
@@ -55,13 +63,16 @@ class FeedModel {
       "isGroupGoal": isGroupGoal,
       "isCheckedIn": isCheckedIn,
       "isPrivate": isPrivate,
+      "isHabit": isHabit,
       "userId": userId,
       "title": title,
+      "GoalSum": GoalSum,
       "description": description,
       "likeCount": likeCount,
       "commentCount": commentCount ?? 0,
       "retweetCount": retweetCount ?? 0,
       "memberCount": memberCount ?? 0,
+      "GoalAchieved": GoalAchieved ?? 0,
       "createdAt": createdAt,
       "imagePath": imagePath,
       "likeList": likeList,
@@ -72,6 +83,7 @@ class FeedModel {
       "checkInList": checkInList,
       "user": user == null ? null : user!.toJson(),
       "parentkey": parentkey,
+      "parentName" : parentName,
       "lanCode": lanCode,
       "childRetwetkey": childRetwetkey
     };
@@ -81,6 +93,7 @@ class FeedModel {
     isGroupGoal = map['isGroupGoal'];
     isCheckedIn = map['isCheckedIn'];
     isPrivate = map['isCheckedIn'];
+    isHabit = map['isHabit'];
     key = map['key'];
     title = map['title'];
     description = map['description'];
@@ -89,12 +102,15 @@ class FeedModel {
     commentCount = map['commentCount'];
     retweetCount = map["retweetCount"] ?? 0;
     memberCount = map["memberCount"] ?? 0;
+    GoalAchieved = map["GoalAchieved"] ?? 0;
+    GoalSum = map["GoalSum"] ?? 0;
     imagePath = map['imagePath'];
     createdAt = map['createdAt'];
     imagePath = map['imagePath'];
     lanCode = map['lanCode'];
     user = UserModel.fromJson(map['user']);
     parentkey = map['parentkey'];
+    parentName = map['parentName'];
     childRetwetkey = map['childRetwetkey'];
     if (map['checkInList'] != null) {
       checkInList = <bool>[];

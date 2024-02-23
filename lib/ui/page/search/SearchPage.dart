@@ -140,24 +140,20 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                                       },
                                     ),
                                   ),
-
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      alignment: Alignment(10.0, 1),
-                                      margin: const EdgeInsets.only(top: 30, right: 30),
-                                      child: Text(
-                                        authState.userModel == null ? '' :
-                                          authState.userModel!.displayName!,
-                                          style: GoogleFonts.openSans(fontSize: 40,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-
-                                          ),
-
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    alignment: Alignment(10.0, 1),
+                                    margin: const EdgeInsets.only(top: 30, right: 30),
+                                    child: Text(
+                                      authState.userModel == null ? '' :
+                                        authState.userModel!.displayName!,
+                                        style: GoogleFonts.openSans(fontSize: 40,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                    ),
                                   )
                                 ],
                             ),
-
                             authState.isbusy ? SizedBox(
                               width:20,
                             ): state.isbusy ? SizedBox(
@@ -272,7 +268,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                               Center(
                                 child: Column(
                                   children: <Widget>[
-
                                     Center(
                                         child: ListView.separated(
                                           scrollDirection: Axis.vertical,
@@ -305,71 +300,80 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
   }
 }
 
-class _UserTile extends StatelessWidget {
+class _UserTile extends StatefulWidget {
   const _UserTile({Key? key, required this.tweet}) : super(key: key);
   //final UserModel user;
   final FeedModel tweet;
+
+  @override
+  State<_UserTile> createState() => _UserTileState();
+}
+
+class _UserTileState extends State<_UserTile> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-
-
     return ListTile(
       onTap: () {
         /*if (kReleaseMode) {
           kAnalytics.logViewSearchResults(searchTerm: user.userName!);
         }*/
-        Navigator.push(context, TaskDetailPage.getRoute(tweet));
+        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
       },
-      //leading: CircularImage(path: user.profilePic, height: 40),
-
       title:
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
             width: 90,
-            child: TitleText(tweet.title!,
+            child: TitleText(widget.tweet.title!,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
                 overflow: TextOverflow.ellipsis),
           ),
           SizedBox (width: 5),
-    SizedBox(
-      height: 20,
-          width:120,
-          child: ListView.builder(
-            itemCount: tweet.checkInList?.length ?? 0,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              if(tweet.checkInList![index] == true) {
-                return Container(
-                  width: 15.0,
-                  height: 15.0,
-                  decoration: new BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                );
-              }
-              else {
-                return Container(
-                  width: 15.0,
-                  height: 15.0,
-                  decoration: new BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
-                  ),
-                );
-              }
+          SizedBox(
+            height: 20,
+                width:120,
+                child: ListView.builder(
+                  itemCount: widget.tweet.checkInList?.length ?? 0,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    if(widget.tweet.checkInList![index] == true) {
+                      return Container(
+                        width: 15.0,
+                        height: 15.0,
+                        decoration: new BoxDecoration(
+                          color: Colors.orange,
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    }
+                    else {
+                      return Container(
+                        width: 15.0,
+                        height: 15.0,
+                        decoration: new BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    }
 
-            },
-          ),
-    )
+                  },
+                ),
+          )
         ],
       ),
-      subtitle: Text(tweet.description!),
-      trailing: tweet.isCheckedIn ? Icon(AppIcon.bulbOn) :
+      subtitle: Text(widget.tweet.description!),
+      trailing: widget.tweet.isCheckedIn ? Icon(AppIcon.bulbOn) :
       ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -378,13 +382,15 @@ class _UserTile extends StatelessWidget {
         ),
         onPressed: () async {
           var state = Provider.of<FeedState>(context, listen: false);
-          var tempTweet = await state.fetchTweet(tweet.key!);
+          var tempTweet = await state.fetchTweet(widget.tweet.key!);
           tempTweet!.checkInList![tempTweet!.checkInList!.length! - 1] = true;
-          FirebaseDatabase.instance.reference().child("tweet").child(tweet.key!).update({
+          FirebaseDatabase.instance.reference().child("tweet").child(widget.tweet.key!).update({
             "checkInList": tempTweet.checkInList,
             "isCheckedIn": true,
           }).then((_) {
-
+            if(tempTweet.isHabit == false) {
+              _showPopupWindow(context, tempTweet);
+            }
           }).catchError((onError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(onError)));
           });
@@ -399,7 +405,36 @@ class _UserTile extends StatelessWidget {
       )
     );
   }
+
+  void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter an Integer'),
+          content: TextField(
+            controller: _textEditingController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(hintText: "Enter integer here"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Submit'),
+              onPressed: () {
+                var state = Provider.of<FeedState>(context, listen: false);
+                state.addNumberToGoal(tempFeed, int.parse(_textEditingController.text));
+                print('Entered Integer: ${_textEditingController.text}');
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({

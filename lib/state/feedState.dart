@@ -79,6 +79,38 @@ class FeedState extends AppState {
     return list;
   }
 
+  List<FeedModel>? getCommentList(UserModel? userModel) {
+    if (userModel == null) {
+      return null;
+    }
+
+    List<FeedModel>? list;
+
+    if (!isBusy && feedList != null && feedList!.isNotEmpty) {
+      list = feedList!.where((x) {
+        /// If Tweet is a comment then no need to add it in tweet list
+        if (x.parentkey == null &&
+            x.user!.userId == userModel.userId) {
+          return false;
+        }
+
+        /// Only include Tweets of logged-in user's and his following user's
+        // if (x.user!.userId == userModel.userId ||
+        //     (userModel.followingList != null &&
+        //         userModel.followingList!.contains(x.user!.userId))) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+        return true;
+      }).toList();
+      if (list.isEmpty) {
+        list = null;
+      }
+    }
+    return list;
+  }
+
   Map<String, dynamic> _linkWebInfos = {};
   Map<String, dynamic> get linkWebInfos => _linkWebInfos;
   void addWebInfo(String url, dynamic webInfo) {
@@ -173,7 +205,11 @@ class FeedState extends AppState {
     List<String>? list = userModel.grouplist;
     return list;
   }
-
+  Future<void> addNumberToGoal(FeedModel tempFeed, int tempInt) async {
+    await kDatabase.child('tweet').child(tempFeed.key!).update({
+      'GoalAchieved': tempFeed.GoalAchieved == null ? tempInt : tempFeed.GoalAchieved! + tempInt,
+    });
+  }
 
   /// [clear all tweets] if any tweet present in tweet detail page or comment tweet
   void clearAllDetailAndReplyTweetStack() {
