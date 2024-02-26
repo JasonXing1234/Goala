@@ -196,15 +196,15 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return SearchPage(scaffoldKey: _scaffoldKey);
       case 1:
+        return FeedPage1(scaffoldKey: _scaffoldKey,
+          refreshIndicatorKey: refreshIndicatorKey,);
+      case 2:
+        return Search1Page(scaffoldKey: _scaffoldKey);
+      case 3:
         return FeedPage(
           scaffoldKey: _scaffoldKey,
           refreshIndicatorKey: refreshIndicatorKey,
         );
-      case 2:
-        return Search1Page(scaffoldKey: _scaffoldKey);
-      case 3:
-        return FeedPage1(scaffoldKey: _scaffoldKey,
-          refreshIndicatorKey: refreshIndicatorKey,);
       /*case 3:
         return ChatListPage(scaffoldKey: _scaffoldKey);*/
       default:

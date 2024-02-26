@@ -133,11 +133,7 @@ class _SplashPageState extends State<SplashPage> {
                   : const CircularProgressIndicator(
                       strokeWidth: 2,
                     ),
-              Image.asset(
-                'assets/images/icon-480.png',
-                height: 30,
-                width: 30,
-              )
+
             ],
           ),
         ),
