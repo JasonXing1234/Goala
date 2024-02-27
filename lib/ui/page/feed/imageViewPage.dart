@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/constant.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/widgets/cache_image.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetIconsRow.dart';
+import 'package:Goala/helper/constant.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/widgets/cache_image.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
 import 'package:provider/provider.dart';
 
 /*class ImageViewPge extends StatefulWidget {

@@ -1,16 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/constant.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/page/Auth/widget/googleLoginButton.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/customLoader.dart';
+import 'package:Goala/helper/constant.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
@@ -144,7 +144,7 @@ class _SignupState extends State<Signup> {
     loader.showLoader(context);
     var state = Provider.of<AuthState>(context, listen: false);
     Random random = Random();
-    int randomNumber = random.nextInt(8);
+    int randomNumber = random.nextInt(7);
 
     UserModel user = UserModel(
       email: _emailController.text.toLowerCase(),
@@ -155,7 +155,7 @@ class _SignupState extends State<Signup> {
           .toString(),
       location: 'Somewhere in universe',
       profilePic: Constants.dummyProfilePicList[randomNumber],
-      isVerified: false,
+      isVerified: false
     );
     state
         .signUp(
