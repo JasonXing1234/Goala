@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/state/notificationState.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/state/notificationState.dart';
+import 'package:Goala/ui/page/feed/feedPostDetail.dart';
+import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:provider/provider.dart';
 
 class PostLikeTile extends StatelessWidget {

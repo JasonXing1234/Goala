@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/state/profile_state.dart';
-import 'package:flutter_twitter_clone/state/suggestionUserState.dart';
+import 'package:Goala/state/profile_state.dart';
+import 'package:Goala/state/suggestionUserState.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_twitter_clone/state/searchState.dart';
-import 'package:flutter_twitter_clone/ui/page/common/locator.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
+import 'package:Goala/state/searchState.dart';
+import 'package:Goala/ui/page/common/locator.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'helper/routes.dart';
 import 'state/appState.dart';
 import 'state/authState.dart';

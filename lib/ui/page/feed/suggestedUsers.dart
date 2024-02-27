@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/suggestionUserState.dart';
-import 'package:flutter_twitter_clone/state/searchState.dart';
-import 'package:flutter_twitter_clone/ui/page/common/widget/userListWidget.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/customLoader.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/emptyList.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/suggestionUserState.dart';
+import 'package:Goala/state/searchState.dart';
+import 'package:Goala/ui/page/common/widget/userListWidget.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/newWidget/customLoader.dart';
+import 'package:Goala/widgets/newWidget/emptyList.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 
 class SuggestedUsers extends StatefulWidget {

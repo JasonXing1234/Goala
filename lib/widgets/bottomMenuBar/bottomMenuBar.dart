@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/bottomMenuBar/tabItem.dart';
+import 'package:Goala/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
+import 'package:Goala/state/appState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/bottomMenuBar/tabItem.dart';
 import 'package:provider/provider.dart';
 
+import '../../BottomBarIcon/flutter-icons-53c02229/bottom_bar_icons.dart';
+import '../../BottomBarIcon/flutter-icons-e32d3695/human_icons.dart';
+import '../../BottomBarIcon/flutter-icons-ef08281a/search_icons.dart';
 import '../customWidgets.dart';
 
 class BottomMenubar extends StatefulWidget {
@@ -37,21 +41,21 @@ class _BottomMenubarState extends State<BottomMenubar> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _icon(null, 0,
-              icon: 0 == state.pageIndex ? AppIcon.homeFill : AppIcon.home,
+              icon: 0 == state.pageIndex ? Human.user : Human.user,
               isCustomIcon: true),
           _icon(null, 1,
-              icon: 1 == state.pageIndex ? AppIcon.searchFill : AppIcon.search,
+              icon: 1 == state.pageIndex ? BottomBar.globe_alt : BottomBar.globe,
               isCustomIcon: true),
-          /*_icon(null, 2,
+          _icon(null, 2,
               icon: 2 == state.pageIndex
-                  ? AppIcon.notificationFill
-                  : AppIcon.notification,
+                  ? Search.search : Search.search,
+
               isCustomIcon: true),
           _icon(null, 3,
               icon: 3 == state.pageIndex
                   ? AppIcon.messageFill
                   : AppIcon.messageEmpty,
-              isCustomIcon: true),*/
+              isCustomIcon: true),
         ],
       ),
     );

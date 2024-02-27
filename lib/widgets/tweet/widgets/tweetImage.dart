@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/widgets/cache_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/widgets/cache_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class TweetImage extends StatelessWidget {

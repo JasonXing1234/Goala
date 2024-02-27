@@ -4,10 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/firebase_database.dart' as dabase;
 import 'package:flutter/foundation.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
+import 'package:collection/collection.dart';
 class ProfileState extends ChangeNotifier {
   ProfileState(this.profileId) {
     databaseInit();
@@ -66,6 +66,16 @@ class ProfileState extends ChangeNotifier {
     });
   }
 
+  /*String? getProfilePic(String? userProfileId){
+    return kDatabase
+        .child("profile")
+        .child(userProfileId!).child("profilePic").get() as String?;
+  }
+  String? getProfileUsername(String? userProfileId){
+    return kDatabase
+        .child("profile")
+        .child(userProfileId!).child("disP").get() as String?;
+  }*/
   /// Fetch profile data of user whoose profile is opened
   void _getProfileUser(String? userProfileId) {
     assert(userProfileId != null);
@@ -115,17 +125,16 @@ class ProfileState extends ChangeNotifier {
         /// if logged in user is `not following` profile user then
         /// 1.Add logged in user to profile user's `follower` list
         /// 2. Add profile user to logged in user's `following` list
+        ///
         profileUserModel.followersList ??= [];
         profileUserModel.followersList!.add(userModel.userId!);
         // Adding profile user to logged-in user's following list
         userModel.followingList ??= [];
         addFollowNotification();
         userModel.followingList!.add(profileUserModel.userId!);
+        profileUserModel.following = profileUserModel.followingList!.length;
+        userModel.following = userModel.followingList!.length;
       }
-      // update profile user's user follower count
-      profileUserModel.followers = profileUserModel.followersList!.length;
-      // update logged-in user's following count
-      userModel.following = userModel.followingList!.length;
       kDatabase
           .child('profile')
           .child(profileUserModel.userId!)
@@ -141,6 +150,190 @@ class ProfileState extends ChangeNotifier {
       notifyListeners();
     } catch (error) {
       cprint(error, errorIn: 'followUser');
+    }
+  }
+  acceptFriendRequest() {
+    /// `userModel` is user who is logged-in app.
+    /// `profileUserModel` is user whoose profile is open in app.
+    try {
+
+      addCloseness(profileId, 1);
+      // update profile user's user follower count
+      userModel.followingList ??= [];
+      userModel.followingList!.add(profileUserModel.userId!);
+      // update logged-in user's following count
+      userModel.following = userModel.followingList!.length;
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .child('followingList')
+          .set(userModel.followingList);
+      cprint('user added to following list', event: 'add_follow');
+      notifyListeners();
+    } catch (error) {
+      cprint(error, errorIn: 'followUser');
+    }
+  }
+  addFriend() {
+    /// `userModel` is user who is logged-in app.
+    /// `profileUserModel` is user whoose profile is open in app.
+    try {
+
+      // update profile user's user follower count
+      userModel.followingList ??= [];
+      userModel.followingList!.add(profileUserModel.userId!);
+      // update logged-in user's following count
+      userModel.following = userModel.followingList!.length;
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .child('followingList')
+          .set(userModel.followingList);
+      cprint('user added to following list', event: 'add_follow');
+      notifyListeners();
+    } catch (error) {
+      cprint(error, errorIn: 'followUser');
+    }
+  }
+  addCloseness(String userI, int addition){
+    if(userModel.closenessMap == null || profileUserModel.closenessMap == null){
+      if(profileUserModel.closenessMap != null && profileUserModel.closenessMap?.firstWhereOrNull((element) =>
+          element.contains(userId)) == null){
+        List<String?> tempList = [];
+        tempList.add(profileId + ' ' + 1.toString());
+        kDatabase
+            .child('profile')
+            .child(userId)
+            .update({
+          'closenessMap': tempList,
+        });
+        cprint('user added to following list', event: 'add_follow');
+
+        List<String?> tempList2 = profileUserModel.closenessMap!;
+        String tempString2 = userId + ' ' + 1.toString();
+        tempList2.add(tempString2);
+        kDatabase
+            .child('profile')
+            .child(profileId)
+            .update({
+          'closenessMap': tempList2,
+        });
+        cprint('user added to following list', event: 'add_follow');
+      }
+      else if(userModel.closenessMap != null && userModel.closenessMap?.firstWhereOrNull((element) =>
+          element.contains(profileId)) == null){
+        List<String?> tempList = [];
+        tempList.add(userId + ' ' + 1.toString());
+        kDatabase
+            .child('profile')
+            .child(profileId)
+            .update({
+          'closenessMap': tempList,
+        });
+        cprint('user added to following list', event: 'add_follow');
+
+        List<String?> tempList2 = userModel.closenessMap!;
+        String tempString2 = profileId + ' ' + 1.toString();
+        tempList2.add(tempString2);
+        kDatabase
+            .child('profile')
+            .child(userId)
+            .update({
+          'closenessMap': tempList2,
+        });
+        cprint('user added to following list', event: 'add_follow');
+      }
+      else if(userModel.closenessMap == null || profileUserModel.closenessMap == null){
+        List<String?> tempList = [];
+        tempList.add(profileId + ' ' + 1.toString());
+        kDatabase
+            .child('profile')
+            .child(userId)
+            .update({
+          'closenessMap': tempList,
+        });
+        cprint('user added to following list', event: 'add_follow');
+
+        List<String?> tempList2 = [];
+        tempList2.add(userId + ' ' + 1.toString());
+        kDatabase
+            .child('profile')
+            .child(profileId)
+            .update({
+          'closenessMap': tempList2,
+        });
+        cprint('user added to following list', event: 'add_follow');
+      }
+    }
+    else if (userModel.closenessMap?.firstWhereOrNull((element) =>
+        element.contains(profileId)) == null || profileUserModel.closenessMap?.firstWhereOrNull((element) =>
+        element.contains(userId)) == null){
+      List<String?> tempList = userModel.closenessMap!;
+      String tempString = profileId + ' ' + 1.toString();
+      tempList.add(tempString);
+
+      List<String?> tempList2 = profileUserModel.closenessMap!;
+      String tempString2 = userId + ' ' + 1.toString();
+      tempList2.add(tempString2);
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .update({
+        'closenessMap': tempList,
+      });
+      cprint(
+          'user added to following list', event: 'add_follow');
+      kDatabase
+          .child('profile')
+          .child(profileId)
+          .update({
+        'closenessMap': tempList2,
+      });
+      cprint(
+          'user added to following list', event: 'add_follow');
+    }
+    else {
+      List<String?> tempList = userModel.closenessMap!;
+      String tempString = userModel.closenessMap!
+          .firstWhere((element) =>
+          element.contains(profileId));
+      int tempIndex = userModel.closenessMap!
+          .indexWhere((element) =>
+          element.contains(profileId));
+      String uid = tempString.split(' ')[0];
+      String closeness = tempString.split(' ')[1];
+      closeness = (int.parse(closeness) + 1).toString();
+      tempString = uid + ' ' + closeness;
+      tempList[tempIndex] = tempString;
+
+      List<String?> tempList2 = profileUserModel.closenessMap!;
+      String tempString2 = profileUserModel.closenessMap!
+          .firstWhere((element) =>
+          element.contains(userId));
+      int tempIndex2 = profileUserModel.closenessMap!
+          .indexWhere((element) =>
+          element.contains(userId));
+      String uid2 = tempString2.split(' ')[0];
+      String closeness2 = tempString2.split(' ')[1];
+      closeness2 = (int.parse(closeness2) + 1).toString();
+      tempString2 = uid2 + ' ' + closeness2;
+      tempList2[tempIndex2] = tempString2;
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .update({
+              'closenessMap': tempList,
+      });
+      cprint(
+          'user added to following list', event: 'add_follow');
+      kDatabase
+          .child('profile')
+          .child(profileId)
+          .update({
+            'closenessMap': tempList2,
+      });
+      cprint(
+          'user added to following list', event: 'add_follow');
     }
   }
 

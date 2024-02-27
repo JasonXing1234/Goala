@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/bookmarkState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customAppBar.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/emptyList.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/tweet.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/bookmarkState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customAppBar.dart';
+import 'package:Goala/widgets/newWidget/emptyList.dart';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:provider/provider.dart';
 
 class BookmarkPage extends StatelessWidget {
