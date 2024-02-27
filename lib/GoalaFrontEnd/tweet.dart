@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/parentTweet.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetIconsRow.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/custom_link_media_info.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/ui/page/feed/feedPostDetail.dart';
+import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
+import 'package:Goala/widgets/tweet/widgets/parentTweet.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
+import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
 
-import '../customWidgets.dart';
-import 'widgets/retweetWidget.dart';
-import 'widgets/tweetImage.dart';
+import '../widgets/customWidgets.dart';
+import '../widgets/tweet/widgets/retweetWidget.dart';
+import '../widgets/tweet/widgets/tweetImage.dart';
 
 class Tweet extends StatelessWidget {
   final FeedModel model;

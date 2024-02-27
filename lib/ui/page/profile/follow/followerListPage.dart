@@ -1,9 +1,9 @@
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/ui/page/common/usersListPage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/follow/followListState.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/customLoader.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/ui/page/common/usersListPage.dart';
+import 'package:Goala/ui/page/profile/follow/followListState.dart';
+import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:provider/provider.dart';
 
 class FollowerListPage extends StatelessWidget {

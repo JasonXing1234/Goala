@@ -1,4 +1,4 @@
-import 'package:flutter_twitter_clone/model/user.dart';
+import 'package:Goala/model/user.dart';
 
 class GroupGoalModel {
   late bool isPrivate;

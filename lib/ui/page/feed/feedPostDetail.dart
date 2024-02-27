@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/customRoute.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/tweet.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetBottomSheet.dart';
+import 'package:Goala/helper/customRoute.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
 class FeedPostDetail extends StatefulWidget {

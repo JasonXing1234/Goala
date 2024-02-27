@@ -3,31 +3,31 @@ import 'dart:async';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/push_notification_model.dart';
-import 'package:flutter_twitter_clone/resource/push_notification_service.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/chats/chatState.dart';
-import 'package:flutter_twitter_clone/state/suggestionUserState.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/state/notificationState.dart';
-import 'package:flutter_twitter_clone/state/searchState.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/feedPage.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/suggestedUsers.dart';
-import 'package:flutter_twitter_clone/ui/page/message/chatListPage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
-import 'package:flutter_twitter_clone/ui/page/search/Search1.dart';
-import 'package:flutter_twitter_clone/widgets/bottomMenuBar/bottomMenuBar.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/push_notification_model.dart';
+import 'package:Goala/resource/push_notification_service.dart';
+import 'package:Goala/state/appState.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/chats/chatState.dart';
+import 'package:Goala/state/suggestionUserState.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/state/notificationState.dart';
+import 'package:Goala/state/searchState.dart';
+import 'package:Goala/GoalaFrontEnd/feedPage.dart';
+import 'package:Goala/ui/page/feed/feedPostDetail.dart';
+import 'package:Goala/ui/page/feed/suggestedUsers.dart';
+import 'package:Goala/ui/page/message/chatListPage.dart';
+import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/UserProfilePage.dart';
+import 'package:Goala/widgets/bottomMenuBar/bottomMenuBar.dart';
 import 'package:provider/provider.dart';
 
-import 'common/locator.dart';
-import 'common/sidebar.dart';
-import 'feed/feedPage1.dart';
-import 'notification/notificationPage.dart';
-import 'search/SearchPage.dart';
+import '../ui/page/common/locator.dart';
+import '../ui/page/common/sidebar.dart';
+import '../ui/page/feed/feedPage1.dart';
+import '../ui/page/notification/notificationPage.dart';
+import 'SearchPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         return FeedPage1(scaffoldKey: _scaffoldKey,
           refreshIndicatorKey: refreshIndicatorKey,);
       case 2:
-        return Search1Page(scaffoldKey: _scaffoldKey);
+        return UserProfilePage(scaffoldKey: _scaffoldKey);
       case 3:
         return FeedPage(
           scaffoldKey: _scaffoldKey,

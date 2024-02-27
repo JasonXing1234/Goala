@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/customRoute.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/RoundedButton.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/helper/customRoute.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/ui/RoundedButton.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/newWidget/title_text.dart';
+import '../widgets/newWidget/title_text.dart';
 
 class TaskDetailPage extends StatefulWidget {
   const TaskDetailPage({Key? key, required this.tempFeed}) : super(key: key);

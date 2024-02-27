@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/bottomMenuBar/tabItem.dart';
+import 'package:Goala/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
+import 'package:Goala/state/appState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/bottomMenuBar/tabItem.dart';
 import 'package:provider/provider.dart';
 
 import '../../BottomBarIcon/flutter-icons-53c02229/bottom_bar_icons.dart';

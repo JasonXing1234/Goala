@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '821486252812',
     projectId: 'motivationapp-fa23c',
     storageBucket: 'motivationapp-fa23c.appspot.com',
-    iosBundleId: 'com.thealphamerc.flutterTwitterClone',
+    iosBundleId: 'com.Goala',
   );
 }

@@ -1,30 +1,30 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/ui/page/Auth/selectAuthMethod.dart';
-import 'package:flutter_twitter_clone/ui/page/Auth/verifyEmail.dart';
-import 'package:flutter_twitter_clone/ui/page/common/splash.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/composeTweet/ComposeGroupGoal.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/composeTweet/composeTweet.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/composeTweet/state/composeTweetState.dart';
-import 'package:flutter_twitter_clone/ui/page/homePage.dart';
-import 'package:flutter_twitter_clone/ui/page/message/conversationInformation/conversationInformation.dart';
-import 'package:flutter_twitter_clone/ui/page/message/newMessagePage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/follow/followerListPage.dart';
-import 'package:flutter_twitter_clone/ui/page/search/SearchPage.dart';
-import 'package:flutter_twitter_clone/ui/page/search/Search1.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/about/aboutTwitter.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/accessibility/accessibility.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/accountSettingsPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/contentPrefrences/contentPreference.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/contentPrefrences/trends/trendsPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/dataUsage/dataUsagePage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/displaySettings/displayAndSoundPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/notifications/notificationPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/privacyAndSafety/directMessage/directMessage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/privacyAndSafety/privacyAndSafetyPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/accountSettings/proxy/proxyPage.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/settingsAndPrivacyPage.dart';
+import 'package:Goala/ui/page/Auth/selectAuthMethod.dart';
+import 'package:Goala/ui/page/Auth/verifyEmail.dart';
+import 'package:Goala/ui/page/common/splash.dart';
+import 'package:Goala/GoalaFrontEnd/ComposeGroupGoal.dart';
+import 'package:Goala/GoalaFrontEnd/composeTweet.dart';
+import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
+import 'package:Goala/GoalaFrontEnd/homePage.dart';
+import 'package:Goala/ui/page/message/conversationInformation/conversationInformation.dart';
+import 'package:Goala/ui/page/message/newMessagePage.dart';
+import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
+import 'package:Goala/GoalaFrontEnd/SearchPage.dart';
+import 'package:Goala/GoalaFrontEnd/UserProfilePage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/about/aboutTwitter.dart';
+import 'package:Goala/ui/page/settings/accountSettings/accessibility/accessibility.dart';
+import 'package:Goala/ui/page/settings/accountSettings/accountSettingsPage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/contentPrefrences/contentPreference.dart';
+import 'package:Goala/ui/page/settings/accountSettings/contentPrefrences/trends/trendsPage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/dataUsage/dataUsagePage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/displaySettings/displayAndSoundPage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/notifications/notificationPage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/privacyAndSafety/directMessage/directMessage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/privacyAndSafety/privacyAndSafetyPage.dart';
+import 'package:Goala/ui/page/settings/accountSettings/proxy/proxyPage.dart';
+import 'package:Goala/ui/page/settings/settingsAndPrivacyPage.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/customRoute.dart';
@@ -34,7 +34,7 @@ import '../ui/page/Auth/signup.dart';
 import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/feed/imageViewPage.dart';
 import '../ui/page/message/chatScreenPage.dart';
-import '../ui/page/profile/profilePage.dart';
+import '../GoalaFrontEnd/profilePage.dart';
 import '../widgets/customWidgets.dart';
 
 class Routes {
@@ -121,7 +121,7 @@ class Routes {
             builder: (BuildContext context) => SearchPage());
       case "Search1Page":
         return CustomRoute<bool>(
-            builder: (BuildContext context) => Search1Page());
+            builder: (BuildContext context) => UserProfilePage());
       /*case "ImageViewPge":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const ImageViewPge());*/
