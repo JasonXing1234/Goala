@@ -32,7 +32,6 @@ import '../ui/page/Auth/ForgetPasswordPage.dart';
 import '../ui/page/Auth/SignInPage.dart';
 import '../ui/page/Auth/SignupPage.dart';
 import '../ui/page/feed/feedPostDetail.dart';
-import '../ui/page/feed/imageViewPage.dart';
 import '../ui/page/message/chatScreenPage.dart';
 import '../GoalaFrontEnd/profilePage.dart';
 import '../widgets/customWidgets.dart';
