@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/state/profile_state.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
             create: (_) => SuggestionsState()),
       ],
       child: MaterialApp(
-        title: 'Fwitter',
+        title: APP_NAME,
         theme: AppTheme.appTheme.copyWith(
           textTheme: GoogleFonts.mulishTextTheme(
             Theme.of(context).textTheme,
