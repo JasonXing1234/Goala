@@ -223,7 +223,7 @@ class AuthState extends AppState {
   Future<User?> getCurrentUser() async {
     try {
       isBusy = true;
-      Utility.logEvent('get_currentUSer', parameter: {});
+      Utility.logEvent('get_currentUser', parameter: {});
       user = _firebaseAuth.currentUser;
       if (user != null) {
         await getProfileUser();
