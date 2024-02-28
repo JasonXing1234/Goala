@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
@@ -33,7 +34,7 @@ class DirectMessagesPage extends StatelessWidget {
             visibleSwitch: true,
             vPadding: 20,
             subtitle:
-                'You will be able to receive Direct Message requests from anyone on Fwitter, even if you don\'t follow them.',
+                'You will be able to receive Direct Message requests from anyone on $APP_NAME, even if you don\'t follow them.',
           ),
           SettingRowWidget(
             "Show read receipts",

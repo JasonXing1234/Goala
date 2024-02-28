@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
@@ -48,7 +49,7 @@ class SettingsAndPrivacyPage extends StatelessWidget {
               navigateTo: 'AccessibilityPage'),
           const SettingRowWidget("Proxy", navigateTo: "ProxyPage"),
           const SettingRowWidget(
-            "About Fwitter",
+            "About $APP_NAME",
             navigateTo: "AboutPage",
           ),
           const SettingRowWidget(
@@ -56,7 +57,7 @@ class SettingsAndPrivacyPage extends StatelessWidget {
             showDivider: false,
             vPadding: 10,
             subtitle:
-                'These settings affect all of your Fwitter accounts on this devce.',
+                'These settings affect all of your $APP_NAME accounts on this devce.',
           )
         ],
       ),

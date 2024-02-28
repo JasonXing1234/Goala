@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/ui/page/settings/widgets/headerWidget.dart';
 import 'package:Goala/ui/page/settings/widgets/settingsRowWidget.dart';
@@ -143,7 +144,7 @@ class DisplayAndSoundPage extends StatelessWidget {
           const SettingRowWidget(
             "Emoji",
             subtitle:
-                'Use the Fwitter set instead of your device\'s default set',
+                'Use the $APP_NAME set instead of your device\'s default set',
             showDivider: false,
             showCheckBox: false,
           ),
@@ -162,7 +163,7 @@ class DisplayAndSoundPage extends StatelessWidget {
           ),
           const SettingRowWidget(
             "Use in-app browser",
-            subtitle: 'Open external links with Fwitter browser',
+            subtitle: 'Open external links with $APP_NAME browser',
             showCheckBox: false,
           ),
         ],

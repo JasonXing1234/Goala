@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/ui/page/settings/widgets/headerWidget.dart';
@@ -106,7 +107,7 @@ class PrivacyAndSaftyPage extends StatelessWidget {
           SettingRowWidget(
             "Precise location",
             subtitle:
-                'Disabled \n\n\nIf enabled, Fwitter will collect, store, and use your device\'s precise location, such as your GPS information. This lets Fwitter improve your experience - for example, showing you mpre local content, ads, and recommendations.',
+                'Disabled \n\n\nIf enabled, $APP_NAME will collect, store, and use your device\'s precise location, such as your GPS information. This lets $APP_NAME improve your experience - for example, showing you mpre local content, ads, and recommendations.',
           ),
           HeaderWidget(
             'Personalisation and data',
@@ -117,7 +118,7 @@ class PrivacyAndSaftyPage extends StatelessWidget {
             subtitle: "Allow all",
           ),
           SettingRowWidget(
-            "See your Fwitter data",
+            "See your $APP_NAME data",
             subtitle:
                 "Review and edit your profile information and data associated with your account.",
           ),

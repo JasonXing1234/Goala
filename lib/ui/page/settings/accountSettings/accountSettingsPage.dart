@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
@@ -43,7 +44,7 @@ class AccountSettingsPage extends StatelessWidget {
             secondHeader: true,
           ),
           const SettingRowWidget("Country"),
-          const SettingRowWidget("Your Fwitter data"),
+          const SettingRowWidget("Your $APP_NAME data"),
           const SettingRowWidget("Apps and sessions"),
           SettingRowWidget(
             "Log out",

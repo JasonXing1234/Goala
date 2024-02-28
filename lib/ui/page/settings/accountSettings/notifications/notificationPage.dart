@@ -1,3 +1,4 @@
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/ui/page/settings/widgets/headerWidget.dart';
@@ -39,13 +40,13 @@ class NotificationPage extends StatelessWidget {
             "Unread notification count badge",
             showCheckBox: false,
             subtitle:
-                'Display a badge with the number of notifications waiting for you inside the Fwitter app.',
+                'Display a badge with the number of notifications waiting for you inside the $APP_NAME app.',
           ),
           SettingRowWidget("Push notifications"),
           SettingRowWidget("SMS notifications"),
           SettingRowWidget(
             "Email notifications",
-            subtitle: 'Control when how often Fwitter sends emails to you.',
+            subtitle: 'Control when how often $APP_NAME sends emails to you.',
           ),
         ],
       ),
