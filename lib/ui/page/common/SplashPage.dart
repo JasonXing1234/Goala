@@ -133,7 +133,6 @@ class _SplashPageState extends State<SplashPage> {
                   : const CircularProgressIndicator(
                       strokeWidth: 2,
                     ),
-
             ],
           ),
         ),
