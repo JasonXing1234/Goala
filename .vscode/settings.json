@@ -7,5 +7,6 @@
     "RGBO",
     "thumbpin",
     "userlist"
-  ]
+  ],
+  "editor.formatOnSave": true,
 }
