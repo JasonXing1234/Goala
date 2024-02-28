@@ -53,12 +53,12 @@ class _SplashPageState extends State<SplashPage> {
   Future<bool> _checkAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final currentAppVersion = packageInfo.version;
-    final buildNo = packageInfo.buildNumber;
+    final buildNumber = packageInfo.buildNumber;
     final config = await _getAppVersionFromFirebaseConfig();
 
     if (config != null &&
         config['name'] == currentAppVersion &&
-        config['versions'].contains(int.tryParse(buildNo))) {
+        config['versions'].contains(int.tryParse(buildNumber))) {
       return true;
     } else {
       if (kDebugMode) {
@@ -143,13 +143,19 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<AuthState>(context);
+
+    Widget body;
+    if (state.authStatus == AuthStatus.NOT_DETERMINED) {
+      body = _body();
+    } else if (state.authStatus == AuthStatus.NOT_LOGGED_IN) {
+      body = const WelcomePage();
+    } else {
+      body = const HomePage();
+    }
+
     return Scaffold(
       backgroundColor: TwitterColor.white,
-      body: state.authStatus == AuthStatus.NOT_DETERMINED
-          ? _body()
-          : state.authStatus == AuthStatus.NOT_LOGGED_IN
-              ? const WelcomePage()
-              : const HomePage(),
+      body: body,
     );
   }
 }

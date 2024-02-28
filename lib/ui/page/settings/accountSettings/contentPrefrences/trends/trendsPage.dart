@@ -113,7 +113,7 @@ class TrendsPage extends StatelessWidget {
           const SettingRowWidget(
             null,
             subtitle:
-                'You can see what\'s trending in a specfic location by selecting which location appears in your Trending tab.',
+                "You can see what's trending in a specfic location by selecting which location appears in your Trending tab.",
             navigateTo: null,
             showDivider: false,
             vPadding: 12,

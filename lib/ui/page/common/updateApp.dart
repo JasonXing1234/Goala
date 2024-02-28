@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/utility.dart';
-import 'package:Goala/ui/page/common/splash.dart';
+import 'package:Goala/ui/page/common/SplashPage.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';

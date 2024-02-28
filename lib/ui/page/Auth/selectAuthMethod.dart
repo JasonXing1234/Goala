@@ -1,3 +1,5 @@
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
@@ -17,12 +19,12 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  Widget _submitButton() {
+  Widget _createAccountButton() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 15),
       width: MediaQuery.of(context).size.width,
       child: CustomFlatButton(
-        label: "Create Account",
+        label: CREATE_ACCOUNT_TEXT,
         onPressed: () {
           var state = Provider.of<AuthState>(context, listen: false);
           Navigator.push(
@@ -37,55 +39,53 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
+  void _onLoginPressed() {
+    cprint("Login button pressed");
+    var state = Provider.of<AuthState>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SignIn(loginCallback: state.getCurrentUser),
+      ),
+    );
+  }
+
   Widget _body() {
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 80,
-              height: 40,
-              child: Image.asset('assets/images/icon-480.png'),
+          children: [
+            const SizedBox(height: 20),
+            Image.asset(
+              'assets/images/icon-48.png',
             ),
             const Spacer(),
             const TitleText(
-              'See what\'s happening in the world right now.',
+              SEE_WHAT_HAPPENING_TEXT,
               fontSize: 25,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            _submitButton(),
+            const SizedBox(height: 20),
+            _createAccountButton(),
             const Spacer(),
             Wrap(
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
+              children: [
                 const TitleText(
-                  'Have an account already?',
+                  ALREADY_HAVE_AN_ACCOUNT_TEXT,
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
                 ),
                 InkWell(
-                  onTap: () {
-                    var state = Provider.of<AuthState>(context, listen: false);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SignIn(loginCallback: state.getCurrentUser),
-                      ),
-                    );
-                  },
+                  onTap: _onLoginPressed,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 16,
+                    ),
                     child: TitleText(
-                      ' Log in',
+                      LOG_IN_TEXT,
                       fontSize: 14,
                       color: TwitterColor.dodgeBlue,
                       fontWeight: FontWeight.w300,

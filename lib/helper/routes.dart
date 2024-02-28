@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:Goala/ui/page/Auth/selectAuthMethod.dart';
 import 'package:Goala/ui/page/Auth/verifyEmail.dart';
-import 'package:Goala/ui/page/common/splash.dart';
+import 'package:Goala/ui/page/common/SplashPage.dart';
 import 'package:Goala/GoalaFrontEnd/ComposeGroupGoal.dart';
 import 'package:Goala/GoalaFrontEnd/composeTweet.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
@@ -95,7 +95,7 @@ class Routes {
                 ChangeNotifierProvider<ComposeTweetState>(
                   create: (_) => ComposeTweetState(),
                   child:
-                  const ComposeGroupGoal(isRetweet: false, isTweet: true),
+                      const ComposeGroupGoal(isRetweet: false, isTweet: true),
                 ));
 
       case "CreateFeedPage":
