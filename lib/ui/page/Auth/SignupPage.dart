@@ -13,15 +13,15 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:provider/provider.dart';
 
-class Signup extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   final VoidCallback? loginCallback;
 
-  const Signup({Key? key, this.loginCallback}) : super(key: key);
+  const SignupPage({Key? key, this.loginCallback}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _SignupState();
+  State<StatefulWidget> createState() => _SignupPageState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupPageState extends State<SignupPage> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
@@ -147,16 +147,15 @@ class _SignupState extends State<Signup> {
     int randomNumber = random.nextInt(7);
 
     UserModel user = UserModel(
-      email: _emailController.text.toLowerCase(),
-      bio: 'Edit profile to update bio',
-      // contact:  _mobileController.text,
-      displayName: _nameController.text,
-      dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
-          .toString(),
-      location: 'Somewhere in universe',
-      profilePic: Constants.dummyProfilePicList[randomNumber],
-      isVerified: false
-    );
+        email: _emailController.text.toLowerCase(),
+        bio: 'Edit profile to update bio',
+        // contact:  _mobileController.text,
+        displayName: _nameController.text,
+        dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
+            .toString(),
+        location: 'Somewhere in universe',
+        profilePic: Constants.dummyProfilePicList[randomNumber],
+        isVerified: false);
     state
         .signUp(
       user,

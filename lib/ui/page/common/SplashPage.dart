@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/state/authState.dart';
-import 'package:Goala/ui/page/Auth/selectAuthMethod.dart';
+import 'package:Goala/ui/page/Auth/WelcomePage.dart';
 import 'package:Goala/ui/page/common/updateApp.dart';
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/ui/theme/theme.dart';
