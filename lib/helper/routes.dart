@@ -29,7 +29,7 @@ import 'package:provider/provider.dart';
 
 import '../helper/customRoute.dart';
 import '../ui/page/Auth/forgetPasswordPage.dart';
-import '../ui/page/Auth/signin.dart';
+import '../ui/page/Auth/SignInPage.dart';
 import '../ui/page/Auth/signup.dart';
 import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/feed/imageViewPage.dart';

@@ -9,7 +9,7 @@ import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import '../../../GoalaFrontEnd/homePage.dart';
-import 'signin.dart';
+import 'SignInPage.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
