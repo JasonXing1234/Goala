@@ -201,7 +201,10 @@ class Utility {
   }
 
   static bool validateCredentials(
-      BuildContext context, String? email, String? password) {
+    BuildContext context,
+    String? email,
+    String? password,
+  ) {
     if (email == null || email.isEmpty) {
       customSnackBar(context, 'Please enter email id');
       return false;

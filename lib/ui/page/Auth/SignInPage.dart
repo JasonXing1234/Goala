@@ -144,6 +144,7 @@ class _SignInState extends State<SignIn> {
         }
       });
     } else {
+      // TODO(Outline the text inputs in red)
       loader.hideLoader();
     }
   }
