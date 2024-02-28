@@ -2,7 +2,7 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
-import 'package:Goala/ui/page/Auth/signup.dart';
+import 'package:Goala/ui/page/Auth/SignupPage.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
