@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:math'as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/utility.dart';
@@ -13,11 +14,14 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../model/feedModel.dart';
+import '../resource/push_notification_service.dart';
 import '../state/authState.dart';
 import '../state/feedState.dart';
+import '../ui/page/common/locator.dart';
 import '../widgets/newWidget/rippleButton.dart';
 import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/profile/profileImageView.dart';
@@ -35,17 +39,67 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateMixin {
   @override
   late TabController _tabController;
+  var initializationSettingsAndroid =
+  new AndroidInitializationSettings('goala');
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = Provider.of<SearchState>(context, listen: false);
       state.resetFilterList();
     });
     _tabController = TabController(length: 2, vsync: this);
+    listenForForegroundNotifications();
     super.initState();
   }
 
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
+  }
+
+  void listenForForegroundNotifications() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('pushing goals!');
+      // print('Message data: ${message.data}');
+
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'high_importance_channel',
+        'High Importance Notifications',
+        description: 'This channel is used for important notifications.',
+        importance: Importance.max,
+      );
+
+      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+      //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
+    });
+  }
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    cprint("Handling a background message: ${message.messageId}");
   }
 
   @override
@@ -245,7 +299,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                                   Center(
                                     child: Column(
                                       children: <Widget>[
-                                        SingleChildScrollView(child:
                                         Center(
                                           child: ListView.separated(
                                             scrollDirection: Axis.vertical,
@@ -258,7 +311,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                                             ),
                                             itemCount: list?.length ?? 0,
                                           ),
-                                        ),),
+                                        ),
                                       ],
                                     )
                                   ),

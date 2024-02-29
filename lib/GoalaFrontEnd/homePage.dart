@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
     state.databaseInit(authState.userId);
 
     /// configure push notifications
-    state.initFirebaseService();
+    //state.initFirebaseService();
 
     /// Subscribe the push notifications
     /// Whenever devices receive push notification, `listenPushNotification` callback will trigger.

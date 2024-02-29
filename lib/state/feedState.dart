@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/firebase_database.dart' as database;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/shared_prefrence_helper.dart';
@@ -10,10 +11,13 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/appState.dart';
 import 'package:Goala/ui/page/common/locator.dart';
+import 'package:flutter/material.dart';
 // import 'package:link_preview_generator/link_preview_generator.dart'
 //     show WebInfo;
 import 'package:path/path.dart' as path;
 import 'package:translator/translator.dart';
+
+import '../model/GoalNotificationModel.dart';
 
 class FeedState extends AppState {
   bool isBusy = false;
@@ -22,6 +26,8 @@ class FeedState extends AppState {
   List<UserModel>? _userFilterList;
   List<UserModel>? memberList;
   List<UserModel>? myGroupList;
+  List<bool> daySelected = List.filled(7, false);
+  TimeOfDay? pickedTime;
   List<UserModel>? _userlist;
   FeedModel? get tweetToReplyModel => _tweetToReplyModel;
   set setTweetToReply(FeedModel model) {
@@ -438,6 +444,13 @@ class FeedState extends AppState {
     isBusy = false;
     notifyListeners();
     return tweetKey;
+  }
+
+  void sendToDatabase(List<GoalNotiModel> modelList) {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    for (int i = 0; i < modelList.length; i++) {
+      databaseReference.child('GoalNotifications').push().set(modelList[i].toJson());
+    }
   }
 
 

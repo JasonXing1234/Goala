@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -21,6 +22,7 @@ import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import '../model/GoalNotificationModel.dart';
 import '../ui/RoundedButton.dart';
 import '../ui/constants.dart';
 
@@ -48,6 +50,12 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
+  TimeOfDay? pickedTime;
+  final List<String> days = [
+    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+  ];
+  List<bool> daySelected = List.filled(7, false);
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -108,7 +116,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
 
+    List<GoalNotiModel> NotiModelList = [];
     FeedModel tweetModel = await createTweetModel();
+
     String? tweetId;
 
     /// If tweet contain image
@@ -143,6 +153,16 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
       /// If type of tweet is new tweet
       if (widget.isTweet) {
         tweetId = await state.createTweet(tweetModel);
+        for (int i = 0; i < daySelected.length; i++) {
+          if (daySelected[i]) {
+            // Send each selected day with the time to the database
+            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetModel.key!);
+            NotiModelList.add(NotiModel);
+          }
+        }
+        if(tweetModel.parentkey == null && !daySelected.contains(true)){
+          state.sendToDatabase(NotiModelList);
+        }
       }
 
       /// If type of tweet is  retweet
@@ -170,6 +190,15 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
       /// Navigate back to home page
       Navigator.pop(context);
     });
+  }
+
+  Future<GoalNotiModel> createNotiModel(int day, String feedID) async{
+    var authState = Provider.of<AuthState>(context, listen: false);
+    var myUser = authState.userModel;
+    final _messaging = FirebaseMessaging.instance;
+    String? tempToken = await _messaging.getToken();
+    GoalNotiModel temp = GoalNotiModel(tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
+    return temp;
   }
 
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
@@ -234,6 +263,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
       }
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: customTitleText(''),
         onActionPressed: _submitButton,
@@ -391,77 +421,40 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                       title:
                       Center(child: Text('Time'),),
                       children: [
-                        SizedBox(
-                            height:20
-                        ),
-                        TabBar(
-                          labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
-                          controller: _tabController,
-                          // give the indicator a decoration (color and border radius)
-                          indicator: BoxDecoration(
-
-                            borderRadius: BorderRadius.circular(
-                              9.0,
+                        Column(
+                          children: [
+                            Wrap(
+                              children: List.generate(days.length, (index) {
+                                return ChoiceChip(
+                                  label: Text(days[index]),
+                                  selected: daySelected[index],
+                                  onSelected: (bool selected) {
+                                    setState(() {
+                                      daySelected[index] = selected;
+                                    });
+                                  },
+                                );
+                              }),
                             ),
-                            color: Colors.black,
-                          ),
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Colors.black,
-                          tabs: [
-                            Container(
-                              width: 300,
-                              child: Center(
-                                child:Text("Daily"),
-                              ),
-                            ),
-                            Container(
-                              width: 300,
-                              child: Center(child:
-                              Text("Weekly"),
-                              ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final TimeOfDay? time = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                );
+                                if (time != null) {
+                                  setState(() {
+                                    pickedTime = time;
+                                  });
+                                }
+                              },
+                              child: Text('Pick a Time'),
                             ),
                           ],
                         ),
                         SizedBox(
                             height:20
                         ),
-                        SizedBox(
-                          height: 100,
-                          child:
-                          TabBarView(
-                            controller: _tabController,
-                            children: <Widget>[
-                              RoundedButton(
-                                color: Colors.black,
-                                title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                                action: () async {
-                                  TimeOfDay? newDate = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-
-                                  );
-                                  if (newDate == null) return;
-
-                                },
-                              ),
-                              RoundedButton(
-                                color: Colors.black,
-                                title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                                action: () async {
-                                  TimeOfDay? newDate = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-
-                                  );
-                                  if (newDate == null) return;
-
-                                },
-                              ),
-                            ],
-                          ),),
-                        SizedBox(
-                          height: 20,
-                        )
                       ]
                   ),
                   Flexible(

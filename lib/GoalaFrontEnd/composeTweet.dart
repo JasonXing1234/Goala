@@ -1,14 +1,15 @@
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/model/user.dart';
+import 'package:Goala/model/GoalNotificationModel.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
 import 'package:Goala/ui/page/feed/composeTweet/widget/composeBottomIconWidget.dart';
 import 'package:Goala/ui/page/feed/composeTweet/widget/composeTweetImage.dart';
-import 'package:Goala/ui/page/feed/composeTweet/widget/widgetView.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/searchState.dart';
@@ -16,12 +17,9 @@ import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
-import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:translator/translator.dart';
-
 import '../ui/RoundedButton.dart';
 import '../ui/constants.dart';
 
@@ -47,6 +45,12 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
   late TextEditingController _titleController;
   late TabController _tabController;
   List<bool> isSelected = [true, false];
+  TimeOfDay? pickedTime;
+  final List<String> days = [
+    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+  ];
+  List<bool> daySelected = List.filled(7, false);
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -105,8 +109,10 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
+    List<GoalNotiModel> NotiModelList = [];
 
     FeedModel tweetModel = await createTweetModel();
+
     String? tweetId;
 
     /// If tweet contain image
@@ -141,6 +147,16 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
       /// If type of tweet is new tweet
       if (widget.isTweet) {
         tweetId = await state.createTweet(tweetModel);
+        for (int i = 0; i < daySelected.length; i++) {
+          if (daySelected[i]) {
+            // Send each selected day with the time to the database
+            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
+            NotiModelList.add(NotiModel);
+          }
+        }
+        if(tweetModel.parentkey == null && daySelected.contains(true)){
+          state.sendToDatabase(NotiModelList);
+        }
       }
 
       /// If type of tweet is  retweet
@@ -170,6 +186,14 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     });
   }
 
+  Future<GoalNotiModel> createNotiModel(int day, String feedID) async{
+    var authState = Provider.of<AuthState>(context, listen: false);
+    var myUser = authState.userModel;
+    final _messaging = FirebaseMessaging.instance;
+    String? tempToken = await _messaging.getToken();
+    GoalNotiModel temp = GoalNotiModel(tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
+    return temp;
+  }
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
   /// If tweet is new tweet then `parentkey` and `childRetwetkey` should be null
   /// IF tweet is a comment then it should have `parentkey`
@@ -223,7 +247,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     );
     return reply;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -419,74 +442,37 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                           title:
                           Center(child: Text('Reminder Time'),),
                           children: [
-                            SizedBox(
-                                height:20
-                            ),
-                            TabBar(
-                              labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
-                              controller: _tabController,
-                              // give the indicator a decoration (color and border radius)
-                              indicator: BoxDecoration(
-
-                                borderRadius: BorderRadius.circular(
-                                  9.0,
+                            Column(
+                              children: [
+                                Wrap(
+                                  children: List.generate(days.length, (index) {
+                                    return ChoiceChip(
+                                      label: Text(days[index]),
+                                      selected: daySelected[index],
+                                      onSelected: (bool selected) {
+                                        setState(() {
+                                          daySelected[index] = selected;
+                                        });
+                                      },
+                                    );
+                                  }),
                                 ),
-                                color: Colors.black,
-                              ),
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Colors.black,
-                              tabs: [
-                                Container(
-                                  width: 300,
-                                  child: Center(
-                                    child:Text("Daily"),
-                                  ),
-                                ),
-                                Container(
-                                  width: 300,
-                                  child: Center(child:
-                                  Text("Weekly"),
-                                  ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final TimeOfDay? time = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+                                    if (time != null) {
+                                      setState(() {
+                                        pickedTime = time;
+                                      });
+                                    }
+                                  },
+                                  child: Text('Pick a Time'),
                                 ),
                               ],
                             ),
-                            SizedBox(
-                                height:20
-                            ),
-                            SizedBox(
-                              height: 100,
-                              child:
-                              TabBarView(
-                                controller: _tabController,
-                                children: <Widget>[
-                                  RoundedButton(
-                                    color: Colors.black,
-                                    title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                                    action: () async {
-                                      TimeOfDay? newDate = await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-
-                                      );
-                                      if (newDate == null) return;
-
-                                    },
-                                  ),
-                                  RoundedButton(
-                                    color: Colors.black,
-                                    title: Text(DateTime.now().toString(), style: TextStyle(color: Colors.white)),
-                                    action: () async {
-                                      TimeOfDay? newDate = await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-
-                                      );
-                                      if (newDate == null) return;
-
-                                    },
-                                  ),
-                                ],
-                              ),),
                             SizedBox(
                               height: 20,
                             )
