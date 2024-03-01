@@ -16,7 +16,6 @@ import 'package:flutter_twitter_clone/state/notificationState.dart';
 import 'package:flutter_twitter_clone/state/searchState.dart';
 import 'package:flutter_twitter_clone/ui/page/feed/feedPage.dart';
 import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/suggestedUsers.dart';
 import 'package:flutter_twitter_clone/ui/page/message/chatListPage.dart';
 import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
 import 'package:flutter_twitter_clone/widgets/bottomMenuBar/bottomMenuBar.dart';
