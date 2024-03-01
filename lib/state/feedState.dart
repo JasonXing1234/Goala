@@ -122,6 +122,7 @@ class FeedState extends AppState {
       notifyListeners();
     }
   }
+
   void filterByUsername(String? name) {
     if (name != null &&
         name.isEmpty &&
@@ -138,12 +139,13 @@ class FeedState extends AppState {
     else if (name != null) {
       _userFilterList = _userlist!
           .where((x) =>
-      x.userName != null &&
-          x.userName!.toLowerCase().contains(name.toLowerCase()))
+              x.userName != null &&
+              x.userName!.toLowerCase().contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
+
   void filterByGroupname(String? name) {
     if (name != null &&
         name.isEmpty &&
@@ -160,12 +162,12 @@ class FeedState extends AppState {
     else if (name != null) {
       memberList = _userlist!
           .where((x) =>
-      x.grouplist != null &&
-          x.grouplist!.contains(name.toLowerCase()))
+              x.grouplist != null && x.grouplist!.contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
+
   List<String>? getMyGroups(UserModel? userModel) {
     if (userModel == null) {
       return null;
@@ -173,7 +175,6 @@ class FeedState extends AppState {
     List<String>? list = userModel.grouplist;
     return list;
   }
-
 
   /// [clear all tweets] if any tweet present in tweet detail page or comment tweet
   void clearAllDetailAndReplyTweetStack() {
@@ -239,11 +240,12 @@ class FeedState extends AppState {
       cprint(error, errorIn: 'getDataFromDatabase');
     }
   }
+
   void getPeopleFromDatabase() {
     try {
       isBusy = true;
       kDatabase.child('profile').once().then(
-            (DatabaseEvent event) {
+        (DatabaseEvent event) {
           final snapshot = event.snapshot;
           _userlist = <UserModel>[];
           _userFilterList = <UserModel>[];
@@ -403,7 +405,6 @@ class FeedState extends AppState {
     notifyListeners();
     return tweetKey;
   }
-
 
   ///  It will create tweet in [Firebase kDatabase] just like other normal tweet.
   ///  update retweet count for retweet model

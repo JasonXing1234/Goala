@@ -7,18 +7,19 @@ import 'package:provider/provider.dart';
 import 'customWidgets.dart';
 
 class CustomAppBar2 extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar2({Key? key,
-    this.title,
-    this.scaffoldKey,
-    this.icon,
-    this.onActionPressed,
-    this.textController,
-    this.isBackButton = false,
-    this.isCrossButton = false,
-    this.submitButtonText,
-    this.isSubmitDisable = true,
-    this.isBottomLine = true,
-    this.onSearchChanged})
+  const CustomAppBar2(
+      {Key? key,
+      this.title,
+      this.scaffoldKey,
+      this.icon,
+      this.onActionPressed,
+      this.textController,
+      this.isBackButton = false,
+      this.isCrossButton = false,
+      this.submitButtonText,
+      this.isSubmitDisable = true,
+      this.isBottomLine = true,
+      this.onSearchChanged})
       : super(key: key);
 
   final Size appBarHeight = const Size.fromHeight(56.0);
@@ -64,49 +65,41 @@ class CustomAppBar2 extends StatelessWidget implements PreferredSizeWidget {
     return <Widget>[
       submitButtonText != null
           ? Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child: Container(
-          alignment: Alignment.center,
-          padding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          decoration: BoxDecoration(
-            color: !isSubmitDisable
-                ? Theme
-                .of(context)
-                .primaryColor
-                : Theme
-                .of(context)
-                .primaryColor
-                .withAlpha(150),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            submitButtonText!,
-            style:
-            TextStyle(color: Theme
-                .of(context)
-                .colorScheme
-                .onPrimary),
-          ),
-        ).ripple(
-              () {
-            if (onActionPressed != null) onActionPressed!();
-          },
-          borderRadius: BorderRadius.circular(40),
-        ),
-      )
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+              child: Container(
+                alignment: Alignment.center,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                decoration: BoxDecoration(
+                  color: !isSubmitDisable
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).primaryColor.withAlpha(150),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  submitButtonText!,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                ),
+              ).ripple(
+                () {
+                  if (onActionPressed != null) onActionPressed!();
+                },
+                borderRadius: BorderRadius.circular(40),
+              ),
+            )
           : icon == null
-          ? Container()
-          : IconButton(
-        onPressed: () {
-          if (onActionPressed != null) onActionPressed!();
-        },
-        icon: customIcon(context,
-            icon: icon!,
-            isTwitterIcon: true,
-            iconColor: AppColor.primary,
-            size: 25),
-      )
+              ? Container()
+              : IconButton(
+                  onPressed: () {
+                    if (onActionPressed != null) onActionPressed!();
+                  },
+                  icon: customIcon(context,
+                      icon: icon!,
+                      isTwitterIcon: true,
+                      iconColor: AppColor.primary,
+                      size: 25),
+                )
     ];
   }
 
@@ -126,32 +119,28 @@ class CustomAppBar2 extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-          iconTheme: const IconThemeData(color: Colors.blue),
-          backgroundColor: Colors.white,
-          leading: isBackButton
-              ? const BackButton()
-              : isCrossButton
-              ? IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-              : _getUserAvatar(context),
-          title: title ?? _searchField(),
-          actions: _getActionButtons(context),
-          bottom: PreferredSize(
-            child: Container(
-              color: isBottomLine
-                  ? Colors.grey.shade200
-                  : Theme
-                  .of(context)
-                  .scaffoldBackgroundColor,
-              height: 1.0,
-            ),
-            preferredSize: const Size.fromHeight(0.0),
-          )
-        );
-
+        iconTheme: const IconThemeData(color: Colors.blue),
+        backgroundColor: Colors.white,
+        leading: isBackButton
+            ? const BackButton()
+            : isCrossButton
+                ? IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                : _getUserAvatar(context),
+        title: title ?? _searchField(),
+        actions: _getActionButtons(context),
+        bottom: PreferredSize(
+          child: Container(
+            color: isBottomLine
+                ? Colors.grey.shade200
+                : Theme.of(context).scaffoldBackgroundColor,
+            height: 1.0,
+          ),
+          preferredSize: const Size.fromHeight(0.0),
+        ));
   }
 }

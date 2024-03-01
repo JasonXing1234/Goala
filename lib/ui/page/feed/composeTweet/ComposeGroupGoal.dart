@@ -93,7 +93,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
   /// Submit tweet to save in firebase database
   void _submitButton() async {
     if (_descriptionController.text.isEmpty ||
-        _descriptionController.text.length > 50 || _titleController.text.isEmpty ||
+        _descriptionController.text.length > 50 ||
+        _titleController.text.isEmpty ||
         _titleController.text.length > 10) {
       return;
     }
@@ -154,7 +155,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
     /// If no user found, compose tweet screen is closed and redirect back to home page.
     await Provider.of<ComposeTweetState>(context, listen: false)
         .sendNotification(
-        tweetModel, Provider.of<SearchState>(context, listen: false))
+            tweetModel, Provider.of<SearchState>(context, listen: false))
         .then((_) {
       /// Hide running loader on screen
       kScreenLoader.hideLoader();
@@ -175,6 +176,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
     var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
     memberListTemp.add(myUser.userId!);
     memberListTemp.add(_addUserController.text);
+
     /// User who are creating reply tweet
     var commentedUser = UserModel(
         displayName: myUser.displayName ?? myUser.email!.split('@')[0],
@@ -188,9 +190,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
         title: _titleController.text,
         description: _descriptionController.text,
         lanCode:
-        (await GoogleTranslator().translate(_descriptionController.text))
-            .sourceLanguage
-            .code,
+            (await GoogleTranslator().translate(_descriptionController.text))
+                .sourceLanguage
+                .code,
         user: commentedUser,
         memberList: memberListTemp,
         createdAt: DateTime.now().toUtc().toString(),
@@ -198,13 +200,13 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
         parentkey: widget.isTweet
             ? null
             : widget.isRetweet
-            ? null
-            : state.tweetToReplyModel!.key,
+                ? null
+                : state.tweetToReplyModel!.key,
         childRetwetkey: widget.isTweet
             ? null
             : widget.isRetweet
-            ? model!.key
-            : null,
+                ? model!.key
+                : null,
         userId: myUser.userId!);
     return reply;
   }
@@ -219,11 +221,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
         submitButtonText: widget.isTweet
             ? 'Tweet'
             : widget.isRetweet
-            ? 'Retweet'
-            : 'Reply',
+                ? 'Retweet'
+                : 'Reply',
         isSubmitDisable:
-        !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-            Provider.of<FeedState>(context).isBusy,
+            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+                Provider.of<FeedState>(context).isBusy,
         isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -233,7 +235,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
           SingleChildScrollView(
             controller: scrollController,
             child:
-            widget.isRetweet ? _ComposeRetweet(this) : _ComposeTweet(this),
+                widget.isRetweet ? _ComposeRetweet(this) : _ComposeTweet(this),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -286,13 +288,13 @@ class _ComposeRetweet
                   const SizedBox(width: 3),
                   model.user!.isVerified!
                       ? customIcon(
-                    context,
-                    icon: AppIcon.blueTick,
-                    isTwitterIcon: true,
-                    iconColor: AppColor.primary,
-                    size: 13,
-                    paddingIcon: 3,
-                  )
+                          context,
+                          icon: AppIcon.blueTick,
+                          isTwitterIcon: true,
+                          iconColor: AppColor.primary,
+                          size: 13,
+                          paddingIcon: 3,
+                        )
                       : const SizedBox(width: 0),
                   SizedBox(width: model.user!.isVerified! ? 5 : 0),
                   Flexible(
@@ -338,9 +340,9 @@ class _ComposeRetweet
             children: <Widget>[
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child:
-                CircularImage(path: authState.user?.photoURL, height: 40),
+                    CircularImage(path: authState.user?.photoURL, height: 40),
               ),
               Expanded(
                 child: _TextField(
@@ -375,7 +377,7 @@ class _ComposeRetweet
                           border: Border.all(
                               color: AppColor.extraLightGrey, width: .5),
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(15))),
+                              const BorderRadius.all(Radius.circular(15))),
                       child: _tweet(context, viewState.model!),
                     ),
                   ],
@@ -440,7 +442,7 @@ class _ComposeTweet
                   const SizedBox(height: 30),
                   UrlText(
                     text:
-                    'Replying to ${viewState.model!.user!.userName ?? viewState.model!.user!.displayName}',
+                        'Replying to ${viewState.model!.user!.userName ?? viewState.model!.user!.displayName}',
                     style: TextStyle(
                       color: TwitterColor.paleSky,
                       fontSize: 13,
@@ -458,7 +460,7 @@ class _ComposeTweet
                 const SizedBox(width: 10),
                 ConstrainedBox(
                   constraints:
-                  BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
+                      BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
                   child: TitleText(viewState.model!.user!.displayName!,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -467,13 +469,13 @@ class _ComposeTweet
                 const SizedBox(width: 3),
                 viewState.model!.user!.isVerified!
                     ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                  paddingIcon: 3,
-                )
+                        context,
+                        icon: AppIcon.blueTick,
+                        isTwitterIcon: true,
+                        iconColor: AppColor.primary,
+                        size: 13,
+                        paddingIcon: 3,
+                      )
                     : const SizedBox(width: 0),
                 SizedBox(width: viewState.model!.user!.isVerified! ? 5 : 0),
                 customText('${viewState.model!.user!.userName}',
@@ -558,9 +560,9 @@ class _ComposeTweet
 class _TextField extends StatelessWidget {
   const _TextField(
       {Key? key,
-        required this.textEditingController,
-        this.isTweet = false,
-        this.isRetweet = false})
+      required this.textEditingController,
+      this.isTweet = false,
+      this.isRetweet = false})
       : super(key: key);
   final TextEditingController textEditingController;
   final bool isTweet;
@@ -584,8 +586,8 @@ class _TextField extends StatelessWidget {
               hintText: isTweet
                   ? 'What\'s happening?'
                   : isRetweet
-                  ? 'Add a comment'
-                  : 'Tweet your reply',
+                      ? 'Add a comment'
+                      : 'Tweet your reply',
               hintStyle: const TextStyle(fontSize: 18)),
         ),
       ],
@@ -602,35 +604,35 @@ class _UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !Provider.of<ComposeTweetState>(context).displayUserList ||
-        list == null ||
-        list!.length < 0 ||
-        list!.isEmpty
+            list == null ||
+            list!.length < 0 ||
+            list!.isEmpty
         ? const SizedBox.shrink()
         : Container(
-      padding: const EdgeInsetsDirectional.only(bottom: 50),
-      color: TwitterColor.white,
-      constraints:
-      const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
-      child: ListView.builder(
-        itemCount: list!.length,
-        physics: ClampingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return _UserTile(
-            user: list![index],
-            onUserSelected: (user) {
-              textEditingController.text =
-                  Provider.of<ComposeTweetState>(context, listen: false)
-                      .getDescription(user.userName!) +
-                      " ";
-              textEditingController.selection = TextSelection.collapsed(
-                  offset: textEditingController.text.length);
-              Provider.of<ComposeTweetState>(context, listen: false)
-                  .onUserSelected();
-            },
+            padding: const EdgeInsetsDirectional.only(bottom: 50),
+            color: TwitterColor.white,
+            constraints:
+                const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
+            child: ListView.builder(
+              itemCount: list!.length,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return _UserTile(
+                  user: list![index],
+                  onUserSelected: (user) {
+                    textEditingController.text =
+                        Provider.of<ComposeTweetState>(context, listen: false)
+                                .getDescription(user.userName!) +
+                            " ";
+                    textEditingController.selection = TextSelection.collapsed(
+                        offset: textEditingController.text.length);
+                    Provider.of<ComposeTweetState>(context, listen: false)
+                        .onUserSelected();
+                  },
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
   }
 }
 
@@ -651,7 +653,7 @@ class _UserTile extends StatelessWidget {
         children: <Widget>[
           ConstrainedBox(
             constraints:
-            BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
+                BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
             child: TitleText(user.displayName!,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
@@ -660,13 +662,13 @@ class _UserTile extends StatelessWidget {
           const SizedBox(width: 3),
           user.isVerified!
               ? customIcon(
-            context,
-            icon: AppIcon.blueTick,
-            isTwitterIcon: true,
-            iconColor: AppColor.primary,
-            size: 13,
-            paddingIcon: 3,
-          )
+                  context,
+                  icon: AppIcon.blueTick,
+                  isTwitterIcon: true,
+                  iconColor: AppColor.primary,
+                  size: 13,
+                  paddingIcon: 3,
+                )
               : const SizedBox(width: 0),
         ],
       ),

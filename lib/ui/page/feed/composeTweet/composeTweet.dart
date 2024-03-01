@@ -89,7 +89,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> {
   /// Submit tweet to save in firebase database
   void _submitButton() async {
     if (_descriptionController.text.isEmpty ||
-        _descriptionController.text.length > 50 || _titleController.text.isEmpty ||
+        _descriptionController.text.length > 50 ||
+        _titleController.text.isEmpty ||
         _titleController.text.length > 10) {
       return;
     }
@@ -519,7 +520,7 @@ class _ComposeTweet
           ),
           Text('Title'),
           TextField(
-              controller: viewState._titleController,
+            controller: viewState._titleController,
           ),
           Text('Description'),
           TextField(
@@ -566,7 +567,7 @@ class _TextField extends StatelessWidget {
           controller: textEditingController,
           onChanged: (text) {
             //Provider.of<ComposeTweetState>(context, listen: false)
-             //   .onDescriptionChanged(text, searchState);
+            //   .onDescriptionChanged(text, searchState);
           },
           maxLines: null,
           decoration: InputDecoration(

@@ -25,7 +25,8 @@ class SearchPage extends StatefulWidget {
   State<StatefulWidget> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateMixin {
+class _SearchPageState extends State<SearchPage>
+    with SingleTickerProviderStateMixin {
   @override
   late TabController _tabController;
   void initState() {
@@ -47,20 +48,21 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     List<FeedModel>? GroupGoalList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
-    var authState = Provider.of<AuthState>(context, listen:false);
+    var authState = Provider.of<AuthState>(context, listen: false);
     String id = authState.userId!;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      list = feedstate.feedList!.where((x) => x.userId == id && x.isGroupGoal == false).toList();
-      GroupGoalList = feedstate.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
+      list = feedstate.feedList!
+          .where((x) => x.userId == id && x.isGroupGoal == false)
+          .toList();
+      GroupGoalList = feedstate.feedList!
+          .where((x) => x.memberList!.contains(id) && x.isGroupGoal == true)
+          .toList();
     }
-
 
     //final List<FeedModel>? list = state.getTweetList(authState.userModel);
     return Scaffold(
-        //floatingActionButton: _floatingActionButton(context),
-      body:
-
-      RefreshIndicator(
+      //floatingActionButton: _floatingActionButton(context),
+      body: RefreshIndicator(
         onRefresh: () async {
           state.getDataFromDatabase();
           return Future.value();
@@ -77,14 +79,14 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   color: Colors.black,
                   child: Text(authState.userModel!.displayName!,
                       style: TextStyle(
-
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontSize: 19.0,
                       )),
                 ),
                 background: CachedNetworkImage(
-                  imageUrl: 'https://www.foodandwine.com/thmb/h7XBIk5uparmVpDEyQ9oC7brCpA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/A-Feast-of-Apples-FT-2-MAG1123-980271d42b1a489bab239b1466588ca4.jpg',
+                  imageUrl:
+                      'https://www.foodandwine.com/thmb/h7XBIk5uparmVpDEyQ9oC7brCpA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/A-Feast-of-Apples-FT-2-MAG1123-980271d42b1a489bab239b1466588ca4.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -137,56 +139,64 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                             children: [
                               // first tab bar view widget
                               Center(
-                                child: Column(
-                          children: <Widget>[
-                          ElevatedButton(
-                          //style: style,
-                          onPressed: (){Navigator.of(context).pushNamed('/CreateFeedPage/tweet');},
-                          child: const Text('New Personal Goal'),
-                        ),
-                        Center(
-                          child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            addAutomaticKeepAlives: false,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) => _UserTile(tweet: list![index]),
-                            separatorBuilder: (_, index) => const Divider(
-                              height: 0,
-                            ),
-                            itemCount: list?.length ?? 0,
-                          ),
-                        ),
-                      ],
-                    )
-                                ),
-
+                                  child: Column(
+                                children: <Widget>[
+                                  ElevatedButton(
+                                    //style: style,
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/CreateFeedPage/tweet');
+                                    },
+                                    child: const Text('New Personal Goal'),
+                                  ),
+                                  Center(
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      addAutomaticKeepAlives: false,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) =>
+                                          _UserTile(tweet: list![index]),
+                                      separatorBuilder: (_, index) =>
+                                          const Divider(
+                                        height: 0,
+                                      ),
+                                      itemCount: list?.length ?? 0,
+                                    ),
+                                  ),
+                                ],
+                              )),
 
                               // second tab bar view widget
                               Center(
-                                child: Column(
-                                  children: <Widget>[
-                                    ElevatedButton(
-                                      //style: style,
-                                      onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
-                                      child: const Text('New Group Goal'),
+                                  child: Column(
+                                children: <Widget>[
+                                  ElevatedButton(
+                                    //style: style,
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/CreateGroupGoal/tweet');
+                                    },
+                                    child: const Text('New Group Goal'),
+                                  ),
+                                  Center(
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      addAutomaticKeepAlives: false,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) =>
+                                          _UserTile(
+                                              tweet: GroupGoalList![index]),
+                                      separatorBuilder: (_, index) =>
+                                          const Divider(
+                                        height: 0,
+                                      ),
+                                      itemCount: GroupGoalList?.length ?? 0,
                                     ),
-                                    Center(
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          addAutomaticKeepAlives: false,
-                                          physics: const BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) => _UserTile(tweet: GroupGoalList![index]),
-                                          separatorBuilder: (_, index) => const Divider(
-                                            height: 0,
-                                          ),
-                                          itemCount: GroupGoalList?.length ?? 0,
-                                        ),
-                                    ),
-                                  ],
-                                )
-                              ),
+                                  ),
+                                ],
+                              )),
                             ],
                           ),
                         ),

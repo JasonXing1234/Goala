@@ -18,6 +18,7 @@ class SearchState extends AppState {
       return List.from(_userFilterList!);
     }
   }
+
   List<FeedModel>? get feedList {
     if (_feedList == null) {
       return null;
@@ -70,11 +71,9 @@ class SearchState extends AppState {
       // notifyListeners();
     }
   }
-  void getUsername(){
 
-  }
+  void getUsername() {}
   List<FeedModel>? getTweetList(UserModel? userModel) {
-
     if (userModel == null) {
       return null;
     }

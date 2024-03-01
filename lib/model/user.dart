@@ -45,10 +45,8 @@ class UserModel extends Equatable {
       this.fcmToken,
       this.followersList,
       this.followingList,
-        this.grouplist,
-        this.groups
-
-      });
+      this.grouplist,
+      this.groups});
 
   UserModel.fromJson(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -121,29 +119,28 @@ class UserModel extends Equatable {
     };
   }
 
-  UserModel copyWith({
-    String? email,
-    String? userId,
-    String? displayName,
-    String? profilePic,
-    String? key,
-    String? contact,
-    String? bio,
-    String? dob,
-    String? bannerImage,
-    String? location,
-    String? createdAt,
-    String? userName,
-    int? followers,
-    int? following,
-    String? webSite,
-    bool? isVerified,
-    String? fcmToken,
-    List<String>? followingList,
-    List<String>? followersList,
-    List<String>? grouplist,
-    int? groups
-  }) {
+  UserModel copyWith(
+      {String? email,
+      String? userId,
+      String? displayName,
+      String? profilePic,
+      String? key,
+      String? contact,
+      String? bio,
+      String? dob,
+      String? bannerImage,
+      String? location,
+      String? createdAt,
+      String? userName,
+      int? followers,
+      int? following,
+      String? webSite,
+      bool? isVerified,
+      String? fcmToken,
+      List<String>? followingList,
+      List<String>? followersList,
+      List<String>? grouplist,
+      int? groups}) {
     return UserModel(
       email: email ?? this.email,
       bio: bio ?? this.bio,
@@ -197,7 +194,7 @@ class UserModel extends Equatable {
         fcmToken,
         followersList,
         followingList,
-    grouplist,
-    groups
+        grouplist,
+        groups
       ];
 }
