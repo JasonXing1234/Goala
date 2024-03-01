@@ -185,7 +185,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(bool popping) async {
     state.setIsChatScreenOpen = false;
     state.onChatScreenClosed();
     return true;
@@ -230,8 +230,9 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
   Widget build(BuildContext context) {
     state = Provider.of<ChatState>(context, listen: false);
     userImage = state.chatUser!.profilePic!;
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvoked: _onWillPop,
+      canPop: true,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(

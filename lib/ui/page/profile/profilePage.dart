@@ -300,13 +300,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  /// This method called when user pressed back button
-  /// When profile page is about to close
-  /// Maintain minimum user's profile in profile page list
-  Future<bool> _onWillPop() async {
-    return true;
-  }
-
   late TabController _tabController;
 
   void shareProfile(BuildContext context) async {
@@ -336,62 +329,59 @@ class _ProfilePageState extends State<ProfilePage>
     if (state.feedList != null && state.feedList!.isNotEmpty) {
       list = state.feedList!.where((x) => x.userId == id).toList();
     }
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        key: scaffoldKey,
-        floatingActionButton: !isMyProfile ? null : _floatingActionButton(),
-        backgroundColor: TwitterColor.mystic,
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-            return <Widget>[
-              getAppbar(),
-              authState.isbusy
-                  ? _emptyBox()
-                  : SliverToBoxAdapter(
-                      child: Container(
-                        color: Colors.white,
-                        child: authState.isbusy
-                            ? const SizedBox.shrink()
-                            : UserNameRowWidget(
-                                user: authState.profileUserModel,
-                                isMyProfile: isMyProfile,
-                              ),
-                      ),
+    return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: !isMyProfile ? null : _floatingActionButton(),
+      backgroundColor: TwitterColor.mystic,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+          return <Widget>[
+            getAppbar(),
+            authState.isbusy
+                ? _emptyBox()
+                : SliverToBoxAdapter(
+                    child: Container(
+                      color: Colors.white,
+                      child: authState.isbusy
+                          ? const SizedBox.shrink()
+                          : UserNameRowWidget(
+                              user: authState.profileUserModel,
+                              isMyProfile: isMyProfile,
+                            ),
                     ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Container(
-                      color: TwitterColor.white,
-                      child: TabBar(
-                        indicator: TabIndicator(),
-                        controller: _tabController,
-                        tabs: const <Widget>[
-                          Text("Tweets"),
-                          Text("Tweets & replies"),
-                          Text("Media")
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ];
-          },
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              /// Display all independent tweets list
-              _tweetList(context, authState, list, false, false),
+                  ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Container(
+                    color: TwitterColor.white,
+                    child: TabBar(
+                      indicator: TabIndicator(),
+                      controller: _tabController,
+                      tabs: const <Widget>[
+                        Text("Tweets"),
+                        Text("Tweets & replies"),
+                        Text("Media")
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ];
+        },
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            /// Display all independent tweets list
+            _tweetList(context, authState, list, false, false),
 
-              /// Display all reply tweet list
-              _tweetList(context, authState, list, true, false),
+            /// Display all reply tweet list
+            _tweetList(context, authState, list, true, false),
 
-              /// Display all reply and comments tweet list
-              _tweetList(context, authState, list, false, true)
-            ],
-          ),
+            /// Display all reply and comments tweet list
+            _tweetList(context, authState, list, false, true)
+          ],
         ),
       ),
     );

@@ -87,12 +87,13 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (popping) async {
         Provider.of<FeedState>(context, listen: false)
             .removeLastTweetDetail(postId);
         return Future.value(true);
       },
+      canPop: true,
       child: Scaffold(
         key: scaffoldKey,
         floatingActionButton: _floatingActionButton(),

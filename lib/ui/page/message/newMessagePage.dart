@@ -60,7 +60,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(bool popping) async {
     final state = Provider.of<SearchState>(context, listen: false);
     state.filterByUsername("");
     return true;
@@ -68,8 +68,9 @@ class _NewMessagePageState extends State<NewMessagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvoked: _onWillPop,
+      canPop: true,
       child: Scaffold(
         appBar: CustomAppBar(
           scaffoldKey: widget.scaffoldKey,
