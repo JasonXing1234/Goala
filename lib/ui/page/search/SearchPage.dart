@@ -133,7 +133,7 @@ class _SearchPageState extends State<SearchPage>
                               // first tab bar view widget
                               Center(
                                   child: Column(
-                                children: <Widget>[
+                                children: [
                                   ElevatedButton(
                                     //style: style,
                                     onPressed: () {
@@ -163,7 +163,7 @@ class _SearchPageState extends State<SearchPage>
                               // second tab bar view widget
                               Center(
                                   child: Column(
-                                children: <Widget>[
+                                children: [
                                   ElevatedButton(
                                     //style: style,
                                     onPressed: () {
@@ -250,7 +250,7 @@ class _UserTile extends StatelessWidget {
       //leading: CircularImage(path: user.profilePic, height: 40),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Flexible(
             child: TitleText(tweet.title!,
                 fontSize: 16,

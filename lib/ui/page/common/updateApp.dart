@@ -47,7 +47,7 @@ class _UpdateAppState extends State<UpdateApp> with WidgetsBindingObserver {
         margin: const EdgeInsets.symmetric(horizontal: 36),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             Image.asset("assets/images/icon-480.png"),
             const TitleText(
               "New Update is available",

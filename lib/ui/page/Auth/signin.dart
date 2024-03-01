@@ -43,7 +43,7 @@ class _SignInState extends State<SignIn> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
             const SizedBox(height: 150),
             _entryField('Enter email', controller: _emailController),
             _entryField('Enter password',

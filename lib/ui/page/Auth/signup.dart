@@ -56,7 +56,7 @@ class _SignupState extends State<Signup> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
             _entryField('Name', controller: _nameController),
             _entryField('Enter email',
                 controller: _emailController, isEmail: true),

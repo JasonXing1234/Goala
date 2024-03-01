@@ -58,11 +58,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     var authState = Provider.of<AuthState>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         SizedBox(
           height: 180,
           child: Stack(
-            children: <Widget>[
+            children: [
               _bannerImage(authState),
               Align(
                 alignment: Alignment.bottomLeft,
@@ -165,7 +165,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           customText(title, style: const TextStyle(color: Colors.black54)),
           TextField(
             enabled: enabled,
@@ -254,14 +254,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
           height: 100,
           padding: const EdgeInsets.all(10),
           child: Column(
-            children: <Widget>[
+            children: [
               const Text(
                 'Pick an image',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Row(
-                children: <Widget>[
+                children: [
                   Expanded(
                     child: CustomFlatButton(
                       label: "Use Camera",

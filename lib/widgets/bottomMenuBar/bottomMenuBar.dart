@@ -35,7 +35,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+        children: [
           _icon(null, 0,
               icon: 0 == state.pageIndex ? AppIcon.homeFill : AppIcon.home,
               isCustomIcon: true),

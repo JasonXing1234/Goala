@@ -36,7 +36,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
       },
       leading: CircularImage(path: user.profilePic, height: 40),
       title: Row(
-        children: <Widget>[
+        children: [
           ConstrainedBox(
             constraints:
                 BoxConstraints(minWidth: 0, maxWidth: context.width - 104),
@@ -83,7 +83,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
         body: Consumer<SearchState>(
           builder: (context, state, child) {
             return Column(
-              children: <Widget>[
+              children: [
                 TextField(
                   onChanged: (text) {
                     state.filterByUsername(text);

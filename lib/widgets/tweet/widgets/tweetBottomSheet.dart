@@ -81,7 +81,7 @@ class TweetBottomSheet {
       required TweetType type,
       required GlobalKey<ScaffoldState> scaffoldKey}) {
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           width: context.width * .1,
           height: 5,
@@ -209,7 +209,7 @@ class TweetBottomSheet {
       required TweetType type,
       required GlobalKey<ScaffoldState> scaffoldKey}) {
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           width: context.width * .1,
           height: 5,
@@ -334,7 +334,7 @@ class TweetBottomSheet {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
-          children: <Widget>[
+          children: [
             customIcon(
               context,
               icon: icon,
@@ -408,7 +408,7 @@ class TweetBottomSheet {
 
   Widget _retweet(BuildContext context, FeedModel model, TweetType? type) {
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           width: context.width * .1,
           height: 5,
@@ -501,7 +501,7 @@ class TweetBottomSheet {
         imageUrl: Uri.parse(model.user?.profilePic ??
             "https://play-lh.googleusercontent.com/e66XMuvW5hZ7HnFf8R_lcA3TFgkxm0SuyaMsBs3KENijNHZlogUAjxeu9COqsejV5w=s180-rw"));
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           width: context.width * .1,
           height: 5,

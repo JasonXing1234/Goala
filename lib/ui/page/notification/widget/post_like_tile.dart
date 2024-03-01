@@ -38,9 +38,9 @@ class PostLikeTile extends StatelessWidget {
 
     var col = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         Row(
-          children: <Widget>[
+          children: [
             const SizedBox(width: 20),
             customIcon(context,
                 icon: AppIcon.heartFill,
@@ -98,7 +98,7 @@ class PostLikeTile extends StatelessWidget {
           : model.description!;
     }
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           color: TwitterColor.white,

@@ -125,7 +125,7 @@ class _SplashPageState extends State<SplashPage> {
           ),
           child: Stack(
             alignment: Alignment.center,
-            children: <Widget>[
+            children: [
               Platform.isIOS
                   ? const CupertinoActivityIndicator(
                       radius: 35,

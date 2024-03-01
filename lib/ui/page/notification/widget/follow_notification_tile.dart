@@ -72,7 +72,7 @@ class _UserCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     UrlText(
                       text: user.displayName!,
                       style: const TextStyle(

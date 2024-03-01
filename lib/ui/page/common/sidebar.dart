@@ -41,7 +41,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             Container(
               height: 56,
               width: 56,
@@ -63,7 +63,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
                     ProfilePage.getRoute(profileId: state.userModel!.userId!));
               },
               title: Row(
-                children: <Widget>[
+                children: [
                   UrlText(
                     text: state.userModel!.displayName ?? "",
                     style: TextStyles.onPrimaryTitleText
@@ -97,7 +97,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
             Container(
               alignment: Alignment.center,
               child: Row(
-                children: <Widget>[
+                children: [
                   const SizedBox(
                     width: 17,
                   ),
@@ -147,7 +147,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
         }
       },
       child: Row(
-        children: <Widget>[
+        children: [
           customText(
             '$count ',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
@@ -196,10 +196,10 @@ class _SidebarMenuState extends State<SidebarMenu> {
       right: 0,
       left: 0,
       child: Column(
-        children: <Widget>[
+        children: [
           const Divider(height: 0),
           Row(
-            children: <Widget>[
+            children: [
               const SizedBox(
                 width: 10,
                 height: 45,
@@ -249,12 +249,12 @@ class _SidebarMenuState extends State<SidebarMenu> {
     return Drawer(
       child: SafeArea(
         child: Stack(
-          children: <Widget>[
+          children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: ListView(
                 physics: const BouncingScrollPhysics(),
-                children: <Widget>[
+                children: [
                   Container(
                     child: _menuHeader(),
                   ),

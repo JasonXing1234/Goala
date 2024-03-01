@@ -54,7 +54,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
       child: Wrap(
-        children: <Widget>[
+        children: [
           MaterialButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),

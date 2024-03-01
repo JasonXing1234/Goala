@@ -57,7 +57,7 @@ class _ComposeBottomIconWidgetState extends State<ComposeBottomIconWidget> {
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Row(
-        children: <Widget>[
+        children: [
           IconButton(
               onPressed: () {
                 setImage(ImageSource.gallery);
@@ -91,7 +91,7 @@ class _ComposeBottomIconWidgetState extends State<ComposeBottomIconWidget> {
                       )
                     : Stack(
                         alignment: Alignment.center,
-                        children: <Widget>[
+                        children: [
                           CircularProgressIndicator(
                             value: getTweetLimit(),
                             backgroundColor: Colors.grey,

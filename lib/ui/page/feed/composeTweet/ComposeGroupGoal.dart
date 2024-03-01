@@ -231,7 +231,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         //!Removed container
-        children: <Widget>[
+        children: [
           SingleChildScrollView(
             controller: scrollController,
             child:
@@ -258,7 +258,7 @@ class _ComposeRetweet
   Widget _tweet(BuildContext context, FeedModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         // SizedBox(width: 10),
 
         const SizedBox(width: 20),
@@ -266,11 +266,11 @@ class _ComposeRetweet
           width: context.width - 12,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
+                children: [
                   SizedBox(
                     width: 25,
                     height: 25,
@@ -334,10 +334,10 @@ class _ComposeRetweet
     return SizedBox(
       height: context.height,
       child: Column(
-        children: <Widget>[
+        children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -365,9 +365,9 @@ class _ComposeRetweet
           ),
           Flexible(
             child: Stack(
-              children: <Widget>[
+              children: [
                 Wrap(
-                  children: <Widget>[
+                  children: [
                     Container(
                       margin: const EdgeInsets.only(
                           left: 75, right: 16, bottom: 16),
@@ -406,9 +406,9 @@ class _ComposeTweet
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
+      children: [
         Stack(
-          children: <Widget>[
+          children: [
             Container(
               padding: const EdgeInsets.only(left: 30),
               margin: const EdgeInsets.only(left: 20, top: 20, bottom: 3),
@@ -422,7 +422,7 @@ class _ComposeTweet
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+                children: [
                   SizedBox(
                     width: context.width - 72,
                     child: UrlText(
@@ -454,7 +454,7 @@ class _ComposeTweet
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: [
                 CircularImage(
                     path: viewState.model!.user!.profilePic, height: 40),
                 const SizedBox(width: 10),
@@ -503,13 +503,13 @@ class _ComposeTweet
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           viewState.widget.isTweet
               ? const SizedBox.shrink()
               : _tweetCard(context),
           /*Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               //CircularImage(path: authState.user?.photoURL, height: 40),
               const SizedBox(
                 width: 10,
@@ -539,7 +539,7 @@ class _ComposeTweet
           ),
           Flexible(
             child: Stack(
-              children: <Widget>[
+              children: [
                 ComposeTweetImage(
                   image: viewState._image,
                   onCrossIconPressed: viewState._onCrossIconPressed,
@@ -573,7 +573,7 @@ class _TextField extends StatelessWidget {
     final searchState = Provider.of<SearchState>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         TextField(
           controller: textEditingController,
           onChanged: (text) {
@@ -650,7 +650,7 @@ class _UserTile extends StatelessWidget {
       },
       leading: CircularImage(path: user.profilePic, height: 35),
       title: Row(
-        children: <Widget>[
+        children: [
           ConstrainedBox(
             constraints:
                 BoxConstraints(minWidth: 0, maxWidth: context.width * .5),

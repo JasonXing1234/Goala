@@ -39,7 +39,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
             _label(),
             const SizedBox(
               height: 50,
@@ -92,7 +92,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget _label() {
     return Container(
         child: Column(
-      children: <Widget>[
+      children: [
         customText('Forget Password',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         const SizedBox(height: 15),

@@ -81,10 +81,10 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
           myMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       mainAxisAlignment:
           myMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: <Widget>[
+      children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
+          children: [
             const SizedBox(
               width: 15,
             ),
@@ -104,7 +104,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
                   left: myMessage ? (context.width / 4) : 10,
                 ),
                 child: Stack(
-                  children: <Widget>[
+                  children: [
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -161,7 +161,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
       alignment: Alignment.bottomLeft,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
+        children: [
           const Divider(
             thickness: 0,
             height: 1,
@@ -238,7 +238,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
         appBar: AppBar(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               UrlText(
                 text: state.chatUser!.displayName!,
                 style: const TextStyle(
@@ -264,7 +264,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
         ),
         body: SafeArea(
           child: Stack(
-            children: <Widget>[
+            children: [
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(

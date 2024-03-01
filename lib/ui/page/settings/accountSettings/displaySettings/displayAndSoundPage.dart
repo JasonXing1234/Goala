@@ -38,7 +38,7 @@ class DisplayAndSoundPage extends StatelessWidget {
       context,
       250,
       Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 5),
           Container(
             width: 40,
@@ -68,7 +68,7 @@ class DisplayAndSoundPage extends StatelessWidget {
       context,
       190,
       Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 5),
           Container(
             width: 40,
@@ -116,7 +116,7 @@ class DisplayAndSoundPage extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           const HeaderWidget('Media'),
           const SettingRowWidget(
             "Media Previews",

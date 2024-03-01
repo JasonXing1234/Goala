@@ -87,7 +87,7 @@ class _MyHomePageState extends State<ShareWidget> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+          children: [
             RepaintBoundary(
                 key: _globalKey,
                 child: Container(

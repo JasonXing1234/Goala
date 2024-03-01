@@ -21,7 +21,7 @@ class AboutPage extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           const HeaderWidget(
             'Help',
             secondHeader: true,

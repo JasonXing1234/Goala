@@ -14,7 +14,7 @@ class ComposeTweetImage extends StatelessWidget {
       child: image == null
           ? Container()
           : Stack(
-              children: <Widget>[
+              children: [
                 InteractiveViewer(
                   child: Container(
                     alignment: Alignment.topRight,

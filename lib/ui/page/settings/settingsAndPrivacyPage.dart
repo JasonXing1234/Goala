@@ -24,7 +24,7 @@ class SettingsAndPrivacyPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: <Widget>[
+        children: [
           HeaderWidget(user.userName),
           const SettingRowWidget(
             "Account",

@@ -115,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage>
             ? const SizedBox.shrink()
             : Stack(
                 alignment: Alignment.topCenter,
-                children: <Widget>[
+                children: [
                   SizedBox.expand(
                     child: Container(
                       padding: const EdgeInsets.only(top: 50),
@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
+                      children: [
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 500),
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -161,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage>
                         Container(
                           margin: const EdgeInsets.only(top: 90, right: 30),
                           child: Row(
-                            children: <Widget>[
+                            children: [
                               isMyProfile
                                   ? Container(height: 40)
                                   : RippleButton(
@@ -491,7 +491,7 @@ class UserNameRowWidget extends StatelessWidget {
         onPressed();
       },
       child: Row(
-        children: <Widget>[
+        children: [
           customText(
             '$count ',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
@@ -509,14 +509,14 @@ class UserNameRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
           ),
           child: Row(
-            children: <Widget>[
+            children: [
               UrlText(
                 text: user.displayName!,
                 style: const TextStyle(
@@ -556,7 +556,7 @@ class UserNameRowWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               customIcon(context,
                   icon: AppIcon.locationPin,
                   size: 14,
@@ -576,7 +576,7 @@ class UserNameRowWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Row(
-            children: <Widget>[
+            children: [
               customIcon(context,
                   icon: AppIcon.calender,
                   size: 14,
@@ -594,7 +594,7 @@ class UserNameRowWidget extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           child: Row(
-            children: <Widget>[
+            children: [
               const SizedBox(
                 width: 10,
                 height: 30,

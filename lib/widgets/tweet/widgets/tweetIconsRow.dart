@@ -38,7 +38,7 @@ class TweetIconsRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 0, top: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        children: [
           const SizedBox(
             width: 20,
           ),
@@ -98,7 +98,7 @@ class TweetIconsRow extends StatelessWidget {
 
     return Expanded(
       child: Row(
-        children: <Widget>[
+        children: [
           IconButton(
             onPressed: () {
               if (onPressed != null) onPressed();
@@ -129,10 +129,10 @@ class TweetIconsRow extends StatelessWidget {
 
   Widget _timeWidget(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         const SizedBox(height: 8),
         Row(
-          children: <Widget>[
+          children: [
             const SizedBox(width: 5),
             customText(Utility.getPostTime2(model.createdAt),
                 style: TextStyles.textStyle14),
@@ -152,7 +152,7 @@ class TweetIconsRow extends StatelessWidget {
     bool isRetweetAvailable = model.retweetCount! > 0;
     bool isLikeRetweetAvailable = isRetweetAvailable || isLikeAvailable;
     return Column(
-      children: <Widget>[
+      children: [
         const Divider(
           endIndent: 10,
           height: 0,
@@ -166,7 +166,7 @@ class TweetIconsRow extends StatelessWidget {
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     !isRetweetAvailable
                         ? const SizedBox.shrink()
                         : customText(model.retweetCount.toString(),
@@ -194,7 +194,7 @@ class TweetIconsRow extends StatelessWidget {
                       child: AnimatedCrossFade(
                         firstChild: const SizedBox.shrink(),
                         secondChild: Row(
-                          children: <Widget>[
+                          children: [
                             customSwitcherWidget(
                               duraton: const Duration(milliseconds: 300),
                               child: customText(model.likeCount.toString(),
@@ -263,7 +263,7 @@ class TweetIconsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         isTweetDetail ? _timeWidget(context) : const SizedBox(),
         isTweetDetail ? _likeCommentWidget(context) : const SizedBox(),
         _likeCommentsIcons(context, model)

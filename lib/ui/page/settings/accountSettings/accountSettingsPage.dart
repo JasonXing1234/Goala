@@ -20,7 +20,7 @@ class AccountSettingsPage extends StatelessWidget {
         subtitle: user.userName,
       ),
       body: ListView(
-        children: <Widget>[
+        children: [
           const HeaderWidget('Login and security'),
           SettingRowWidget(
             "Username",

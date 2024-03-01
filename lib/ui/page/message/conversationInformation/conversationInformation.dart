@@ -19,7 +19,7 @@ class ConversationInformation extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 25),
       child: Column(
-        children: <Widget>[
+        children: [
           Container(
             alignment: Alignment.center,
             child: SizedBox(
@@ -36,7 +36,7 @@ class ConversationInformation extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               UrlText(
                 text: user.displayName!,
                 style: TextStyles.onPrimaryTitleText.copyWith(
@@ -83,7 +83,7 @@ class ConversationInformation extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: <Widget>[
+        children: [
           _header(context, user),
           const HeaderWidget('Notifications'),
           const SettingRowWidget(

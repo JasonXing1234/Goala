@@ -29,14 +29,14 @@ class RetweetWidget extends StatelessWidget {
   Widget _tweet(BuildContext context, FeedModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           width: context.width - 12,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
+            children: [
               SizedBox(
                 width: 20,
                 height: 20,

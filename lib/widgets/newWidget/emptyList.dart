@@ -33,7 +33,7 @@ class NotifyText extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: [
         if (title != null)
           TitleText(title!, fontSize: 20, textAlign: TextAlign.center),
         if (subTitle != null) ...[

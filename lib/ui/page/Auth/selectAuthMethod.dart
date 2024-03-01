@@ -45,7 +45,7 @@ class _WelcomePageState extends State<WelcomePage> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             SizedBox(
               width: MediaQuery.of(context).size.width - 80,
               height: 40,
@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
             Wrap(
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
+              children: [
                 const TitleText(
                   'Have an account already?',
                   fontSize: 14,

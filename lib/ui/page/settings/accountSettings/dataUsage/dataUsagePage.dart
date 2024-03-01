@@ -38,7 +38,7 @@ class DataUsagePage extends StatelessWidget {
       context,
       250,
       Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 5),
           Container(
             width: 40,
@@ -68,7 +68,7 @@ class DataUsagePage extends StatelessWidget {
       context,
       190,
       Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 5),
           Container(
             width: 40,
@@ -116,7 +116,7 @@ class DataUsagePage extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           const HeaderWidget('Data Saver'),
           const SettingRowWidget(
             "Data saver",

@@ -82,7 +82,7 @@ class CustomScreenLoader extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Stack(
             alignment: Alignment.center,
-            children: <Widget>[
+            children: [
               Platform.isIOS
                   ? const CupertinoActivityIndicator(
                       radius: 35,

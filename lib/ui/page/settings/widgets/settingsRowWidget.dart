@@ -27,7 +27,7 @@ class SettingRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         ListTile(
             contentPadding:
                 EdgeInsets.symmetric(vertical: vPadding, horizontal: 18),

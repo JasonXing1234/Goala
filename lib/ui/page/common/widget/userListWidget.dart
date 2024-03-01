@@ -105,7 +105,7 @@ class UserTile extends StatelessWidget {
       color: TwitterColor.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           ListTile(
             onTap: () {
               Navigator.push(
@@ -120,7 +120,7 @@ class UserTile extends StatelessWidget {
               child: CircularImage(path: user.profilePic, height: 55),
             ),
             title: Row(
-              children: <Widget>[
+              children: [
                 ConstrainedBox(
                   constraints:
                       BoxConstraints(minWidth: 0, maxWidth: context.width * .4),

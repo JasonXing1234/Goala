@@ -58,7 +58,7 @@ class Tweet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.topLeft,
-      children: <Widget>[
+      children: [
         /// Left vertical bar of a tweet
         type != TweetType.ParentTweet
             ? const SizedBox.shrink()
@@ -84,7 +84,7 @@ class Tweet extends StatelessWidget {
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
+            children: [
               Container(
                 padding: EdgeInsets.only(
                   top: type == TweetType.Tweet || type == TweetType.Reply
@@ -177,7 +177,7 @@ class _TweetBody extends StatelessWidget {
         fontWeight: descriptionFontWeight);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         const SizedBox(width: 10),
         SizedBox(
           width: 40,
@@ -199,14 +199,14 @@ class _TweetBody extends StatelessWidget {
           width: context.width - 80,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
+                children: [
                   Expanded(
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         ConstrainedBox(
                           constraints: BoxConstraints(
                               minWidth: 0, maxWidth: context.width * .5),
@@ -310,7 +310,7 @@ class _TweetDetailBody extends StatelessWidget {
         fontWeight: descriptionFontWeight);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         model.parentkey != null &&
                 model.childRetwetkey == null &&
                 type != TweetType.ParentTweet
@@ -324,7 +324,7 @@ class _TweetDetailBody extends StatelessWidget {
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 leading: GestureDetector(
@@ -335,7 +335,7 @@ class _TweetDetailBody extends StatelessWidget {
                   child: CircularImage(path: model.user!.profilePic),
                 ),
                 title: Row(
-                  children: <Widget>[
+                  children: [
                     ConstrainedBox(
                       constraints: BoxConstraints(
                           minWidth: 0, maxWidth: context.width * .5),

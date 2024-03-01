@@ -95,7 +95,7 @@ class LinkPreviewer extends StatelessWidget {
   //       child: Column(
   //         crossAxisAlignment: CrossAxisAlignment.start,
   //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
+  //         children: [
   //           if (LinkPreviewAnalyzer.isNotEmpty(image))
   //             ClipRRect(
   //               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),

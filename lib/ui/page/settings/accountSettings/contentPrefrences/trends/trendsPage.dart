@@ -37,7 +37,7 @@ class TrendsPage extends StatelessWidget {
       context,
       340,
       Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 5),
           Container(
             width: 40,
@@ -94,7 +94,7 @@ class TrendsPage extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           SettingRowWidget(
             "Search Filter",
             subtitle:

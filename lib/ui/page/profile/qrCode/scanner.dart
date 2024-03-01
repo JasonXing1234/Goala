@@ -91,7 +91,7 @@ class _ScanState extends State<ScanScreen> with SingleTickerProviderStateMixin {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: <Widget>[
+          children: [
             PageView.builder(
               controller: pageController,
               itemCount: 2,
