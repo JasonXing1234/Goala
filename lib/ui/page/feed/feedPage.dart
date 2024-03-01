@@ -68,16 +68,15 @@ class FeedPage extends StatelessWidget {
 }
 
 class _FeedPageBody extends StatefulWidget {
-  const _FeedPageBody({Key? key, required this.scaffoldKey, required this.refreshIndicatorKey}) : super(key: key);
+  const _FeedPageBody(
+      {Key? key, required this.scaffoldKey, required this.refreshIndicatorKey})
+      : super(key: key);
   final GlobalKey<ScaffoldState> scaffoldKey;
   final GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
   State<_FeedPageBody> createState() => _FeedPageBodyState();
 }
+
 class _FeedPageBodyState extends State<_FeedPageBody> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<FeedState>(context);
@@ -87,7 +86,9 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
     String currentTweetId = '';
     bool ShowPage = false;
     if (state.feedList != null && state.feedList!.isNotEmpty) {
-        GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
+      GroupList = state.feedList!
+          .where((x) => x.memberList!.contains(id) && x.isGroupGoal == true)
+          .toList();
     }
     return Consumer<FeedState>(
       builder: (context, state, child) {
@@ -99,68 +100,61 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
                 //expandedHeight: 150.0,
 
                 actions: <Widget>[
-            Expanded(
-                //height: 100.0,
-                //width:300.0,
-                child:
-                  ListView(
-                  // This next line does the trick.
+                  Expanded(
+                      //height: 100.0,
+                      //width:300.0,
+                      child: ListView(
+                    // This next line does the trick.
                     scrollDirection: Axis.horizontal,
-                    children:
-                      GroupList!.map((model) {
+                    children: GroupList!.map(
+                      (model) {
                         return ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () {},
                           child: Text(model!.title!),
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
-                              // Change your radius here
-                              borderRadius: BorderRadius.circular(16),
+                                // Change your radius here
+                                borderRadius: BorderRadius.circular(16),
                               ),
                             ),
                           ),
                         );
-                        },
-                      ).toList(),
-                  )
-        )]
-            ),
+                      },
+                    ).toList(),
+                  ))
+                ]),
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 100.0,
-                child:
-                  ListView(
-                    // This next line does the trick.
-                    scrollDirection: Axis.horizontal,
-                    children:
-                    GroupList!.map(
-                            (model) {
-                          return Column (children: [
-                            ElevatedButton(
-                              onPressed: (){
-                                ShowPage = !ShowPage;
-                                  currentTweetId = model!.key!;
-                                },
-                              child: Text(model!.title!),
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    // Change your radius here
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            model!.key! == currentTweetId ? Container(
-                                child: Text('hahahaha')
-                            ) : Container(
-                                child: Text('')
-                            )
-                          ]);
+                child: SizedBox(
+              height: 100.0,
+              child: ListView(
+                // This next line does the trick.
+                scrollDirection: Axis.horizontal,
+                children: GroupList!.map(
+                  (model) {
+                    return Column(children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          ShowPage = !ShowPage;
+                          currentTweetId = model!.key!;
                         },
-                      ).toList(),
-
-                  ),
+                        child: Text(model!.title!),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              // Change your radius here
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      model!.key! == currentTweetId
+                          ? Container(child: Text('hahahaha'))
+                          : Container(child: Text(''))
+                    ]);
+                  },
+                ).toList(),
+              ),
             )),
             /*SliverPadding(
                         padding: EdgeInsets.all(16.0),
@@ -188,7 +182,8 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
 
                         ),
                       )
-            )*/],
+            )*/
+          ],
         );
       },
       /*child:
@@ -197,16 +192,15 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
         state.getDataFromDatabase();
         return Future.value();
       },*/
-        child: CustomAppBar2(
-          scaffoldKey: widget.scaffoldKey,
-          icon: AppIcon.settings,
-          //onActionPressed: onSettingIconPressed,
-          onSearchChanged: (text) {
-
-            state.filterByUsername(text);
-          },
-        ),
-     // )
+      child: CustomAppBar2(
+        scaffoldKey: widget.scaffoldKey,
+        icon: AppIcon.settings,
+        //onActionPressed: onSettingIconPressed,
+        onSearchChanged: (text) {
+          state.filterByUsername(text);
+        },
+      ),
+      // )
       /*SliverAppBar(
         floating: true,
         elevation: 0,
@@ -254,27 +248,28 @@ class _FeedPageBodyState extends State<_FeedPageBody> {
     );
   }
 }
+
 class SampleWidget extends StatefulWidget {
   @override
   _SampleWidgetState createState() => _SampleWidgetState();
 }
 
 class _SampleWidgetState extends State<SampleWidget> {
-
-
-  Widget _body(){
+  Widget _body() {
     final state = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context, listen: false);
     String id = authState.userId!;
     List<FeedModel>? GroupList = [];
     if (state.feedList != null && state.feedList!.isNotEmpty) {
-      GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
+      GroupList = state.feedList!
+          .where((x) => x.memberList!.contains(id) && x.isGroupGoal == true)
+          .toList();
     }
     int _activeWidget = GroupList.length;
     switch (_activeWidget) {
       case 1:
         return GestureDetector(
-            onTap: (){
+            onTap: () {
               setState(() {
                 _activeWidget = 2;
               });
@@ -282,11 +277,10 @@ class _SampleWidgetState extends State<SampleWidget> {
             child: Container(
               color: Colors.blue,
               child: Text("I'm one"),
-            )
-        );
-      case 2 :
+            ));
+      case 2:
         return GestureDetector(
-            onTap: (){
+            onTap: () {
               setState(() {
                 _activeWidget = 0;
               });
@@ -294,11 +288,10 @@ class _SampleWidgetState extends State<SampleWidget> {
             child: Container(
               color: Colors.green,
               child: Text("I'm two"),
-            )
-        );
+            ));
       default:
         return GestureDetector(
-            onTap: (){
+            onTap: () {
               setState(() {
                 _activeWidget = 1;
               });
@@ -306,10 +299,10 @@ class _SampleWidgetState extends State<SampleWidget> {
             child: Container(
               color: Colors.red,
               child: Text("I'm zero"),
-            )
-        );
+            ));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

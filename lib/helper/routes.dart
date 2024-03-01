@@ -94,7 +94,7 @@ class Routes {
                 ChangeNotifierProvider<ComposeTweetState>(
                   create: (_) => ComposeTweetState(),
                   child:
-                  const ComposeGroupGoal(isRetweet: false, isTweet: true),
+                      const ComposeGroupGoal(isRetweet: false, isTweet: true),
                 ));
 
       case "CreateFeedPage":

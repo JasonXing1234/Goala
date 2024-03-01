@@ -17,26 +17,26 @@ class GroupGoalModel {
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
   String?
-  lanCode; //Saving the language of the tweet so to not translate to check which language
+      lanCode; //Saving the language of the tweet so to not translate to check which language
   UserModel? user;
   GroupGoalModel(
       {this.key,
-        this.description,
-        required this.userId,
-        this.likeCount,
-        this.commentCount,
-        this.retweetCount,
-        this.memberCount,
-        required this.createdAt,
-        this.imagePath,
-        this.likeList,
-        this.tags,
-        this.memberList,
-        this.user,
-        this.replyTweetKeyList,
-        this.parentkey,
-        this.lanCode,
-        this.childRetwetkey});
+      this.description,
+      required this.userId,
+      this.likeCount,
+      this.commentCount,
+      this.retweetCount,
+      this.memberCount,
+      required this.createdAt,
+      this.imagePath,
+      this.likeList,
+      this.tags,
+      this.memberList,
+      this.user,
+      this.replyTweetKeyList,
+      this.parentkey,
+      this.lanCode,
+      this.childRetwetkey});
   toJson() {
     return {
       "userId": userId,
@@ -151,8 +151,6 @@ class GroupGoalModel {
       commentCount = 0;
     }
   }
-
-
 
   bool get isValidTweet {
     bool isValid = false;

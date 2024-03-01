@@ -182,14 +182,12 @@ class _HomePageState extends State<HomePage> {
   Widget _body() {
     return SafeArea(
       child: Container(
-
         child: _getPage(Provider.of<AppState>(context).pageIndex),
       ),
     );
   }
 
   Widget _getPage(int index) {
-
     switch (index) {
       case 0:
         return SearchPage(scaffoldKey: _scaffoldKey);
@@ -213,8 +211,8 @@ class _HomePageState extends State<HomePage> {
     context.read<SuggestionsState>().initUser(state.userModel);
 
     //if (context
-     //   .select<SuggestionsState, bool>((state) => state.displaySuggestions)) {
-     // return SuggestedUsers();
+    //   .select<SuggestionsState, bool>((state) => state.displaySuggestions)) {
+    // return SuggestedUsers();
     //}
 
     return Scaffold(
