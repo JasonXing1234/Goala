@@ -40,7 +40,6 @@ exports.dailyCheckInUpdate = functions.runWith({timeoutSeconds: 300}).pubsub
 
 exports.sendUserNotifications = functions.pubsub.schedule("* * * * *")
   .onRun(async (context) => {
-  sendPushNotification("eL2amMOfS_6gIa-3aF4-26:APA91bHJ56NpYWzFfAM_A7izhubkDcMQ17ITRaIlzykrtKoCPHgXBoCI5ktn7zMYYEy8uqoEU_tMqGd1iXY-B97-S6SIviHJ6p32UUOutxV3vBR9QILx7sw48ggKvX7rB0rmL6BOFX4w", " run 5 miles");
   const now = new Date();
   const currentDay = now.getDay(); // Sunday - 0, Monday - 1, ..., Saturday - 6
   const currentTime = now.toISOString().substring(11, 16); // "HH:MM" format

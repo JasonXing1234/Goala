@@ -51,11 +51,11 @@ class _BottomMenubarState extends State<BottomMenubar> {
                   ? Search.search : Search.search,
 
               isCustomIcon: true),
-          _icon(null, 3,
+          /*_icon(null, 3,
               icon: 3 == state.pageIndex
                   ? AppIcon.messageFill
                   : AppIcon.messageEmpty,
-              isCustomIcon: true),
+              isCustomIcon: true),*/
         ],
       ),
     );

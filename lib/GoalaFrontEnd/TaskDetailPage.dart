@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/enum.dart';
@@ -10,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/newWidget/title_text.dart';
+import '../widgets/tweet/widgets/tweetBottomSheet.dart';
 
 class TaskDetailPage extends StatefulWidget {
   const TaskDetailPage({Key? key, required this.tempFeed}) : super(key: key);
@@ -63,16 +65,18 @@ class _TaskDetailState extends State<TaskDetailPage> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
+    final scrollController = ScrollController();
     return Scaffold(
         key: scaffoldKey,
         floatingActionButton: _floatingActionButton(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: CustomScrollView(
+          controller: scrollController,
           slivers: <Widget>[
             SliverAppBar(
               pinned: true,
               title: customTitleText(
-                'Goal Detail',
+                'Your Posts',
               ),
               iconTheme: IconThemeData(color: Colors.black),
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -88,11 +92,6 @@ class _TaskDetailState extends State<TaskDetailPage> {
               child:
                     Column(
                         children: [
-                          TitleText('Photo Album',
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                            overflow: TextOverflow.ellipsis
-                          ),
                           ElevatedButton(
                               onPressed: () {
                                 var state = Provider.of<FeedState>(context, listen: false);
@@ -102,6 +101,31 @@ class _TaskDetailState extends State<TaskDetailPage> {
                               child: Text('Add Post')
                               //isEditing == true ? Text('Finish') : Text('Edit')
                           ),
+                          ListView(
+                            controller: scrollController,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children:
+                            state.tweetReplyMap == null ||
+                                state.tweetReplyMap!.isEmpty ||
+                                state.tweetReplyMap![widget.tempFeed.key!] == null
+                                ? [
+                              Column(
+                                  children: [
+                                    SizedBox(height:140),
+                                    Center(
+                                        child: Text(
+                                          'Explore Your Groups',
+                                          style: TextStyle(fontSize: 34),
+                                        )
+                                    )
+                                  ]
+                              )
+                            ]
+                                :state.tweetReplyMap![widget.tempFeed.key!]!
+                                .map((x) => _commentRow(x))
+                                .toList(),
+                          )
 
                           /*tempFeed.goalPhotoList == null ? SizedBox() :
                           GridView.builder(
@@ -156,6 +180,15 @@ class _TaskDetailState extends State<TaskDetailPage> {
           ],
         ),
       );
+  }
+  Widget _commentRow(FeedModel model) {
+    return Tweet(
+      model: model,
+      type: TweetType.Reply,
+      trailing: TweetBottomSheet().tweetOptionIcon(context,
+          scaffoldKey: scaffoldKey, model: model, type: TweetType.Reply),
+      scaffoldKey: scaffoldKey,
+    );
   }
 }
 

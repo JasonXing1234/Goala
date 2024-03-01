@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Goala/ui/page/common/groupGoalSideBar.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ import 'package:provider/provider.dart';
 
 import '../ui/page/common/locator.dart';
 import '../ui/page/common/sidebar.dart';
-import '../ui/page/feed/feedPage1.dart';
+import 'feedPage1.dart';
 import '../ui/page/notification/notificationPage.dart';
 import 'SearchPage.dart';
 
@@ -226,6 +227,7 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       bottomNavigationBar: const BottomMenubar(),
       drawer: const SidebarMenu(),
+      endDrawer: const groupSidebarMenu(),
       body: _body(),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:math'as math;
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -77,9 +78,6 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
       //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
-
-
-
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -372,11 +370,10 @@ class _UserTileState extends State<_UserTile> {
   }
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<FeedState>(context);
     return ListTile(
       onTap: () {
-        /*if (kReleaseMode) {
-          kAnalytics.logViewSearchResults(searchTerm: user.userName!);
-        }*/
+        state.getPostDetailFromDatabase(null, model: widget.tweet);
         Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
       },
       title:
@@ -394,34 +391,16 @@ class _UserTileState extends State<_UserTile> {
           SizedBox(
             height: 20,
                 width:120,
-                child: ListView.builder(
-                  itemCount: widget.tweet.checkInList?.length ?? 0,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    if(widget.tweet.checkInList![index] == true) {
-                      return Container(
-                        width: 15.0,
-                        height: 15.0,
-                        decoration: new BoxDecoration(
-                          color: Colors.orange,
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    }
-                    else {
-                      return Container(
-                        width: 15.0,
-                        height: 15.0,
-                        decoration: new BoxDecoration(
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    }
-
-                  },
-                ),
+                child:
+                  CustomProgressBar(
+                      progress: widget.tweet.isHabit == false ? widget.tweet
+                          .GoalAchieved! / widget.tweet.GoalSum!
+                          : widget.tweet.checkInList!.where((item) => item == true)
+                          .length / 8,
+                      height: 20,
+                      width: 120,
+                      backgroundColor: Colors.grey[300]!,
+                      progressColor: Colors.blue),
           )
         ],
       ),

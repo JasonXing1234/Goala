@@ -156,7 +156,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
         for (int i = 0; i < daySelected.length; i++) {
           if (daySelected[i]) {
             // Send each selected day with the time to the database
-            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetModel.key!);
+            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
             NotiModelList.add(NotiModel);
           }
         }
@@ -244,8 +244,13 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
             : null,
         userId: myUser.userId!, isCheckedIn: false, isPrivate: false,
         checkInList: [false],
-        isHabit: isSelected[0] == false ? false : true,
-        GoalSum: int.parse(_goalSumController.text)
+        parentName: widget.isTweet
+            ? null
+            : widget.isRetweet
+            ? null : state.tweetToReplyModel!.title,
+        isHabit: widget.isTweet
+            ? isSelected[0] == false ? false : true : state.tweetToReplyModel!.isHabit,
+        GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0
     );
     return reply;
   }
