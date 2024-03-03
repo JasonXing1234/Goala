@@ -15,20 +15,19 @@ import 'package:Goala/state/suggestionUserState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/notificationState.dart';
 import 'package:Goala/state/searchState.dart';
-import 'package:Goala/GoalaFrontEnd/feedPage.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
 import 'package:Goala/ui/page/feed/suggestedUsers.dart';
 import 'package:Goala/ui/page/message/chatListPage.dart';
 import 'package:Goala/GoalaFrontEnd/profilePage.dart';
-import 'package:Goala/GoalaFrontEnd/UserProfilePage.dart';
+import 'package:Goala/GoalaFrontEnd/SearchUsersPage.dart';
 import 'package:Goala/widgets/bottomMenuBar/bottomMenuBar.dart';
 import 'package:provider/provider.dart';
 
 import '../ui/page/common/locator.dart';
 import '../ui/page/common/sidebar.dart';
-import 'feedPage1.dart';
+import 'FeedPage1.dart';
 import '../ui/page/notification/notificationPage.dart';
-import 'SearchPage.dart';
+import 'CurrentUserProfilePage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -195,21 +194,22 @@ class _HomePageState extends State<HomePage> {
 
     switch (index) {
       case 0:
-        return SearchPage(scaffoldKey: _scaffoldKey);
+        return CurrentUserProfilePage(scaffoldKey: _scaffoldKey);
       case 1:
-        return FeedPage1(scaffoldKey: _scaffoldKey,
+        return FeedPage(scaffoldKey: _scaffoldKey,
           refreshIndicatorKey: refreshIndicatorKey,);
       case 2:
-        return UserProfilePage(scaffoldKey: _scaffoldKey);
-      case 3:
+        return SearchUsersPage(scaffoldKey: _scaffoldKey);
+      /*case 3:
         return FeedPage(
           scaffoldKey: _scaffoldKey,
           refreshIndicatorKey: refreshIndicatorKey,
-        );
+        );*/
       /*case 3:
         return ChatListPage(scaffoldKey: _scaffoldKey);*/
       default:
-        return FeedPage(scaffoldKey: _scaffoldKey);
+        return FeedPage(scaffoldKey: _scaffoldKey,
+          refreshIndicatorKey: refreshIndicatorKey,);
     }
   }
 

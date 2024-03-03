@@ -11,8 +11,8 @@ import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/ui/page/message/conversationInformation/conversationInformation.dart';
 import 'package:Goala/ui/page/message/newMessagePage.dart';
 import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
-import 'package:Goala/GoalaFrontEnd/SearchPage.dart';
-import 'package:Goala/GoalaFrontEnd/UserProfilePage.dart';
+import 'package:Goala/GoalaFrontEnd/CurrentUserProfilePage.dart';
+import 'package:Goala/GoalaFrontEnd/SearchUsersPage.dart';
 import 'package:Goala/ui/page/settings/accountSettings/about/aboutTwitter.dart';
 import 'package:Goala/ui/page/settings/accountSettings/accessibility/accessibility.dart';
 import 'package:Goala/ui/page/settings/accountSettings/accountSettingsPage.dart';
@@ -118,10 +118,10 @@ class Routes {
             builder: (BuildContext context) => const ForgetPasswordPage());
       case "SearchPage":
         return CustomRoute<bool>(
-            builder: (BuildContext context) => SearchPage());
+            builder: (BuildContext context) => CurrentUserProfilePage());
       case "Search1Page":
         return CustomRoute<bool>(
-            builder: (BuildContext context) => UserProfilePage());
+            builder: (BuildContext context) => SearchUsersPage());
       /*case "ImageViewPge":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const ImageViewPge());*/

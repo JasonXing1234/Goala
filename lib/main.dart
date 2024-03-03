@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Goala',
         theme: AppTheme.appTheme.copyWith(
-          textTheme: GoogleFonts.mulishTextTheme(
+          textTheme: GoogleFonts.robotoTextTheme(
             Theme.of(context).textTheme,
           ),
         ),

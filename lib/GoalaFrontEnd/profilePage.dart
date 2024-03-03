@@ -1,31 +1,14 @@
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:Goala/helper/enum.dart';
-import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
-import 'package:Goala/model/user.dart';
-import 'package:Goala/state/chats/chatState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/profile_state.dart';
 import 'package:Goala/ui/page/profile/EditProfilePage.dart';
-import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
-import 'package:Goala/ui/page/profile/follow/followingListPage.dart';
 import 'package:Goala/ui/page/profile/profileImageView.dart';
-import 'package:Goala/ui/page/profile/qrCode/scanner.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
-import 'package:Goala/ui/page/profile/widgets/tabPainter.dart';
 import 'package:Goala/ui/theme/theme.dart';
-import 'package:Goala/widgets/cache_image.dart';
-import 'package:Goala/widgets/customWidgets.dart';
-import 'package:Goala/widgets/newWidget/customLoader.dart';
-import 'package:Goala/widgets/newWidget/emptyList.dart';
 import 'package:Goala/widgets/newWidget/rippleButton.dart';
-import 'package:Goala/GoalaFrontEnd/tweet.dart';
-import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
-import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../state/authState.dart';
 import '../state/searchState.dart';
 import '../widgets/newWidget/title_text.dart';
@@ -84,29 +67,26 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           x == authState.profileId) == null)) {
         return "Add Friend";
       }
-
-        else if (authState.profileUserModel.followingList?.any((x) => x == authState.userId) == true &&
-            (authState.userModel.followingList?.any((x) => x == authState.profileId) == false || authState.userModel.followingList?.any((x) => x == authState.profileId) == null)) {
-          return "Accept Friend Request";
-        }
-        else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false || authState.profileUserModel.followingList?.any((x) =>
-        x == authState.userId) == null) && (authState.userModel.followingList?.any((x) => x == authState.profileId)) == true) {
-          return "Friend Request Sent";
-        }
-        else if ((authState.profileUserModel.followingList?.any((x) =>
-        x ==
-            authState.userId)) == true &&
-            (authState.userModel.followingList?.any((x) =>
-            x ==
-                authState.profileId)) == true) {
-          return "Friend Added";
-        }
+      else if (authState.profileUserModel.followingList?.any((x) => x == authState.userId) == true &&
+          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false || authState.userModel.followingList?.any((x) => x == authState.profileId) == null)) {
+        return "Accept Friend Request";
       }
-
-
-      return "";
-
+      else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false || authState.profileUserModel.followingList?.any((x) =>
+      x == authState.userId) == null) && (authState.userModel.followingList?.any((x) => x == authState.profileId)) == true) {
+        return "Friend Request Sent";
+      }
+      else if ((authState.profileUserModel.followingList?.any((x) =>
+      x ==
+          authState.userId)) == true &&
+          (authState.userModel.followingList?.any((x) =>
+          x ==
+              authState.profileId)) == true) {
+        return "Friend Added";
+      }
+    }
+    return "";
   }
+
   bool isFriendRequestSent() {
     var authState = Provider.of<ProfileState>(context, listen: false);
     if (authState.profileUserModel.followingList != null &&
@@ -132,9 +112,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       list = feedstate.feedList!.where((x) => x.userId == widget.profileId && x.isGroupGoal == false && x.parentkey == null && x.isPrivate == false).toList();
       GroupGoalList = feedstate.feedList!.where((x) => x.memberList!.contains(widget.profileId) && x.isGroupGoal == true && x.parentkey == null && x.isPrivate == false).toList();
     }
-
-
-    //final List<FeedModel>? list = state.getTweetList(authState.userModel);
     return Scaffold(
       resizeToAvoidBottomInset : false,
       body:
@@ -158,7 +135,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   centerTitle: true,
                   background:
                   Container(
-
                     padding: const EdgeInsets.all(8.0),
                     color: Colors.white,
                     child:
@@ -180,106 +156,100 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                                 path: authState.profileUserModel!.profilePic!,
                                 height: 80,
                               ),
-
                             borderRadius: BorderRadius.circular(50),
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  ProfileImageView.getRoute(
-                                      authState.profileUserModel!.profilePic!));
+                                context,
+                                ProfileImageView.getRoute(authState.profileUserModel!.profilePic!));
                             },
                           ),
                         ),
-                SingleChildScrollView(
-                  child:
-                        Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                              alignment: Alignment(-100.0, -1.0),
-                              margin: const EdgeInsets.only(top: 90, right: 30),
-                              child: authState.isbusy
-                                  ? const SizedBox.shrink(): Text(
-                                authState.profileUserModel!.displayName!,
-                                style: GoogleFonts.openSans(fontSize: 40,
-                                  fontWeight: FontWeight.w700,
-                                ),
-
-                              ),
-                            ),
-                            RippleButton(
-                              splashColor:
-                              TwitterColor.dodgeBlue_50.withAlpha(100),
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(60)),
-                              onPressed: () {
-                                setState(() {
-                                  if (isMyProfile) {
-                                    Navigator.push(
-                                        context, EditProfilePage.getRoute());
-                                  } else {
-                                    if(isFollower() == "Add Friend"){
-                                      authState.addFriend();
-                                    }
-                                    else if(isFollower() == "Friend Request Sent"){
-
-                                    }
-                                    else if(isFollower() == "Accept Friend Request"){
-                                      authState.acceptFriendRequest();
-                                    }
-                                    else if(isFollower() == "Friend Added"){
-
-                                    }
-                                }});
-
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isMyProfile
-                                      ? TwitterColor.white : authState.isbusy ?
-                                      TwitterColor.dodgeBlue
-                                      : isFollower() == "Friend Added"
-                                      ? TwitterColor.dodgeBlue
-                                      : TwitterColor.white,
-                                  border: Border.all(
-                                      color: isMyProfile
-                                          ? Colors.black87.withAlpha(180)
-                                          : Colors.blue,
-                                      width: 1),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-
-                                /// If [isMyProfile] is true then Edit profile button will display
-                                // Otherwise Follow/Following button will be display
-                                child: Text(
-                                  isMyProfile
-                                      ? 'Edit Profile'
-                                      : isFollower() == "Add Friend"
-                                      ? 'Add Friend'
-                                      : isFollower() == "Friend Request Sent" ? 'Friend Request Sent'
-                                      : isFollower() == "Accept Friend Request" ? 'Accept Friend Request'
-                                      : isFollower() == "Friend Added" ? 'Friend Added':'',
-                                  style: TextStyle(
-                                    color: isMyProfile
-                                        ? Colors.black87.withAlpha(180)
-                                        : isFollower() == "Friend Added"
-                                        ? TwitterColor.white
-                                        : Colors.blue,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
+                        SingleChildScrollView(
+                          child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                                  alignment: Alignment(-100.0, -1.0),
+                                  margin: const EdgeInsets.only(top: 90, right: 30),
+                                  child: authState.isbusy
+                                      ? const SizedBox.shrink(): Text(
+                                    authState.profileUserModel!.displayName!,
+                                    style: GoogleFonts.openSans(fontSize: 40,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ]
-                        )
-                )],
-                    ),
+                                RippleButton(
+                                  splashColor:
+                                  TwitterColor.dodgeBlue_50.withAlpha(100),
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(60)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isMyProfile) {
+                                        Navigator.push(
+                                            context, EditProfilePage.getRoute());
+                                      } else {
+                                        if(isFollower() == "Add Friend"){
+                                          authState.addFriend();
+                                        }
+                                        else if(isFollower() == "Friend Request Sent"){
 
+                                        }
+                                        else if(isFollower() == "Accept Friend Request"){
+                                          authState.acceptFriendRequest();
+                                        }
+                                        else if(isFollower() == "Friend Added"){
+
+                                        }
+                                    }});
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isMyProfile
+                                          ? TwitterColor.white : authState.isbusy ?
+                                          TwitterColor.dodgeBlue
+                                          : isFollower() == "Friend Added"
+                                          ? TwitterColor.dodgeBlue
+                                          : TwitterColor.white,
+                                      border: Border.all(
+                                          color: isMyProfile
+                                              ? Colors.black87.withAlpha(180)
+                                              : Colors.blue,
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    /// If [isMyProfile] is true then Edit profile button will display
+                                    // Otherwise Follow/Following button will be display
+                                    child: Text(
+                                      isMyProfile
+                                          ? 'Edit Profile'
+                                          : isFollower() == "Add Friend"
+                                          ? 'Add Friend'
+                                          : isFollower() == "Friend Request Sent" ? 'Friend Request Sent'
+                                          : isFollower() == "Accept Friend Request" ? 'Accept Friend Request'
+                                          : isFollower() == "Friend Added" ? 'Friend Added':'',
+                                      style: TextStyle(
+                                        color: isMyProfile
+                                            ? Colors.black87.withAlpha(180)
+                                            : isFollower() == "Friend Added"
+                                            ? TwitterColor.white
+                                            : Colors.blue,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            )
+                        )
+                      ],
+                    ),
                   )),),
             SliverToBoxAdapter(
               child: Container(

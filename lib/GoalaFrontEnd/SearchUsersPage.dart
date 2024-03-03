@@ -11,16 +11,16 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 
-class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({Key? key, this.scaffoldKey}) : super(key: key);
+class SearchUsersPage extends StatefulWidget {
+  const SearchUsersPage({Key? key, this.scaffoldKey}) : super(key: key);
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
 
   @override
-  State<StatefulWidget> createState() => _UserProfilePageState();
+  State<StatefulWidget> createState() => _SearchUsersPageState();
 }
 
-class _UserProfilePageState extends State<UserProfilePage> {
+class _SearchUsersPageState extends State<SearchUsersPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {

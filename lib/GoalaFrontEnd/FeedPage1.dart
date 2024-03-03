@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:Goala/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/ui/theme/theme.dart';
-import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:Goala/widgets/newWidget/emptyList.dart';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
-class FeedPage1 extends StatelessWidget {
-  const FeedPage1(
+class FeedPage extends StatelessWidget {
+  const FeedPage(
       {Key? key, required this.scaffoldKey, this.refreshIndicatorKey})
       : super(key: key);
 

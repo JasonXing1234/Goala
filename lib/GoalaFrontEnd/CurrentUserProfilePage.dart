@@ -28,16 +28,16 @@ import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/profile/profileImageView.dart';
 import 'TaskDetailPage.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, this.scaffoldKey}) : super(key: key);
+class CurrentUserProfilePage extends StatefulWidget {
+  const CurrentUserProfilePage({Key? key, this.scaffoldKey}) : super(key: key);
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
 
   @override
-  State<StatefulWidget> createState() => _SearchPageState();
+  State<StatefulWidget> createState() => _CurrentUserProfilePageState();
 }
 
-class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateMixin {
+class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with SingleTickerProviderStateMixin {
   @override
   late TabController _tabController;
   var initializationSettingsAndroid =
@@ -252,7 +252,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(
-                              25.0,
+                              8.0,
                             ),
                           ),
                           child: TabBar(
@@ -262,7 +262,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                             indicator: BoxDecoration(
                               color: Color(0xFF292A29),
                               borderRadius: BorderRadius.circular(
-                                25.0,
+                                8.0,
                               ),
                             ),
                             labelColor: Colors.white,
