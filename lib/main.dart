@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:Goala/state/profile_state.dart';
 import 'package:Goala/state/suggestionUserState.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
