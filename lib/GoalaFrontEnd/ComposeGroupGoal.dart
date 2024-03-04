@@ -25,6 +25,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../model/GoalNotificationModel.dart';
 import '../ui/RoundedButton.dart';
 import '../ui/constants.dart';
+import '../widgets/newWidget/customizedTitleText.dart';
 
 class ComposeGroupGoal extends StatefulWidget {
   const ComposeGroupGoal(
@@ -52,7 +53,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   List<bool> isSelected = [true, false];
   TimeOfDay? pickedTime;
   final List<String> days = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+    'M', 'T', 'W', 'Th', 'F', 'S', 'Su'
   ];
   List<bool> daySelected = List.filled(7, false);
 
@@ -297,170 +298,136 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: widget.isTweet ? Text('New Goal') : Text('New Post'),
+                    child: widget.isTweet ? customizedTitleText('Group', 25) : customizedTitleText('New Post', 25),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ToggleButtons(
-                      borderColor: Colors.grey,
-                      fillColor: Colors.blue,
-                      borderWidth: 2,
-                      selectedBorderColor: Colors.blue,
-                      selectedColor: Colors.white,
-                      borderRadius: BorderRadius.circular(0),
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text('Habit'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text('Goal'),
-                        ),
-                      ],
-                      onPressed: (int index) {
-                        setState(() {
-                          // Make sure only one tab is selected at a time
-                          for (int i = 0; i < isSelected.length; i++) {
-                            isSelected[i] = i == index;
-                          }
-
-                        });
-                      },
-                      isSelected: isSelected,
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ToggleButtons(
+                        borderColor: Colors.grey,
+                        fillColor: Color(0xFF29AB87),
+                        borderWidth: 2,
+                        selectedBorderColor: Color(0xFF29AB87),
+                        selectedColor: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            child: customizedTitleText('Habit', 18),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            child: customizedTitleText('Goal', 18),
+                          ),
+                        ],
+                        onPressed: (int index) {
+                          setState(() {
+                            for (int i = 0; i < isSelected.length; i++) {
+                              isSelected[i] = i == index;
+                            }
+                          });
+                        },
+                        isSelected: isSelected,
+                      ),
                     ),
                   ),
-                  ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
-                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-                      leading: Icon(Icons.edit),
-                      title:Center(child: Text('Title'),),
-                      children: [
-                        TextFormField(
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _titleController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "title"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ]
+                  SizedBox(
+                    height: 10,
                   ),
-                  ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
-                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-                      leading: Icon(Icons.edit),
-                      title:Center(child: Text('Description'),),
-                      children: [
-                        TextFormField(
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _descriptionController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "description"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ]
-                  ),
-                  if(widget.isTweet && isSelected[0] == false) ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
-                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-                      leading: Icon(Icons.edit),
-                      title:Center(child: Text('Goal Number'),),
-                      children: [
-                        TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _goalSumController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "goal number"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ]
-                  ),
-                  ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
-                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-                      leading: Icon(Icons.edit),
-                      title:Center(child: Text('Add User'),),
-                      children:[
-                        SizedBox(height: 40),
-                        MultiSelectChipField<UserModel?>(
-                          items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.userName!)).toList(),
-                          //initialValue: [_animals[4], _animals[7], _animals[9]],
-                          title: Text("Friends"),
-                          headerColor: Colors.black.withOpacity(0.5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue, width: 1.8),
-                          ),
-                          selectedChipColor: Colors.blue.withOpacity(0.5),
-                          selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                          onTap: (values) {
-                            List<String> temp = [];
-                            for(int i = 0; i < values.length; i++) {
-                              temp.add(values[i]!.userId!);
-                            }
-                            memberListTemp.addAll(temp);
-                            _multiSelectKey.currentState?.validate();
-                          },
-                        ),
-                        SizedBox(height: 40),
+                  if(widget.isTweet) Center(
+                    child: SizedBox(width: 200, child: TextFormField(
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                      cursorColor: Theme.of(context).colorScheme.secondary,
+                      controller: _titleController,
+                      textAlign: TextAlign.center,
+                      maxLength: 50,
+                      decoration: kTextFieldDecoration.copyWith(hintText: "title"),
+                    ),),),
+                  if(widget.isTweet) Center(
+                    child: SizedBox(width: 340, child: TextFormField(
 
-                      ]),
-                  ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
-                      tilePadding: EdgeInsets.only(left: 5, right: 20, top: 5, bottom: 5),
-                      leading: Icon(Icons.edit),
-                      title:
-                      Center(child: Text('Time'),),
-                      children: [
-                        Column(
-                          children: [
-                            Wrap(
-                              children: List.generate(days.length, (index) {
-                                return ChoiceChip(
-                                  label: Text(days[index]),
-                                  selected: daySelected[index],
-                                  onSelected: (bool selected) {
-                                    setState(() {
-                                      daySelected[index] = selected;
-                                    });
-                                  },
-                                );
-                              }),
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                final TimeOfDay? time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                );
-                                if (time != null) {
-                                  setState(() {
-                                    pickedTime = time;
-                                  });
-                                }
-                              },
-                              child: Text('Pick a Time'),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                            height:20
-                        ),
-                      ]
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                      cursorColor: Theme.of(context).colorScheme.secondary,
+                      controller: _descriptionController,
+                      textAlign: TextAlign.center,
+                      decoration: kTextFieldDecoration.copyWith(hintText: "description"),
+                    ),),),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  if(widget.isTweet && isSelected[0] == false) SizedBox(
+                    height: 15,
+                  ),
+                  if(widget.isTweet && isSelected[0] == false) Center(
+                    child: SizedBox(width: 340,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                        cursorColor: Theme.of(context).colorScheme.secondary,
+                        controller: _goalSumController,
+                        textAlign: TextAlign.center,
+                        decoration: kTextFieldDecoration.copyWith(hintText: "goal number"),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(child:MultiSelectChipField<UserModel?>(
+
+                    items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.displayName!)).toList(),
+                    //initialValue: [_animals[4], _animals[7], _animals[9]],
+                    title: Text("Add Friends"),
+                    headerColor: Colors.grey,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1.8),
+                    ),
+                    selectedChipColor: Color(0xFF29AB87),
+                    selectedTextStyle: TextStyle(color: Color(0xFF1A3B33)),
+                    onTap: (values) {
+                      List<String> temp = [];
+                      for(int i = 0; i < values.length; i++) {
+                        temp.add(values[i]!.userId!);
+                      }
+                      memberListTemp.addAll(temp);
+                      _multiSelectKey.currentState?.validate();
+                    },
+                  ),),
+                  Column(
+                    children: [
+                      Center(child: Wrap(
+                        children: List.generate(days.length, (index) {
+                          return ChoiceChip(
+                            selectedColor: Color(0xFF29AB87),
+                            showCheckmark: false,
+                            label: Text(days[index]),
+                            selected: daySelected[index],
+                            onSelected: (bool selected) {
+                              setState(() {
+                                daySelected[index] = selected;
+                              });
+                            },
+                          );
+                        }),
+                      ),),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final TimeOfDay? time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (time != null) {
+                            setState(() {
+                              pickedTime = time;
+                            });
+                          }
+                        },
+                        child: pickedTime == null ? Text('Pick a Time') : Text(pickedTime.toString().substring(10, 15)),
+                      ),
+                    ],
                   ),
                   Flexible(
                     child: Stack(

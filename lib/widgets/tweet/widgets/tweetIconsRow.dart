@@ -264,8 +264,8 @@ class TweetIconsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        isTweetDetail ? _timeWidget(context) : const SizedBox(),
-        isTweetDetail ? _likeCommentWidget(context) : const SizedBox(),
+        //isTweetDetail ? _timeWidget(context) : const SizedBox(),
+        //isTweetDetail ? _likeCommentWidget(context) : const SizedBox(),
         _likeCommentsIcons(context, model)
       ],
     );

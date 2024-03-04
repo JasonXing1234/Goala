@@ -7,6 +7,7 @@ class FeedModel {
   late bool isHabit;
   late bool isCheckedIn;
   late bool isPrivate;
+  String? grandparentKey;
   String? key;
   String? parentkey;
   String? childRetwetkey;
@@ -35,6 +36,7 @@ class FeedModel {
         required this.isCheckedIn,
         required this.isPrivate,
         required this.isHabit,
+        this.grandparentKey,
         this.key,
         this.parentName,
         this.title,
@@ -64,6 +66,7 @@ class FeedModel {
       "isCheckedIn": isCheckedIn,
       "isPrivate": isPrivate,
       "isHabit": isHabit,
+      "grandparentKey": grandparentKey,
       "userId": userId,
       "title": title,
       "GoalSum": GoalSum,
@@ -95,6 +98,7 @@ class FeedModel {
     isPrivate = map['isCheckedIn'];
     isHabit = map['isHabit'];
     key = map['key'];
+    grandparentKey = map['grandparentKey'];
     title = map['title'];
     description = map['description'];
     userId = map['userId'];

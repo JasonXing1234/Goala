@@ -102,7 +102,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
             SliverAppBar(
               pinned: true,
               title: customTitleText(
-                'Thread',
+                'Comments',
               ),
               iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -114,21 +114,16 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                 preferredSize: const Size.fromHeight(0.0),
               ),
             ),
-            SliverList(
+            /*SliverList(
               delegate: SliverChildListDelegate(
                 [
                   state.tweetDetailModel == null ||
                           state.tweetDetailModel!.isEmpty
                       ? Container()
                       : _tweetDetail(state.tweetDetailModel!.last),
-                  Container(
-                    height: 6,
-                    width: double.infinity,
-                    color: TwitterColor.mystic,
-                  )
                 ],
               ),
-            ),
+            ),*/
             SliverList(
               delegate: SliverChildListDelegate(
                 state.tweetReplyMap == null ||

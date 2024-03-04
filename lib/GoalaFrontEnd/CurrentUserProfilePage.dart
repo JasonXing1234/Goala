@@ -94,11 +94,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
       }
     });
   }
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    // If you're going to use other Firebase services in the background, such as Firestore,
-    // make sure you call `initializeApp` before using other Firebase services.
-    cprint("Handling a background message: ${message.messageId}");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +113,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
               x.isGroupGoal == true && x.parentkey == null).toList();
     }
     if(authState.isbusy){
-      //authState.userModel!.closenessMap.add("eM3NppwKJkNoQsgI1sO7uUktsvy1");
       if(authState.userModel!.closenessMap != null) {
         authState.userModel!.closenessMap!.sort((a, b) =>
             a.split(' ')[1].compareTo(b.split(' ')[1]));

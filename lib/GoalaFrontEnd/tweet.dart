@@ -60,7 +60,7 @@ class Tweet extends StatelessWidget {
       alignment: Alignment.topLeft,
       children: <Widget>[
         /// Left vertical bar of a tweet
-        type != TweetType.ParentTweet
+        /*type != TweetType.ParentTweet
             ? const SizedBox.shrink()
             : Positioned.fill(
                 child: Container(
@@ -74,7 +74,7 @@ class Tweet extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ),*/
         InkWell(
           onLongPress: () {
             onLongPressedTweet(context);
@@ -111,14 +111,14 @@ class Tweet extends StatelessWidget {
                   type: type,
                 ),
               ),
-              model.childRetwetkey == null
+              /*model.childRetwetkey == null
                   ? const SizedBox.shrink()
                   : RetweetWidget(
                       childRetwetkey: model.childRetwetkey!,
                       type: type,
                       isImageAvailable: model.imagePath != null &&
                           model.imagePath!.isNotEmpty,
-                    ),
+                    ),*/
               Padding(
                 padding:
                     EdgeInsets.only(left: type == TweetType.Detail ? 10 : 60),
@@ -197,137 +197,114 @@ class _TweetBodyState extends State<_TweetBody> {
         fontWeight: descriptionFontWeight);
     return FutureBuilder(
         future: getParentModel(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState != ConnectionState.done) {
-        // Future hasn't finished yet, return a placeholder
-        return Text('Loading');
-      }
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: GestureDetector(
-              onTap: () {
-                // If tweet is displaying on someone's profile then no need to navigate to same user's profile again.
-                if (widget.isDisplayOnProfile) {
-                  return;
-                }
-                Navigator.push(
-                    context,
-                    ProfilePage.getRoute(profileId: widget.model.userId));
-              },
-              child: CircularImage(path: widget.model.user!.profilePic),
-            ),
-          ),
-          const SizedBox(width: 20),
-          SizedBox(
-            width: context.width - 80,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(
-                      child: Row(
-                        children: <Widget>[
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                                minWidth: 0, maxWidth: context.width * .5),
-                            child: TitleText(widget.model.user!.displayName!,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          const SizedBox(width: 3),
-                          widget.model.user!.isVerified!
-                              ? customIcon(
-                            context,
-                            icon: AppIcon.blueTick,
-                            isTwitterIcon: true,
-                            iconColor: AppColor.primary,
-                            size: 13,
-                            paddingIcon: 3,
-                          )
-                              : const SizedBox(width: 0),
-                          SizedBox(
-                            width: widget.model.user!.isVerified! ? 5 : 0,
-                          ),
-                          /*Flexible(
-                          child: customText(
-                            '${model.user!.userName}',
-                            style: TextStyles.userNameStyle,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),*/
-                          const SizedBox(width: 4),
-                          customText(
-                            '· ${Utility.getChatTime(widget.model.createdAt)}',
-                            style:
-                            TextStyles.userNameStyle.copyWith(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(child: widget.trailing ?? const SizedBox()),
-                  ],
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            // Future hasn't finished yet, return a placeholder
+            return Text('Loading');
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(width: 10),
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: GestureDetector(
+                  onTap: () {
+                    // If tweet is displaying on someone's profile then no need to navigate to same user's profile again.
+                    if (widget.isDisplayOnProfile) {
+                      return;
+                    }
+                    Navigator.push(
+                        context,
+                        ProfilePage.getRoute(profileId: widget.model.userId));
+                  },
+                  child: CircularImage(path: widget.model.user!.profilePic),
                 ),
-                CustomProgressBar(
-                    progress: widget.model.isHabit == false ? tempModel!
-                        .GoalAchieved! / tempModel!.GoalSum!
-                        : tempModel!.checkInList!.where((item) => item == true)
-                        .length / 8,
-                    height: 20,
-                    width: 200,
-                    backgroundColor: Colors.grey[300]!,
-                    progressColor: Colors.blue),
-                Text(widget.model.parentName!),
-                widget.model.goalPhotoList?.length != null ?
-                SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.model.goalPhotoList!.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.all(8.0),
-                          // Add some padding around each image
-                          child: Image.network(
-                            widget.model.goalPhotoList![index]!,
-                            fit: BoxFit.cover,
+              ),
+              const SizedBox(width: 20),
+              SizedBox(
+                width: context.width - 80,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Expanded(
+                          child: Row(
+                            children: <Widget>[
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    minWidth: 0, maxWidth: context.width * .5),
+                                child: TitleText(widget.model.user!.displayName!,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              const SizedBox(width: 3),
+                              widget.model.user!.isVerified!
+                                  ? customIcon(
+                                context,
+                                icon: AppIcon.blueTick,
+                                isTwitterIcon: true,
+                                iconColor: AppColor.primary,
+                                size: 13,
+                                paddingIcon: 3,
+                              )
+                                  : const SizedBox(width: 0),
+                              SizedBox(
+                                width: widget.model.user!.isVerified! ? 5 : 0,
+                              ),
+                              const SizedBox(width: 4),
+                              customText(
+                                '· ${Utility.getChatTime(widget.model.createdAt)}',
+                                style:
+                                TextStyles.userNameStyle.copyWith(fontSize: 12),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    )) : SizedBox(),
-                /*model.description == null
-                  ? const SizedBox()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        UrlText(
-                          text: model.description!.removeSpaces,
-                          onHashTagPressed: (tag) {
-                            cprint(tag);
-                          },
-                          style: textStyle,
-                          urlStyle: urlStyle,
                         ),
+                        Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
-              if (model.imagePath == null && model.description != null)
-                CustomLinkMediaInfo(text: model.description!), */
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-        ],
-      );
-    });
+                    widget.model.grandparentKey == null ? CustomProgressBar(
+                        progress: widget.model.isHabit == false ? tempModel!
+                            .GoalAchieved! / tempModel!.GoalSum!
+                            : tempModel!.checkInList!.where((item) => item == true)
+                            .length / 8,
+                        height: 20,
+                        width: 200,
+                        backgroundColor: Colors.grey[300]!,
+                        progressColor: Colors.blue):SizedBox.shrink(),
+                    widget.model.parentName != null ? Text(widget.model.parentName!) : Text(''),
+                    widget.model.goalPhotoList != null ?
+                    SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.model.goalPhotoList!.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.all(8.0),
+                              // Add some padding around each image
+                              child: Image.network(
+                                widget.model.goalPhotoList![index]!,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        )) : SizedBox(),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+          );
+        }
+    );
   }
 }
 
@@ -417,8 +394,8 @@ class _TweetDetailBody extends StatelessWidget {
                     ),
                   ],
                 ),
-                subtitle: customText('${model.user!.userName}',
-                    style: TextStyles.userNameStyle),
+                /*subtitle: customText('${model.user!.userName}',
+                    style: TextStyles.userNameStyle),*/
                 trailing: trailing,
               ),
               model.description == null
