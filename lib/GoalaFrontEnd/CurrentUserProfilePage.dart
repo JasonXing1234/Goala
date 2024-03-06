@@ -102,8 +102,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context);
-    //final ulist = state.userlist!.where((x) => authState.userModel!.followingList!.contains(x.userId) && x.followingList!.contains(authState.userModel!.userId));
-    //Map<String, int>? friendMap = Map.fromIterable(ulist, key: (item) => item, value: (item) => 1);
     String id = authState.userId!;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
       list = feedstate.feedList!.where((x) => x.userId == id &&
@@ -119,8 +117,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
       }
     }
 
-
-    //final List<FeedModel>? list = state.getTweetList(authState.userModel);
     return Scaffold(
       floatingActionButton: ExpandableFab(
       distance: 112,
@@ -139,7 +135,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
       ],
     ),
       body:
-
       RefreshIndicator(
         onRefresh: () async {
           state.getDataFromDatabase();
@@ -394,7 +389,7 @@ class _UserTileState extends State<_UserTile> {
                       height: 20,
                       width: 120,
                       backgroundColor: Colors.grey[300]!,
-                      progressColor: Colors.blue),
+                      progressColor: Color(0xFF29AB87)),
           )
         ],
       ),

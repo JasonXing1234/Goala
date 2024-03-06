@@ -221,7 +221,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
         user: commentedUser,
         createdAt: DateTime.now().toUtc().toString(),
         tags: tags,
-        grandparentKey: state.tweetToReplyModel!.parentkey == null ? null : state.tweetToReplyModel!.parentkey,
+        grandparentKey: state.tweetToReplyModel == null ? null : state.tweetToReplyModel!.parentkey,
         parentkey: widget.isTweet
             ? null
             : widget.isRetweet
@@ -369,6 +369,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                       SizedBox(
                         height: 10,
                       ),
+                      //TODO: "Ch
                       widget.isTweet
                           ? const SizedBox.shrink() :
                       ElevatedButton(
@@ -421,6 +422,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                           Center(child: Wrap(
                             children: List.generate(days.length, (index) {
                               return ChoiceChip(
+                                selectedColor: Color(0xFF29AB87),
                                 showCheckmark: false,
                                 label: Text(days[index]),
                                 selected: daySelected[index],

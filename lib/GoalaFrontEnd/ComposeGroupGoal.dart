@@ -48,6 +48,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
   late TextEditingController _addUserController;
+  late TextEditingController _monthController;
+  late TextEditingController _dayController;
+  late TextEditingController _yearController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
@@ -275,10 +278,10 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
         onActionPressed: _submitButton,
         isCrossButton: true,
         submitButtonText: widget.isTweet
-            ? 'Tweet'
+            ? 'Submit'
             : widget.isRetweet
             ? 'Retweet'
-            : 'Reply',
+            : 'Comment',
         isSubmitDisable:
         !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
             Provider.of<FeedState>(context).isBusy,
@@ -370,46 +373,97 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  if(widget.isTweet && isSelected[0] == false) SizedBox(height: 10),
+                  Center(child:customTitleText('Complete By')),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      SizedBox(width: 35),
+                      SizedBox(width: 80,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _monthController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "MM"),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      SizedBox(width: 80,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _dayController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "DD"),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      SizedBox(width: 110,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          cursorColor: Theme.of(context).colorScheme.secondary,
+                          controller: _yearController,
+                          textAlign: TextAlign.center,
+                          decoration: kTextFieldDecoration.copyWith(hintText: "Year"),
+                        ),
+                      ),
+                    ],
                   ),
-                  Center(child:MultiSelectChipField<UserModel?>(
 
-                    items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.displayName!)).toList(),
-                    //initialValue: [_animals[4], _animals[7], _animals[9]],
-                    title: Text("Add Friends"),
-                    headerColor: Colors.grey,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1.8),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(child:
+                    MultiSelectChipField<UserModel?>(
+                      items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.displayName!)).toList(),
+                      //initialValue: [_animals[4], _animals[7], _animals[9]],
+                      title: Text("Add Friends"),
+                      headerColor: Colors.grey,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 1.8),
+                      ),
+                      selectedChipColor: Color(0xFF29AB87),
+                      selectedTextStyle: TextStyle(color: Color(0xFF1A3B33)),
+                      onTap: (values) {
+                        List<String> temp = [];
+                        for(int i = 0; i < values.length; i++) {
+                          temp.add(values[i]!.userId!);
+                        }
+                        memberListTemp.addAll(temp);
+                        _multiSelectKey.currentState?.validate();
+                      },
                     ),
-                    selectedChipColor: Color(0xFF29AB87),
-                    selectedTextStyle: TextStyle(color: Color(0xFF1A3B33)),
-                    onTap: (values) {
-                      List<String> temp = [];
-                      for(int i = 0; i < values.length; i++) {
-                        temp.add(values[i]!.userId!);
-                      }
-                      memberListTemp.addAll(temp);
-                      _multiSelectKey.currentState?.validate();
-                    },
-                  ),),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Column(
                     children: [
-                      Center(child: Wrap(
-                        children: List.generate(days.length, (index) {
-                          return ChoiceChip(
-                            selectedColor: Color(0xFF29AB87),
-                            showCheckmark: false,
-                            label: Text(days[index]),
-                            selected: daySelected[index],
-                            onSelected: (bool selected) {
-                              setState(() {
-                                daySelected[index] = selected;
-                              });
-                            },
-                          );
-                        }),
-                      ),),
+                      Center(
+                        child:
+                          Wrap(
+                          children: List.generate(days.length, (index) {
+                            return Padding(padding: EdgeInsets.all(1.0),
+                            child:
+                              ChoiceChip(
+                                selectedColor: Color(0xFF29AB87),
+                                showCheckmark: false,
+                                label: Text(days[index]),
+                                selected: daySelected[index],
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    daySelected[index] = selected;
+                                  });
+                                },
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
                       SizedBox(
                         height: 15,
                       ),
@@ -456,190 +510,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
           ),
         ],
       ),
-    );
-  }
-}
-
-class _ComposeRetweet
-    extends WidgetView<ComposeGroupGoal, _ComposeTweetReplyPageState> {
-  const _ComposeRetweet(this.viewState) : super(viewState);
-
-  final _ComposeTweetReplyPageState viewState;
-  Widget _tweet(BuildContext context, FeedModel model) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // SizedBox(width: 10),
-
-        const SizedBox(width: 20),
-        SizedBox(
-          width: context.width - 12,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: CircularImage(path: model.user!.profilePic),
-                  ),
-                  const SizedBox(width: 10),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: 0, maxWidth: context.width * .5),
-                    child: TitleText(model.user!.displayName!,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  const SizedBox(width: 3),
-                  model.user!.isVerified!
-                      ? customIcon(
-                    context,
-                    icon: AppIcon.blueTick,
-                    isTwitterIcon: true,
-                    iconColor: AppColor.primary,
-                    size: 13,
-                    paddingIcon: 3,
-                  )
-                      : const SizedBox(width: 0),
-                  SizedBox(width: model.user!.isVerified! ? 5 : 0),
-                  Flexible(
-                    child: customText(
-                      '${model.user!.userName}',
-                      style: TextStyles.userNameStyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  customText('· ${Utility.getChatTime(model.createdAt)}',
-                      style: TextStyles.userNameStyle),
-                  const Expanded(child: SizedBox()),
-                ],
-              ),
-            ],
-          ),
-        ),
-        if (model.description != null)
-          UrlText(
-            text: model.description!,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-            urlStyle: const TextStyle(
-                color: Colors.blue, fontWeight: FontWeight.w400),
-          ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var authState = Provider.of<AuthState>(context);
-    return SizedBox(
-      height: context.height,
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child:
-                CircularImage(path: authState.user?.photoURL, height: 40),
-              ),
-              Expanded(
-                child: _TextField(
-                  isTweet: false,
-                  isRetweet: true,
-                  textEditingController: viewState._descriptionController,
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16, left: 80, bottom: 8),
-            child: ComposeTweetImage(
-              image: viewState._image,
-              onCrossIconPressed: viewState._onCrossIconPressed,
-            ),
-          ),
-          Flexible(
-            child: Stack(
-              children: <Widget>[
-                Wrap(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(
-                          left: 75, right: 16, bottom: 16),
-                      padding: const EdgeInsets.all(8),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: AppColor.extraLightGrey, width: .5),
-                          borderRadius:
-                          const BorderRadius.all(Radius.circular(15))),
-                      child: _tweet(context, viewState.model!),
-                    ),
-                  ],
-                ),
-                _UserList(
-                  list: Provider.of<SearchState>(context).userlist,
-                  textEditingController: viewState._descriptionController,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 50)
-        ],
-      ),
-    );
-  }
-}
-
-class _TextField extends StatelessWidget {
-  const _TextField(
-      {Key? key,
-        required this.textEditingController,
-        this.isTweet = false,
-        this.isRetweet = false})
-      : super(key: key);
-  final TextEditingController textEditingController;
-  final bool isTweet;
-  final bool isRetweet;
-
-  @override
-  Widget build(BuildContext context) {
-    final searchState = Provider.of<SearchState>(context, listen: false);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TextField(
-          controller: textEditingController,
-          onChanged: (text) {
-            //Provider.of<ComposeTweetState>(context, listen: false)
-            //   .onDescriptionChanged(text, searchState);
-          },
-          maxLines: null,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: isTweet
-                  ? 'What\'s happening?'
-                  : isRetweet
-                  ? 'Add a comment'
-                  : 'Tweet your reply',
-              hintStyle: const TextStyle(fontSize: 18)),
-        ),
-      ],
     );
   }
 }

@@ -95,7 +95,7 @@ class FeedModel {
   FeedModel.fromJson(Map<dynamic, dynamic> map) {
     isGroupGoal = map['isGroupGoal'];
     isCheckedIn = map['isCheckedIn'];
-    isPrivate = map['isCheckedIn'];
+    isPrivate = map['isPrivate'];
     isHabit = map['isHabit'];
     key = map['key'];
     grandparentKey = map['grandparentKey'];

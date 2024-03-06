@@ -1,3 +1,4 @@
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../state/authState.dart';
 import '../state/searchState.dart';
 import '../widgets/newWidget/title_text.dart';
+import 'TaskDetailPage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.profileId}) : super(key: key);
@@ -124,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * .3,
+              expandedHeight: MediaQuery.of(context).size.height * .24,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -138,119 +140,154 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     padding: const EdgeInsets.all(8.0),
                     color: Colors.white,
                     child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        // Add an image widget to display an image
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 5),
-                              shape: BoxShape.circle),
-                          child: RippleButton(
-                            child: authState.isbusy
-                                ? const SizedBox.shrink() :
-                              CircularImage(
-                                path: authState.profileUserModel!.profilePic!,
-                                height: 80,
-                              ),
-                            borderRadius: BorderRadius.circular(50),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                ProfileImageView.getRoute(authState.profileUserModel!.profilePic!));
-                            },
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                                  alignment: Alignment(-100.0, -1.0),
-                                  margin: const EdgeInsets.only(top: 90, right: 30),
-                                  child: authState.isbusy
-                                      ? const SizedBox.shrink(): Text(
-                                    authState.profileUserModel!.displayName!,
-                                    style: GoogleFonts.openSans(fontSize: 40,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Add an image widget to display an image
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 500),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white, width: 5),
+                                  shape: BoxShape.circle),
+                              child: RippleButton(
+                                child: authState.isbusy
+                                    ? const SizedBox.shrink() :
+                                  CircularImage(
+                                    path: authState.profileUserModel!.profilePic!,
+                                    height: 80,
                                   ),
-                                ),
-                                RippleButton(
-                                  splashColor:
-                                  TwitterColor.dodgeBlue_50.withAlpha(100),
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(60)),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (isMyProfile) {
-                                        Navigator.push(
-                                            context, EditProfilePage.getRoute());
-                                      } else {
-                                        if(isFollower() == "Add Friend"){
-                                          authState.addFriend();
-                                        }
-                                        else if(isFollower() == "Friend Request Sent"){
-
-                                        }
-                                        else if(isFollower() == "Accept Friend Request"){
-                                          authState.acceptFriendRequest();
-                                        }
-                                        else if(isFollower() == "Friend Added"){
-
-                                        }
-                                    }});
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isMyProfile
-                                          ? TwitterColor.white : authState.isbusy ?
-                                          TwitterColor.dodgeBlue
-                                          : isFollower() == "Friend Added"
-                                          ? TwitterColor.dodgeBlue
-                                          : TwitterColor.white,
-                                      border: Border.all(
-                                          color: isMyProfile
-                                              ? Colors.black87.withAlpha(180)
-                                              : Colors.blue,
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    /// If [isMyProfile] is true then Edit profile button will display
-                                    // Otherwise Follow/Following button will be display
-                                    child: Text(
-                                      isMyProfile
-                                          ? 'Edit Profile'
-                                          : isFollower() == "Add Friend"
-                                          ? 'Add Friend'
-                                          : isFollower() == "Friend Request Sent" ? 'Friend Request Sent'
-                                          : isFollower() == "Accept Friend Request" ? 'Accept Friend Request'
-                                          : isFollower() == "Friend Added" ? 'Friend Added':'',
-                                      style: TextStyle(
-                                        color: isMyProfile
-                                            ? Colors.black87.withAlpha(180)
-                                            : isFollower() == "Friend Added"
-                                            ? TwitterColor.white
-                                            : Colors.blue,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
+                                borderRadius: BorderRadius.circular(50),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    ProfileImageView.getRoute(authState.profileUserModel!.profilePic!));
+                                },
+                              ),
+                            ),
+                            SingleChildScrollView(
+                              child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                                      alignment: Alignment(10.0, 1),
+                                      margin: const EdgeInsets.only(top: 30, right: 30),
+                                      child: authState.isbusy
+                                          ? const SizedBox.shrink(): Text(
+                                        authState.profileUserModel.displayName!,
+                                        style: GoogleFonts.openSans(fontSize: 40,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ]
+                                    SizedBox(height:20),
+                                    RippleButton(
+                                      splashColor:
+                                      TwitterColor.dodgeBlue_50.withAlpha(100),
+                                      borderRadius:
+                                      const BorderRadius.all(Radius.circular(60)),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (isMyProfile) {
+                                            Navigator.push(
+                                                context, EditProfilePage.getRoute());
+                                          } else {
+                                            if(isFollower() == "Add Friend"){
+                                              authState.addFriend();
+                                            }
+                                            else if(isFollower() == "Friend Request Sent"){
+
+                                            }
+                                            else if(isFollower() == "Accept Friend Request"){
+                                              authState.acceptFriendRequest();
+                                            }
+                                            else if(isFollower() == "Friend Added"){
+
+                                            }
+                                        }});
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isMyProfile
+                                              ? TwitterColor.white : authState.isbusy ?
+                                              TwitterColor.dodgeBlue
+                                              : isFollower() == "Friend Added"
+                                              ? TwitterColor.dodgeBlue
+                                              : TwitterColor.white,
+                                          border: Border.all(
+                                              color: isMyProfile
+                                                  ? Colors.black87.withAlpha(180)
+                                                  : Colors.blue,
+                                              width: 1),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        /// If [isMyProfile] is true then Edit profile button will display
+                                        // Otherwise Follow/Following button will be display
+                                        child: Text(
+                                          isMyProfile
+                                              ? 'Edit Profile'
+                                              : isFollower() == "Add Friend"
+                                              ? 'Add Friend'
+                                              : isFollower() == "Friend Request Sent" ? 'Friend Request Sent'
+                                              : isFollower() == "Accept Friend Request" ? 'Accept Friend Request'
+                                              : isFollower() == "Friend Added" ? 'Friend Added':'',
+                                          style: TextStyle(
+                                            color: isMyProfile
+                                                ? Colors.black87.withAlpha(180)
+                                                : isFollower() == "Friend Added"
+                                                ? TwitterColor.white
+                                                : Colors.blue,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]
+                                )
+                            )
+                          ],
+                        ),
+                        authState.isbusy ? SizedBox(
+                          width:20,
+                        ): state.isbusy ? SizedBox(
+                          width:20,
+                        ):authState.profileUserModel.closenessMap == null ? SizedBox(
+                          width:20,
+                        ):Expanded(
+                            child:
+                            ListView(
+                              scrollDirection: Axis.horizontal,
+                              children:
+                              authState.profileUserModel.closenessMap!.map((model) {
+
+                                return Row(children:[
+                                  state.getUserList() == null ? SizedBox(
+                                    width:20,
+                                  ):
+                                  CircularImage(path: state.getSingleUserDetail(model.split(' ')[0]).profilePic, height: 37),
+                                  SizedBox(
+                                    width:20,
+                                  )
+                                ]);
+                              },
+
+                              ).toList(),
                             )
                         )
-                      ],
+                      ]
                     ),
-                  )),),
+                  )
+              ),
+            ),
             SliverToBoxAdapter(
               child: Container(
                 height: 800,
@@ -262,34 +299,37 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                         // give the tab bar a height [can change hheight to preferred height]
                         Container(
                           height: 45,
+                          width:330,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(
-                              9.0,
+                              8.0,
                             ),
                           ),
                           child: TabBar(
-                            labelPadding: EdgeInsets.symmetric(horizontal: 25.0),
+                            labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
                             controller: _tabController,
                             // give the indicator a decoration (color and border radius)
                             indicator: BoxDecoration(
-
+                              color: Color(0xFF292A29),
                               borderRadius: BorderRadius.circular(
-                                9.0,
+                                8.0,
                               ),
-                              color: Colors.black,
                             ),
                             labelColor: Colors.white,
+                            //91F291
                             unselectedLabelColor: Colors.black,
                             tabs: [
                               Container(
-                                width: 300,
+                                width: 200,
+                                color: Color(0x69DC9E),
                                 child: Center(
                                   child:Text("Personal Goals"),
                                 ),
                               ),
                               Container(
-                                width: 300,
+                                width: 200,
+                                color: Color(0x69DC9E),
                                 child: Center(child:
                                 Text("Group Goals"),
                                 ),
@@ -364,99 +404,54 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 }
 
 
-class _UserTile extends StatelessWidget {
+class _UserTile extends StatefulWidget {
   const _UserTile({Key? key, required this.tweet}) : super(key: key);
   //final UserModel user;
   final FeedModel tweet;
+
+  @override
+  State<_UserTile> createState() => _UserTileState();
+}
+
+class _UserTileState extends State<_UserTile> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<SearchState>(context);
     var authState = Provider.of<AuthState>(context, listen: false);
-
+    final feedState = Provider.of<FeedState>(context);
     return ListTile(
       onTap: () {
-        /*if (kReleaseMode) {
-          kAnalytics.logViewSearchResults(searchTerm: user.userName!);
-        }
-        Navigator.push(context, ProfilePage.getRoute(profileId: user.userId!));*/
+        feedState.getPostDetailFromDatabase(null, model: widget.tweet);
+        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
       },
-      //leading: CircularImage(path: user.profilePic, height: 40),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Flexible(
-            child: TitleText(tweet.title!,
+          SizedBox(
+            width: 90,
+            child: TitleText(widget.tweet.title!,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
                 overflow: TextOverflow.ellipsis),
           ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 8.0,
-            height: 8.0,
-            decoration: new BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-          ),
+          SizedBox (width: 5),
+          SizedBox(
+            height: 20,
+            width:120,
+            child:
+            CustomProgressBar(
+                progress: widget.tweet.isHabit == false ? widget.tweet
+                    .GoalAchieved! / widget.tweet.GoalSum!
+                    : widget.tweet.checkInList!.where((item) => item == true)
+                    .length / 8,
+                height: 20,
+                width: 120,
+                backgroundColor: Colors.grey[300]!,
+                progressColor: Color(0xFF29AB87)),
+          )
         ],
       ),
-      subtitle: Text(tweet.description!),
+      subtitle: Text(widget.tweet.description!),
     );
   }
 }

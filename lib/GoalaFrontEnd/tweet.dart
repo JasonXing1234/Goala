@@ -198,10 +198,10 @@ class _TweetBodyState extends State<_TweetBody> {
     return FutureBuilder(
         future: getParentModel(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
+          /*if (snapshot.connectionState != ConnectionState.done) {
             // Future hasn't finished yet, return a placeholder
             return Text('Loading');
-          }
+          }*/
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -277,7 +277,7 @@ class _TweetBodyState extends State<_TweetBody> {
                         height: 20,
                         width: 200,
                         backgroundColor: Colors.grey[300]!,
-                        progressColor: Colors.blue):SizedBox.shrink(),
+                        progressColor: Color(0xFF29AB87)):SizedBox.shrink(),
                     widget.model.parentName != null ? Text(widget.model.parentName!) : Text(''),
                     widget.model.goalPhotoList != null ?
                     SizedBox(
