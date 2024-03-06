@@ -15,6 +15,7 @@ import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/customWidgets.dart';
+import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/retweetWidget.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
 
@@ -269,15 +270,21 @@ class _TweetBodyState extends State<_TweetBody> {
                         Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
-                    widget.model.grandparentKey == null ? CustomProgressBar(
-                        progress: widget.model.isHabit == false ? tempModel!
-                            .GoalAchieved! / tempModel!.GoalSum!
-                            : tempModel!.checkInList!.where((item) => item == true)
-                            .length / 8,
-                        height: 20,
-                        width: 200,
-                        backgroundColor: Colors.grey[300]!,
-                        progressColor: Color(0xFF29AB87)):SizedBox.shrink(),
+                    widget.model.grandparentKey == null ? Row(
+                      children: [
+                        CustomProgressBar(
+                            progress: widget.model.isHabit == false ? tempModel!
+                                .GoalAchieved! / tempModel!.GoalSum!
+                                : tempModel!.checkInList!.where((item) => item == true)
+                                .length / 8,
+                            height: 20,
+                            width: 200,
+                            backgroundColor: Colors.grey[300]!,
+                            progressColor: Color(0xFF29AB87))
+                        const Spacer(),
+                        PokeButton(onPressed: _onPressPoke),
+                      ],
+                    ) :SizedBox.shrink(),
                     widget.model.parentName != null ? Text(widget.model.parentName!) : Text(''),
                     widget.model.goalPhotoList != null ?
                     SizedBox(
