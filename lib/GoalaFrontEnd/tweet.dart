@@ -171,6 +171,9 @@ class _TweetBodyState extends State<_TweetBody> {
 
 
   }
+  void _onPressPoke() {
+    debugPrint("You pressed the poke button");
+  }
   Future <void> getParentModel() async {
     var feedState = Provider.of<FeedState>(context, listen:false);
     tempModel = await feedState.fetchTweet(widget.model.parentkey!);
@@ -280,7 +283,7 @@ class _TweetBodyState extends State<_TweetBody> {
                             height: 20,
                             width: 200,
                             backgroundColor: Colors.grey[300]!,
-                            progressColor: Color(0xFF29AB87))
+                            progressColor: Color(0xFF29AB87)),
                         const Spacer(),
                         PokeButton(onPressed: _onPressPoke),
                       ],
