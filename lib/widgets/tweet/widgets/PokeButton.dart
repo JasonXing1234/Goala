@@ -14,7 +14,7 @@ class PokeButtonState extends State<PokeButton> {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: widget.onPressed,
-      icon: Text("👉", style: TextStyle(fontSize: 20)),
+      icon: Text("👉", style: TextStyle(fontSize: 20, color: Colors.black)),
     );
   }
 }

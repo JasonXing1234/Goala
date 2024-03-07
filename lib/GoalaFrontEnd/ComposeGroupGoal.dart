@@ -196,6 +196,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
       /// If type of tweet is new comment tweet
       else {
         tweetId = await state.addCommentToPost(tweetModel);
+        if(tweetModel.goalPhotoList!.length != 0) {
+          state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
+        }
       }
     }
     tweetModel.key = tweetId;
@@ -244,7 +247,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
         userName: authState.userModel!.userName);
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
-        isGroupGoal: true,
+        isGroupGoal: memberListTemp.length == 1 ? false : true,
         title: _titleController.text,
         description: _descriptionController.text,
         lanCode:
@@ -252,7 +255,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
             .sourceLanguage
             .code,
         user: commentedUser,
-        memberList: memberListTemp,
+        memberList: memberListTemp.length == 1 ? null : memberListTemp,
         createdAt: DateTime.now().toUtc().toString(),
         tags: tags,
         parentkey: widget.isTweet
@@ -320,9 +323,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Center(
-                    child: widget.isTweet ? customizedTitleText('Group', 25) : customizedTitleText('New Post', 25),
-                  ),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

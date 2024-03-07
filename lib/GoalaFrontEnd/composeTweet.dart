@@ -40,7 +40,10 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
   late FeedModel? model;
   late ScrollController scrollController;
   List<String?> selectedImages = [];
+
   File? _image;
+  DateTime selectedDate = DateTime.now();
+  bool dateSelected = false;
   late TextEditingController _descriptionController;
   late TextEditingController _goalSumController;
   late TextEditingController _titleController;
@@ -99,6 +102,22 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     setState(() {
       _image = file;
     });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000), // The earliest allowable date
+      lastDate: DateTime(2025), // The latest allowable date
+      // You can also add more arguments to customize the DatePicker, like `initialDatePickerMode` and `helpText`.
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        dateSelected = true;
+        selectedDate = picked;
+      });
+    }
   }
 
   /// Submit tweet to save in firebase database
@@ -169,6 +188,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
       /// If type of tweet is new comment tweet
       else {
         tweetId = await state.addCommentToPost(tweetModel);
+        if(tweetModel.goalPhotoList!.length != 0) {
+          state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
+        }
       }
     }
     tweetModel.key = tweetId;
@@ -247,6 +269,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
       isHabit: widget.isTweet
           ? isSelected[0] == false ? false : true : state.tweetToReplyModel!.isHabit,
       GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0,
+      deadlineDate: "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     );
     return reply;
   }
@@ -369,30 +392,46 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                       SizedBox(
                         height: 10,
                       ),
-                      //TODO: "Ch
+                      widget.isTweet
+                          ? Row(
+                        children: [
+                          SizedBox(width: 58),
+                          customTitleText('Complete By:'),
+                          SizedBox(width: 15),
+                          ElevatedButton(
+                            onPressed: () => _selectDate(context), // Call the _selectDate function when the button is pressed
+                            child: dateSelected == true ? Text("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}") : Text('Select Date'),
+                          ),
+                        ],
+                      ) : const SizedBox.shrink(),
+                      SizedBox(height: 10),
                       widget.isTweet
                           ? const SizedBox.shrink() :
-                      ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.green)),
-                        // TO change button color
-                        child: const Text('Select Image from Gallery and Camera'),
-                        onPressed: () async {
-                          final picker = ImagePicker();
-                          await picker.pickMultiImage(imageQuality: 50).then((
-                              List<XFile> files,
-                              ) async {
-                            List<File>? tempfiles = files.map((xFile) => File(xFile.path)).toList();
-                            if (tempfiles.isNotEmpty) {
-                              for (var i = 0; i < tempfiles.length; i++) {
-                                selectedImages.add(await feedState.uploadFile(tempfiles[i]));
-                              }
-                            }
-                          });
-                          // if atleast 1 images is selected it will add
-                          // all images in selectedImages
-                          // variable so that we can easily show them in UI
-                        },
+                      Center(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Color(0xFF29AB87))),
+                          // TO change button color
+                          child: const Text('Select Image'),
+                          onPressed: () {
+                            setState(() async {
+                              final picker = ImagePicker();
+                              await picker.pickMultiImage(imageQuality: 50).then((
+                                  List<XFile> files,
+                                  ) async {
+                                List<File>? tempfiles = files.map((xFile) => File(xFile.path)).toList();
+                                if (tempfiles.isNotEmpty) {
+                                  for (var i = 0; i < tempfiles.length; i++) {
+                                    selectedImages.add(await feedState.uploadFile(tempfiles[i]));
+                                  }
+                                }
+                              });
+                            });
+                            // if atleast 1 images is selected it will add
+                            // all images in selectedImages
+                            // variable so that we can easily show them in UI
+                          },
+                        ),
                       ),
                       widget.isTweet
                           ? const SizedBox.shrink() :
@@ -401,22 +440,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                         height: 100,// To show images in particular area only
                         child: selectedImages.isEmpty  // If no images is selected
                             ? const Center(child: Text('Sorry nothing selected!!'))
-                        // If atleast 1 images is selected
-                            : GridView.builder(
-                          itemCount: selectedImages.length,
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3
-                            // Horizontally only 3 images will show
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            // TO show selected file
-                            return Center(
-                                child: Image.network(
-                                    selectedImages[index]!));
-                          },
-                        ),
-                      ),
+                            : Image.network(selectedImages[0]!)),
                       if(widget.isTweet) Column(
                         children: [
                           Center(child: Wrap(

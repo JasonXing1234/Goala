@@ -123,6 +123,8 @@ class FeedState extends AppState {
     _linkWebInfos.addAll({url: webInfo});
   }
 
+
+
   Map<String, Translation?> _tweetsTranslations = {};
   Map<String, Translation?> get tweetsTranslations => _tweetsTranslations;
   void addTweetTranslation(String tweet, Translation? translation) {
@@ -159,6 +161,12 @@ class FeedState extends AppState {
           "Last index Tweet removed from list. Remaining Tweet: ${_tweetDetailModelList!.length}");
       notifyListeners();
     }
+  }
+
+  Future<void> uploadCoverPhoto(String? url) async {
+    await kDatabase.child('tweet').child(tweetToReplyModel!.key!).update({
+      'coverPhoto': url,
+    });
   }
   void filterByUsername(String? name) {
     if (name != null &&

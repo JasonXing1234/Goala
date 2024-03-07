@@ -27,6 +27,7 @@ class FeedModel {
   String? imagePath;
   List<String>? tags;
   List<String?>? goalPhotoList;
+  String? coverPhoto;
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
   List<bool>? checkInList;
@@ -39,6 +40,7 @@ class FeedModel {
         required this.isHabit,
         this.grandparentKey,
         this.key,
+        this.coverPhoto,
         this.parentName,
         this.title,
         this.description,
@@ -84,6 +86,7 @@ class FeedModel {
       "likeList": likeList,
       "tags": tags,
       "goalPhotoList": goalPhotoList,
+      "coverPhoto": coverPhoto,
       "memberList": memberList,
       "replyTweetKeyList": replyTweetKeyList,
       "checkInList": checkInList,
@@ -120,6 +123,7 @@ class FeedModel {
     parentkey = map['parentkey'];
     parentName = map['parentName'];
     childRetwetkey = map['childRetwetkey'];
+    coverPhoto = map['coverPhoto'];
     if (map['checkInList'] != null) {
       checkInList = <bool>[];
       map['checkInList'].forEach((value) {

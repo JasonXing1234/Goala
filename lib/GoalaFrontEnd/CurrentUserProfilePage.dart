@@ -118,22 +118,12 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
     }
 
     return Scaffold(
-      floatingActionButton: ExpandableFab(
-      distance: 112,
-      children: [
-        ActionButton(
-          onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
-          icon: const Icon(Icons.group),
-        ),
-        ActionButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed('/CreateFeedPage/tweet');
-          },
-          icon: const Icon(Icons.person),
-        ),
-
-      ],
-    ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFF29AB87),
+        foregroundColor: Colors.white,
+        onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
+        child: const Icon(Icons.create),
+      ),
       body:
       RefreshIndicator(
         onRefresh: () async {
@@ -287,16 +277,19 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
                                     child: Column(
                                       children: <Widget>[
                                         Center(
-                                          child: ListView.separated(
+                                          child: GridView.builder(
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
                                             addAutomaticKeepAlives: false,
                                             physics: const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) => _UserTile(tweet: list![index]),
-                                            separatorBuilder: (_, index) => const Divider(
-                                              height: 0,
-                                            ),
+                                            itemBuilder: (context, index) => _UserTile2(tweet: list![index]),
                                             itemCount: list?.length ?? 0,
+                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2, // Number of items per row
+                                              crossAxisSpacing: 10.0, // Horizontal space between items
+                                              mainAxisSpacing: 10.0, // Vertical space between items
+                                              childAspectRatio: 1.0, // Aspect ratio of each item
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -458,6 +451,111 @@ class _UserTileState extends State<_UserTile> {
   }
 }
 
+class _UserTile2 extends StatefulWidget {
+  const _UserTile2({Key? key, required this.tweet}) : super(key: key);
+  //final UserModel user;
+  final FeedModel tweet;
+
+  @override
+  State<_UserTile2> createState() => _UserTile2State();
+}
+
+class _UserTile2State extends State<_UserTile2> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    final state = Provider.of<FeedState>(context);
+    return GridTile(
+        child: 
+          InkWell(
+            onTap: () {
+              state.getPostDetailFromDatabase(null, model: widget.tweet);
+              Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
+            },
+            child: 
+              Column(
+                children: [
+                  SizedBox(
+                    width: 90,
+                    child: TitleText(widget.tweet.title!,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    width:120,
+                    child:
+                    CustomProgressBar(
+                      progress: widget.tweet.isHabit == false ? widget.tweet
+                          .GoalAchieved! / widget.tweet.GoalSum!
+                          : widget.tweet.checkInList!.where((item) => item == true)
+                          .length / 8,
+                      height: 20,
+                      width: 120,
+                      backgroundColor: Colors.grey[300]!,
+                      progressColor: Color(0xFF29AB87),
+                      daysLeft: DateTime(int.parse(widget.tweet.deadlineDate!.split('-')[0]), int.parse(widget.tweet.deadlineDate!.split('-')[1]), int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                          .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
+                    ),
+                  ),
+                  if(widget.tweet.coverPhoto != null) Container(
+                    width: 100, // Specify the width of the container
+                    height: 100, // Specify the height of the container
+                    decoration: BoxDecoration(
+                      // Optionally add a border, radius, etc.
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      // Use ClipRRect for borderRadius if needed
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.tweet.coverPhoto!,
+                        fit: BoxFit.cover, // This ensures the image covers the container
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          )
+    );
+  }
+
+  void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter an Integer'),
+          content: TextField(
+            controller: _textEditingController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(hintText: "Enter integer here"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Submit'),
+              onPressed: () {
+                var state = Provider.of<FeedState>(context, listen: false);
+                state.addNumberToGoal(tempFeed, int.parse(_textEditingController.text));
+                print('Entered Integer: ${_textEditingController.text}');
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
 
 @immutable
 class ExpandableFab extends StatefulWidget {
@@ -522,8 +620,6 @@ class _ExpandableFabState extends State<ExpandableFab>
         alignment: Alignment.bottomRight,
         clipBehavior: Clip.none,
         children: [
-          _buildTapToCloseFab(),
-          ..._buildExpandingActionButtons(),
           _buildTapToOpenFab(),
         ],
       ),
