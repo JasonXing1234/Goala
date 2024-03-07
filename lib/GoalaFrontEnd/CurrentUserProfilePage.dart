@@ -389,7 +389,10 @@ class _UserTileState extends State<_UserTile> {
                       height: 20,
                       width: 120,
                       backgroundColor: Colors.grey[300]!,
-                      progressColor: Color(0xFF29AB87)),
+                      progressColor: Color(0xFF29AB87),
+                      daysLeft: DateTime(int.parse(widget.tweet.deadlineDate!.split('-')[0]), int.parse(widget.tweet.deadlineDate!.split('-')[1]), int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                          .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
+                  ),
           )
         ],
       ),

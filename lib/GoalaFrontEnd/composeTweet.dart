@@ -246,7 +246,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
           ? null : state.tweetToReplyModel!.title,
       isHabit: widget.isTweet
           ? isSelected[0] == false ? false : true : state.tweetToReplyModel!.isHabit,
-      GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0
+      GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0,
     );
     return reply;
   }

@@ -453,7 +453,6 @@ class FeedState extends AppState {
     }
   }
 
-
   ///  It will create tweet in [Firebase kDatabase] just like other normal tweet.
   ///  update retweet count for retweet model
   Future<String?> createReTweet(FeedModel model) async {

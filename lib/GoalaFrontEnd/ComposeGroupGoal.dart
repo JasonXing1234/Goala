@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -44,13 +45,15 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   late ScrollController scrollController;
 
   File? _image;
+  DateTime selectedDate = DateTime.now();
+  bool dateSelected = false;
   late TextEditingController _descriptionController;
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
   late TextEditingController _addUserController;
-  late TextEditingController _monthController;
-  late TextEditingController _dayController;
-  late TextEditingController _yearController;
+  //late TextEditingController _monthController;
+  //late TextEditingController _dayController;
+  //late TextEditingController _yearController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
@@ -108,6 +111,22 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
     setState(() {
       _image = file;
     });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000), // The earliest allowable date
+      lastDate: DateTime(2025), // The latest allowable date
+      // You can also add more arguments to customize the DatePicker, like `initialDatePickerMode` and `helpText`.
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        dateSelected = true;
+        selectedDate = picked;
+      });
+    }
   }
 
   /// Submit tweet to save in firebase database
@@ -254,7 +273,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
             ? null : state.tweetToReplyModel!.title,
         isHabit: widget.isTweet
             ? isSelected[0] == false ? false : true : state.tweetToReplyModel!.isHabit,
-        GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0
+        GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0,
+        deadlineDate: "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     );
     return reply;
   }
@@ -374,9 +394,20 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                     ),
                   ),
                   if(widget.isTweet && isSelected[0] == false) SizedBox(height: 10),
-                  Center(child:customTitleText('Complete By')),
-                  SizedBox(height: 10),
                   Row(
+                    children: [
+                      SizedBox(width: 58),
+                      customTitleText('Complete By:'),
+                      SizedBox(width: 15),
+                      ElevatedButton(
+                        onPressed: () => _selectDate(context), // Call the _selectDate function when the button is pressed
+                        child: dateSelected == true ? Text("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}") : Text('Select Date'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+
+                  /*Row(
                     children: [
                       SizedBox(width: 35),
                       SizedBox(width: 80,
@@ -412,7 +443,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                         ),
                       ),
                     ],
-                  ),
+                  ),*/
 
                   SizedBox(
                     height: 20,

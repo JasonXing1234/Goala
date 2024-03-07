@@ -23,6 +23,7 @@ class FeedModel {
   int? GoalSum;
   int? GoalAchieved;
   late String createdAt;
+  String? deadlineDate;
   String? imagePath;
   List<String>? tags;
   List<String?>? goalPhotoList;
@@ -49,6 +50,7 @@ class FeedModel {
         this.GoalAchieved,
         this.GoalSum,
         required this.createdAt,
+        this.deadlineDate,
         this.imagePath,
         this.likeList,
         this.tags,
@@ -77,6 +79,7 @@ class FeedModel {
       "memberCount": memberCount ?? 0,
       "GoalAchieved": GoalAchieved ?? 0,
       "createdAt": createdAt,
+      "deadlineDate": deadlineDate,
       "imagePath": imagePath,
       "likeList": likeList,
       "tags": tags,
@@ -110,6 +113,7 @@ class FeedModel {
     GoalSum = map["GoalSum"] ?? 0;
     imagePath = map['imagePath'];
     createdAt = map['createdAt'];
+    deadlineDate = map['deadlineDate'];
     imagePath = map['imagePath'];
     lanCode = map['lanCode'];
     user = UserModel.fromJson(map['user']);

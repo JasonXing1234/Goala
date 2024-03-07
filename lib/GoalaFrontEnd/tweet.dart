@@ -283,7 +283,10 @@ class _TweetBodyState extends State<_TweetBody> {
                             height: 20,
                             width: 200,
                             backgroundColor: Colors.grey[300]!,
-                            progressColor: Color(0xFF29AB87)),
+                            progressColor: Color(0xFF29AB87),
+                            daysLeft: DateTime(int.parse(tempModel!.deadlineDate!.split('-')[0]), int.parse(tempModel!.deadlineDate!.split('-')[1]), int.parse(tempModel!.deadlineDate!.split('-')[2]))
+                              .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
+                        ),
                         const Spacer(),
                         PokeButton(onPressed: _onPressPoke),
                       ],
@@ -446,6 +449,7 @@ class CustomProgressBar extends StatelessWidget {
   final double progress;
   final Color backgroundColor;
   final Color progressColor;
+  final int daysLeft;
 
   const CustomProgressBar({
     Key? key,
@@ -453,7 +457,7 @@ class CustomProgressBar extends StatelessWidget {
     required this.height,
     required this.progress,
     required this.backgroundColor,
-    required this.progressColor,
+    required this.progressColor, required this.daysLeft,
   }) : super(key: key);
 
   @override
@@ -475,6 +479,12 @@ class CustomProgressBar extends StatelessWidget {
             color: progressColor,
             borderRadius: BorderRadius.circular(4),
           ),
+        ),
+        Center(
+          child: Text(
+            daysLeft.toString() + ' days left',
+            style: TextStyle(fontSize: 12),
+          )
         ),
       ],
     );
