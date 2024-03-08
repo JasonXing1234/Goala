@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/searchState.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/searchState.dart';
 
 class ComposeTweetState extends ChangeNotifier {
   bool showUserList = false;
@@ -109,7 +109,7 @@ class ComposeTweetState extends ChangeNotifier {
   ///  {
   ///    "key": "FCM server key here"
   ///  } ```
-  /// For more detail visit:- https://github.com/TheAlphamerc/flutter_twitter_clone/issues/28#issue-611695533
+  /// For more detail visit:- https://github.com/TheAlphamerc/Goala/issues/28#issue-611695533
   /// For package detail check:-  https://pub.dev/packages/firebase_remote_config#-readme-tab-
   Future<void> getFCMServerKey() async {
     /// If FCM server key is already fetched then no need to fetch it again.

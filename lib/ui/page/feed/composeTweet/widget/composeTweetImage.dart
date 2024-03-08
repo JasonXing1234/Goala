@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
+import 'package:Goala/ui/theme/theme.dart';
 
 class ComposeTweetImage extends StatelessWidget {
   final File? image;
@@ -14,7 +14,7 @@ class ComposeTweetImage extends StatelessWidget {
       child: image == null
           ? Container()
           : Stack(
-              children: [
+              children: <Widget>[
                 InteractiveViewer(
                   child: Container(
                     alignment: Alignment.topRight,

@@ -19,6 +19,7 @@ class UserModel extends Equatable {
   int? followers;
   int? following;
   int? groups;
+  List<String>? closenessMap;
   String? fcmToken;
   List<String>? followersList;
   List<String>? followingList;
@@ -46,7 +47,8 @@ class UserModel extends Equatable {
       this.followersList,
       this.followingList,
       this.grouplist,
-      this.groups});
+      this.groups,
+      this.closenessMap});
 
   UserModel.fromJson(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -71,10 +73,16 @@ class UserModel extends Equatable {
     webSite = map['webSite'];
     fcmToken = map['fcmToken'];
     isVerified = map['isVerified'] ?? false;
-    if (map['followerList'] != null) {
-      followersList = <String>[];
-      map['followerList'].forEach((value) {
-        followersList!.add(value);
+    if (map['followingList'] != null) {
+      followingList = <String>[];
+      map['followingList'].forEach((value) {
+        followingList!.add(value);
+      });
+    }
+    if (map['closenessMap'] != null) {
+      closenessMap = <String>[];
+      map['closenessMap'].forEach((value) {
+        closenessMap!.add(value);
       });
     }
     followers = followersList != null ? followersList!.length : null;
@@ -86,7 +94,7 @@ class UserModel extends Equatable {
     }
     followers = followersList != null ? followersList!.length : null;
     if (map['grouplist'] != null) {
-      followingList = <String>[];
+      grouplist = <String>[];
       map['grouplist'].forEach((value) {
         grouplist!.add(value);
       });
@@ -115,7 +123,8 @@ class UserModel extends Equatable {
       'followerList': followersList,
       'followingList': followingList,
       'grouplist': grouplist,
-      'groups': grouplist
+      'groups': grouplist,
+      'closenessMap': closenessMap
     };
   }
 
@@ -140,29 +149,30 @@ class UserModel extends Equatable {
       List<String>? followingList,
       List<String>? followersList,
       List<String>? grouplist,
+      List<String>? closenessMap,
       int? groups}) {
     return UserModel(
-      email: email ?? this.email,
-      bio: bio ?? this.bio,
-      contact: contact ?? this.contact,
-      createdAt: createdAt ?? this.createdAt,
-      displayName: displayName ?? this.displayName,
-      dob: dob ?? this.dob,
-      followers: followers ?? this.followers,
-      following: following ?? this.following,
-      isVerified: isVerified ?? this.isVerified,
-      key: key ?? this.key,
-      location: location ?? this.location,
-      profilePic: profilePic ?? this.profilePic,
-      bannerImage: bannerImage ?? this.bannerImage,
-      userId: userId ?? this.userId,
-      userName: userName ?? this.userName,
-      webSite: webSite ?? this.webSite,
-      fcmToken: fcmToken ?? this.fcmToken,
-      followersList: followersList ?? this.followersList,
-      followingList: followingList ?? this.followingList,
-      grouplist: grouplist ?? this.grouplist,
-    );
+        email: email ?? this.email,
+        bio: bio ?? this.bio,
+        contact: contact ?? this.contact,
+        createdAt: createdAt ?? this.createdAt,
+        displayName: displayName ?? this.displayName,
+        dob: dob ?? this.dob,
+        followers: followers ?? this.followers,
+        following: following ?? this.following,
+        isVerified: isVerified ?? this.isVerified,
+        key: key ?? this.key,
+        location: location ?? this.location,
+        profilePic: profilePic ?? this.profilePic,
+        bannerImage: bannerImage ?? this.bannerImage,
+        userId: userId ?? this.userId,
+        userName: userName ?? this.userName,
+        webSite: webSite ?? this.webSite,
+        fcmToken: fcmToken ?? this.fcmToken,
+        followersList: followersList ?? this.followersList,
+        followingList: followingList ?? this.followingList,
+        grouplist: grouplist ?? this.grouplist,
+        closenessMap: closenessMap ?? this.closenessMap);
   }
 
   String get getFollower {
@@ -195,6 +205,7 @@ class UserModel extends Equatable {
         followersList,
         followingList,
         grouplist,
-        groups
+        groups,
+        closenessMap
       ];
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/widgets/headerWidget.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customAppBar.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/page/settings/widgets/headerWidget.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customAppBar.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/settingsRowWidget.dart';
@@ -24,7 +24,7 @@ class SettingsAndPrivacyPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           HeaderWidget(user.userName),
           const SettingRowWidget(
             "Account",

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/ui/page/settings/widgets/settingsRowWidget.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customAppBar.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/ui/page/settings/widgets/settingsRowWidget.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customAppBar.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 
 class ProxyPage extends StatelessWidget {
   const ProxyPage({Key? key}) : super(key: key);

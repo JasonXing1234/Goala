@@ -4,8 +4,8 @@ import 'dart:ui' as ui;
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ShareWidget extends StatefulWidget {
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<ShareWidget> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             RepaintBoundary(
                 key: _globalKey,
                 child: Container(

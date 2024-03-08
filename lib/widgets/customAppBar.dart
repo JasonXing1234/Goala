@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 import 'customWidgets.dart';
@@ -47,15 +47,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           controller: textController,
           decoration: const InputDecoration(
             border: OutlineInputBorder(
-              borderSide: BorderSide(width: 0, style: BorderStyle.none),
+              borderSide: BorderSide(width: 1, style: BorderStyle.none),
               borderRadius: BorderRadius.all(
                 Radius.circular(25.0),
               ),
             ),
             hintText: 'Search..',
-            fillColor: AppColor.extraLightGrey,
+            fillColor: Colors.white,
             filled: true,
-            focusColor: Colors.white,
+            focusColor: Colors.black,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
           ),
         ));

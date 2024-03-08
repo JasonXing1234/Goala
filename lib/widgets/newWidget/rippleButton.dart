@@ -16,7 +16,7 @@ class RippleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         child,
         Positioned(
           left: 0,

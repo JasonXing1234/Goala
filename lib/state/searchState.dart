@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
 import '../model/feedModel.dart';
 import 'appState.dart';
 
@@ -72,7 +72,7 @@ class SearchState extends AppState {
     }
   }
 
-  void getUsername() {}
+  void getClosestFriends() {}
   List<FeedModel>? getTweetList(UserModel? userModel) {
     if (userModel == null) {
       return null;
@@ -180,5 +180,14 @@ class SearchState extends AppState {
       }
     }).toList();
     return list;
+  }
+
+  UserModel getSingleUserDetail(String uId) {
+    final user = _userlist!.firstWhere((x) => x.userId == uId);
+    return user;
+  }
+
+  List<UserModel>? getUserList() {
+    return _userlist;
   }
 }

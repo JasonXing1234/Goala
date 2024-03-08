@@ -1,15 +1,15 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/share_widget.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/tweet.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/share_widget.dart';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:provider/provider.dart';
 
 class TweetBottomSheet {
@@ -81,7 +81,7 @@ class TweetBottomSheet {
       required TweetType type,
       required GlobalKey<ScaffoldState> scaffoldKey}) {
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           width: context.width * .1,
           height: 5,
@@ -209,7 +209,7 @@ class TweetBottomSheet {
       required TweetType type,
       required GlobalKey<ScaffoldState> scaffoldKey}) {
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           width: context.width * .1,
           height: 5,
@@ -334,7 +334,7 @@ class TweetBottomSheet {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
-          children: [
+          children: <Widget>[
             customIcon(
               context,
               icon: icon,
@@ -408,7 +408,7 @@ class TweetBottomSheet {
 
   Widget _retweet(BuildContext context, FeedModel model, TweetType? type) {
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           width: context.width * .1,
           height: 5,
@@ -436,11 +436,14 @@ class TweetBottomSheet {
                 userName: authState.userModel!.userName);
             // Prepare current Tweet model to reply
             FeedModel post = FeedModel(
+                isPrivate: false,
                 isGroupGoal: false,
+                isCheckedIn: false,
                 childRetwetkey: model.getTweetKeyToRetweet,
                 createdAt: DateTime.now().toUtc().toString(),
                 user: myUser,
-                userId: myUser.userId!);
+                userId: myUser.userId!,
+                isHabit: false);
             state.createTweet(post);
 
             Navigator.pop(context);
@@ -501,7 +504,7 @@ class TweetBottomSheet {
         imageUrl: Uri.parse(model.user?.profilePic ??
             "https://play-lh.googleusercontent.com/e66XMuvW5hZ7HnFf8R_lcA3TFgkxm0SuyaMsBs3KENijNHZlogUAjxeu9COqsejV5w=s180-rw"));
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           width: context.width * .1,
           height: 5,

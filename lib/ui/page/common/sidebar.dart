@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/constant.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/page/bookmark/bookmarkPage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/follow/followerListPage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/follow/followingListPage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/profilePage.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/qrCode/scanner.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
+import 'package:Goala/helper/constant.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/page/bookmark/bookmarkPage.dart';
+import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
+import 'package:Goala/ui/page/profile/follow/followingListPage.dart';
+import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/ui/page/profile/qrCode/scanner.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:provider/provider.dart';
 
 class SidebarMenu extends StatefulWidget {
@@ -41,7 +41,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               height: 56,
               width: 56,
@@ -63,7 +63,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
                     ProfilePage.getRoute(profileId: state.userModel!.userId!));
               },
               title: Row(
-                children: [
+                children: <Widget>[
                   UrlText(
                     text: state.userModel!.displayName ?? "",
                     style: TextStyles.onPrimaryTitleText
@@ -97,7 +97,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
             Container(
               alignment: Alignment.center,
               child: Row(
-                children: [
+                children: <Widget>[
                   const SizedBox(
                     width: 17,
                   ),
@@ -147,7 +147,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
         }
       },
       child: Row(
-        children: [
+        children: <Widget>[
           customText(
             '$count ',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
@@ -196,10 +196,10 @@ class _SidebarMenuState extends State<SidebarMenu> {
       right: 0,
       left: 0,
       child: Column(
-        children: [
+        children: <Widget>[
           const Divider(height: 0),
           Row(
-            children: [
+            children: <Widget>[
               const SizedBox(
                 width: 10,
                 height: 45,
@@ -249,12 +249,12 @@ class _SidebarMenuState extends State<SidebarMenu> {
     return Drawer(
       child: SafeArea(
         child: Stack(
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: ListView(
                 physics: const BouncingScrollPhysics(),
-                children: [
+                children: <Widget>[
                   Container(
                     child: _menuHeader(),
                   ),

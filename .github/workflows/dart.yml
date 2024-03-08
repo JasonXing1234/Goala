@@ -1,11 +1,6 @@
 name: Dart CI
 
-# Only run on the "main" branch
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push]
 
 jobs: 
   build-and-test: 

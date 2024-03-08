@@ -3,17 +3,20 @@ import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/firebase_database.dart' as database;
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/shared_prefrence_helper.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
-import 'package:flutter_twitter_clone/ui/page/common/locator.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/shared_prefrence_helper.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/appState.dart';
+import 'package:Goala/ui/page/common/locator.dart';
+import 'package:flutter/material.dart';
 // import 'package:link_preview_generator/link_preview_generator.dart'
 //     show WebInfo;
 import 'package:path/path.dart' as path;
 import 'package:translator/translator.dart';
+
+import '../model/GoalNotificationModel.dart';
 
 class FeedState extends AppState {
   bool isBusy = false;
@@ -22,6 +25,8 @@ class FeedState extends AppState {
   List<UserModel>? _userFilterList;
   List<UserModel>? memberList;
   List<UserModel>? myGroupList;
+  List<bool> daySelected = List.filled(7, false);
+  TimeOfDay? pickedTime;
   List<UserModel>? _userlist;
   FeedModel? get tweetToReplyModel => _tweetToReplyModel;
   set setTweetToReply(FeedModel model) {
@@ -59,6 +64,37 @@ class FeedState extends AppState {
         if (x.parentkey != null &&
             x.childRetwetkey == null &&
             x.user!.userId != userModel.userId) {
+          return false;
+        }
+
+        /// Only include Tweets of logged-in user's and his following user's
+        // if (x.user!.userId == userModel.userId ||
+        //     (userModel.followingList != null &&
+        //         userModel.followingList!.contains(x.user!.userId))) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+        return true;
+      }).toList();
+      if (list.isEmpty) {
+        list = null;
+      }
+    }
+    return list;
+  }
+
+  List<FeedModel>? getCommentList(UserModel? userModel) {
+    if (userModel == null) {
+      return null;
+    }
+
+    List<FeedModel>? list;
+
+    if (!isBusy && feedList != null && feedList!.isNotEmpty) {
+      list = feedList!.where((x) {
+        /// If Tweet is a comment then no need to add it in tweet list
+        if (x.parentkey == null && x.user!.userId == userModel.userId) {
           return false;
         }
 
@@ -123,6 +159,12 @@ class FeedState extends AppState {
     }
   }
 
+  Future<void> uploadCoverPhoto(String? url) async {
+    await kDatabase.child('tweet').child(tweetToReplyModel!.key!).update({
+      'coverPhoto': url,
+    });
+  }
+
   void filterByUsername(String? name) {
     if (name != null &&
         name.isEmpty &&
@@ -174,6 +216,14 @@ class FeedState extends AppState {
     }
     List<String>? list = userModel.grouplist;
     return list;
+  }
+
+  Future<void> addNumberToGoal(FeedModel tempFeed, int tempInt) async {
+    await kDatabase.child('tweet').child(tempFeed.key!).update({
+      'GoalAchieved': tempFeed.GoalAchieved == null
+          ? tempInt
+          : tempFeed.GoalAchieved! + tempInt,
+    });
   }
 
   /// [clear all tweets] if any tweet present in tweet detail page or comment tweet
@@ -406,6 +456,16 @@ class FeedState extends AppState {
     return tweetKey;
   }
 
+  void sendToDatabase(List<GoalNotiModel> modelList) {
+    final databaseReference = FirebaseDatabase.instance.ref();
+    for (int i = 0; i < modelList.length; i++) {
+      databaseReference
+          .child('GoalNotifications')
+          .push()
+          .set(modelList[i].toJson());
+    }
+  }
+
   ///  It will create tweet in [Firebase kDatabase] just like other normal tweet.
   ///  update retweet count for retweet model
   Future<String?> createReTweet(FeedModel model) async {
@@ -497,6 +557,17 @@ class FeedState extends AppState {
   /// [update] tweet
   Future<void> updateTweet(FeedModel model) async {
     await kDatabase.child('tweet').child(model.key!).set(model.toJson());
+  }
+
+  Future<void> addPhoto(FeedModel model, String? url) async {
+    List tempString = [];
+    if (model.goalPhotoList != null) {
+      tempString = model.goalPhotoList!;
+    }
+    tempString.add(url);
+    await kDatabase.child('tweet').child(model.key!).update({
+      'goalPhotoList': tempString,
+    });
   }
 
   /// Add/Remove like on a Tweet

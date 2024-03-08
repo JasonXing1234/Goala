@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/ui/page/Auth/signup.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/ui/page/Auth/signup.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import '../homePage.dart';
+import '../../../GoalaFrontEnd/homePage.dart';
 import 'signin.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _WelcomePageState extends State<WelcomePage> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             SizedBox(
               width: MediaQuery.of(context).size.width - 80,
               height: 40,
@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
             Wrap(
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
+              children: <Widget>[
                 const TitleText(
                   'Have an account already?',
                   fontSize: 14,

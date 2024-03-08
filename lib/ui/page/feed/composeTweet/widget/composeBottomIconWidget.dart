@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ComposeBottomIconWidget extends StatefulWidget {
@@ -57,7 +57,7 @@ class _ComposeBottomIconWidgetState extends State<ComposeBottomIconWidget> {
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Row(
-        children: [
+        children: <Widget>[
           IconButton(
               onPressed: () {
                 setImage(ImageSource.gallery);
@@ -91,7 +91,7 @@ class _ComposeBottomIconWidgetState extends State<ComposeBottomIconWidget> {
                       )
                     : Stack(
                         alignment: Alignment.center,
-                        children: [
+                        children: <Widget>[
                           CircularProgressIndicator(
                             value: getTweetLimit(),
                             backgroundColor: Colors.grey,

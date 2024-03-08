@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/ui/page/common/splash.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/ui/page/common/splash.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
 
 class UpdateApp extends StatefulWidget {
   const UpdateApp({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _UpdateAppState extends State<UpdateApp> with WidgetsBindingObserver {
         margin: const EdgeInsets.symmetric(horizontal: 36),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Image.asset("assets/images/icon-480.png"),
             const TitleText(
               "New Update is available",
@@ -68,7 +68,7 @@ class _UpdateAppState extends State<UpdateApp> with WidgetsBindingObserver {
               child: CustomFlatButton(
                 label: "Update now",
                 onPressed: () => Utility.launchURL(
-                    "https://play.google.com/store/apps/details?id=com.thealphamerc.flutter_twitter_clone"),
+                    "https://play.google.com/store/apps/details?id=com.Goala"),
                 borderRadius: 30,
               ),
             )

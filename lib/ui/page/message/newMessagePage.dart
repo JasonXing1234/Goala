@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/chats/chatState.dart';
-import 'package:flutter_twitter_clone/state/searchState.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customAppBar.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/chats/chatState.dart';
+import 'package:Goala/state/searchState.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customAppBar.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 
 class NewMessagePage extends StatefulWidget {
@@ -36,7 +36,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
       },
       leading: CircularImage(path: user.profilePic, height: 40),
       title: Row(
-        children: [
+        children: <Widget>[
           ConstrainedBox(
             constraints:
                 BoxConstraints(minWidth: 0, maxWidth: context.width - 104),
@@ -60,7 +60,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
     );
   }
 
-  Future<bool> _onWillPop(bool popping) async {
+  Future<bool> _onWillPop() async {
     final state = Provider.of<SearchState>(context, listen: false);
     state.filterByUsername("");
     return true;
@@ -68,9 +68,8 @@ class _NewMessagePageState extends State<NewMessagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: _onWillPop,
-      canPop: true,
+    return WillPopScope(
+      onWillPop: _onWillPop,
       child: Scaffold(
         appBar: CustomAppBar(
           scaffoldKey: widget.scaffoldKey,
@@ -83,7 +82,7 @@ class _NewMessagePageState extends State<NewMessagePage> {
         body: Consumer<SearchState>(
           builder: (context, state, child) {
             return Column(
-              children: [
+              children: <Widget>[
                 TextField(
                   onChanged: (text) {
                     state.filterByUsername(text);

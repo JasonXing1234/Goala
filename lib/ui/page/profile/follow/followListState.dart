@@ -1,9 +1,9 @@
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/shared_prefrence_helper.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
-import 'package:flutter_twitter_clone/ui/page/common/locator.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/shared_prefrence_helper.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/appState.dart';
+import 'package:Goala/ui/page/common/locator.dart';
 
 enum StateType { following, follower }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/emptyList.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/newWidget/emptyList.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 
 class VerifyEmailPage extends StatefulWidget {
@@ -54,7 +54,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
       child: Wrap(
-        children: [
+        children: <Widget>[
           MaterialButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),

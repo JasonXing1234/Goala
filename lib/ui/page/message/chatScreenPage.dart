@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/chatModel.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/chats/chatState.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/chatModel.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/chats/chatState.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreenPage extends StatefulWidget {
@@ -81,10 +81,10 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
           myMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       mainAxisAlignment:
           myMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
+          children: <Widget>[
             const SizedBox(
               width: 15,
             ),
@@ -104,7 +104,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
                   left: myMessage ? (context.width / 4) : 10,
                 ),
                 child: Stack(
-                  children: [
+                  children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -161,7 +161,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
       alignment: Alignment.bottomLeft,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+        children: <Widget>[
           const Divider(
             thickness: 0,
             height: 1,
@@ -185,7 +185,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
     );
   }
 
-  Future<bool> _onWillPop(bool popping) async {
+  Future<bool> _onWillPop() async {
     state.setIsChatScreenOpen = false;
     state.onChatScreenClosed();
     return true;
@@ -230,15 +230,14 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
   Widget build(BuildContext context) {
     state = Provider.of<ChatState>(context, listen: false);
     userImage = state.chatUser!.profilePic!;
-    return PopScope(
-      onPopInvoked: _onWillPop,
-      canPop: true,
+    return WillPopScope(
+      onWillPop: _onWillPop,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               UrlText(
                 text: state.chatUser!.displayName!,
                 style: const TextStyle(
@@ -264,7 +263,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
         ),
         body: SafeArea(
           child: Stack(
-            children: [
+            children: <Widget>[
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(

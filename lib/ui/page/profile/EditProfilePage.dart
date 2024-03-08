@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/customRoute.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/widgets/cache_image.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/helper/customRoute.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/widgets/cache_image.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -58,11 +58,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     var authState = Provider.of<AuthState>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         SizedBox(
           height: 180,
           child: Stack(
-            children: [
+            children: <Widget>[
               _bannerImage(authState),
               Align(
                 alignment: Alignment.bottomLeft,
@@ -165,7 +165,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           customText(title, style: const TextStyle(color: Colors.black54)),
           TextField(
             enabled: enabled,
@@ -254,14 +254,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
           height: 100,
           padding: const EdgeInsets.all(10),
           child: Column(
-            children: [
+            children: <Widget>[
               const Text(
                 'Pick an image',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: CustomFlatButton(
                       label: "Use Camera",

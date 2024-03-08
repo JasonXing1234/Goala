@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/customRoute.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/tweet.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetBottomSheet.dart';
+import 'package:Goala/helper/customRoute.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
 class FeedPostDetail extends StatefulWidget {
@@ -87,13 +86,12 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
-    return PopScope(
-      onPopInvoked: (popping) async {
+    return WillPopScope(
+      onWillPop: () async {
         Provider.of<FeedState>(context, listen: false)
             .removeLastTweetDetail(postId);
         return Future.value(true);
       },
-      canPop: true,
       child: Scaffold(
         key: scaffoldKey,
         floatingActionButton: _floatingActionButton(),
@@ -103,7 +101,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
             SliverAppBar(
               pinned: true,
               title: customTitleText(
-                'Thread',
+                'Comments',
               ),
               iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -115,21 +113,16 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                 preferredSize: const Size.fromHeight(0.0),
               ),
             ),
-            SliverList(
+            /*SliverList(
               delegate: SliverChildListDelegate(
                 [
                   state.tweetDetailModel == null ||
                           state.tweetDetailModel!.isEmpty
                       ? Container()
                       : _tweetDetail(state.tweetDetailModel!.last),
-                  Container(
-                    height: 6,
-                    width: double.infinity,
-                    color: TwitterColor.mystic,
-                  )
                 ],
               ),
-            ),
+            ),*/
             SliverList(
               delegate: SliverChildListDelegate(
                 state.tweetReplyMap == null ||

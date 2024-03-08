@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/enum.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/feedModel.dart';
-import 'package:flutter_twitter_clone/state/feedState.dart';
-import 'package:flutter_twitter_clone/ui/page/feed/feedPostDetail.dart';
-import 'package:flutter_twitter_clone/ui/page/profile/widgets/circular_image.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/rippleButton.dart';
-import 'package:flutter_twitter_clone/widgets/newWidget/title_text.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/tweetImage.dart';
-import 'package:flutter_twitter_clone/widgets/tweet/widgets/unavailableTweet.dart';
-import 'package:flutter_twitter_clone/widgets/url_text/customUrlText.dart';
+import 'package:Goala/helper/enum.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/feedModel.dart';
+import 'package:Goala/state/feedState.dart';
+import 'package:Goala/ui/page/feed/feedPostDetail.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/newWidget/rippleButton.dart';
+import 'package:Goala/widgets/newWidget/title_text.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetImage.dart';
+import 'package:Goala/widgets/tweet/widgets/unavailableTweet.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:provider/provider.dart';
 
 class RetweetWidget extends StatelessWidget {
@@ -29,14 +29,14 @@ class RetweetWidget extends StatelessWidget {
   Widget _tweet(BuildContext context, FeedModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           width: context.width - 12,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            children: [
+            children: <Widget>[
               SizedBox(
                 width: 20,
                 height: 20,

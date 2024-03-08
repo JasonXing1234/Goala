@@ -82,7 +82,7 @@ class CustomScreenLoader extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Stack(
             alignment: Alignment.center,
-            children: [
+            children: <Widget>[
               Platform.isIOS
                   ? const CupertinoActivityIndicator(
                       radius: 35,
@@ -90,11 +90,6 @@ class CustomScreenLoader extends StatelessWidget {
                   : const CircularProgressIndicator(
                       strokeWidth: 2,
                     ),
-              Image.asset(
-                'assets/images/icon-480.png',
-                height: 30,
-                width: 30,
-              )
             ],
           ),
         ),

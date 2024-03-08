@@ -8,7 +8,7 @@ class AppTheme {
   static final ThemeData appTheme = ThemeData.light().copyWith(
     scaffoldBackgroundColor: TwitterColor.white,
     brightness: Brightness.light,
-    primaryColor: AppColor.primary,
+    primaryColor: Colors.black,
     cardColor: Colors.white,
     unselectedWidgetColor: Colors.grey,
     bottomSheetTheme: const BottomSheetThemeData(
@@ -45,8 +45,8 @@ class AppTheme {
       onSecondary: Colors.white,
       onSurface: Colors.black,
       error: Colors.red,
-      primary: Colors.blue,
-      primaryContainer: Colors.blue,
+      primary: Colors.black,
+      primaryContainer: Colors.black,
       secondary: AppColor.secondary,
       secondaryContainer: AppColor.darkGrey,
       surface: Colors.white,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/state/authState.dart';
-import 'package:flutter_twitter_clone/ui/theme/theme.dart';
-import 'package:flutter_twitter_clone/widgets/customFlatButton.dart';
-import 'package:flutter_twitter_clone/widgets/customWidgets.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/state/authState.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customFlatButton.dart';
+import 'package:Goala/widgets/customWidgets.dart';
 import 'package:provider/provider.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             _label(),
             const SizedBox(
               height: 50,
@@ -92,7 +92,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget _label() {
     return Container(
         child: Column(
-      children: [
+      children: <Widget>[
         customText('Forget Password',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         const SizedBox(height: 15),

@@ -1,6 +1,6 @@
-import 'package:flutter_twitter_clone/helper/utility.dart';
-import 'package:flutter_twitter_clone/model/user.dart';
-import 'package:flutter_twitter_clone/state/appState.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/state/appState.dart';
 
 class SuggestionsState extends AppState {
   List<UserModel>? _userlist;

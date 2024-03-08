@@ -18,7 +18,7 @@ extension OnPressed on Widget {
           {BorderRadiusGeometry borderRadius =
               const BorderRadius.all(Radius.circular(5))}) =>
       Stack(
-        children: [
+        children: <Widget>[
           this,
           Positioned(
             left: 0,
