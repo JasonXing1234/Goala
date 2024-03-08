@@ -172,16 +172,16 @@ class _TweetBodyState extends State<_TweetBody> {
   void initState() {
     super.initState();
     getParentModel();
-
-
   }
+
   Future<void> _onPressPoke(String? token, String? displayName) async {
     try {
       await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers:<String, String>{
+        headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
+          'Authorization':
+              'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
         },
         body: jsonEncode(
           <String, dynamic>{
@@ -218,17 +218,20 @@ class _TweetBodyState extends State<_TweetBody> {
       print(e);
     }*/
   }
-  Future <void> getParentModel() async {
-    var feedState = Provider.of<FeedState>(context, listen:false);
+
+  Future<void> getParentModel() async {
+    var feedState = Provider.of<FeedState>(context, listen: false);
     tempModel = await feedState.fetchTweet(widget.model.parentkey!);
   }
+
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
-        : widget.type == TweetType.Detail || widget.type == TweetType.ParentTweet
+        : widget.type == TweetType.Detail ||
+                widget.type == TweetType.ParentTweet
             ? 18
             : 14;
     FontWeight descriptionFontWeight =
@@ -264,8 +267,7 @@ class _TweetBodyState extends State<_TweetBody> {
                     if (widget.isDisplayOnProfile) {
                       return;
                     }
-                    Navigator.push(
-                        context,
+                    Navigator.push(context,
                         ProfilePage.getRoute(profileId: widget.model.userId));
                   },
                   child: CircularImage(path: widget.model.user!.profilePic),
@@ -287,7 +289,8 @@ class _TweetBodyState extends State<_TweetBody> {
                               ConstrainedBox(
                                 constraints: BoxConstraints(
                                     minWidth: 0, maxWidth: context.width * .5),
-                                child: TitleText(widget.model.user!.displayName!,
+                                child: TitleText(
+                                    widget.model.user!.displayName!,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w800,
                                     overflow: TextOverflow.ellipsis),
@@ -295,13 +298,13 @@ class _TweetBodyState extends State<_TweetBody> {
                               const SizedBox(width: 3),
                               widget.model.user!.isVerified!
                                   ? customIcon(
-                                context,
-                                icon: AppIcon.blueTick,
-                                isTwitterIcon: true,
-                                iconColor: AppColor.primary,
-                                size: 13,
-                                paddingIcon: 3,
-                              )
+                                      context,
+                                      icon: AppIcon.blueTick,
+                                      isTwitterIcon: true,
+                                      iconColor: AppColor.primary,
+                                      size: 13,
+                                      paddingIcon: 3,
+                                    )
                                   : const SizedBox(width: 0),
                               SizedBox(
                                 width: widget.model.user!.isVerified! ? 5 : 0,
@@ -309,8 +312,8 @@ class _TweetBodyState extends State<_TweetBody> {
                               const SizedBox(width: 4),
                               customText(
                                 '· ${Utility.getChatTime(widget.model.createdAt)}',
-                                style:
-                                TextStyles.userNameStyle.copyWith(fontSize: 12),
+                                style: TextStyles.userNameStyle
+                                    .copyWith(fontSize: 12),
                               ),
                             ],
                           ),
@@ -318,53 +321,71 @@ class _TweetBodyState extends State<_TweetBody> {
                         Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
-                    widget.model.grandparentKey == null ? Row(
-                      children: [
-                        CustomProgressBar(
-                            progress: widget.model.isHabit == false ? tempModel!
-                                .GoalAchieved! / tempModel!.GoalSum!
-                                : tempModel!.checkInList!.where((item) => item == true)
-                                .length / 8,
-                            height: 20,
-                            width: 200,
-                            backgroundColor: Colors.grey[300]!,
-                            progressColor: Color(0xFF29AB87),
-                            daysLeft: DateTime(int.parse(tempModel!.deadlineDate!.split('-')[0]), int.parse(tempModel!.deadlineDate!.split('-')[1]), int.parse(tempModel!.deadlineDate!.split('-')[2]))
-                              .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
-                        ),
-                        const Spacer(),
-                        PokeButton(onPressed: (){
-                          _onPressPoke(widget.model.deviceToken, authState.userModel!.displayName);
-                        }),
-                      ],
-                    ) :SizedBox.shrink(),
-                    widget.model.parentName != null ? Text(widget.model.parentName!) : Text(''),
-                    widget.model.goalPhotoList != null ?
-                    SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.model.goalPhotoList!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.all(8.0),
-                              // Add some padding around each image
-                              child: Image.network(
-                                widget.model.goalPhotoList![index]!,
-                                fit: BoxFit.cover,
+                    widget.model.grandparentKey == null
+                        ? Row(
+                            children: [
+                              CustomProgressBar(
+                                progress: widget.model.isHabit == false
+                                    ? tempModel!.GoalAchieved! /
+                                        tempModel!.GoalSum!
+                                    : tempModel!.checkInList!
+                                            .where((item) => item == true)
+                                            .length /
+                                        8,
+                                height: 20,
+                                width: 200,
+                                backgroundColor: Colors.grey[300]!,
+                                progressColor: AppColor.PROGRESS_COLOR,
+                                daysLeft: DateTime(
+                                        int.parse(tempModel!.deadlineDate!
+                                            .split('-')[0]),
+                                        int.parse(tempModel!.deadlineDate!
+                                            .split('-')[1]),
+                                        int.parse(tempModel!.deadlineDate!
+                                            .split('-')[2]))
+                                    .difference(DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day))
+                                    .inDays,
                               ),
-                            );
-                          },
-                        )) : SizedBox(),
+                              const Spacer(),
+                              PokeButton(onPressed: () {
+                                _onPressPoke(widget.model.deviceToken,
+                                    authState.userModel!.displayName);
+                              }),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    widget.model.parentName != null
+                        ? Text(widget.model.parentName!)
+                        : Text(''),
+                    widget.model.goalPhotoList != null
+                        ? SizedBox(
+                            height: 200,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.model.goalPhotoList!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  // Add some padding around each image
+                                  child: Image.network(
+                                    widget.model.goalPhotoList![index]!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                            ))
+                        : SizedBox(),
                   ],
                 ),
               ),
               const SizedBox(width: 10),
             ],
           );
-        }
-    );
+        });
   }
 }
 
@@ -504,7 +525,8 @@ class CustomProgressBar extends StatelessWidget {
     required this.height,
     required this.progress,
     required this.backgroundColor,
-    required this.progressColor, required this.daysLeft,
+    required this.progressColor,
+    required this.daysLeft,
   }) : super(key: key);
 
   @override
@@ -528,11 +550,10 @@ class CustomProgressBar extends StatelessWidget {
           ),
         ),
         Center(
-          child: Text(
-            daysLeft.toString() + ' days left',
-            style: TextStyle(fontSize: 12),
-          )
-        ),
+            child: Text(
+          daysLeft.toString() + ' days left',
+          style: TextStyle(fontSize: 12),
+        )),
       ],
     );
   }

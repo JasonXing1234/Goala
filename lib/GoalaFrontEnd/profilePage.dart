@@ -37,7 +37,8 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   @override
   late TabController _tabController;
   bool isMyProfile = false;
@@ -46,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = Provider.of<SearchState>(context, listen: false);
-      var authState = Provider.of<ProfileState>(context, listen:false);
+      var authState = Provider.of<ProfileState>(context, listen: false);
 
       isMyProfile = authState.isMyProfile;
 
@@ -62,27 +63,28 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   String? isFollower() {
     var authState = Provider.of<ProfileState>(context, listen: false);
-    if(authState.isbusy == false) {
-      if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false || authState.profileUserModel.followingList?.any((x) => x ==
-          authState.userId) == null )&&(
-          authState.userModel.followingList?.any((x) => x == authState.profileId) == false || authState.userModel.followingList?.any((x) =>
-          x == authState.profileId) == null)) {
+    if (authState.isbusy == false) {
+      if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false ||
+              authState.profileUserModel.followingList?.any((x) => x == authState.userId) ==
+                  null) &&
+          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false ||
+              authState.userModel.followingList?.any((x) => x == authState.profileId) ==
+                  null)) {
         return "Add Friend";
-      }
-      else if (authState.profileUserModel.followingList?.any((x) => x == authState.userId) == true &&
-          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false || authState.userModel.followingList?.any((x) => x == authState.profileId) == null)) {
+      } else if (authState.profileUserModel.followingList?.any((x) => x == authState.userId) == true &&
+          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false ||
+              authState.userModel.followingList?.any((x) => x == authState.profileId) ==
+                  null)) {
         return "Accept Friend Request";
-      }
-      else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false || authState.profileUserModel.followingList?.any((x) =>
-      x == authState.userId) == null) && (authState.userModel.followingList?.any((x) => x == authState.profileId)) == true) {
+      } else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false ||
+              authState.profileUserModel.followingList
+                      ?.any((x) => x == authState.userId) ==
+                  null) &&
+          (authState.userModel.followingList?.any((x) => x == authState.profileId)) ==
+              true) {
         return "Friend Request Sent";
-      }
-      else if ((authState.profileUserModel.followingList?.any((x) =>
-      x ==
-          authState.userId)) == true &&
-          (authState.userModel.followingList?.any((x) =>
-          x ==
-              authState.profileId)) == true) {
+      } else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId)) == true &&
+          (authState.userModel.followingList?.any((x) => x == authState.profileId)) == true) {
         return "Friend Added";
       }
     }
@@ -96,8 +98,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         authState.userModel.followingList != null &&
         authState.userModel.followingList!.isNotEmpty) {
       return (authState.profileUserModel.followingList!
-          .any((x) => x == authState.userId)) && (authState.userModel.followingList!
-          .any((x) => x == authState.profileId));
+              .any((x) => x == authState.userId)) &&
+          (authState.userModel.followingList!
+              .any((x) => x == authState.profileId));
     } else {
       return false;
     }
@@ -109,16 +112,26 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     List<FeedModel>? GroupGoalList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
-    var authState = Provider.of<ProfileState>(context, listen:true);
+    var authState = Provider.of<ProfileState>(context, listen: true);
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      list = feedstate.feedList!.where((x) => x.userId == widget.profileId && x.isGroupGoal == false && x.parentkey == null && x.isPrivate == false).toList();
-      GroupGoalList = feedstate.feedList!.where((x) => x.memberList!.contains(widget.profileId) && x.isGroupGoal == true && x.parentkey == null && x.isPrivate == false).toList();
+      list = feedstate.feedList!
+          .where((x) =>
+              x.userId == widget.profileId &&
+              x.isGroupGoal == false &&
+              x.parentkey == null &&
+              x.isPrivate == false)
+          .toList();
+      GroupGoalList = feedstate.feedList!
+          .where((x) =>
+              x.memberList!.contains(widget.profileId) &&
+              x.isGroupGoal == true &&
+              x.parentkey == null &&
+              x.isPrivate == false)
+          .toList();
     }
     return Scaffold(
-      resizeToAvoidBottomInset : false,
-      body:
-
-      RefreshIndicator(
+      resizeToAvoidBottomInset: false,
+      body: RefreshIndicator(
         onRefresh: () async {
           state.getDataFromDatabase();
           return Future.value();
@@ -135,158 +148,179 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     StretchMode.blurBackground
                   ],
                   centerTitle: true,
-                  background:
-                  Container(
+                  background: Container(
                     padding: const EdgeInsets.all(8.0),
                     color: Colors.white,
-                    child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // Add an image widget to display an image
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 500),
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white, width: 5),
-                                  shape: BoxShape.circle),
-                              child: RippleButton(
-                                child: authState.isbusy
-                                    ? const SizedBox.shrink() :
-                                  CircularImage(
-                                    path: authState.profileUserModel!.profilePic!,
-                                    height: 80,
-                                  ),
-                                borderRadius: BorderRadius.circular(50),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    ProfileImageView.getRoute(authState.profileUserModel!.profilePic!));
-                                },
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // Add an image widget to display an image
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 40),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white, width: 5),
+                                    shape: BoxShape.circle),
+                                child: RippleButton(
+                                  child: authState.isbusy
+                                      ? const SizedBox.shrink()
+                                      : CircularImage(
+                                          path: authState
+                                              .profileUserModel!.profilePic!,
+                                          height: 80,
+                                        ),
+                                  borderRadius: BorderRadius.circular(50),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        ProfileImageView.getRoute(authState
+                                            .profileUserModel!.profilePic!));
+                                  },
+                                ),
                               ),
-                            ),
-                            SingleChildScrollView(
-                              child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                                      alignment: Alignment(10.0, 1),
-                                      margin: const EdgeInsets.only(top: 30, right: 30),
-                                      child: authState.isbusy
-                                          ? const SizedBox.shrink(): Text(
-                                        authState.profileUserModel.displayName!,
-                                        style: GoogleFonts.openSans(fontSize: 40,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height:20),
-                                    RippleButton(
-                                      splashColor:
-                                      TwitterColor.dodgeBlue_50.withAlpha(100),
-                                      borderRadius:
-                                      const BorderRadius.all(Radius.circular(60)),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (isMyProfile) {
-                                            Navigator.push(
-                                                context, EditProfilePage.getRoute());
-                                          } else {
-                                            if(isFollower() == "Add Friend"){
-                                              authState.addFriend();
-                                            }
-                                            else if(isFollower() == "Friend Request Sent"){
-
-                                            }
-                                            else if(isFollower() == "Accept Friend Request"){
-                                              authState.acceptFriendRequest();
-                                            }
-                                            else if(isFollower() == "Friend Added"){
-
-                                            }
-                                        }});
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 5,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: isMyProfile
-                                              ? TwitterColor.white : authState.isbusy ?
-                                              TwitterColor.dodgeBlue
-                                              : isFollower() == "Friend Added"
-                                              ? TwitterColor.dodgeBlue
-                                              : TwitterColor.white,
-                                          border: Border.all(
-                                              color: isMyProfile
-                                                  ? Colors.black87.withAlpha(180)
-                                                  : Colors.blue,
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        /// If [isMyProfile] is true then Edit profile button will display
-                                        // Otherwise Follow/Following button will be display
-                                        child: Text(
-                                          isMyProfile
-                                              ? 'Edit Profile'
-                                              : isFollower() == "Add Friend"
-                                              ? 'Add Friend'
-                                              : isFollower() == "Friend Request Sent" ? 'Friend Request Sent'
-                                              : isFollower() == "Accept Friend Request" ? 'Accept Friend Request'
-                                              : isFollower() == "Friend Added" ? 'Friend Added':'',
-                                          style: TextStyle(
-                                            color: isMyProfile
-                                                ? Colors.black87.withAlpha(180)
-                                                : isFollower() == "Friend Added"
-                                                ? TwitterColor.white
-                                                : Colors.blue,
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
+                              SingleChildScrollView(
+                                  child: Column(children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 2),
+                                  alignment: Alignment(10.0, 1),
+                                  margin:
+                                      const EdgeInsets.only(top: 30, right: 30),
+                                  child: authState.isbusy
+                                      ? const SizedBox.shrink()
+                                      : Text(
+                                          authState
+                                              .profileUserModel.displayName!,
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
+                                ),
+                                SizedBox(height: 20),
+                                RippleButton(
+                                  splashColor:
+                                      TwitterColor.dodgeBlue_50.withAlpha(100),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(60)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isMyProfile) {
+                                        Navigator.push(context,
+                                            EditProfilePage.getRoute());
+                                      } else {
+                                        if (isFollower() == "Add Friend") {
+                                          authState.addFriend();
+                                        } else if (isFollower() ==
+                                            "Friend Request Sent") {
+                                        } else if (isFollower() ==
+                                            "Accept Friend Request") {
+                                          authState.acceptFriendRequest();
+                                        } else if (isFollower() ==
+                                            "Friend Added") {}
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isMyProfile
+                                          ? TwitterColor.white
+                                          : authState.isbusy
+                                              ? TwitterColor.dodgeBlue
+                                              : isFollower() == "Friend Added"
+                                                  ? TwitterColor.dodgeBlue
+                                                  : TwitterColor.white,
+                                      border: Border.all(
+                                          color: isMyProfile
+                                              ? Colors.black87.withAlpha(180)
+                                              : Colors.blue,
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+
+                                    /// If [isMyProfile] is true then Edit profile button will display
+                                    // Otherwise Follow/Following button will be display
+                                    child: Text(
+                                      isMyProfile
+                                          ? 'Edit Profile'
+                                          : isFollower() == "Add Friend"
+                                              ? 'Add Friend'
+                                              : isFollower() ==
+                                                      "Friend Request Sent"
+                                                  ? 'Friend Request Sent'
+                                                  : isFollower() ==
+                                                          "Accept Friend Request"
+                                                      ? 'Accept Friend Request'
+                                                      : isFollower() ==
+                                                              "Friend Added"
+                                                          ? 'Friend Added'
+                                                          : '',
+                                      style: TextStyle(
+                                        color: isMyProfile
+                                            ? Colors.black87.withAlpha(180)
+                                            : isFollower() == "Friend Added"
+                                                ? TwitterColor.white
+                                                : Colors.blue,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ]
+                                  ),
+                                ),
+                              ]))
+                            ],
+                          ),
+                          authState.isbusy
+                              ? SizedBox(
+                                  width: 20,
                                 )
-                            )
-                          ],
-                        ),
-                        authState.isbusy ? SizedBox(
-                          width:20,
-                        ): state.isbusy ? SizedBox(
-                          width:20,
-                        ):authState.profileUserModel.closenessMap == null ? SizedBox(
-                          width:20,
-                        ):Expanded(
-                            child:
-                            ListView(
-                              scrollDirection: Axis.horizontal,
-                              children:
-                              authState.profileUserModel.closenessMap!.map((model) {
-
-                                return Row(children:[
-                                  state.getUserList() == null ? SizedBox(
-                                    width:20,
-                                  ):
-                                  CircularImage(path: state.getSingleUserDetail(model.split(' ')[0]).profilePic, height: 37),
-                                  SizedBox(
-                                    width:20,
-                                  )
-                                ]);
-                              },
-
-                              ).toList(),
-                            )
-                        )
-                      ]
-                    ),
-                  )
-              ),
+                              : state.isbusy
+                                  ? SizedBox(
+                                      width: 20,
+                                    )
+                                  : authState.profileUserModel.closenessMap ==
+                                          null
+                                      ? SizedBox(
+                                          width: 20,
+                                        )
+                                      : Expanded(
+                                          child: ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: authState
+                                              .profileUserModel.closenessMap!
+                                              .map(
+                                            (model) {
+                                              return Row(children: [
+                                                state.getUserList() == null
+                                                    ? SizedBox(
+                                                        width: 20,
+                                                      )
+                                                    : CircularImage(
+                                                        path: state
+                                                            .getSingleUserDetail(
+                                                                model.split(
+                                                                    ' ')[0])
+                                                            .profilePic,
+                                                        height: 37),
+                                                SizedBox(
+                                                  width: 20,
+                                                )
+                                              ]);
+                                            },
+                                          ).toList(),
+                                        ))
+                        ]),
+                  )),
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -299,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                         // give the tab bar a height [can change hheight to preferred height]
                         Container(
                           height: 45,
-                          width:330,
+                          width: 330,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(
@@ -324,14 +358,14 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                                 width: 200,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child:Text("Personal Goals"),
+                                  child: Text("Personal Goals"),
                                 ),
                               ),
                               Container(
                                 width: 200,
                                 color: Color(0x69DC9E),
-                                child: Center(child:
-                                Text("Group Goals"),
+                                child: Center(
+                                  child: Text("Group Goals"),
                                 ),
                               ),
                             ],
@@ -343,50 +377,53 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                             controller: _tabController,
                             children: [
                               // first tab bar view widget
-                              Stack(
+                              Stack(children: <Widget>[
+                                Center(
+                                    child: Column(
                                   children: <Widget>[
-                                    Center(
-                                        child: Column(
-                                          children: <Widget>[
-                                            SingleChildScrollView(child:
-                                            Center(
-                                              child: ListView.separated(
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                                addAutomaticKeepAlives: false,
-                                                physics: const BouncingScrollPhysics(),
-                                                itemBuilder: (context, index) => _UserTile(tweet: list![index]),
-                                                separatorBuilder: (_, index) => const Divider(
-                                                  height: 0,
-                                                ),
-                                                itemCount: list?.length ?? 0,
-                                              ),
-                                            ),),
-                                          ],
-                                        )
-                                    ),
-                                  ]
-                              ),
-                              // second tab bar view widget
-                              Center(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Center(
+                                    SingleChildScrollView(
+                                      child: Center(
                                         child: ListView.separated(
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
                                           addAutomaticKeepAlives: false,
-                                          physics: const BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) => _UserTile(tweet: GroupGoalList![index]),
-                                          separatorBuilder: (_, index) => const Divider(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) =>
+                                              _UserTile(tweet: list![index]),
+                                          separatorBuilder: (_, index) =>
+                                              const Divider(
                                             height: 0,
                                           ),
-                                          itemCount: GroupGoalList?.length ?? 0,
+                                          itemCount: list?.length ?? 0,
                                         ),
                                       ),
-                                    ],
-                                  )
-                              ),
+                                    ),
+                                  ],
+                                )),
+                              ]),
+                              // second tab bar view widget
+                              Center(
+                                  child: Column(
+                                children: <Widget>[
+                                  Center(
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      addAutomaticKeepAlives: false,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) =>
+                                          _UserTile(
+                                              tweet: GroupGoalList![index]),
+                                      separatorBuilder: (_, index) =>
+                                          const Divider(
+                                        height: 0,
+                                      ),
+                                      itemCount: GroupGoalList?.length ?? 0,
+                                    ),
+                                  ),
+                                ],
+                              )),
                             ],
                           ),
                         ),
@@ -402,7 +439,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 }
-
 
 class _UserTile extends StatefulWidget {
   const _UserTile({Key? key, required this.tweet}) : super(key: key);
@@ -434,22 +470,28 @@ class _UserTileState extends State<_UserTile> {
                 fontWeight: FontWeight.w800,
                 overflow: TextOverflow.ellipsis),
           ),
-          SizedBox (width: 5),
+          SizedBox(width: 5),
           SizedBox(
             height: 20,
-            width:120,
-            child:
-            CustomProgressBar(
-                progress: widget.tweet.isHabit == false ? widget.tweet
-                    .GoalAchieved! / widget.tweet.GoalSum!
-                    : widget.tweet.checkInList!.where((item) => item == true)
-                    .length / 8,
-                height: 20,
-                width: 120,
-                backgroundColor: Colors.grey[300]!,
-                progressColor: Color(0xFF29AB87),
-              daysLeft: DateTime(int.parse(widget.tweet.deadlineDate!.split('-')[0]), int.parse(widget.tweet.deadlineDate!.split('-')[1]), int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                  .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
+            width: 120,
+            child: CustomProgressBar(
+              progress: widget.tweet.isHabit == false
+                  ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                  : widget.tweet.checkInList!
+                          .where((item) => item == true)
+                          .length /
+                      8,
+              height: 20,
+              width: 120,
+              backgroundColor: Colors.grey[300]!,
+              progressColor: AppColor.PROGRESS_COLOR,
+              daysLeft: DateTime(
+                      int.parse(widget.tweet.deadlineDate!.split('-')[0]),
+                      int.parse(widget.tweet.deadlineDate!.split('-')[1]),
+                      int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                  .difference(DateTime(DateTime.now().year,
+                      DateTime.now().month, DateTime.now().day))
+                  .inDays,
             ),
           )
         ],
@@ -458,6 +500,7 @@ class _UserTileState extends State<_UserTile> {
     );
   }
 }
+
 class Choice {
   const Choice(
       {required this.title, required this.icon, this.isEnable = false});

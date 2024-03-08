@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'dart:math'as math;
+import 'dart:math' as math;
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -37,11 +37,12 @@ class CurrentUserProfilePage extends StatefulWidget {
   State<StatefulWidget> createState() => _CurrentUserProfilePageState();
 }
 
-class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with SingleTickerProviderStateMixin {
+class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
+    with SingleTickerProviderStateMixin {
   @override
   late TabController _tabController;
   var initializationSettingsAndroid =
-  new AndroidInitializationSettings('goala');
+      new AndroidInitializationSettings('goala');
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = Provider.of<SearchState>(context, listen: false);
@@ -57,24 +58,22 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
     Navigator.pushNamed(context, '/TrendsPage');
   }
 
-  void requestPermission()async{
+  void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true
-    );
-    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User Granted Permission');
-    }
-    else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
       print('User Granted Permission');
-    }
-    else{
+    } else {
       print('declined');
     }
   }
@@ -92,11 +91,11 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
       );
 
       final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+          FlutterLocalNotificationsPlugin();
 
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
       //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       RemoteNotification? notification = message.notification;
@@ -127,28 +126,34 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
     var authState = Provider.of<AuthState>(context);
     String id = authState.userId!;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      list = feedstate.feedList!.where((x) => x.userId == id &&
-          x.isGroupGoal == false && x.parentkey == null).toList();
-      GroupGoalList =
-          feedstate.feedList!.where((x) => x.memberList!.contains(id) &&
-              x.isGroupGoal == true && x.parentkey == null).toList();
+      list = feedstate.feedList!
+          .where((x) =>
+              x.userId == id && x.isGroupGoal == false && x.parentkey == null)
+          .toList();
+      GroupGoalList = feedstate.feedList!
+          .where((x) =>
+              x.memberList!.contains(id) &&
+              x.isGroupGoal == true &&
+              x.parentkey == null)
+          .toList();
     }
-    if(authState.isbusy){
-      if(authState.userModel!.closenessMap != null) {
-        authState.userModel!.closenessMap!.sort((a, b) =>
-            a.split(' ')[1].compareTo(b.split(' ')[1]));
+    if (authState.isbusy) {
+      if (authState.userModel!.closenessMap != null) {
+        authState.userModel!.closenessMap!
+            .sort((a, b) => a.split(' ')[1].compareTo(b.split(' ')[1]));
       }
     }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF29AB87),
+        backgroundColor: AppColor.PROGRESS_COLOR,
         foregroundColor: Colors.white,
-        onPressed: (){Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');},
+        onPressed: () {
+          Navigator.of(context).pushNamed('/CreateGroupGoal/tweet');
+        },
         child: const Icon(Icons.create),
       ),
-      body:
-      RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () async {
           state.getDataFromDatabase();
           return Future.value();
@@ -160,85 +165,98 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                background:
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.white,
-                    child:
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  centerTitle: true,
+                  background: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      color: Colors.white,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  // Add an image widget to display an image
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white, width: 5),
-                                        shape: BoxShape.circle),
-                                    child: RippleButton(
-                                      child: CircularImage(
-                                        path: authState.userModel?.profilePic,
-                                        height: 80,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            ProfileImageView.getRoute(
-                                                authState.profileUserModel!.profilePic!));
-                                      },
+                              children: <Widget>[
+                                // Add an image widget to display an image
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 500),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.white, width: 5),
+                                      shape: BoxShape.circle),
+                                  child: RippleButton(
+                                    child: CircularImage(
+                                      path: authState.userModel?.profilePic,
+                                      height: 80,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          ProfileImageView.getRoute(authState
+                                              .profileUserModel!.profilePic!));
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  alignment: Alignment(10.0, 1),
+                                  margin:
+                                      const EdgeInsets.only(top: 30, right: 30),
+                                  child: Text(
+                                    authState.userModel == null
+                                        ? ''
+                                        : authState.userModel!.displayName!,
+                                    style: GoogleFonts.openSans(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    alignment: Alignment(10.0, 1),
-                                    margin: const EdgeInsets.only(top: 30, right: 30),
-                                    child: Text(
-                                      authState.userModel == null ? '' :
-                                        authState.userModel!.displayName!,
-                                        style: GoogleFonts.openSans(fontSize: 40,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                    ),
-                                  )
-                                ],
+                                )
+                              ],
                             ),
-                            authState.isbusy ? SizedBox(
-                              width:20,
-                            ): state.isbusy ? SizedBox(
-                              width:20,
-                            ):authState.userModel?.closenessMap == null ? SizedBox(
-                              width:20,
-                            ):Expanded(
-                                child:
-                                    ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children:
-                                      authState.userModel!.closenessMap!.map((model) {
-
-                                        return Row(children:[
-                                          state.getUserList() == null ? SizedBox(
-                                            width:20,
-                                          ):
-                                          CircularImage(path: state.getSingleUserDetail(model.split(' ')[0]).profilePic, height: 37),
-                                          SizedBox(
-                                            width:20,
+                            authState.isbusy
+                                ? SizedBox(
+                                    width: 20,
+                                  )
+                                : state.isbusy
+                                    ? SizedBox(
+                                        width: 20,
+                                      )
+                                    : authState.userModel?.closenessMap == null
+                                        ? SizedBox(
+                                            width: 20,
                                           )
-                                        ]);
-                                      },
-
-                                      ).toList(),
-                                    )
-                            )
-                          ]
-                        )
-
-                )),),
+                                        : Expanded(
+                                            child: ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: authState
+                                                .userModel!.closenessMap!
+                                                .map(
+                                              (model) {
+                                                return Row(children: [
+                                                  state.getUserList() == null
+                                                      ? SizedBox(
+                                                          width: 20,
+                                                        )
+                                                      : CircularImage(
+                                                          path: state
+                                                              .getSingleUserDetail(
+                                                                  model.split(
+                                                                      ' ')[0])
+                                                              .profilePic,
+                                                          height: 37),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  )
+                                                ]);
+                                              },
+                                            ).toList(),
+                                          ))
+                          ]))),
+            ),
             SliverToBoxAdapter(
               child: Container(
                 height: 800,
@@ -250,7 +268,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
                         // give the tab bar a height [can change hheight to preferred height]
                         Container(
                           height: 45,
-                          width:330,
+                          width: 330,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(
@@ -275,14 +293,14 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
                                 width: 400,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child:Text("Personal Goals"),
+                                  child: Text("Personal Goals"),
                                 ),
                               ),
                               Container(
                                 width: 300,
-                                  color: Color(0x69DC9E),
-                                child: Center(child:
-                                Text("Group Goals"),
+                                color: Color(0x69DC9E),
+                                child: Center(
+                                  child: Text("Group Goals"),
                                 ),
                               ),
                             ],
@@ -294,52 +312,57 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
                             controller: _tabController,
                             children: [
                               // first tab bar view widget
-                              Stack(
-                                  children: <Widget>[
-                                  Center(
+                              Stack(children: <Widget>[
+                                Center(
                                     child: Column(
-                                      children: <Widget>[
-                                        Center(
-                                          child: GridView.builder(
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: true,
-                                            addAutomaticKeepAlives: false,
-                                            physics: const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) => _UserTile2(tweet: list![index]),
-                                            itemCount: list?.length ?? 0,
-                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2, // Number of items per row
-                                              crossAxisSpacing: 10.0, // Horizontal space between items
-                                              mainAxisSpacing: 10.0, // Vertical space between items
-                                              childAspectRatio: 1.0, // Aspect ratio of each item
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ),
-                                ]
-                              ),
-                              // second tab bar view widget
-                              Center(
-                                child: Column(
                                   children: <Widget>[
                                     Center(
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          addAutomaticKeepAlives: false,
-                                          physics: const BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) => _UserTile(tweet: GroupGoalList![index]),
-                                          separatorBuilder: (_, index) => const Divider(
-                                            height: 0,
-                                          ),
-                                          itemCount: GroupGoalList?.length ?? 0,
+                                      child: GridView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        addAutomaticKeepAlives: false,
+                                        physics: const BouncingScrollPhysics(),
+                                        itemBuilder: (context, index) =>
+                                            _UserTile2(tweet: list![index]),
+                                        itemCount: list?.length ?? 0,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount:
+                                              2, // Number of items per row
+                                          crossAxisSpacing:
+                                              10.0, // Horizontal space between items
+                                          mainAxisSpacing:
+                                              10.0, // Vertical space between items
+                                          childAspectRatio:
+                                              1.0, // Aspect ratio of each item
                                         ),
+                                      ),
                                     ),
                                   ],
-                                )
-                              ),
+                                )),
+                              ]),
+                              // second tab bar view widget
+                              Center(
+                                  child: Column(
+                                children: <Widget>[
+                                  Center(
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      addAutomaticKeepAlives: false,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) =>
+                                          _UserTile(
+                                              tweet: GroupGoalList![index]),
+                                      separatorBuilder: (_, index) =>
+                                          const Divider(
+                                        height: 0,
+                                      ),
+                                      itemCount: GroupGoalList?.length ?? 0,
+                                    ),
+                                  ),
+                                ],
+                              )),
                             ],
                           ),
                         ),
@@ -373,77 +396,88 @@ class _UserTileState extends State<_UserTile> {
     _textEditingController = TextEditingController();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<FeedState>(context);
     return ListTile(
-      onTap: () {
-        state.getPostDetailFromDatabase(null, model: widget.tweet);
-        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-      },
-      title:
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 90,
-            child: TitleText(widget.tweet.title!,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                overflow: TextOverflow.ellipsis),
-          ),
-          SizedBox (width: 5),
-          SizedBox(
-            height: 20,
-                width:120,
-                child:
-                  CustomProgressBar(
-                      progress: widget.tweet.isHabit == false ? widget.tweet
-                          .GoalAchieved! / widget.tweet.GoalSum!
-                          : widget.tweet.checkInList!.where((item) => item == true)
-                          .length / 8,
-                      height: 20,
-                      width: 120,
-                      backgroundColor: Colors.grey[300]!,
-                      progressColor: Color(0xFF29AB87),
-                      daysLeft: DateTime(int.parse(widget.tweet.deadlineDate!.split('-')[0]), int.parse(widget.tweet.deadlineDate!.split('-')[1]), int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                          .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
-                  ),
-          )
-        ],
-      ),
-      subtitle: Text(widget.tweet.description!),
-      trailing: widget.tweet.isCheckedIn ? Icon(AppIcon.bulbOn) :
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)),
-          fixedSize: Size(98, 20), //////// HERE
-        ),
-        onPressed: () async {
-          var state = Provider.of<FeedState>(context, listen: false);
-          var tempTweet = await state.fetchTweet(widget.tweet.key!);
-          tempTweet!.checkInList![tempTweet!.checkInList!.length! - 1] = true;
-          FirebaseDatabase.instance.reference().child("tweet").child(widget.tweet.key!).update({
-            "checkInList": tempTweet.checkInList,
-            "isCheckedIn": true,
-          }).then((_) {
-            if(tempTweet.isHabit == false) {
-              _showPopupWindow(context, tempTweet);
-            }
-          }).catchError((onError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(onError)));
-          });
+        onTap: () {
+          state.getPostDetailFromDatabase(null, model: widget.tweet);
+          Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
         },
-        child: Text(
-            'Check In',
-          style: TextStyle(
-            fontSize: 12,
-          ),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 90,
+              child: TitleText(widget.tweet.title!,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  overflow: TextOverflow.ellipsis),
+            ),
+            SizedBox(width: 5),
+            SizedBox(
+              height: 20,
+              width: 120,
+              child: CustomProgressBar(
+                progress: widget.tweet.isHabit == false
+                    ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                    : widget.tweet.checkInList!
+                            .where((item) => item == true)
+                            .length /
+                        8,
+                height: 20,
+                width: 120,
+                backgroundColor: Colors.grey[300]!,
+                progressColor: AppColor.PROGRESS_COLOR,
+                daysLeft: DateTime(
+                        int.parse(widget.tweet.deadlineDate!.split('-')[0]),
+                        int.parse(widget.tweet.deadlineDate!.split('-')[1]),
+                        int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                    .difference(DateTime(DateTime.now().year,
+                        DateTime.now().month, DateTime.now().day))
+                    .inDays,
+              ),
+            )
+          ],
         ),
-
-      )
-    );
+        subtitle: Text(widget.tweet.description!),
+        trailing: widget.tweet.isCheckedIn
+            ? Icon(AppIcon.bulbOn)
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                  fixedSize: Size(98, 20), //////// HERE
+                ),
+                onPressed: () async {
+                  var state = Provider.of<FeedState>(context, listen: false);
+                  var tempTweet = await state.fetchTweet(widget.tweet.key!);
+                  tempTweet!.checkInList![tempTweet!.checkInList!.length! - 1] =
+                      true;
+                  FirebaseDatabase.instance
+                      .reference()
+                      .child("tweet")
+                      .child(widget.tweet.key!)
+                      .update({
+                    "checkInList": tempTweet.checkInList,
+                    "isCheckedIn": true,
+                  }).then((_) {
+                    if (tempTweet.isHabit == false) {
+                      _showPopupWindow(context, tempTweet);
+                    }
+                  }).catchError((onError) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(onError)));
+                  });
+                },
+                child: Text(
+                  'Check In',
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ));
   }
 
   void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
@@ -462,7 +496,8 @@ class _UserTileState extends State<_UserTile> {
               child: Text('Submit'),
               onPressed: () {
                 var state = Provider.of<FeedState>(context, listen: false);
-                state.addNumberToGoal(tempFeed, int.parse(_textEditingController.text));
+                state.addNumberToGoal(
+                    tempFeed, int.parse(_textEditingController.text));
                 print('Entered Integer: ${_textEditingController.text}');
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -491,64 +526,70 @@ class _UserTile2State extends State<_UserTile2> {
     _textEditingController = TextEditingController();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<FeedState>(context);
     return GridTile(
-        child: 
-          InkWell(
-            onTap: () {
-              state.getPostDetailFromDatabase(null, model: widget.tweet);
-              Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-            },
-            child: 
-              Column(
-                children: [
-                  SizedBox(
-                    width: 90,
-                    child: TitleText(widget.tweet.title!,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  SizedBox(
-                    height: 20,
-                    width:120,
-                    child:
-                    CustomProgressBar(
-                      progress: widget.tweet.isHabit == false ? widget.tweet
-                          .GoalAchieved! / widget.tweet.GoalSum!
-                          : widget.tweet.checkInList!.where((item) => item == true)
-                          .length / 8,
-                      height: 20,
-                      width: 120,
-                      backgroundColor: Colors.grey[300]!,
-                      progressColor: Color(0xFF29AB87),
-                      daysLeft: DateTime(int.parse(widget.tweet.deadlineDate!.split('-')[0]), int.parse(widget.tweet.deadlineDate!.split('-')[1]), int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                          .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
-                    ),
-                  ),
-                  if(widget.tweet.coverPhoto != null) Container(
-                    width: 100, // Specify the width of the container
-                    height: 100, // Specify the height of the container
-                    decoration: BoxDecoration(
-                      // Optionally add a border, radius, etc.
-                      border: Border.all(color: Colors.blueAccent),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ClipRRect(
-                      // Use ClipRRect for borderRadius if needed
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        widget.tweet.coverPhoto!,
-                        fit: BoxFit.cover, // This ensures the image covers the container
-                      ),
-                    ),
-                  ),
-                ],
+        child: InkWell(
+      onTap: () {
+        state.getPostDetailFromDatabase(null, model: widget.tweet);
+        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
+      },
+      child: Column(
+        children: [
+          SizedBox(
+            width: 90,
+            child: TitleText(widget.tweet.title!,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                overflow: TextOverflow.ellipsis),
+          ),
+          SizedBox(
+            height: 20,
+            width: 120,
+            child: CustomProgressBar(
+              progress: widget.tweet.isHabit == false
+                  ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                  : widget.tweet.checkInList!
+                          .where((item) => item == true)
+                          .length /
+                      8,
+              height: 20,
+              width: 120,
+              backgroundColor: Colors.grey[300]!,
+              progressColor: AppColor.PROGRESS_COLOR,
+              daysLeft: DateTime(
+                      int.parse(widget.tweet.deadlineDate!.split('-')[0]),
+                      int.parse(widget.tweet.deadlineDate!.split('-')[1]),
+                      int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                  .difference(DateTime(DateTime.now().year,
+                      DateTime.now().month, DateTime.now().day))
+                  .inDays,
+            ),
+          ),
+          if (widget.tweet.coverPhoto != null)
+            Container(
+              width: 100, // Specify the width of the container
+              height: 100, // Specify the height of the container
+              decoration: BoxDecoration(
+                // Optionally add a border, radius, etc.
+                border: Border.all(color: Colors.blueAccent),
+                borderRadius: BorderRadius.circular(12),
               ),
-          )
-    );
+              child: ClipRRect(
+                // Use ClipRRect for borderRadius if needed
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  widget.tweet.coverPhoto!,
+                  fit: BoxFit
+                      .cover, // This ensures the image covers the container
+                ),
+              ),
+            ),
+        ],
+      ),
+    ));
   }
 
   void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
@@ -567,7 +608,8 @@ class _UserTile2State extends State<_UserTile2> {
               child: Text('Submit'),
               onPressed: () {
                 var state = Provider.of<FeedState>(context, listen: false);
-                state.addNumberToGoal(tempFeed, int.parse(_textEditingController.text));
+                state.addNumberToGoal(
+                    tempFeed, int.parse(_textEditingController.text));
                 print('Entered Integer: ${_textEditingController.text}');
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -578,7 +620,6 @@ class _UserTile2State extends State<_UserTile2> {
     );
   }
 }
-
 
 @immutable
 class ExpandableFab extends StatefulWidget {
@@ -678,8 +719,8 @@ class _ExpandableFabState extends State<ExpandableFab>
     final count = widget.children.length;
     final step = 90.0 / (count - 1);
     for (var i = 0, angleInDegrees = 0.0;
-    i < count;
-    i++, angleInDegrees += step) {
+        i < count;
+        i++, angleInDegrees += step) {
       children.add(
         _ExpandingActionButton(
           directionInDegrees: angleInDegrees,
@@ -709,7 +750,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
-            backgroundColor: Color(0xFF29AB87),
+            backgroundColor: AppColor.PROGRESS_COLOR,
             foregroundColor: Colors.white,
             onPressed: _toggle,
             child: const Icon(Icons.create),
@@ -719,6 +760,7 @@ class _ExpandableFabState extends State<ExpandableFab>
     );
   }
 }
+
 //29AB87
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
@@ -777,7 +819,7 @@ class ActionButton extends StatelessWidget {
     return Material(
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
-      color: Color(0xFF29AB87),
+      color: AppColor.PROGRESS_COLOR,
       elevation: 4,
       child: IconButton(
         onPressed: onPressed,

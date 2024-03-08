@@ -24,4 +24,6 @@ class AppColor {
   static const Color extraLightGrey = Color(0xff000000);
   static const Color extraExtraLightGrey = Color(0xff000000);
   static const Color white = Color(0xff000000);
+
+  static const Color PROGRESS_COLOR = Color(0xFF29AB87);
 }
