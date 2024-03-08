@@ -48,12 +48,35 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> with Si
       state.resetFilterList();
     });
     _tabController = TabController(length: 2, vsync: this);
+    requestPermission();
     listenForForegroundNotifications();
     super.initState();
   }
 
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
+  }
+
+  void requestPermission()async{
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true
+    );
+    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+      print('User Granted Permission');
+    }
+    else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+      print('User Granted Permission');
+    }
+    else{
+      print('declined');
+    }
   }
 
   void listenForForegroundNotifications() {

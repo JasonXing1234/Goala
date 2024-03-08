@@ -15,6 +15,7 @@ class FeedModel {
   String? title;
   String? description;
   late String userId;
+  String? deviceToken;
   int? likeCount;
   List<String>? likeList;
   int? commentCount;
@@ -45,6 +46,7 @@ class FeedModel {
         this.title,
         this.description,
         required this.userId,
+        this.deviceToken,
         this.likeCount,
         this.commentCount,
         this.retweetCount,
@@ -72,6 +74,7 @@ class FeedModel {
       "isHabit": isHabit,
       "grandparentKey": grandparentKey,
       "userId": userId,
+      "deviceToken": deviceToken,
       "title": title,
       "GoalSum": GoalSum,
       "description": description,
@@ -108,6 +111,7 @@ class FeedModel {
     title = map['title'];
     description = map['description'];
     userId = map['userId'];
+    deviceToken = map['deviceToken'];
     likeCount = map['likeCount'] ?? 0;
     commentCount = map['commentCount'];
     retweetCount = map["retweetCount"] ?? 0;

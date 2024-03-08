@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
@@ -13,7 +15,9 @@ import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
 import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:http/http.dart' as http;
+import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/retweetWidget.dart';
@@ -171,8 +175,48 @@ class _TweetBodyState extends State<_TweetBody> {
 
 
   }
-  void _onPressPoke() {
-    debugPrint("You pressed the poke button");
+  Future<void> _onPressPoke(String? token, String? displayName) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers:<String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'status': 'done',
+              'body': 'Goala',
+              'title': '${displayName} poked you!',
+            },
+            "notification": <String, dynamic>{
+              'title': 'Goala',
+              'body': '${displayName} poked you!',
+              'android_channel_id': 'dbfood'
+            },
+            "to": token,
+          },
+        ),
+      );
+      print('good');
+    } catch (e) {
+      print('error');
+    }
+    /*try {
+      HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('sendPokeNotification');
+      final result = await callable.call({
+        "data": {
+          'token': token,
+          'user': displayName
+        }
+      });
+      print('Function result: ${result.data}');
+    } on FirebaseFunctionsException catch (e) {
+      print(e);
+    }*/
   }
   Future <void> getParentModel() async {
     var feedState = Provider.of<FeedState>(context, listen:false);
@@ -181,6 +225,7 @@ class _TweetBodyState extends State<_TweetBody> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context, listen: false);
+    var authState = Provider.of<AuthState>(context, listen: false);
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
         : widget.type == TweetType.Detail || widget.type == TweetType.ParentTweet
@@ -288,7 +333,9 @@ class _TweetBodyState extends State<_TweetBody> {
                               .difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays,
                         ),
                         const Spacer(),
-                        PokeButton(onPressed: _onPressPoke),
+                        PokeButton(onPressed: (){
+                          _onPressPoke(widget.model.deviceToken, authState.userModel!.displayName);
+                        }),
                       ],
                     ) :SizedBox.shrink(),
                     widget.model.parentName != null ? Text(widget.model.parentName!) : Text(''),

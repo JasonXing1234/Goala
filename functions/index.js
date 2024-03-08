@@ -86,3 +86,25 @@ function sendPushNotification(userID, goalID) {
     });
 }
 
+exports.sendPokeNotification = functions.https.onCall((data, context) => {
+  const token = data.token;
+  const displayName = data.user;// Device token of the recipient user
+  console.log("Successfully sent message:", response);
+  const message = {
+    notification: {
+      title: displayName + "You are poked!",
+      body: "You have a new message.",
+    },
+    token: token,
+  };
+  console.log("Successfully sent message:", response);
+
+  return admin.messaging().send(message)
+    .then((response) => {
+      return {success: true, response: response};
+    })
+    .catch((error) => {
+      return {success: false, error: error};
+    });
+});
+

@@ -26,6 +26,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../model/GoalNotificationModel.dart';
 import '../ui/RoundedButton.dart';
 import '../ui/constants.dart';
+import '../widgets/newWidget/customMultiSelectChips.dart';
 import '../widgets/newWidget/customizedTitleText.dart';
 
 class ComposeGroupGoal extends StatefulWidget {
@@ -61,7 +62,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
   final List<String> days = [
     'M', 'T', 'W', 'Th', 'F', 'S', 'Su'
   ];
-  List<bool> daySelected = List.filled(7, false);
+  List<bool> daySelected = List.filled(7, true);
 
   @override
   void dispose() {
@@ -237,7 +238,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
     var myUser = authState.userModel;
     var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
     memberListTemp.add(myUser.userId!);
-    memberListTemp.add(_addUserController.text);
+    //memberListTemp.add(_addUserController.text);
     /// User who are creating reply tweet
     var commentedUser = UserModel(
         displayName: myUser.displayName ?? myUser.email!.split('@')[0],
@@ -406,49 +407,23 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                     ],
                   ),
                   SizedBox(height: 10),
-
-                  /*Row(
-                    children: [
-                      SizedBox(width: 35),
-                      SizedBox(width: 80,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _monthController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "MM"),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      SizedBox(width: 80,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _dayController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "DD"),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      SizedBox(width: 110,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _yearController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(hintText: "Year"),
-                        ),
-                      ),
-                    ],
-                  ),*/
-
                   SizedBox(
                     height: 20,
                   ),
-                  Center(child:
+                  ChildWidget(
+                    friends: FriendList,
+                    onSelectionChanged: (updatedFriends) {
+                      setState(() {
+                        memberListTemp.clear();
+                        List<String> temp = [];
+                        for(int i = 0; i < updatedFriends.length; i++) {
+                          temp.add(updatedFriends[i]!.userId!);
+                        }
+                        memberListTemp.addAll(temp);
+                      });
+                    },
+                  ),
+                  /*Center(child:
                     MultiSelectChipField<UserModel?>(
                       items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.displayName!)).toList(),
                       //initialValue: [_animals[4], _animals[7], _animals[9]],
@@ -468,7 +443,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                         _multiSelectKey.currentState?.validate();
                       },
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     height: 20,
                   ),
@@ -495,6 +470,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal> with TickerPro
                           }),
                         ),
                       ),
+                      //TODO:TEXT
                       SizedBox(
                         height: 15,
                       ),

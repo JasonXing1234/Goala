@@ -98,12 +98,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     });
   }
 
-  void _onImageIconSelected(File file) {
-    setState(() {
-      _image = file;
-    });
-  }
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -227,6 +221,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
     var authState = Provider.of<AuthState>(context, listen: false);
     var myUser = authState.userModel;
     var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
+    String? token = await FirebaseMessaging.instance.getToken();
     /// User who are creating reply tweet
     var commentedUser = UserModel(
         displayName: myUser.displayName ?? myUser.email!.split('@')[0],
@@ -270,6 +265,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
           ? isSelected[0] == false ? false : true : state.tweetToReplyModel!.isHabit,
       GoalSum: widget.isTweet ? isSelected[0] ? 0 : int.parse(_goalSumController.text) : 0,
       deadlineDate: "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+      deviceToken: token,
     );
     return reply;
   }
@@ -413,19 +409,17 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage> with TickerPro
                               backgroundColor: MaterialStateProperty.all(Color(0xFF29AB87))),
                           // TO change button color
                           child: const Text('Select Image'),
-                          onPressed: () {
-                            setState(() async {
-                              final picker = ImagePicker();
-                              await picker.pickMultiImage(imageQuality: 50).then((
-                                  List<XFile> files,
-                                  ) async {
-                                List<File>? tempfiles = files.map((xFile) => File(xFile.path)).toList();
-                                if (tempfiles.isNotEmpty) {
-                                  for (var i = 0; i < tempfiles.length; i++) {
-                                    selectedImages.add(await feedState.uploadFile(tempfiles[i]));
-                                  }
+                          onPressed: () async {
+                            final picker = ImagePicker();
+                            await picker.pickMultiImage(imageQuality: 50).then((
+                                List<XFile> files,
+                                ) async {
+                              List<File>? tempfiles = files.map((xFile) => File(xFile.path)).toList();
+                              if (tempfiles.isNotEmpty) {
+                                for (var i = 0; i < tempfiles.length; i++) {
+                                  selectedImages.add(await feedState.uploadFile(tempfiles[i]));
                                 }
-                              });
+                              }
                             });
                             // if atleast 1 images is selected it will add
                             // all images in selectedImages
