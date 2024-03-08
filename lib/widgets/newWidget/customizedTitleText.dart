@@ -9,13 +9,14 @@ class customizedTitleText extends StatelessWidget {
   final TextAlign textAlign;
   final TextOverflow overflow;
   const customizedTitleText(
-      this.text, this.fontSize, {
-        Key? key,
-        this.color = Colors.black,
-        this.fontWeight = FontWeight.w600,
-        this.textAlign = TextAlign.left,
-        this.overflow = TextOverflow.visible,
-      }) : super(key: key);
+    this.text,
+    this.fontSize, {
+    Key? key,
+    this.color = Colors.black,
+    this.fontWeight = FontWeight.w600,
+    this.textAlign = TextAlign.left,
+    this.overflow = TextOverflow.visible,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(

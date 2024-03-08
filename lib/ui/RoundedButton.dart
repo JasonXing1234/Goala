@@ -17,11 +17,11 @@ class RoundedButton extends StatelessWidget {
         onPressed: action,
         style: color != null
             ? ButtonStyle(
-            backgroundColor: color != null
-                ? MaterialStateProperty.all<Color>(color as Color)
-                : null,
-            foregroundColor: MaterialStateProperty.all<Color>(
-                color == Colors.black ? Colors.white : Colors.black))
+                backgroundColor: color != null
+                    ? MaterialStateProperty.all<Color>(color as Color)
+                    : null,
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    color == Colors.black ? Colors.white : Colors.black))
             : const ButtonStyle(),
         child: title,
       ),

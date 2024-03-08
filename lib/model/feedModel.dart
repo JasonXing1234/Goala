@@ -32,40 +32,41 @@ class FeedModel {
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
   List<bool>? checkInList;
-  String? lanCode; //Saving the language of the tweet so to not translate to check which language
+  String?
+      lanCode; //Saving the language of the tweet so to not translate to check which language
   UserModel? user;
   FeedModel(
       {required this.isGroupGoal,
-        required this.isCheckedIn,
-        required this.isPrivate,
-        required this.isHabit,
-        this.grandparentKey,
-        this.key,
-        this.coverPhoto,
-        this.parentName,
-        this.title,
-        this.description,
-        required this.userId,
-        this.deviceToken,
-        this.likeCount,
-        this.commentCount,
-        this.retweetCount,
-        this.memberCount,
-        this.GoalAchieved,
-        this.GoalSum,
-        required this.createdAt,
-        this.deadlineDate,
-        this.imagePath,
-        this.likeList,
-        this.tags,
-        this.goalPhotoList,
-        this.memberList,
-        this.checkInList,
-        this.user,
-        this.replyTweetKeyList,
-        this.parentkey,
-        this.lanCode,
-        this.childRetwetkey});
+      required this.isCheckedIn,
+      required this.isPrivate,
+      required this.isHabit,
+      this.grandparentKey,
+      this.key,
+      this.coverPhoto,
+      this.parentName,
+      this.title,
+      this.description,
+      required this.userId,
+      this.deviceToken,
+      this.likeCount,
+      this.commentCount,
+      this.retweetCount,
+      this.memberCount,
+      this.GoalAchieved,
+      this.GoalSum,
+      required this.createdAt,
+      this.deadlineDate,
+      this.imagePath,
+      this.likeList,
+      this.tags,
+      this.goalPhotoList,
+      this.memberList,
+      this.checkInList,
+      this.user,
+      this.replyTweetKeyList,
+      this.parentkey,
+      this.lanCode,
+      this.childRetwetkey});
   toJson() {
     return {
       "isGroupGoal": isGroupGoal,
@@ -95,7 +96,7 @@ class FeedModel {
       "checkInList": checkInList,
       "user": user == null ? null : user!.toJson(),
       "parentkey": parentkey,
-      "parentName" : parentName,
+      "parentName": parentName,
       "lanCode": lanCode,
       "childRetwetkey": childRetwetkey
     };
@@ -218,8 +219,6 @@ class FeedModel {
       commentCount = 0;
     }
   }
-
-
 
   bool get isValidTweet {
     bool isValid = false;

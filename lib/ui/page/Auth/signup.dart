@@ -147,16 +147,15 @@ class _SignupState extends State<Signup> {
     int randomNumber = random.nextInt(7);
 
     UserModel user = UserModel(
-      email: _emailController.text.toLowerCase(),
-      bio: 'Edit profile to update bio',
-      // contact:  _mobileController.text,
-      displayName: _nameController.text,
-      dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
-          .toString(),
-      location: 'Somewhere in universe',
-      profilePic: Constants.dummyProfilePicList[randomNumber],
-      isVerified: false
-    );
+        email: _emailController.text.toLowerCase(),
+        bio: 'Edit profile to update bio',
+        // contact:  _mobileController.text,
+        displayName: _nameController.text,
+        dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
+            .toString(),
+        location: 'Somewhere in universe',
+        profilePic: Constants.dummyProfilePicList[randomNumber],
+        isVerified: false);
     state
         .signUp(
       user,

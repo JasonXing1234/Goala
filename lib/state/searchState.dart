@@ -20,6 +20,7 @@ class SearchState extends AppState {
       return List.from(_userFilterList!);
     }
   }
+
   List<FeedModel>? get feedList {
     if (_feedList == null) {
       return null;
@@ -45,7 +46,6 @@ class SearchState extends AppState {
                 model.key = key;
                 _userlist!.add(model);
                 _userFilterList!.add(model);
-
               });
               _userFilterList!
                   .sort((x, y) => y.followers!.compareTo(x.followers!));
@@ -73,11 +73,9 @@ class SearchState extends AppState {
       // notifyListeners();
     }
   }
-  void getClosestFriends(){
 
-  }
+  void getClosestFriends() {}
   List<FeedModel>? getTweetList(UserModel? userModel) {
-
     if (userModel == null) {
       return null;
     }
@@ -185,11 +183,12 @@ class SearchState extends AppState {
     }).toList();
     return list;
   }
-  UserModel getSingleUserDetail(String uId) {
 
+  UserModel getSingleUserDetail(String uId) {
     final user = _userlist!.firstWhere((x) => x.userId == uId);
     return user;
   }
+
   List<UserModel>? getUserList() {
     return _userlist;
   }

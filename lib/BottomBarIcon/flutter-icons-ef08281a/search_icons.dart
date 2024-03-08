@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/Search.ttf
 ///
-/// 
+///
 /// * Elusive, Copyright (C) 2013 by Aristeides Stathopoulos
 ///         Author:    Aristeides Stathopoulos
 ///         License:   SIL (http://scripts.sil.org/OFL)
@@ -29,10 +29,16 @@ class Search {
   static const _kFontFam = 'Search';
   static const String? _kFontPkg = null;
 
-  static const IconData goalalogo = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData adult = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData child = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData globe = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData globe_alt = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData search = IconData(0xf50d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData goalalogo =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData adult =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData child =
+      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData globe =
+      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData globe_alt =
+      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData search =
+      IconData(0xf50d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -44,12 +44,11 @@ class _BottomMenubarState extends State<BottomMenubar> {
               icon: 0 == state.pageIndex ? Human.user : Human.user,
               isCustomIcon: true),
           _icon(null, 1,
-              icon: 1 == state.pageIndex ? BottomBar.globe_alt : BottomBar.globe,
+              icon:
+                  1 == state.pageIndex ? BottomBar.globe_alt : BottomBar.globe,
               isCustomIcon: true),
           _icon(null, 2,
-              icon: 2 == state.pageIndex
-                  ? Search.search : Search.search,
-
+              icon: 2 == state.pageIndex ? Search.search : Search.search,
               isCustomIcon: true),
           /*_icon(null, 3,
               icon: 3 == state.pageIndex

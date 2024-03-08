@@ -31,8 +31,7 @@ class AboutPage extends StatelessWidget {
             vPadding: 0,
             showDivider: false,
             onPressed: () {
-              Utility.launchURL(
-                  "https://github.com/TheAlphamerc/Goala/issues");
+              Utility.launchURL("https://github.com/TheAlphamerc/Goala/issues");
             },
           ),
           const HeaderWidget('Legal'),

@@ -95,8 +95,7 @@ class FeedState extends AppState {
     if (!isBusy && feedList != null && feedList!.isNotEmpty) {
       list = feedList!.where((x) {
         /// If Tweet is a comment then no need to add it in tweet list
-        if (x.parentkey == null &&
-            x.user!.userId == userModel.userId) {
+        if (x.parentkey == null && x.user!.userId == userModel.userId) {
           return false;
         }
 
@@ -122,8 +121,6 @@ class FeedState extends AppState {
   void addWebInfo(String url, dynamic webInfo) {
     _linkWebInfos.addAll({url: webInfo});
   }
-
-
 
   Map<String, Translation?> _tweetsTranslations = {};
   Map<String, Translation?> get tweetsTranslations => _tweetsTranslations;
@@ -168,6 +165,7 @@ class FeedState extends AppState {
       'coverPhoto': url,
     });
   }
+
   void filterByUsername(String? name) {
     if (name != null &&
         name.isEmpty &&
@@ -184,12 +182,13 @@ class FeedState extends AppState {
     else if (name != null) {
       _userFilterList = _userlist!
           .where((x) =>
-      x.userName != null &&
-          x.userName!.toLowerCase().contains(name.toLowerCase()))
+              x.userName != null &&
+              x.userName!.toLowerCase().contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
+
   void filterByGroupname(String? name) {
     if (name != null &&
         name.isEmpty &&
@@ -206,12 +205,12 @@ class FeedState extends AppState {
     else if (name != null) {
       memberList = _userlist!
           .where((x) =>
-      x.grouplist != null &&
-          x.grouplist!.contains(name.toLowerCase()))
+              x.grouplist != null && x.grouplist!.contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
+
   List<String>? getMyGroups(UserModel? userModel) {
     if (userModel == null) {
       return null;
@@ -219,9 +218,12 @@ class FeedState extends AppState {
     List<String>? list = userModel.grouplist;
     return list;
   }
+
   Future<void> addNumberToGoal(FeedModel tempFeed, int tempInt) async {
     await kDatabase.child('tweet').child(tempFeed.key!).update({
-      'GoalAchieved': tempFeed.GoalAchieved == null ? tempInt : tempFeed.GoalAchieved! + tempInt,
+      'GoalAchieved': tempFeed.GoalAchieved == null
+          ? tempInt
+          : tempFeed.GoalAchieved! + tempInt,
     });
   }
 
@@ -289,11 +291,12 @@ class FeedState extends AppState {
       cprint(error, errorIn: 'getDataFromDatabase');
     }
   }
+
   void getPeopleFromDatabase() {
     try {
       isBusy = true;
       kDatabase.child('profile').once().then(
-            (DatabaseEvent event) {
+        (DatabaseEvent event) {
           final snapshot = event.snapshot;
           _userlist = <UserModel>[];
           _userFilterList = <UserModel>[];
@@ -457,7 +460,10 @@ class FeedState extends AppState {
   void sendToDatabase(List<GoalNotiModel> modelList) {
     final databaseReference = FirebaseDatabase.instance.ref();
     for (int i = 0; i < modelList.length; i++) {
-      databaseReference.child('GoalNotifications').push().set(modelList[i].toJson());
+      databaseReference
+          .child('GoalNotifications')
+          .push()
+          .set(modelList[i].toJson());
     }
   }
 
@@ -553,9 +559,10 @@ class FeedState extends AppState {
   Future<void> updateTweet(FeedModel model) async {
     await kDatabase.child('tweet').child(model.key!).set(model.toJson());
   }
+
   Future<void> addPhoto(FeedModel model, String? url) async {
     List tempString = [];
-    if(model.goalPhotoList != null) {
+    if (model.goalPhotoList != null) {
       tempString = model.goalPhotoList!;
     }
     tempString.add(url);

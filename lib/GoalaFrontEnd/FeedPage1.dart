@@ -38,49 +38,51 @@ class FeedPage extends StatelessWidget {
             child: Consumer<FeedState>(
               builder: (context, state, child) {
                 //only show posts under the main goals, don't show the comments under the posts
-                final List<FeedModel>? list = state.getCommentList(authState.userModel)?.where((x) => x.grandparentKey == null).toList();
+                final List<FeedModel>? list = state
+                    .getCommentList(authState.userModel)
+                    ?.where((x) => x.grandparentKey == null)
+                    .toList();
                 return CustomScrollView(
                   slivers: <Widget>[
                     child!,
                     state.isBusy && list == null
                         ? SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: context.height - 135,
-                        child: CustomScreenLoader(
-                          height: double.infinity,
-                          width: double.infinity,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    )
-                        : !state.isBusy && list == null
-                        ? const SliverToBoxAdapter(
-                      child: EmptyList(
-                        'No Posts added yet',
-                        subTitle:
-                        '',
-                      ),
-                    )
-                        : SliverList(
-                      delegate: SliverChildListDelegate(
-                        list!.map(
-                              (model) {
-                            return Container(
-                              color: Colors.white,
-                              child: Tweet(
-                                model: model,
-                                trailing: TweetBottomSheet().tweetOptionIcon(
-                                    context,
-                                    model: model,
-                                    type: TweetType.Tweet,
-                                    scaffoldKey: scaffoldKey),
-                                scaffoldKey: scaffoldKey,
+                            child: SizedBox(
+                              height: context.height - 135,
+                              child: CustomScreenLoader(
+                                height: double.infinity,
+                                width: double.infinity,
+                                backgroundColor: Colors.white,
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    )
+                            ),
+                          )
+                        : !state.isBusy && list == null
+                            ? const SliverToBoxAdapter(
+                                child: EmptyList(
+                                  'No Posts added yet',
+                                  subTitle: '',
+                                ),
+                              )
+                            : SliverList(
+                                delegate: SliverChildListDelegate(
+                                  list!.map(
+                                    (model) {
+                                      return Container(
+                                        color: Colors.white,
+                                        child: Tweet(
+                                          model: model,
+                                          trailing: TweetBottomSheet()
+                                              .tweetOptionIcon(context,
+                                                  model: model,
+                                                  type: TweetType.Tweet,
+                                                  scaffoldKey: scaffoldKey),
+                                          scaffoldKey: scaffoldKey,
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
+                              )
                   ],
                 );
               },
@@ -113,8 +115,9 @@ class FeedPage extends StatelessWidget {
                     builder: (BuildContext context) {
                       return IconButton(
                           icon: Icon(Icons.notifications_active),
-                          onPressed: () {scaffoldKey.currentState!.openEndDrawer();}
-                      );
+                          onPressed: () {
+                            scaffoldKey.currentState!.openEndDrawer();
+                          });
                     },
                   ),
                 ],

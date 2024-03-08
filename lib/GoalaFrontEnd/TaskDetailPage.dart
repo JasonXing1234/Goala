@@ -43,9 +43,11 @@ class _TaskDetailState extends State<TaskDetailPage> {
     var state = Provider.of<FeedState>(context, listen: false);
     return FloatingActionButton(
       onPressed: () {
-        ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50).then((
-            XFile? file,
-            ) async {
+        ImagePicker()
+            .pickImage(source: ImageSource.gallery, imageQuality: 50)
+            .then((
+          XFile? file,
+        ) async {
           imagePicked = File(file!.path);
           state.addPhoto(tempFeed, await state.uploadFile(imagePicked!));
         });
@@ -67,67 +69,62 @@ class _TaskDetailState extends State<TaskDetailPage> {
     var state = Provider.of<FeedState>(context);
     final scrollController = ScrollController();
     return Scaffold(
-        key: scaffoldKey,
-        floatingActionButton: _floatingActionButton(),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: CustomScrollView(
-          controller: scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              title: customTitleText(
-                'Your Posts',
-              ),
-              iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              bottom: PreferredSize(
-                child: Container(
-                  color: Colors.grey.shade200,
-                  height: 1.0,
-                ),
-                preferredSize: const Size.fromHeight(0.0),
-              ),
+      key: scaffoldKey,
+      floatingActionButton: _floatingActionButton(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: CustomScrollView(
+        controller: scrollController,
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            title: customTitleText(
+              'Your Posts',
             ),
-            SliverToBoxAdapter(
-              child:
-                    Column(
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                var state = Provider.of<FeedState>(context, listen: false);
-                                state.setTweetToReply = tempFeed;
-                                Navigator.of(context).pushNamed('/ComposeTweetPage');
-                              },
-                              child: Text('Add Post')
-                              //isEditing == true ? Text('Finish') : Text('Edit')
-                          ),
-                          ListView(
-                            controller: scrollController,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            children:
-                            state.tweetReplyMap == null ||
-                                state.tweetReplyMap!.isEmpty ||
-                                state.tweetReplyMap![widget.tempFeed.key!] == null
-                                ? [
-                              Column(
-                                  children: [
-                                    SizedBox(height:140),
-                                    Center(
-                                        child: Text(
-                                          'Explore Your Groups',
-                                          style: TextStyle(fontSize: 34),
-                                        )
-                                    )
-                                  ]
-                              )
-                            ]
-                                :state.tweetReplyMap![widget.tempFeed.key!]!
-                                .map((x) => _commentRow(x))
-                                .toList(),
-                          )
+            iconTheme: IconThemeData(color: Colors.black),
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            bottom: PreferredSize(
+              child: Container(
+                color: Colors.grey.shade200,
+                height: 1.0,
+              ),
+              preferredSize: const Size.fromHeight(0.0),
+            ),
+          ),
+          SliverToBoxAdapter(
+              child: Column(
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    var state = Provider.of<FeedState>(context, listen: false);
+                    state.setTweetToReply = tempFeed;
+                    Navigator.of(context).pushNamed('/ComposeTweetPage');
+                  },
+                  child: Text('Add Post')
+                  //isEditing == true ? Text('Finish') : Text('Edit')
+                  ),
+              ListView(
+                controller: scrollController,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: state.tweetReplyMap == null ||
+                        state.tweetReplyMap!.isEmpty ||
+                        state.tweetReplyMap![widget.tempFeed.key!] == null
+                    ? [
+                        Column(children: [
+                          SizedBox(height: 140),
+                          Center(
+                              child: Text(
+                            'Explore Your Groups',
+                            style: TextStyle(fontSize: 34),
+                          ))
+                        ])
+                      ]
+                    : state.tweetReplyMap![widget.tempFeed.key!]!
+                        .map((x) => _commentRow(x))
+                        .toList(),
+              )
 
-                          /*tempFeed.goalPhotoList == null ? SizedBox() :
+              /*tempFeed.goalPhotoList == null ? SizedBox() :
                           GridView.builder(
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
@@ -174,13 +171,13 @@ class _TaskDetailState extends State<TaskDetailPage> {
                               );
                             },
                           ),*/
-                        ],
-                    )
-            )
-          ],
-        ),
-      );
+            ],
+          ))
+        ],
+      ),
+    );
   }
+
   Widget _commentRow(FeedModel model) {
     return Tweet(
       model: model,
@@ -191,8 +188,6 @@ class _TaskDetailState extends State<TaskDetailPage> {
     );
   }
 }
-
-
 
 class FullScreenPhoto extends StatelessWidget {
   final String photoUrl;

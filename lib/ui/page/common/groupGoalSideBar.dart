@@ -78,14 +78,14 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
                   ),
                   state.userModel!.isVerified ?? false
                       ? customIcon(context,
-                      icon: AppIcon.blueTick,
-                      isTwitterIcon: true,
-                      iconColor: AppColor.primary,
-                      size: 18,
-                      paddingIcon: 3)
+                          icon: AppIcon.blueTick,
+                          isTwitterIcon: true,
+                          iconColor: AppColor.primary,
+                          size: 18,
+                          paddingIcon: 3)
                       : const SizedBox(
-                    width: 0,
-                  ),
+                          width: 0,
+                        ),
                 ],
               ),
               subtitle: customText(
@@ -176,14 +176,14 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
       leading: icon == null
           ? null
           : Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: customIcon(
-          context,
-          icon: icon,
-          size: 25,
-          iconColor: isEnable ? AppColor.darkGrey : AppColor.lightGrey,
-        ),
-      ),
+              padding: const EdgeInsets.only(top: 5),
+              child: customIcon(
+                context,
+                icon: icon,
+                size: 25,
+                iconColor: isEnable ? AppColor.darkGrey : AppColor.lightGrey,
+              ),
+            ),
       title: customText(
         title,
         style: TextStyle(
@@ -255,7 +255,9 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
     List<FeedModel>? GroupList = [];
     String id = authState.userId!;
     if (state.feedList != null && state.feedList!.isNotEmpty) {
-      GroupList = state.feedList!.where((x) => x.memberList!.contains(id) && x.isGroupGoal == true).toList();
+      GroupList = state.feedList!
+          .where((x) => x.memberList!.contains(id) && x.isGroupGoal == true)
+          .toList();
     }
     return Drawer(
       child: SafeArea(
@@ -266,34 +268,36 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
               child: ListView(
                 // This next line does the trick.
                 scrollDirection: Axis.vertical,
-                children:
-                GroupList.asMap().entries.map((model) {
-                  return Row(children:[
-                    SizedBox(
-                      width:20,
-                    ),
-                    ElevatedButton(
-                      onPressed: (){
-                        setState(() {
-                          state.getPostDetailFromDatabase(null, model: model.value);
-                        });
-                        Navigator.push(context, TaskDetailPage.getRoute(model.value));
-                      },
-                      child: Text(model!.value.title!),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            // Change your radius here
-                            borderRadius: BorderRadius.circular(16),
+                children: GroupList.asMap().entries.map(
+                  (model) {
+                    return Row(children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            state.getPostDetailFromDatabase(null,
+                                model: model.value);
+                          });
+                          Navigator.push(
+                              context, TaskDetailPage.getRoute(model.value));
+                        },
+                        child: Text(model!.value.title!),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              // Change your radius here
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width:10,
-                    )
-                  ]);
-                },
+                      SizedBox(
+                        width: 10,
+                      )
+                    ]);
+                  },
                 ).toList(),
               ),
             ),

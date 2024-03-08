@@ -46,11 +46,9 @@ class UserModel extends Equatable {
       this.fcmToken,
       this.followersList,
       this.followingList,
-        this.grouplist,
-        this.groups,
-        this.closenessMap
-
-      });
+      this.grouplist,
+      this.groups,
+      this.closenessMap});
 
   UserModel.fromJson(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -130,53 +128,51 @@ class UserModel extends Equatable {
     };
   }
 
-  UserModel copyWith({
-    String? email,
-    String? userId,
-    String? displayName,
-    String? profilePic,
-    String? key,
-    String? contact,
-    String? bio,
-    String? dob,
-    String? bannerImage,
-    String? location,
-    String? createdAt,
-    String? userName,
-    int? followers,
-    int? following,
-    String? webSite,
-    bool? isVerified,
-    String? fcmToken,
-    List<String>? followingList,
-    List<String>? followersList,
-    List<String>? grouplist,
-    List<String>? closenessMap,
-    int? groups
-  }) {
+  UserModel copyWith(
+      {String? email,
+      String? userId,
+      String? displayName,
+      String? profilePic,
+      String? key,
+      String? contact,
+      String? bio,
+      String? dob,
+      String? bannerImage,
+      String? location,
+      String? createdAt,
+      String? userName,
+      int? followers,
+      int? following,
+      String? webSite,
+      bool? isVerified,
+      String? fcmToken,
+      List<String>? followingList,
+      List<String>? followersList,
+      List<String>? grouplist,
+      List<String>? closenessMap,
+      int? groups}) {
     return UserModel(
-      email: email ?? this.email,
-      bio: bio ?? this.bio,
-      contact: contact ?? this.contact,
-      createdAt: createdAt ?? this.createdAt,
-      displayName: displayName ?? this.displayName,
-      dob: dob ?? this.dob,
-      followers: followers ?? this.followers,
-      following: following ?? this.following,
-      isVerified: isVerified ?? this.isVerified,
-      key: key ?? this.key,
-      location: location ?? this.location,
-      profilePic: profilePic ?? this.profilePic,
-      bannerImage: bannerImage ?? this.bannerImage,
-      userId: userId ?? this.userId,
-      userName: userName ?? this.userName,
-      webSite: webSite ?? this.webSite,
-      fcmToken: fcmToken ?? this.fcmToken,
-      followersList: followersList ?? this.followersList,
-      followingList: followingList ?? this.followingList,
-      grouplist: grouplist ?? this.grouplist,
-      closenessMap: closenessMap ?? this.closenessMap
-    );
+        email: email ?? this.email,
+        bio: bio ?? this.bio,
+        contact: contact ?? this.contact,
+        createdAt: createdAt ?? this.createdAt,
+        displayName: displayName ?? this.displayName,
+        dob: dob ?? this.dob,
+        followers: followers ?? this.followers,
+        following: following ?? this.following,
+        isVerified: isVerified ?? this.isVerified,
+        key: key ?? this.key,
+        location: location ?? this.location,
+        profilePic: profilePic ?? this.profilePic,
+        bannerImage: bannerImage ?? this.bannerImage,
+        userId: userId ?? this.userId,
+        userName: userName ?? this.userName,
+        webSite: webSite ?? this.webSite,
+        fcmToken: fcmToken ?? this.fcmToken,
+        followersList: followersList ?? this.followersList,
+        followingList: followingList ?? this.followingList,
+        grouplist: grouplist ?? this.grouplist,
+        closenessMap: closenessMap ?? this.closenessMap);
   }
 
   String get getFollower {
@@ -208,8 +204,8 @@ class UserModel extends Equatable {
         fcmToken,
         followersList,
         followingList,
-    grouplist,
-    groups,
-    closenessMap
+        grouplist,
+        groups,
+        closenessMap
       ];
 }

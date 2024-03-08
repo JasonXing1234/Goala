@@ -90,7 +90,6 @@ class CustomScreenLoader extends StatelessWidget {
                   : const CircularProgressIndicator(
                       strokeWidth: 2,
                     ),
-
             ],
           ),
         ),

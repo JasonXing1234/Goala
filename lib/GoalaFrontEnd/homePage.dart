@@ -184,20 +184,20 @@ class _HomePageState extends State<HomePage> {
   Widget _body() {
     return SafeArea(
       child: Container(
-
         child: _getPage(Provider.of<AppState>(context).pageIndex),
       ),
     );
   }
 
   Widget _getPage(int index) {
-
     switch (index) {
       case 0:
         return CurrentUserProfilePage(scaffoldKey: _scaffoldKey);
       case 1:
-        return FeedPage(scaffoldKey: _scaffoldKey,
-          refreshIndicatorKey: refreshIndicatorKey,);
+        return FeedPage(
+          scaffoldKey: _scaffoldKey,
+          refreshIndicatorKey: refreshIndicatorKey,
+        );
       case 2:
         return SearchUsersPage(scaffoldKey: _scaffoldKey);
       /*case 3:
@@ -208,8 +208,10 @@ class _HomePageState extends State<HomePage> {
       /*case 3:
         return ChatListPage(scaffoldKey: _scaffoldKey);*/
       default:
-        return FeedPage(scaffoldKey: _scaffoldKey,
-          refreshIndicatorKey: refreshIndicatorKey,);
+        return FeedPage(
+          scaffoldKey: _scaffoldKey,
+          refreshIndicatorKey: refreshIndicatorKey,
+        );
     }
   }
 
@@ -219,8 +221,8 @@ class _HomePageState extends State<HomePage> {
     context.read<SuggestionsState>().initUser(state.userModel);
 
     //if (context
-     //   .select<SuggestionsState, bool>((state) => state.displaySuggestions)) {
-     // return SuggestedUsers();
+    //   .select<SuggestionsState, bool>((state) => state.displaySuggestions)) {
+    // return SuggestedUsers();
     //}
 
     return Scaffold(

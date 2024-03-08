@@ -43,15 +43,15 @@ class _ChildWidgetState extends State<ChildWidget> {
         Wrap(
           children: _selectedFriends
               .map((friend) => ChoiceChip(
-            label: Text(friend.displayName!),
-            selected: true,
-            onSelected: (isSelected) {
-              setState(() {
-                _selectedFriends.removeWhere((f) => f == friend);
-                widget.onSelectionChanged(_selectedFriends);
-              });
-            },
-          ))
+                    label: Text(friend.displayName!),
+                    selected: true,
+                    onSelected: (isSelected) {
+                      setState(() {
+                        _selectedFriends.removeWhere((f) => f == friend);
+                        widget.onSelectionChanged(_selectedFriends);
+                      });
+                    },
+                  ))
               .toList(),
         ),
       ],
@@ -117,7 +117,8 @@ class _SelectFriendsDialogState extends State<SelectFriendsDialog> {
                       if (value == true) {
                         _selectedFriends.add(friend);
                       } else {
-                        _selectedFriends.removeWhere((selected) => selected == friend);
+                        _selectedFriends
+                            .removeWhere((selected) => selected == friend);
                       }
                     });
                   },

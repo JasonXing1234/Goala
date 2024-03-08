@@ -442,7 +442,8 @@ class TweetBottomSheet {
                 childRetwetkey: model.getTweetKeyToRetweet,
                 createdAt: DateTime.now().toUtc().toString(),
                 user: myUser,
-                userId: myUser.userId!, isHabit: false);
+                userId: myUser.userId!,
+                isHabit: false);
             state.createTweet(post);
 
             Navigator.pop(context);
