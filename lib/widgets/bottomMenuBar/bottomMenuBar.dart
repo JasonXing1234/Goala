@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Goala/goalaicon/flutter-icons-bd835920/my_flutter_app_icons.dart';
 import 'package:Goala/state/appState.dart';
-import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/bottomMenuBar/tabItem.dart';
 import 'package:provider/provider.dart';
 

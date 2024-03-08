@@ -2,10 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/user.dart';
-import 'package:provider/provider.dart';
 import '../model/feedModel.dart';
 import 'appState.dart';
-import 'authState.dart';
 
 class SearchState extends AppState {
   bool isBusy = false;

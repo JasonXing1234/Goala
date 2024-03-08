@@ -8,7 +8,6 @@ import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/model/GoalNotificationModel.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
-import 'package:Goala/ui/page/feed/composeTweet/widget/composeBottomIconWidget.dart';
 import 'package:Goala/ui/page/feed/composeTweet/widget/composeTweetImage.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
@@ -20,7 +19,6 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../ui/RoundedButton.dart';
 import '../ui/constants.dart';
 import '../widgets/newWidget/customizedTitleText.dart';
 

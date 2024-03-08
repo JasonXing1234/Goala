@@ -15,12 +15,10 @@ import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
 import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:http/http.dart' as http;
 import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/PokeButton.dart';
-import '../widgets/tweet/widgets/retweetWidget.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
 
 class Tweet extends StatelessWidget {

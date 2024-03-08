@@ -16,8 +16,6 @@ import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/notificationState.dart';
 import 'package:Goala/state/searchState.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
-import 'package:Goala/ui/page/feed/suggestedUsers.dart';
-import 'package:Goala/ui/page/message/chatListPage.dart';
 import 'package:Goala/GoalaFrontEnd/profilePage.dart';
 import 'package:Goala/GoalaFrontEnd/SearchUsersPage.dart';
 import 'package:Goala/widgets/bottomMenuBar/bottomMenuBar.dart';
@@ -26,7 +24,6 @@ import 'package:provider/provider.dart';
 import '../ui/page/common/locator.dart';
 import '../ui/page/common/sidebar.dart';
 import 'FeedPage1.dart';
-import '../ui/page/notification/notificationPage.dart';
 import 'CurrentUserProfilePage.dart';
 
 class HomePage extends StatefulWidget {

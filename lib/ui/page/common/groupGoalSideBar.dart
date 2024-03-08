@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/constant.dart';
 import 'package:Goala/state/authState.dart';
-import 'package:Goala/ui/page/bookmark/bookmarkPage.dart';
 import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
 import 'package:Goala/ui/page/profile/follow/followingListPage.dart';
 import 'package:Goala/GoalaFrontEnd/profilePage.dart';

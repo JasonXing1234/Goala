@@ -5,12 +5,10 @@ import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
-import 'package:Goala/ui/RoundedButton.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/newWidget/title_text.dart';
 import '../widgets/tweet/widgets/tweetBottomSheet.dart';
 
 class TaskDetailPage extends StatefulWidget {
