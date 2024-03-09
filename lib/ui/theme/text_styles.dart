@@ -10,6 +10,13 @@ class TextStyles {
   static TextStyle get onPrimarySubTitleText {
     return const TextStyle(
       color: Colors.white,
+        fontSize: 16, fontWeight: FontWeight.bold
+    );
+  }
+  static TextStyle get onPrimarySubTitleTextBlack {
+    return const TextStyle(
+      color: Colors.black,
+        fontSize: 16, fontWeight: FontWeight.bold
     );
   }
 

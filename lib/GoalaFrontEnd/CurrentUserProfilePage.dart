@@ -454,7 +454,7 @@ class _UserTileState extends State<_UserTile> {
                 onPressed: () async {
                   var state = Provider.of<FeedState>(context, listen: false);
                   var tempTweet = await state.fetchTweet(widget.tweet.key!);
-                  tempTweet!.checkInList![tempTweet!.checkInList!.length! - 1] =
+                  tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
                       true;
                   FirebaseDatabase.instance
                       .reference()

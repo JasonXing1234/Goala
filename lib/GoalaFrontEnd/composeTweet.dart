@@ -1,5 +1,9 @@
 import 'dart:io';
+import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -21,6 +25,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../ui/constants.dart';
 import '../widgets/newWidget/customizedTitleText.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:uuid/uuid.dart';
 
 class ComposeTweetPage extends StatefulWidget {
   const ComposeTweetPage(
@@ -39,8 +45,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   late FeedModel? model;
   late ScrollController scrollController;
   List<String?> selectedImages = [];
-
+  String imageUrl = '';
   File? _image;
+  String imageUid = const Uuid().v4();
   DateTime selectedDate = DateTime.now();
   bool dateSelected = false;
   late TextEditingController _descriptionController;
@@ -51,6 +58,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   TimeOfDay? pickedTime;
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, false);
+  List<bool> _selections = [false, false];
 
   @override
   void dispose() {
@@ -121,7 +129,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
     List<GoalNotiModel> NotiModelList = [];
-
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -180,6 +187,23 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         tweetId = await state.addCommentToPost(tweetModel);
         if (tweetModel.goalPhotoList!.length != 0) {
           state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
+        }
+        if(_selections[0] == true) {
+          var state = Provider.of<FeedState>(context, listen: false);
+          var tempTweet = await state.fetchTweet(model!.key!);
+          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
+          true;
+          FirebaseDatabase.instance
+              .reference()
+              .child("tweet")
+              .child(model!.key!)
+              .update({
+            "checkInList": tempTweet.checkInList,
+            "isCheckedIn": true,
+          }).catchError((onError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(onError)));
+          });
         }
       }
     }
@@ -281,22 +305,36 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     return reply;
   }
 
+  Future<void> setImage(ImageSource source) async {
+    XFile? image;
+    try {
+      image = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 20);
+    } catch (e) {
+      SnackBar snackBar = const SnackBar(
+        content: Text('Invalid image was selected.'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // print(e.toString());
+    }
+    if (image == null) {
+      return;
+    }
+    final ref = FirebaseStorage.instance.ref().child('Goals').child('$imageUid.jpg');
+    await ref.putFile(File(image.path));
+    imageUrl = await ref.getDownloadURL();
+    setState(() {
+      imageUrl = imageUrl;
+      selectedImages.add(imageUrl);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _multiSelectKey = GlobalKey<FormFieldState>();
-    var authState = Provider.of<AuthState>(context, listen: false);
-    var searchstate = Provider.of<SearchState>(context);
-    var feedState = Provider.of<FeedState>(context, listen: false);
-    List<UserModel?> selectedUsers = [];
-    List<UserModel?> FriendList = [];
-    if (authState.userModel!.followingList != null &&
-        authState.userModel!.followingList!.isNotEmpty) {
-      for (int i = 0; i < authState.userModel!.followingList!.length; i++) {
-        FriendList =
-            searchstate.getuserDetail(authState.userModel!.followingList!);
-      }
-    }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: customTitleText(''),
         onActionPressed: _submitButton,
@@ -312,378 +350,230 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Stack(
+      body:
+      ProgressHUD(
+    child: Builder(builder: (context) {
+      return Stack(
         //!Removed container
         children: <Widget>[
           SingleChildScrollView(
             controller: scrollController,
-            child: Container(
-              height: context.height,
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: Column(
+            child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child:
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: widget.isTweet
-                        ? customizedTitleText('Personal', 25)
-                        : customizedTitleText('New Post', 25),
+                    child: Text(model!.title!, style: TextStyles.titleStyle),
                   ),
-                  if (widget.isTweet)
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ToggleButtons(
-                          borderColor: Colors.grey,
-                          fillColor: AppColor.PROGRESS_COLOR,
-                          borderWidth: 2,
-                          selectedBorderColor: AppColor.PROGRESS_COLOR,
-                          selectedColor: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 60),
-                              child: customizedTitleText('Habit', 18),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 60),
-                              child: customizedTitleText('Goal', 18),
-                            ),
-                          ],
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int i = 0; i < isSelected.length; i++) {
-                                isSelected[i] = i == index;
-                              }
-                            });
-                          },
-                          isSelected: isSelected,
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    height: 10,
+                  Center(
+                    child: Text(model!.description!, style: TextStyles.subtitleStyle),
                   ),
-                  if (widget.isTweet)
-                    Center(
-                      child: SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _titleController,
-                          textAlign: TextAlign.center,
-                          maxLength: 50,
-                          decoration:
-                              kTextFieldDecoration.copyWith(hintText: "title"),
-                        ),
-                      ),
-                    ),
-                  if (widget.isTweet)
-                    Center(
-                      child: SizedBox(
-                        width: 340,
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _descriptionController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(
-                              hintText: "description"),
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  if (widget.isTweet && isSelected[0] == false)
-                    SizedBox(
-                      height: 10,
-                    ),
-                  if (widget.isTweet && isSelected[0] == false)
-                    Center(
-                      child: SizedBox(
-                        width: 340,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _goalSumController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(
-                              hintText: "goal number"),
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  widget.isTweet
-                      ? Row(
-                          children: [
-                            SizedBox(width: 58),
-                            customTitleText('Complete By:'),
-                            SizedBox(width: 15),
-                            ElevatedButton(
-                              onPressed: () => _selectDate(
-                                  context), // Call the _selectDate function when the button is pressed
-                              child: dateSelected == true
-                                  ? Text(
-                                      "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
-                                  : Text('Select Date'),
-                            ),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                  SizedBox(height: 10),
-                  widget.isTweet
-                      ? const SizedBox.shrink()
-                      : Center(
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    AppColor.PROGRESS_COLOR)),
-                            // TO change button color
-                            child: const Text('Select Image'),
-                            onPressed: () async {
-                              final picker = ImagePicker();
-                              await picker
-                                  .pickImage(imageQuality: 50, source: ImageSource.gallery)
-                                  .then((file,) async {
-                                List<File>? tempfile = [];
-                                tempfile.add(File(file!.path));
-                                if (tempfile.isNotEmpty) {
-                                  selectedImages.add(await feedState
-                                      .uploadFile(tempfile[0]));
-                                }
-                              });
-                              //TODO: keep this commented multi photo picker code, might be useful in the future
-                              /*await picker
-                                  .pickMultiImage(imageQuality: 50)
-                                  .then((
-                                List<XFile> files,
-                              ) async {
-                                List<File>? tempfiles = files
-                                    .map((xFile) => File(xFile.path))
-                                    .toList();
-                                if (tempfiles.isNotEmpty) {
-                                  for (var i = 0; i < tempfiles.length; i++) {
-                                    selectedImages.add(await feedState
-                                        .uploadFile(tempfiles[i]));
-                                  }
-                                }
-                              });*/
-                              // if atleast 1 images is selected it will add
-                              // all images in selectedImages
-                              // variable so that we can easily show them in UI
-                            },
-                          ),
-                        ),
-                  widget.isTweet
-                      ? const SizedBox.shrink()
-                      : SizedBox(
-                          width: 300.0,
-                          height: 100, // To show images in particular area only
-                          child:
-                              selectedImages.isEmpty // If no images is selected
-                                  ? const Center(
-                                      child: Text('Sorry nothing selected!!'))
-                                  : Image.network(selectedImages[0]!)),
-                  if (widget.isTweet)
-                    Column(
-                      children: [
-                        Center(
-                          child: Wrap(
-                            children: List.generate(days.length, (index) {
-                              return ChoiceChip(
-                                selectedColor: AppColor.PROGRESS_COLOR,
-                                showCheckmark: false,
-                                label: Text(days[index]),
-                                selected: daySelected[index],
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    daySelected[index] = selected;
-                                  });
-                                },
-                              );
-                            }),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final TimeOfDay? time = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
-                            if (time != null) {
-                              setState(() {
-                                pickedTime = time;
-                              });
-                            }
-                          },
-                          child: pickedTime == null
-                              ? Text('Pick a Time')
-                              : Text(pickedTime.toString().substring(10, 15)),
-                        ),
-                      ],
-                    ),
                   SizedBox(
                     height: 20,
                   ),
-                  Flexible(
-                    child: Stack(
-                      children: <Widget>[
-                        ComposeTweetImage(
-                          image: _image,
-                          onCrossIconPressed: _onCrossIconPressed,
+                  Center(
+                      child: Container(
+                        width: 330,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Color of the border
+                            width: 0.2, // Width of the border
+                          ),
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
                         ),
-                        _UserList(
-                          list: Provider.of<SearchState>(context).userlist,
-                          textEditingController: _descriptionController,
-                        )
-                      ],
-                    ),
+                        child:
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            SizedBox(
+                                height: 41,
+                                width: 300,
+                                child:
+                                  CustomProgressBar(
+                                    progress: model!.isHabit == false
+                                        ? model!.GoalAchieved! / model!.GoalSum!
+                                        : model!.checkInList!
+                                        .where((item) => item == true)
+                                        .length /
+                                        8,
+                                    height: 41,
+                                    width: 300,
+                                    backgroundColor: Colors.grey[300]!,
+                                    progressColor: AppColor.PROGRESS_COLOR,
+                                    daysLeft: DateTime(
+                                        int.parse(model!.deadlineDate!.split('-')[0]),
+                                        int.parse(model!.deadlineDate!.split('-')[1]),
+                                        int.parse(model!.deadlineDate!.split('-')[2]))
+                                        .difference(DateTime(DateTime.now().year,
+                                        DateTime.now().month, DateTime.now().day))
+                                        .inDays, isHabit: model!.isHabit,
+                                    checkInDays: model!.checkInList!,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text('Did you?', style: TextStyles.subtitleStyle),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Center(
+                                child:Row(
+                                  children: [
+                                    ToggleButtons(
+                                      color: Colors.black,
+                                      //selectedColor: Colors.white,
+                                      fillColor: Colors.white,
+                                      renderBorder: false,
+                                      onPressed: (int index) {
+                                        setState(() {
+                                          // This logic sets true for the tapped button and false for the other
+                                          for (int buttonIndex = 0; buttonIndex < _selections.length; buttonIndex++) {
+                                            if (buttonIndex == index) {
+                                              _selections[buttonIndex] = true;
+                                            } else {
+                                              _selections[buttonIndex] = false;
+                                            }
+                                          }
+                                        });
+                                      },
+                                      isSelected: _selections,
+                                      children: List<Widget>.generate(
+                                        2,
+                                        (index) => Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: index == 0 ? AppColor.PROGRESS_COLOR : _selections[1] == false ? Colors.grey : Colors.black,
+                                              borderRadius: BorderRadius.circular(8),
+
+                                            ),
+                                          padding: const EdgeInsets.all(5),
+                                          width: 140,
+                                          height: 50,
+                                          alignment: Alignment.center,
+                                          child: index == 0 ? Text('Yes!', style: TextStyles.onPrimarySubTitleTextBlack) :
+                                          Text('Nope.', style: _selections[1] == false ? TextStyles.onPrimarySubTitleTextBlack : TextStyles.onPrimarySubTitleText),
+                                          ),
+                                        )
+                                      )
+                                    ),
+                                  ],
+                                ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Center(
+                              child: SizedBox(
+                                width: 300,
+                                height: 41,
+                                child: TextFormField(
+                                  style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary),
+                                  cursorColor: Theme.of(context).colorScheme.secondary,
+                                  controller: _descriptionController,
+                                  textAlign: TextAlign.center,
+                                  decoration: kTextFieldDecoration.copyWith(
+                                      hintText: "description"),
+                                ),
+                              ),
+                            ),
+                            widget.isTweet
+                                ? const SizedBox.shrink()
+                                : Center(
+                              child:
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0, horizontal: 0.0),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: imageUrl.isEmpty ? 89.0 : 0.0,
+                                      horizontal: imageUrl.isEmpty ? 89.0 : 0.0
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(0xFF, 0xEC, 0xEC, 0xEC),
+                                    border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1.0),
+                                    borderRadius:
+                                    const BorderRadius.all(Radius.circular(8.0)),
+                                  ),
+                                  child: imageUrl.isEmpty
+                                      ? IconButton(
+                                    icon: Icon(
+                                      Icons.add_photo_alternate_outlined,
+                                      color: Colors.grey,
+                                    ),
+                                    iconSize: imageUrl.isEmpty ? 100 : null,
+                                    onPressed: () async {
+                                      final progress = ProgressHUD.of(context);
+                                      progress!.showWithText('Loading');
+                                      await setImage(ImageSource.gallery);
+                                      progress.dismiss();
+                                    },
+                                  )
+                                      : ClipRRect(
+                                    borderRadius:
+                                    const BorderRadius.all(Radius.circular(8.0)),
+                                    child: Stack(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: imageUrl,
+                                          placeholder: (context, url) => Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(100.0),
+                                                child: Image.asset(
+                                                  'assets/images/goala.png',
+                                                  width: 100,
+                                                  height: 100,
+                                                ),
+                                              )),
+                                          errorWidget: (context, url, error) =>
+                                          const Center(
+                                            child: Text('Unable to load image...'),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 0.0,
+                                          top: 0.0,
+                                          child: FloatingActionButton(
+                                            mini: true,
+                                            backgroundColor: Colors.red,
+                                            foregroundColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {
+                                                imageUrl = '';
+                                                selectedImages.clear();
+                                              });
+                                            },
+                                            child: const Icon(Icons.remove),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
-            ),
+              ),
           ),
-          /*Align(
-            alignment: Alignment.bottomCenter,
-            child: ComposeBottomIconWidget(
-              textEditingController: _descriptionController,
-              onImageIconSelected: _onImageIconSelected,
-            ),
-          ),*/
         ],
-      ),
-    );
-  }
-}
-
-class _TextField extends StatelessWidget {
-  const _TextField(
-      {Key? key,
-      required this.textEditingController,
-      this.isTweet = false,
-      this.isRetweet = false})
-      : super(key: key);
-  final TextEditingController textEditingController;
-  final bool isTweet;
-  final bool isRetweet;
-
-  @override
-  Widget build(BuildContext context) {
-    final searchState = Provider.of<SearchState>(context, listen: false);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TextField(
-          controller: textEditingController,
-          onChanged: (text) {
-            //Provider.of<ComposeTweetState>(context, listen: false)
-            //   .onDescriptionChanged(text, searchState);
-          },
-          maxLines: null,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: isTweet
-                  ? 'What\'s happening?'
-                  : isRetweet
-                      ? 'Add a comment'
-                      : 'Tweet your reply',
-              hintStyle: const TextStyle(fontSize: 18)),
-        ),
-      ],
-    );
-  }
-}
-
-class _UserList extends StatelessWidget {
-  const _UserList({Key? key, this.list, required this.textEditingController})
-      : super(key: key);
-  final List<UserModel>? list;
-  final TextEditingController textEditingController;
-
-  @override
-  Widget build(BuildContext context) {
-    return !Provider.of<ComposeTweetState>(context).displayUserList ||
-            list == null ||
-            list!.length < 0 ||
-            list!.isEmpty
-        ? const SizedBox.shrink()
-        : Container(
-            padding: const EdgeInsetsDirectional.only(bottom: 50),
-            color: TwitterColor.white,
-            constraints:
-                const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
-            child: ListView.builder(
-              itemCount: list!.length,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return _UserTile(
-                  user: list![index],
-                  onUserSelected: (user) {
-                    textEditingController.text =
-                        Provider.of<ComposeTweetState>(context, listen: false)
-                                .getDescription(user.userName!) +
-                            " ";
-                    textEditingController.selection = TextSelection.collapsed(
-                        offset: textEditingController.text.length);
-                    Provider.of<ComposeTweetState>(context, listen: false)
-                        .onUserSelected();
-                  },
-                );
-              },
-            ),
-          );
-  }
-}
-
-class _UserTile extends StatelessWidget {
-  const _UserTile({Key? key, required this.user, required this.onUserSelected})
-      : super(key: key);
-  final UserModel user;
-  final ValueChanged<UserModel> onUserSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        onUserSelected(user);
-      },
-      leading: CircularImage(path: user.profilePic, height: 35),
-      title: Row(
-        children: <Widget>[
-          ConstrainedBox(
-            constraints:
-                BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
-            child: TitleText(user.displayName!,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                overflow: TextOverflow.ellipsis),
-          ),
-          const SizedBox(width: 3),
-          user.isVerified!
-              ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                  paddingIcon: 3,
-                )
-              : const SizedBox(width: 0),
-        ],
-      ),
-      subtitle: Text(user.userName!),
+      );}))
     );
   }
 }
