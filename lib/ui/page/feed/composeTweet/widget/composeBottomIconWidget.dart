@@ -59,21 +59,25 @@ class _ComposeBottomIconWidgetState extends State<ComposeBottomIconWidget> {
       child: Row(
         children: <Widget>[
           IconButton(
-              onPressed: () {
-                setImage(ImageSource.gallery);
-              },
-              icon: customIcon(context,
-                  icon: AppIcon.image,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary)),
+            onPressed: () {
+              setImage(ImageSource.gallery);
+            },
+            icon: customIcon(
+              context,
+              icon: AppIcon.image,
+              iconColor: AppColor.primary,
+            ),
+          ),
           IconButton(
-              onPressed: () {
-                setImage(ImageSource.camera);
-              },
-              icon: customIcon(context,
-                  icon: AppIcon.camera,
-                  isTwitterIcon: true,
-                  iconColor: AppColor.primary)),
+            onPressed: () {
+              setImage(ImageSource.camera);
+            },
+            icon: customIcon(
+              context,
+              icon: AppIcon.camera,
+              iconColor: AppColor.primary,
+            ),
+          ),
           Expanded(
               child: Align(
             alignment: Alignment.centerRight,

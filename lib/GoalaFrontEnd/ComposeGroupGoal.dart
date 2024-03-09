@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -8,7 +7,6 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
-import 'package:Goala/ui/page/feed/composeTweet/widget/composeBottomIconWidget.dart';
 import 'package:Goala/ui/page/feed/composeTweet/widget/composeTweetImage.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
@@ -130,7 +128,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     if (_descriptionController.text.isEmpty ||
         _descriptionController.text.length > 50 ||
         _titleController.text.isEmpty ||
-        _titleController.text.length > 10 || pickedTime == null) {
+        _titleController.text.length > 10 ||
+        pickedTime == null) {
       return;
     }
     var state = Provider.of<FeedState>(context, listen: false);
@@ -279,11 +278,13 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalSum: isSelected[0] == true ? null : widget.isTweet
-          ? isSelected[0]
-              ? 0
-              : int.parse(_goalSumController.text)
-          : 0,
+      GoalSum: isSelected[0] == true
+          ? null
+          : widget.isTweet
+              ? isSelected[0]
+                  ? 0
+                  : int.parse(_goalSumController.text)
+              : 0,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     );
@@ -397,9 +398,10 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         ),
                       ),
                     ),
-                  if (widget.isTweet && isSelected[0] == false) SizedBox(
-                    height: 10,
-                  ),
+                  if (widget.isTweet && isSelected[0] == false)
+                    SizedBox(
+                      height: 10,
+                    ),
                   if (widget.isTweet && isSelected[0] == false)
                     SizedBox(
                       height: 15,
@@ -422,21 +424,22 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     SizedBox(height: 10),
-                  if (widget.isTweet && isSelected[0] == false) Row(
-                    children: [
-                      SizedBox(width: 58),
-                      customTitleText('Complete By:'),
-                      SizedBox(width: 15),
-                      ElevatedButton(
-                        onPressed: () => _selectDate(
-                            context), // Call the _selectDate function when the button is pressed
-                        child: dateSelected == true
-                            ? Text(
-                                "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
-                            : Text('Select Date'),
-                      ),
-                    ],
-                  ),
+                  if (widget.isTweet && isSelected[0] == false)
+                    Row(
+                      children: [
+                        SizedBox(width: 58),
+                        customTitleText('Complete By:'),
+                        SizedBox(width: 15),
+                        ElevatedButton(
+                          onPressed: () => _selectDate(
+                              context), // Call the _selectDate function when the button is pressed
+                          child: dateSelected == true
+                              ? Text(
+                                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
+                              : Text('Select Date'),
+                        ),
+                      ],
+                    ),
                   SizedBox(height: 10),
                   SizedBox(
                     height: 20,
@@ -500,7 +503,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           }),
                         ),
                       ),
-                      //TODO:TEXT
+                      Text("Hello"),
                       SizedBox(
                         height: 15,
                       ),
@@ -615,10 +618,8 @@ class _UserTile extends StatelessWidget {
               ? customIcon(
                   context,
                   icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
                   iconColor: AppColor.primary,
                   size: 13,
-                  paddingIcon: 3,
                 )
               : const SizedBox(width: 0),
         ],

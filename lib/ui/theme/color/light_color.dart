@@ -19,11 +19,11 @@ class TwitterColor {
 class AppColor {
   static const Color primary = Color(0xff000000);
   static const Color secondary = Color(0xff000000);
-  static const Color darkGrey = Color(0xff000000);
-  static const Color lightGrey = Color(0xff000000);
-  static const Color extraLightGrey = Color(0xff000000);
-  static const Color extraExtraLightGrey = Color(0xff000000);
-  static const Color white = Color(0xff000000);
+  static const Color darkGrey = Color(0xff222222);
+  static const Color lightGrey = Color(0xff444444);
+  static const Color extraLightGrey = Color(0xff666666);
+  static const Color extraExtraLightGrey = Color(0xff888888);
+  static const Color white = Color(0xFFFFFFFF);
 
   static const Color PROGRESS_COLOR = Color(0xFF29AB87);
 }

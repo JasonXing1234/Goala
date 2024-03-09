@@ -51,10 +51,8 @@ class ConversationInformation extends StatelessWidget {
                   ? customIcon(
                       context,
                       icon: AppIcon.blueTick,
-                      isTwitterIcon: true,
                       iconColor: AppColor.primary,
                       size: 18,
-                      paddingIcon: 3,
                     )
                   : const SizedBox(width: 0),
             ],

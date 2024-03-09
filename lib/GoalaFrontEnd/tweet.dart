@@ -288,18 +288,17 @@ class _TweetBodyState extends State<_TweetBody> {
                                 constraints: BoxConstraints(
                                     minWidth: 0, maxWidth: context.width * .5),
                                 child: Text(
-                                    widget.model.user!.displayName!,
-                                    style: TextStyles.titleStyle,),
+                                  widget.model.user!.displayName!,
+                                  style: TextStyles.titleStyle,
+                                ),
                               ),
                               const SizedBox(width: 3),
                               widget.model.user!.isVerified!
                                   ? customIcon(
                                       context,
                                       icon: AppIcon.blueTick,
-                                      isTwitterIcon: true,
                                       iconColor: AppColor.primary,
                                       size: 13,
-                                      paddingIcon: 3,
                                     )
                                   : const SizedBox(width: 0),
                               SizedBox(
@@ -325,31 +324,33 @@ class _TweetBodyState extends State<_TweetBody> {
                                 height: 25,
                                 width: 230,
                                 child: CustomProgressBar(
-                                progress: widget.model.isHabit == false
-                                    ? tempModel!.GoalAchieved! /
-                                        tempModel!.GoalSum!
-                                    : tempModel!.checkInList!
-                                            .where((item) => item == true)
-                                            .length /
-                                        8,
-                                height: 25,
-                                width: 230,
-                                backgroundColor: Colors.grey[300]!,
-                                progressColor: AppColor.PROGRESS_COLOR,
-                                daysLeft: DateTime(
-                                        int.parse(tempModel!.deadlineDate!
-                                            .split('-')[0]),
-                                        int.parse(tempModel!.deadlineDate!
-                                            .split('-')[1]),
-                                        int.parse(tempModel!.deadlineDate!
-                                            .split('-')[2]))
-                                    .difference(DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day))
-                                    .inDays,
-                                isHabit: tempModel!.isHabit, checkInDays: widget.model.checkInList!,
-                              ),),
+                                  progress: widget.model.isHabit == false
+                                      ? tempModel!.GoalAchieved! /
+                                          tempModel!.GoalSum!
+                                      : tempModel!.checkInList!
+                                              .where((item) => item == true)
+                                              .length /
+                                          8,
+                                  height: 25,
+                                  width: 230,
+                                  backgroundColor: Colors.grey[300]!,
+                                  progressColor: AppColor.PROGRESS_COLOR,
+                                  daysLeft: DateTime(
+                                          int.parse(tempModel!.deadlineDate!
+                                              .split('-')[0]),
+                                          int.parse(tempModel!.deadlineDate!
+                                              .split('-')[1]),
+                                          int.parse(tempModel!.deadlineDate!
+                                              .split('-')[2]))
+                                      .difference(DateTime(
+                                          DateTime.now().year,
+                                          DateTime.now().month,
+                                          DateTime.now().day))
+                                      .inDays,
+                                  isHabit: tempModel!.isHabit,
+                                  checkInDays: widget.model.checkInList!,
+                                ),
+                              ),
                               SizedBox(width: 20),
                               PokeButton(onPressed: () {
                                 _onPressPoke(widget.model.deviceToken,
@@ -359,29 +360,31 @@ class _TweetBodyState extends State<_TweetBody> {
                           )
                         : SizedBox.shrink(),
                     widget.model.parentName != null
-                        ? Text(widget.model.parentName!, style: TextStyles.subtitleStyle,)
+                        ? Text(
+                            widget.model.parentName!,
+                            style: TextStyles.subtitleStyle,
+                          )
                         : Text(''),
-                    SizedBox(height:15),
+                    SizedBox(height: 15),
                     widget.model.goalPhotoList != null
-                        ?
-                    Container(
-                      width: 160, // Specify the width of the container
-                      height: 160, // Specify the height of the container
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ClipRRect(
-                        // Use ClipRRect for borderRadius if needed
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          widget.model.goalPhotoList![0]!,
-                          fit: BoxFit
-                              .cover, // This ensures the image covers the container
-                        ),
-                      ),
-                    )
-                    //TODO:Keep this listview gallery code, might be useful in the future
-                    /*SizedBox(
+                        ? Container(
+                            width: 160, // Specify the width of the container
+                            height: 160, // Specify the height of the container
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ClipRRect(
+                              // Use ClipRRect for borderRadius if needed
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                widget.model.goalPhotoList![0]!,
+                                fit: BoxFit
+                                    .cover, // This ensures the image covers the container
+                              ),
+                            ),
+                          )
+                        //TODO:Keep this listview gallery code, might be useful in the future
+                        /*SizedBox(
                             height: 200,
                             child:
                             ListView.builder(
@@ -486,10 +489,8 @@ class _TweetDetailBody extends StatelessWidget {
                         ? customIcon(
                             context,
                             icon: AppIcon.blueTick,
-                            isTwitterIcon: true,
                             iconColor: AppColor.primary,
                             size: 13,
-                            paddingIcon: 3,
                           )
                         : const SizedBox(width: 0),
                     SizedBox(
@@ -592,11 +593,13 @@ class CustomProgressBar extends StatelessWidget {
           ),
         ),
         Center(
-            child: isHabit == true ? Text(calculateStreak(checkInDays).toString() + ' days streak', style: TextStyle(fontSize: 12)) :
-            Text(
-          daysLeft.toString() + ' days left',
-          style: TextStyle(fontSize: 12),
-        )),
+            child: isHabit == true
+                ? Text(calculateStreak(checkInDays).toString() + ' days streak',
+                    style: TextStyle(fontSize: 12))
+                : Text(
+                    daysLeft.toString() + ' days left',
+                    style: TextStyle(fontSize: 12),
+                  )),
       ],
     );
   }

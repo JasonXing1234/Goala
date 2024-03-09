@@ -1,3 +1,4 @@
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,7 +6,6 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:Goala/widgets/newWidget/rippleButton.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   const GoogleLoginButton({
@@ -39,31 +39,15 @@ class GoogleLoginButton extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: Color(0xffeeeeee),
-              blurRadius: 15,
-              offset: Offset(5, 5),
-            ),
-          ],
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(99999),
         ),
-        child: Wrap(
-          children: <Widget>[
-            Image.asset(
-              'assets/images/google_logo.png',
-              height: 20,
-              width: 20,
-            ),
-            const SizedBox(width: 10),
-            const TitleText(
-              'Continue with Google',
-              color: Colors.black54,
-            ),
-          ],
+        child: Image.asset(
+          'assets/images/google_logo.png',
+          height: 24,
+          color: AppColor.PROGRESS_COLOR,
         ),
       ),
     );

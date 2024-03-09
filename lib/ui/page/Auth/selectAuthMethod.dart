@@ -1,3 +1,6 @@
+import 'package:Goala/GoalaFrontEnd/homePage.dart';
+import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
+import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
@@ -6,7 +9,6 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import '../../../GoalaFrontEnd/homePage.dart';
 import 'signin.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -17,81 +19,135 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  Widget _submitButton() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      width: MediaQuery.of(context).size.width,
-      child: CustomFlatButton(
-        label: "Create Account",
-        onPressed: () {
-          var state = Provider.of<AuthState>(context, listen: false);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Signup(loginCallback: state.getCurrentUser),
-            ),
-          );
-        },
-        borderRadius: 30,
+  void _onLogInPress() {
+    var state = Provider.of<AuthState>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SignIn(loginCallback: state.getCurrentUser),
+      ),
+    );
+  }
+
+  void _onCreateAccountPress() {
+    var state = Provider.of<AuthState>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Signup(loginCallback: state.getCurrentUser),
+      ),
+    );
+  }
+
+  Widget _usernameInput() {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: "Email",
+        hintStyle: TextStyle(fontStyle: FontStyle.italic),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(99),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _passwordInput() {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: "Password",
+        hintStyle: TextStyle(fontStyle: FontStyle.italic),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(99),
+          ),
+        ),
+        suffixIcon: Icon(Icons.remove_red_eye),
       ),
     );
   }
 
   Widget _body() {
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-        ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 80,
-              height: 40,
-              child: Image.asset('assets/images/icon-480.png'),
+          children: [
+            const SizedBox(height: 20),
+            Image.asset(
+              "assets/images/icon_512.png",
+              height: 175,
             ),
-            const Spacer(),
-            const TitleText(
-              'See what\'s happening in the world right now.',
-              fontSize: 25,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            _submitButton(),
-            const Spacer(),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                const TitleText(
-                  'Have an account already?',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
-                InkWell(
-                  onTap: () {
-                    var state = Provider.of<AuthState>(context, listen: false);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SignIn(loginCallback: state.getCurrentUser),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
-                    child: TitleText(
-                      ' Log in',
-                      fontSize: 14,
-                      color: TwitterColor.dodgeBlue,
-                      fontWeight: FontWeight.w300,
-                    ),
+            Text(
+              "goala",
+              style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                    color: AppColor.lightGrey,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
                   ),
-                )
+            ),
+            const Spacer(),
+            _usernameInput(),
+            const SizedBox(height: 16),
+            _passwordInput(),
+            const SizedBox(height: 24),
+            Text(
+              "FORGOT PASSWORD",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: AppColor.extraLightGrey,
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 2,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15),
+              width: double.infinity,
+              child: CustomFlatButton(
+                label: "LOG IN",
+                onPressed: _onLogInPress,
+                borderRadius: 30,
+                color: AppColor.PROGRESS_COLOR,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              "OR LOG IN WITH",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: AppColor.extraLightGrey,
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 2,
+                  ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GoogleLoginButton(
+                    loader: CustomLoader(),
+                  ),
+                  const SizedBox(width: 24),
+                  GoogleLoginButton(
+                    loader: CustomLoader(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Don't have an account?"),
+                InkWell(
+                  onTap: _onCreateAccountPress,
+                  child: Text(
+                    " SIGN UP",
+                    style: TextStyle(color: TwitterColor.dodgeBlue),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 20)

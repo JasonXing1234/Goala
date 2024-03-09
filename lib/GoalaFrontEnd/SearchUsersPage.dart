@@ -94,10 +94,8 @@ class _UserTile extends StatelessWidget {
               ? customIcon(
                   context,
                   icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
                   iconColor: AppColor.primary,
                   size: 13,
-                  paddingIcon: 3,
                 )
               : const SizedBox(width: 0),
         ],

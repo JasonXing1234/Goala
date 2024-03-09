@@ -109,7 +109,6 @@ class TweetIconsRow extends StatelessWidget {
                     context,
                     size: size,
                     icon: icon!,
-                    isTwitterIcon: true,
                     iconColor: iconColor,
                   ),
           ),

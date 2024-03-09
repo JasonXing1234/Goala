@@ -73,12 +73,12 @@ class _SidebarMenuState extends State<SidebarMenu> {
                     width: 3,
                   ),
                   state.userModel!.isVerified ?? false
-                      ? customIcon(context,
+                      ? customIcon(
+                          context,
                           icon: AppIcon.blueTick,
-                          isTwitterIcon: true,
                           iconColor: AppColor.primary,
                           size: 18,
-                          paddingIcon: 3)
+                        )
                       : const SizedBox(
                           width: 0,
                         ),
@@ -89,10 +89,11 @@ class _SidebarMenuState extends State<SidebarMenu> {
                 style: TextStyles.onPrimarySubTitleText
                     .copyWith(color: Colors.black54, fontSize: 15),
               ),
-              trailing: customIcon(context,
-                  icon: AppIcon.arrowDown,
-                  iconColor: AppColor.primary,
-                  paddingIcon: 20),
+              trailing: customIcon(
+                context,
+                icon: AppIcon.arrowDown,
+                iconColor: AppColor.primary,
+              ),
             ),
             Container(
               alignment: Alignment.center,
@@ -206,7 +207,6 @@ class _SidebarMenuState extends State<SidebarMenu> {
               ),
               customIcon(context,
                   icon: AppIcon.bulbOn,
-                  isTwitterIcon: true,
                   size: 25,
                   iconColor: TwitterColor.dodgeBlue),
               const Spacer(),
