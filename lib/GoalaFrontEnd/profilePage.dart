@@ -491,7 +491,8 @@ class _UserTileState extends State<_UserTile> {
                       int.parse(widget.tweet.deadlineDate!.split('-')[2]))
                   .difference(DateTime(DateTime.now().year,
                       DateTime.now().month, DateTime.now().day))
-                  .inDays,
+                  .inDays, isHabit: widget.tweet.isHabit,
+              checkInDays: widget.tweet.checkInList!,
             ),
           )
         ],

@@ -68,7 +68,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
     final scrollController = ScrollController();
     return Scaffold(
       key: scaffoldKey,
-      floatingActionButton: _floatingActionButton(),
+      //floatingActionButton: _floatingActionButton(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         controller: scrollController,

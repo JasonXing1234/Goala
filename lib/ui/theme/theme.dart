@@ -34,6 +34,22 @@ class AppTheme {
       labelColor: TwitterColor.dodgeBlue,
       labelPadding: const EdgeInsets.symmetric(vertical: 12),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // Set the border radius here
+        ),
+        // You can define other button properties here
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // Set the border radius here
+        ),
+        // You can define other button properties here
+      ),
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: TwitterColor.dodgeBlue,
     ),
@@ -51,6 +67,10 @@ class AppTheme {
       secondaryContainer: AppColor.darkGrey,
       surface: Colors.white,
       brightness: Brightness.light,
+    ),
+    textTheme: TextTheme(
+      displaySmall: TextStyle(fontFamily: 'Roboto', fontSize: 15),
+      titleSmall: TextStyle(fontFamily: 'Roboto', fontSize: 20),
     ),
   );
 

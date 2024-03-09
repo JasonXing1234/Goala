@@ -15,15 +15,14 @@ class TextStyles {
 
   static TextStyle get titleStyle {
     return const TextStyle(
-      color: Colors.black,
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
     );
   }
 
   static TextStyle get subtitleStyle {
     return const TextStyle(
-        color: AppColor.darkGrey, fontSize: 14, fontWeight: FontWeight.bold);
+        fontSize: 16, fontWeight: FontWeight.bold);
   }
 
   static TextStyle get userNameStyle {

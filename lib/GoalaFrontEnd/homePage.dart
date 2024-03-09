@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    pushNotificationSubscription.cancel();
+    //pushNotificationSubscription.cancel();
     super.dispose();
   }
 

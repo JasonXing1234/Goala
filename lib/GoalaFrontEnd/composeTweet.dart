@@ -452,6 +452,17 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             onPressed: () async {
                               final picker = ImagePicker();
                               await picker
+                                  .pickImage(imageQuality: 50, source: ImageSource.gallery)
+                                  .then((file,) async {
+                                List<File>? tempfile = [];
+                                tempfile.add(File(file!.path));
+                                if (tempfile.isNotEmpty) {
+                                  selectedImages.add(await feedState
+                                      .uploadFile(tempfile[0]));
+                                }
+                              });
+                              //TODO: keep this commented multi photo picker code, might be useful in the future
+                              /*await picker
                                   .pickMultiImage(imageQuality: 50)
                                   .then((
                                 List<XFile> files,
@@ -465,7 +476,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                         .uploadFile(tempfiles[i]));
                                   }
                                 }
-                              });
+                              });*/
                               // if atleast 1 images is selected it will add
                               // all images in selectedImages
                               // variable so that we can easily show them in UI

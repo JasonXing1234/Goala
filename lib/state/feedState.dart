@@ -94,7 +94,7 @@ class FeedState extends AppState {
     if (!isBusy && feedList != null && feedList!.isNotEmpty) {
       list = feedList!.where((x) {
         /// If Tweet is a comment then no need to add it in tweet list
-        if (x.parentkey == null && x.user!.userId == userModel.userId) {
+        if (x.parentkey == null) {
           return false;
         }
 
