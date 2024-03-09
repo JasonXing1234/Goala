@@ -130,7 +130,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     if (_descriptionController.text.isEmpty ||
         _descriptionController.text.length > 50 ||
         _titleController.text.isEmpty ||
-        _titleController.text.length > 10) {
+        _titleController.text.length > 10 || pickedTime == null) {
       return;
     }
     var state = Provider.of<FeedState>(context, listen: false);
@@ -279,7 +279,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalSum: widget.isTweet
+      GoalSum: isSelected[0] == true ? null : widget.isTweet
           ? isSelected[0]
               ? 0
               : int.parse(_goalSumController.text)
@@ -397,7 +397,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         ),
                       ),
                     ),
-                  SizedBox(
+                  if (widget.isTweet && isSelected[0] == false) SizedBox(
                     height: 10,
                   ),
                   if (widget.isTweet && isSelected[0] == false)
@@ -422,7 +422,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     SizedBox(height: 10),
-                  Row(
+                  if (widget.isTweet && isSelected[0] == false) Row(
                     children: [
                       SizedBox(width: 58),
                       customTitleText('Complete By:'),
@@ -538,13 +538,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                   ),
                 ],
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ComposeBottomIconWidget(
-              textEditingController: _descriptionController,
-              onImageIconSelected: _onImageIconSelected,
             ),
           ),
         ],

@@ -136,6 +136,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     }
 
     return Scaffold(
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.PROGRESS_COLOR,
         foregroundColor: Colors.white,
@@ -152,7 +153,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * .22,
+              expandedHeight: MediaQuery.of(context).size.height * .20,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -192,23 +193,24 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                 ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                      horizontal: 0),
                                   alignment: Alignment(10.0, 1),
                                   margin:
-                                      const EdgeInsets.only(top: 30, right: 30),
+                                  authState.userModel == null
+                                      ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
                                   child: Text(
                                     authState.userModel == null
                                         ? ''
                                         : authState.userModel!.displayName!,
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 40,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 37,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 )
                               ],
                             ),
-                            authState.isbusy
+                            /*authState.isbusy
                                 ? SizedBox(
                                     width: 20,
                                   )
@@ -245,7 +247,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                                 ]);
                                               },
                                             ).toList(),
-                                          ))
+                                          ))*/
                           ]))),
             ),
             SliverToBoxAdapter(
@@ -284,20 +286,21 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                 width: 400,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child: Text("Personal Goals"),
+                                  child: Text("Personal", style: TextStyles.titleStyle),
                                 ),
                               ),
                               Container(
                                 width: 300,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child: Text("Group Goals"),
+                                  child: Text("Group", style: TextStyles.titleStyle),
                                 ),
                               ),
                             ],
                           ),
                         ),
                         // tab bar view here
+                        SizedBox(height:10),
                         Expanded(
                           child: TabBarView(
                             controller: _tabController,
@@ -321,11 +324,11 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                           crossAxisCount:
                                               2, // Number of items per row
                                           crossAxisSpacing:
-                                              10.0, // Horizontal space between items
+                                              5.0, // Horizontal space between items
                                           mainAxisSpacing:
-                                              10.0, // Vertical space between items
+                                              5.0, // Vertical space between items
                                           childAspectRatio:
-                                              1.0, // Aspect ratio of each item
+                                              0.8, // Aspect ratio of each item
                                         ),
                                       ),
                                     ),
@@ -337,19 +340,25 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                   child: Column(
                                 children: <Widget>[
                                   Center(
-                                    child: ListView.separated(
+                                    child: GridView.builder(
                                       scrollDirection: Axis.vertical,
                                       shrinkWrap: true,
                                       addAutomaticKeepAlives: false,
                                       physics: const BouncingScrollPhysics(),
                                       itemBuilder: (context, index) =>
-                                          _UserTile(
-                                              tweet: GroupGoalList![index]),
-                                      separatorBuilder: (_, index) =>
-                                          const Divider(
-                                        height: 0,
-                                      ),
+                                          _UserTile2(tweet: GroupGoalList![index]),
                                       itemCount: GroupGoalList?.length ?? 0,
+                                      gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount:
+                                        2, // Number of items per row
+                                        crossAxisSpacing:
+                                        5.0, // Horizontal space between items
+                                        mainAxisSpacing:
+                                        5.0, // Vertical space between items
+                                        childAspectRatio:
+                                        0.8, // Aspect ratio of each item
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -415,8 +424,7 @@ class _UserTileState extends State<_UserTile> {
                     ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
                     : widget.tweet.checkInList!
                             .where((item) => item == true)
-                            .length /
-                        8,
+                            .length / 8,
                 height: 20,
                 width: 120,
                 backgroundColor: Colors.grey[300]!,
@@ -428,6 +436,8 @@ class _UserTileState extends State<_UserTile> {
                     .difference(DateTime(DateTime.now().year,
                         DateTime.now().month, DateTime.now().day))
                     .inDays,
+                isHabit: widget.tweet.isHabit,
+                checkInDays: widget.tweet.checkInList!,
               ),
             )
           ],
@@ -484,7 +494,7 @@ class _UserTileState extends State<_UserTile> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Submit'),
+              child: Text('Commit'),
               onPressed: () {
                 var state = Provider.of<FeedState>(context, listen: false);
                 state.addNumberToGoal(
@@ -522,65 +532,75 @@ class _UserTile2State extends State<_UserTile2> {
   Widget build(BuildContext context) {
     final state = Provider.of<FeedState>(context);
     return GridTile(
-        child: InkWell(
-      onTap: () {
-        state.getPostDetailFromDatabase(null, model: widget.tweet);
-        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-      },
-      child: Column(
-        children: [
-          SizedBox(
-            width: 90,
-            child: TitleText(widget.tweet.title!,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                overflow: TextOverflow.ellipsis),
-          ),
-          SizedBox(
-            height: 20,
-            width: 120,
-            child: CustomProgressBar(
-              progress: widget.tweet.isHabit == false
-                  ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                  : widget.tweet.checkInList!
-                          .where((item) => item == true)
-                          .length /
-                      8,
-              height: 20,
-              width: 120,
-              backgroundColor: Colors.grey[300]!,
-              progressColor: AppColor.PROGRESS_COLOR,
-              daysLeft: DateTime(
-                      int.parse(widget.tweet.deadlineDate!.split('-')[0]),
-                      int.parse(widget.tweet.deadlineDate!.split('-')[1]),
-                      int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                  .difference(DateTime(DateTime.now().year,
-                      DateTime.now().month, DateTime.now().day))
-                  .inDays,
-            ),
-          ),
-          if (widget.tweet.coverPhoto != null)
-            Container(
-              width: 100, // Specify the width of the container
-              height: 100, // Specify the height of the container
-              decoration: BoxDecoration(
-                // Optionally add a border, radius, etc.
-                border: Border.all(color: Colors.blueAccent),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ClipRRect(
-                // Use ClipRRect for borderRadius if needed
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  widget.tweet.coverPhoto!,
-                  fit: BoxFit
-                      .cover, // This ensures the image covers the container
+          child: InkWell(
+            onTap: () {
+              state.getPostDetailFromDatabase(null, model: widget.tweet);
+              Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
+            },
+            child:
+            Row(
+            children:
+            [
+              SizedBox(width:12),
+              Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 160,
+                  child: Text(
+                    widget.tweet.title!,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),),
                 ),
-              ),
-            ),
-        ],
-      ),
-    ));
+                SizedBox(height:3),
+                SizedBox(
+                  height: 25,
+                  width: 160,
+                  child: CustomProgressBar(
+                    progress: widget.tweet.isHabit == false
+                        ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                        : widget.tweet.checkInList!
+                        .where((item) => item == true)
+                        .length /
+                        8,
+                    height: 25,
+                    width: 160,
+                    backgroundColor: Colors.grey[300]!,
+                    progressColor: widget.tweet.isCheckedIn == true ? AppColor.PROGRESS_COLOR : AppColor.PROGRESS_COLOR,
+                    daysLeft: DateTime(
+                        int.parse(widget.tweet.deadlineDate!.split('-')[0]),
+                        int.parse(widget.tweet.deadlineDate!.split('-')[1]),
+                        int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                        .difference(DateTime(DateTime.now().year,
+                        DateTime.now().month, DateTime.now().day))
+                        .inDays,
+                    isHabit: widget.tweet.isHabit, checkInDays: widget.tweet.checkInList!,
+                  ),
+                ),
+                SizedBox(height:7),
+                if (widget.tweet.coverPhoto != null)
+                  Container(
+                    width: 160, // Specify the width of the container
+                    height: 160, // Specify the height of the container
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      // Use ClipRRect for borderRadius if needed
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.tweet.coverPhoto!,
+                        fit: BoxFit
+                            .cover, // This ensures the image covers the container
+                      ),
+                    ),
+                  ),
+              ],
+            ),]
+          )),
+    );
   }
 
   void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
@@ -596,7 +616,7 @@ class _UserTile2State extends State<_UserTile2> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Submit'),
+              child: Text('Commit'),
               onPressed: () {
                 var state = Provider.of<FeedState>(context, listen: false);
                 state.addNumberToGoal(

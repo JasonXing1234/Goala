@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../model/user.dart';
+import '../../ui/theme/theme.dart';
+import '../customWidgets.dart';
 
 class ChildWidget extends StatefulWidget {
   final List<UserModel?> friends;
@@ -36,24 +38,33 @@ class _ChildWidgetState extends State<ChildWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: _showSelectFriendsDialog,
-          child: Text('Select Friends'),
+        Center(
+          child: TextButton(
+            onPressed: _showSelectFriendsDialog,
+            child: customTitleText('+ Add Friends'),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: Color(0xDEEFEFEF), // Button background color
+              // You can add more styling properties here
+            ),
+          ),
         ),
+        Center(child:
         Wrap(
           children: _selectedFriends
               .map((friend) => ChoiceChip(
-                    label: Text(friend.displayName!),
-                    selected: true,
-                    onSelected: (isSelected) {
-                      setState(() {
-                        _selectedFriends.removeWhere((f) => f == friend);
-                        widget.onSelectionChanged(_selectedFriends);
-                      });
-                    },
-                  ))
+            selectedColor: AppColor.PROGRESS_COLOR,
+            label: Text(friend.displayName!),
+            selected: true,
+            onSelected: (isSelected) {
+              setState(() {
+                _selectedFriends.removeWhere((f) => f == friend);
+                widget.onSelectionChanged(_selectedFriends);
+              });
+            },
+          ))
               .toList(),
-        ),
+        ),),
       ],
     );
   }

@@ -287,11 +287,9 @@ class _TweetBodyState extends State<_TweetBody> {
                               ConstrainedBox(
                                 constraints: BoxConstraints(
                                     minWidth: 0, maxWidth: context.width * .5),
-                                child: TitleText(
+                                child: Text(
                                     widget.model.user!.displayName!,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    overflow: TextOverflow.ellipsis),
+                                    style: TextStyles.titleStyle,),
                               ),
                               const SizedBox(width: 3),
                               widget.model.user!.isVerified!
@@ -316,13 +314,17 @@ class _TweetBodyState extends State<_TweetBody> {
                             ],
                           ),
                         ),
-                        Container(child: widget.trailing ?? const SizedBox()),
+                        //TODO: Pop-up menu, might be useful for the future
+                        //Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
                     widget.model.grandparentKey == null
                         ? Row(
                             children: [
-                              CustomProgressBar(
+                              SizedBox(
+                                height: 25,
+                                width: 230,
+                                child: CustomProgressBar(
                                 progress: widget.model.isHabit == false
                                     ? tempModel!.GoalAchieved! /
                                         tempModel!.GoalSum!
@@ -330,8 +332,8 @@ class _TweetBodyState extends State<_TweetBody> {
                                             .where((item) => item == true)
                                             .length /
                                         8,
-                                height: 20,
-                                width: 200,
+                                height: 25,
+                                width: 230,
                                 backgroundColor: Colors.grey[300]!,
                                 progressColor: AppColor.PROGRESS_COLOR,
                                 daysLeft: DateTime(
@@ -346,8 +348,9 @@ class _TweetBodyState extends State<_TweetBody> {
                                         DateTime.now().month,
                                         DateTime.now().day))
                                     .inDays,
-                              ),
-                              const Spacer(),
+                                isHabit: tempModel!.isHabit, checkInDays: widget.model.checkInList!,
+                              ),),
+                              SizedBox(width: 20),
                               PokeButton(onPressed: () {
                                 _onPressPoke(widget.model.deviceToken,
                                     authState.userModel!.displayName);
@@ -356,12 +359,32 @@ class _TweetBodyState extends State<_TweetBody> {
                           )
                         : SizedBox.shrink(),
                     widget.model.parentName != null
-                        ? Text(widget.model.parentName!)
+                        ? Text(widget.model.parentName!, style: TextStyles.subtitleStyle,)
                         : Text(''),
+                    SizedBox(height:15),
                     widget.model.goalPhotoList != null
-                        ? SizedBox(
+                        ?
+                    Container(
+                      width: 160, // Specify the width of the container
+                      height: 160, // Specify the height of the container
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        // Use ClipRRect for borderRadius if needed
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          widget.model.goalPhotoList![0]!,
+                          fit: BoxFit
+                              .cover, // This ensures the image covers the container
+                        ),
+                      ),
+                    )
+                    //TODO:Keep this listview gallery code, might be useful in the future
+                    /*SizedBox(
                             height: 200,
-                            child: ListView.builder(
+                            child:
+                            ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: widget.model.goalPhotoList!.length,
@@ -370,12 +393,13 @@ class _TweetBodyState extends State<_TweetBody> {
                                   padding: EdgeInsets.all(8.0),
                                   // Add some padding around each image
                                   child: Image.network(
-                                    widget.model.goalPhotoList![index]!,
+                                    widget.model.goalPhotoList![0]!,
                                     fit: BoxFit.cover,
                                   ),
                                 );
                               },
-                            ))
+                            )
+                    )*/
                         : SizedBox(),
                   ],
                 ),
@@ -516,6 +540,8 @@ class CustomProgressBar extends StatelessWidget {
   final Color backgroundColor;
   final Color progressColor;
   final int daysLeft;
+  final bool isHabit;
+  final List<bool> checkInDays;
 
   const CustomProgressBar({
     Key? key,
@@ -525,7 +551,25 @@ class CustomProgressBar extends StatelessWidget {
     required this.backgroundColor,
     required this.progressColor,
     required this.daysLeft,
+    required this.isHabit,
+    required this.checkInDays,
   }) : super(key: key);
+
+  int calculateStreak(List<bool> values) {
+    int streak = 0;
+
+    // Iterate over the list from the end to the beginning
+    for (int i = values.length - 1; i >= 0; i--) {
+      // If the value is true, increment the streak
+      if (values[i]) {
+        streak++;
+      } else {
+        // If a false is encountered, break the loop as we only want consecutive trues from the end
+        break;
+      }
+    }
+    return streak;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -548,7 +592,8 @@ class CustomProgressBar extends StatelessWidget {
           ),
         ),
         Center(
-            child: Text(
+            child: isHabit == true ? Text(calculateStreak(checkInDays).toString() + ' days streak', style: TextStyle(fontSize: 12)) :
+            Text(
           daysLeft.toString() + ' days left',
           style: TextStyle(fontSize: 12),
         )),
