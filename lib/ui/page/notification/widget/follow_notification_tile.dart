@@ -23,7 +23,7 @@ class FollowNotificationTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  customIcon(context, icon: AppIcon.profile, isEnable: true),
+                  customIcon(context, icon: AppIcon.profile),
                   const SizedBox(width: 10),
                   Text(
                     model.user.displayName!,
@@ -83,12 +83,12 @@ class _UserCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 3),
                     user.isVerified!
-                        ? customIcon(context,
+                        ? customIcon(
+                            context,
                             icon: AppIcon.blueTick,
-                            isTwitterIcon: true,
                             iconColor: AppColor.primary,
                             size: 13,
-                            paddingIcon: 3)
+                          )
                         : const SizedBox(width: 0),
                   ],
                 ),

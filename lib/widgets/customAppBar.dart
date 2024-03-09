@@ -94,11 +94,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () {
                     if (onActionPressed != null) onActionPressed!();
                   },
-                  icon: customIcon(context,
-                      icon: icon!,
-                      isTwitterIcon: true,
-                      iconColor: AppColor.primary,
-                      size: 25),
+                  icon: customIcon(
+                    context,
+                    icon: icon!,
+                    iconColor: AppColor.primary,
+                    size: 25,
+                  ),
                 )
     ];
   }

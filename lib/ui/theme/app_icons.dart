@@ -1,5 +1,6 @@
 part of 'theme.dart';
 
+//TODO: I'm pretty sure we can just delete this whole file.
 class AppIcon {
   AppIcon._();
 

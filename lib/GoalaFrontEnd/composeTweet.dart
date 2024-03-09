@@ -452,13 +452,17 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             onPressed: () async {
                               final picker = ImagePicker();
                               await picker
-                                  .pickImage(imageQuality: 50, source: ImageSource.gallery)
-                                  .then((file,) async {
+                                  .pickImage(
+                                      imageQuality: 50,
+                                      source: ImageSource.gallery)
+                                  .then((
+                                file,
+                              ) async {
                                 List<File>? tempfile = [];
                                 tempfile.add(File(file!.path));
                                 if (tempfile.isNotEmpty) {
-                                  selectedImages.add(await feedState
-                                      .uploadFile(tempfile[0]));
+                                  selectedImages.add(
+                                      await feedState.uploadFile(tempfile[0]));
                                 }
                               });
                               //TODO: keep this commented multi photo picker code, might be useful in the future
@@ -675,10 +679,8 @@ class _UserTile extends StatelessWidget {
               ? customIcon(
                   context,
                   icon: AppIcon.blueTick,
-                  isTwitterIcon: true,
                   iconColor: AppColor.primary,
                   size: 13,
-                  paddingIcon: 3,
                 )
               : const SizedBox(width: 0),
         ],

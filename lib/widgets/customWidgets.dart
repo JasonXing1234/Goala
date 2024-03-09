@@ -19,21 +19,13 @@ Widget customTitleText(String? title, {BuildContext? context}) {
 Widget customIcon(
   BuildContext context, {
   required IconData icon,
-  bool isEnable = false,
   double size = 18,
-  bool isTwitterIcon = true,
-  bool isFontAwesomeSolid = false,
   Color? iconColor,
-  double paddingIcon = 10,
 }) {
-  iconColor = iconColor ?? Theme.of(context).textTheme.bodySmall!.color;
-  return Padding(
-    padding: EdgeInsets.only(bottom: isTwitterIcon ? paddingIcon : 0),
-    child: Icon(
-      icon,
-      size: size,
-      color: isEnable ? Theme.of(context).primaryColor : iconColor,
-    ),
+  return Icon(
+    icon,
+    size: size,
+    color: iconColor,
   );
 }
 

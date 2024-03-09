@@ -42,11 +42,12 @@ class PostLikeTile extends StatelessWidget {
         Row(
           children: <Widget>[
             const SizedBox(width: 20),
-            customIcon(context,
-                icon: AppIcon.heartFill,
-                iconColor: TwitterColor.ceriseRed,
-                isTwitterIcon: true,
-                size: 25),
+            customIcon(
+              context,
+              icon: AppIcon.heartFill,
+              iconColor: TwitterColor.ceriseRed,
+              size: 25,
+            ),
             const SizedBox(width: 10),
             Row(children: avaterList),
           ],

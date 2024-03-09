@@ -23,10 +23,11 @@ class TweetBottomSheet {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
       ),
-      child: customIcon(context,
-          icon: AppIcon.arrowDown,
-          isTwitterIcon: true,
-          iconColor: AppColor.lightGrey),
+      child: customIcon(
+        context,
+        icon: AppIcon.arrowDown,
+        iconColor: AppColor.lightGrey,
+      ),
     ).ripple(
       () {
         _openBottomSheet(context,
@@ -338,9 +339,7 @@ class TweetBottomSheet {
             customIcon(
               context,
               icon: icon,
-              isTwitterIcon: true,
               size: 25,
-              paddingIcon: 8,
               iconColor:
                   onPressed != null ? AppColor.darkGrey : AppColor.lightGrey,
             ),
