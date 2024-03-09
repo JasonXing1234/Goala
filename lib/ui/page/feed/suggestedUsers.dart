@@ -106,7 +106,7 @@ class _SuggestedUsersState extends State<SuggestedUsers> {
                   slivers: [
                     SliverAppBar(
                       title:
-                          Image.asset('assets/images/icon-480.png', height: 40),
+                          Image.asset('assets/images/icon_512.png', height: 40),
                       backgroundColor:
                           Theme.of(context).appBarTheme.backgroundColor,
                       centerTitle: true,

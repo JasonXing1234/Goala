@@ -49,7 +49,7 @@ class _WelcomePageState extends State<WelcomePage> {
             SizedBox(
               width: MediaQuery.of(context).size.width - 80,
               height: 40,
-              child: Image.asset('assets/images/icon-480.png'),
+              child: Image.asset('assets/images/icon_512.png'),
             ),
             const Spacer(),
             const TitleText(

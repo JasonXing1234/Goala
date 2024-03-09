@@ -503,7 +503,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           }),
                         ),
                       ),
-                      //TODO:TEXT
+                      Text("Hello"),
                       SizedBox(
                         height: 15,
                       ),

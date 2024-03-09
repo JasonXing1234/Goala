@@ -284,7 +284,7 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
                           Navigator.push(
                               context, TaskDetailPage.getRoute(model.value));
                         },
-                        child: Text(model!.value.title!),
+                        child: Text(model.value.title!),
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
