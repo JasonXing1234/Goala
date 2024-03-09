@@ -5,6 +5,7 @@ import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../GoalaFrontEnd/homePage.dart';
 import 'signin.dart';
@@ -17,81 +18,64 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  Widget _submitButton() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      width: MediaQuery.of(context).size.width,
-      child: CustomFlatButton(
-        label: "Create Account",
-        onPressed: () {
-          var state = Provider.of<AuthState>(context, listen: false);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Signup(loginCallback: state.getCurrentUser),
-            ),
-          );
-        },
-        borderRadius: 30,
+  void _onLogInPress() {
+    var state = Provider.of<AuthState>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SignIn(loginCallback: state.getCurrentUser),
+      ),
+    );
+  }
+
+  void _onCreateAccountPress() {
+    var state = Provider.of<AuthState>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Signup(loginCallback: state.getCurrentUser),
       ),
     );
   }
 
   Widget _body() {
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-        ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 80,
-              height: 40,
-              child: Image.asset('assets/images/icon_512.png'),
+          children: [
+            const SizedBox(height: 16),
+            Image.asset(
+              "assets/images/icon_512_transparent.png",
+              height: 100,
             ),
             const Spacer(),
             const TitleText(
-              'See what\'s happening in the world right now.',
+              "See what's happening in the world right now.",
               fontSize: 25,
             ),
-            const SizedBox(
-              height: 20,
+            const SizedBox(height: 20),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15),
+              width: double.infinity,
+              child: CustomFlatButton(
+                label: "Create Account",
+                onPressed: _onCreateAccountPress,
+                borderRadius: 30,
+              ),
             ),
-            _submitButton(),
             const Spacer(),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                const TitleText(
-                  'Have an account already?',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Have an account already?"),
                 InkWell(
-                  onTap: () {
-                    var state = Provider.of<AuthState>(context, listen: false);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SignIn(loginCallback: state.getCurrentUser),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
-                    child: TitleText(
-                      ' Log in',
-                      fontSize: 14,
-                      color: TwitterColor.dodgeBlue,
-                      fontWeight: FontWeight.w300,
-                    ),
+                  onTap: _onLogInPress,
+                  child: Text(
+                    " Log in",
+                    style: TextStyle(color: TwitterColor.dodgeBlue),
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 20)
