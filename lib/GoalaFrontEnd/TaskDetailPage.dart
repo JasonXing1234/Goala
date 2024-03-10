@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'package:Goala/GoalaFrontEnd/timelinePosts.dart';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/widgets/customWidgets.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../ui/theme/theme.dart';
 import '../widgets/tweet/widgets/tweetBottomSheet.dart';
 
 class TaskDetailPage extends StatefulWidget {
@@ -75,9 +79,16 @@ class _TaskDetailState extends State<TaskDetailPage> {
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
-            title: customTitleText(
-              'Your Posts',
-            ),
+            title:
+                Column(children: [
+                  Container(
+                    padding: const EdgeInsets.only(right: 30),
+                    child: Text(
+                      tempFeed.title!,
+                      style: TextStyles.barTitleStyle
+                  ),),
+                ],),
+
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             bottom: PreferredSize(
@@ -177,7 +188,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
   }
 
   Widget _commentRow(FeedModel model) {
-    return Tweet(
+    return TimelinePosts(
       model: model,
       type: TweetType.Reply,
       trailing: TweetBottomSheet().tweetOptionIcon(context,

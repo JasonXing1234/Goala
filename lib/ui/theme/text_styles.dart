@@ -32,6 +32,11 @@ class TextStyles {
       fontWeight: FontWeight.bold,
     );
   }
+  static TextStyle get barTitleStyle {
+    return const TextStyle(
+      fontSize: 33,
+    );
+  }
   static TextStyle get bigSubtitleStyle {
     return const TextStyle(
       fontSize: 22,
@@ -41,6 +46,11 @@ class TextStyles {
   static TextStyle get subtitleStyle {
     return const TextStyle(
         fontSize: 16, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle get buttonTextStyle {
+    return const TextStyle(
+        fontSize: 18);
   }
 
   static TextStyle get userNameStyle {

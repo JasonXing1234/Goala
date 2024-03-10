@@ -518,11 +518,13 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             SizedBox(
                               height: 15,
                             ),
+
                             Center(
                               child: SizedBox(
                                 width: 300,
-                                height: 41,
                                 child: TextFormField(
+                                  maxLength: 1000, // Maximum characters
+                                  maxLines: null,
                                   style: TextStyle(
                                       color: Theme.of(context).colorScheme.secondary),
                                   cursorColor: Theme.of(context).colorScheme.secondary,

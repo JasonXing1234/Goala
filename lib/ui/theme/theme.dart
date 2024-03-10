@@ -36,6 +36,7 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        textStyle: TextStyles.buttonTextStyle,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), // Set the border radius here
         ),
