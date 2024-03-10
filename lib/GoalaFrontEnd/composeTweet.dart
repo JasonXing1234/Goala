@@ -51,7 +51,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   DateTime selectedDate = DateTime.now();
   bool dateSelected = false;
   late TextEditingController _descriptionController;
-  late TextEditingController _goalSumController;
+  late TextEditingController _goalAchievedController;
   late TextEditingController _titleController;
   late TabController _tabController;
   List<bool> isSelected = [true, false];
@@ -59,12 +59,13 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, false);
   List<bool> _selections = [false, false];
-
+  String tempString = '';
   @override
   void dispose() {
     scrollController.dispose();
     _descriptionController.dispose();
     _titleController.dispose();
+    _goalAchievedController.dispose();
     super.dispose();
   }
 
@@ -74,7 +75,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     model = feedState.tweetToReplyModel;
     scrollController = ScrollController();
     _descriptionController = TextEditingController();
-    _goalSumController = TextEditingController();
+    _goalAchievedController = TextEditingController();
     _titleController = TextEditingController();
     scrollController.addListener(_scrollListener);
     _tabController = TabController(length: 2, vsync: this);
@@ -188,7 +189,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         if (tweetModel.goalPhotoList!.length != 0) {
           state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
         }
-        if(_selections[0] == true) {
+        if(model!.isHabit == true && _selections[0] == true) {
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
           tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
@@ -204,6 +205,25 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(onError)));
           });
+        }
+        else if(model!.isHabit == false) {
+          var state = Provider.of<FeedState>(context, listen: false);
+          var tempTweet = await state.fetchTweet(model!.key!);
+          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
+          true;
+          FirebaseDatabase.instance
+              .reference()
+              .child("tweet")
+              .child(model!.key!)
+              .update({
+            "checkInList": tempTweet.checkInList,
+            "isCheckedIn": true,
+          }).catchError((onError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(onError)));
+          });
+          state.addNumberToGoal(
+              model!, int.parse(_goalAchievedController.text));
         }
       }
     }
@@ -296,7 +316,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
       GoalSum: widget.isTweet
           ? isSelected[0]
               ? 0
-              : int.parse(_goalSumController.text)
+              : int.parse(_goalAchievedController.text)
           : 0,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
@@ -358,21 +378,22 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         children: <Widget>[
           SingleChildScrollView(
             controller: scrollController,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child:
+            child:
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: Text(model!.title!, style: TextStyles.titleStyle),
-                  ),
-                  Center(
-                    child: Text(model!.description!, style: TextStyles.subtitleStyle),
+                    child: Text(model!.title!, style: TextStyles.bigTitleStyle),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
+                  ),
+                  Center(
+                    child: Text(model!.description!, style: TextStyles.bigSubtitleStyle),
+                  ),
+                  SizedBox(
+                    height: 8,
                   ),
                   Center(
                       child: Container(
@@ -395,16 +416,18 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                 width: 300,
                                 child:
                                   CustomProgressBar(
-                                    progress: model!.isHabit == false
-                                        ? model!.GoalAchieved! / model!.GoalSum!
-                                        : model!.checkInList!
-                                        .where((item) => item == true)
-                                        .length /
-                                        8,
+                                    progress:
+                                    model!.isHabit == false
+                                        ? tempString != ''
+                                        ? (model!.GoalAchieved! + int.parse(_goalAchievedController.text)) / model!.GoalSum!
+                                    : model!.GoalAchieved! / model!.GoalSum!
+                                        : _selections[0] == true
+                                        ? model!.checkInList!.where((item) => item == true).length + 1 / 8
+                                    : model!.checkInList!.where((item) => item == true).length / 8,
                                     height: 41,
                                     width: 300,
                                     backgroundColor: Colors.grey[300]!,
-                                    progressColor: AppColor.PROGRESS_COLOR,
+                                    progressColor: model!.isCheckedIn || _goalAchievedController.text != '' || _selections[0] == true ? AppColor.PROGRESS_COLOR : Colors.black,
                                     daysLeft: DateTime(
                                         int.parse(model!.deadlineDate!.split('-')[0]),
                                         int.parse(model!.deadlineDate!.split('-')[1]),
@@ -418,11 +441,11 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             SizedBox(
                               height: 15,
                             ),
-                            Text('Did you?', style: TextStyles.subtitleStyle),
+                          if (model!.isHabit == true && model!.isCheckedIn == false) Text('Did you?', style: TextStyles.subtitleStyle),
                             SizedBox(
                               height: 10,
                             ),
-                            Center(
+                            if (model!.isHabit == true && model!.isCheckedIn == false) Center(
                                 child:Row(
                                   children: [
                                     ToggleButtons(
@@ -466,6 +489,32 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                   ],
                                 ),
                             ),
+                            if(model!.isHabit == false && model!.isCheckedIn == false) Row(children: [
+                              SizedBox(width: 80),
+                              SizedBox(
+                                width: 100,
+                                child: TextFormField(
+                                  onChanged: (val){
+                                    setState((){
+                                      tempString = _goalAchievedController.text;
+                                    });
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                      color: Theme.of(context).colorScheme.secondary),
+                                  cursorColor: Theme.of(context).colorScheme.secondary,
+                                  controller: _goalAchievedController,
+                                  textAlign: TextAlign.center,
+                                  decoration: kTextFieldDecoration.copyWith(
+                                      hintText: "#"),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(model!.goalUnit!,
+                                  style: TextStyles.titleStyle),
+
+                            ],),
                             SizedBox(
                               height: 15,
                             ),
@@ -529,7 +578,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                               child: Padding(
                                                 padding: const EdgeInsets.all(100.0),
                                                 child: Image.asset(
-                                                  'assets/images/goala.png',
+                                                  'assets/images/icon_512_transparent.png',
                                                   width: 100,
                                                   height: 100,
                                                 ),
@@ -569,7 +618,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                     height: 20,
                   ),
                 ],
-              ),
               ),
           ),
         ],

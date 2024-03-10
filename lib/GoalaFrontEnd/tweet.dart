@@ -329,8 +329,7 @@ class _TweetBodyState extends State<_TweetBody> {
                                           tempModel!.GoalSum!
                                       : tempModel!.checkInList!
                                               .where((item) => item == true)
-                                              .length /
-                                          8,
+                                              .length / 8,
                                   height: 25,
                                   width: 230,
                                   backgroundColor: Colors.grey[300]!,
@@ -348,7 +347,7 @@ class _TweetBodyState extends State<_TweetBody> {
                                           DateTime.now().day))
                                       .inDays,
                                   isHabit: tempModel!.isHabit,
-                                  checkInDays: widget.model.checkInList!,
+                                  checkInDays: tempModel!.checkInList!,
                                 ),
                               ),
                               SizedBox(width: 20),
@@ -595,10 +594,10 @@ class CustomProgressBar extends StatelessWidget {
         Center(
             child: isHabit == true
                 ? Text(calculateStreak(checkInDays).toString() + ' days streak',
-                    style: TextStyle(fontSize: 12))
+                    style: TextStyle(fontSize: height * 0.6))
                 : Text(
                     daysLeft.toString() + ' days left',
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: height * 0.6),
                   )),
       ],
     );

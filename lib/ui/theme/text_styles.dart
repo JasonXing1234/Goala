@@ -26,7 +26,18 @@ class TextStyles {
       fontWeight: FontWeight.bold,
     );
   }
-
+  static TextStyle get bigTitleStyle {
+    return const TextStyle(
+      fontSize: 35,
+      fontWeight: FontWeight.bold,
+    );
+  }
+  static TextStyle get bigSubtitleStyle {
+    return const TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+    );
+  }
   static TextStyle get subtitleStyle {
     return const TextStyle(
         fontSize: 16, fontWeight: FontWeight.bold);

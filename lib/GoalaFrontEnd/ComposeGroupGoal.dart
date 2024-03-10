@@ -46,6 +46,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _descriptionController;
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
+  late TextEditingController _goalUnitController;
   late TextEditingController _addUserController;
   //late TextEditingController _monthController;
   //late TextEditingController _dayController;
@@ -63,6 +64,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     _descriptionController.dispose();
     _titleController.dispose();
     _addUserController.dispose();
+    _goalUnitController.dispose();
+    _goalSumController.dispose();
     super.dispose();
   }
 
@@ -74,6 +77,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     scrollController = ScrollController();
     _descriptionController = TextEditingController();
     _goalSumController = TextEditingController();
+    _goalUnitController = TextEditingController();
     _titleController = TextEditingController();
     _addUserController = TextEditingController();
     scrollController.addListener(_scrollListener);
@@ -285,6 +289,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                   ? 0
                   : int.parse(_goalSumController.text)
               : 0,
+      goalUnit: _goalUnitController.text,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     );
@@ -408,19 +413,37 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     Center(
-                      child: SizedBox(
-                        width: 340,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _goalSumController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(
-                              hintText: "goal number"),
-                        ),
-                      ),
+                      child:
+                        Row(children: [
+                          SizedBox(width: 80),
+                          SizedBox(
+                            width: 60,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary),
+                              cursorColor: Theme.of(context).colorScheme.secondary,
+                              controller: _goalSumController,
+                              textAlign: TextAlign.center,
+                              decoration: kTextFieldDecoration.copyWith(
+                                  hintText: "#"),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          SizedBox(
+                            width: 150,
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary),
+                              cursorColor: Theme.of(context).colorScheme.secondary,
+                              controller: _goalUnitController,
+                              textAlign: TextAlign.center,
+                              decoration: kTextFieldDecoration.copyWith(
+                                  hintText: "Units"),
+                            ),
+                          ),
+                        ],)
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     SizedBox(height: 10),
@@ -457,27 +480,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                       });
                     },
                   ),
-                  /*Center(child:
-                    MultiSelectChipField<UserModel?>(
-                      items: FriendList.map((friend) => MultiSelectItem<UserModel>(friend!, friend.displayName!)).toList(),
-                      //initialValue: [_animals[4], _animals[7], _animals[9]],
-                      title: Text("Add Friends"),
-                      headerColor: Colors.grey,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 1.8),
-                      ),
-                      selectedChipColor: PROGRESS_COLOR,
-                      selectedTextStyle: TextStyle(color: Color(0xFF1A3B33)),
-                      onTap: (values) {
-                        List<String> temp = [];
-                        for(int i = 0; i < values.length; i++) {
-                          temp.add(values[i]!.userId!);
-                        }
-                        memberListTemp.addAll(temp);
-                        _multiSelectKey.currentState?.validate();
-                      },
-                    ),
-                  ),*/
                   SizedBox(
                     height: 20,
                   ),
@@ -503,7 +505,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           }),
                         ),
                       ),
-                      Text("Hello"),
                       SizedBox(
                         height: 15,
                       ),

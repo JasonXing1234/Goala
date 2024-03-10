@@ -13,6 +13,7 @@ class FeedModel {
   String? childRetwetkey;
   String? parentName;
   String? title;
+  String? goalUnit;
   String? description;
   late String userId;
   String? deviceToken;
@@ -46,6 +47,7 @@ class FeedModel {
       this.parentName,
       this.title,
       this.description,
+        this. goalUnit,
       required this.userId,
       this.deviceToken,
       this.likeCount,
@@ -79,6 +81,7 @@ class FeedModel {
       "title": title,
       "GoalSum": GoalSum,
       "description": description,
+      "goalUnit": goalUnit,
       "likeCount": likeCount,
       "commentCount": commentCount ?? 0,
       "retweetCount": retweetCount ?? 0,
@@ -111,6 +114,7 @@ class FeedModel {
     grandparentKey = map['grandparentKey'];
     title = map['title'];
     description = map['description'];
+    goalUnit = map['goalUnit'];
     userId = map['userId'];
     deviceToken = map['deviceToken'];
     likeCount = map['likeCount'] ?? 0;

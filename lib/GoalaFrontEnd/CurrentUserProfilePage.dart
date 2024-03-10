@@ -568,7 +568,7 @@ class _UserTile2State extends State<_UserTile2> {
                     height: 25,
                     width: 160,
                     backgroundColor: Colors.grey[300]!,
-                    progressColor: widget.tweet.isCheckedIn == true ? AppColor.PROGRESS_COLOR : AppColor.PROGRESS_COLOR,
+                    progressColor: widget.tweet.isCheckedIn == true ? AppColor.PROGRESS_COLOR : Colors.black,
                     daysLeft: DateTime(
                         int.parse(widget.tweet.deadlineDate!.split('-')[0]),
                         int.parse(widget.tweet.deadlineDate!.split('-')[1]),
