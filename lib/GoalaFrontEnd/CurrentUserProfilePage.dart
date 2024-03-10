@@ -30,10 +30,18 @@ class CurrentUserProfilePage extends StatefulWidget {
 
 class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     with SingleTickerProviderStateMixin {
-  @override
   late TabController _tabController;
+  final ScrollController _scrollController = ScrollController();
   var initializationSettingsAndroid =
       new AndroidInitializationSettings('goala');
+
+  @override
+  void dispose(){
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = Provider.of<SearchState>(context, listen: false);
@@ -44,6 +52,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     listenForForegroundNotifications();
     super.initState();
   }
+
 
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
@@ -136,7 +145,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     }
 
     return Scaffold(
-
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.PROGRESS_COLOR,
         foregroundColor: Colors.white,
@@ -151,6 +160,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
           return Future.value();
         },
         child: CustomScrollView(
+          //controller: _scrollController,
           slivers: <Widget>[
             SliverAppBar(
               expandedHeight: MediaQuery.of(context).size.height * .20,
@@ -209,7 +219,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                   ),
                                 )
                               ],
-                            ),
+                            )
                             /*authState.isbusy
                                 ? SizedBox(
                                     width: 20,
@@ -305,64 +315,47 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              // first tab bar view widget
-                              Stack(children: <Widget>[
-                                Center(
-                                    child: Column(
-                                  children: <Widget>[
-                                    Center(
-                                      child: GridView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        addAutomaticKeepAlives: false,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemBuilder: (context, index) =>
-                                            _UserTile2(tweet: list![index]),
-                                        itemCount: list?.length ?? 0,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount:
-                                              2, // Number of items per row
-                                          crossAxisSpacing:
-                                              5.0, // Horizontal space between items
-                                          mainAxisSpacing:
-                                              5.0, // Vertical space between items
-                                          childAspectRatio:
-                                              0.8, // Aspect ratio of each item
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                              ]),
-                              // second tab bar view widget
-                              Center(
-                                  child: Column(
-                                children: <Widget>[
-                                  Center(
-                                    child: GridView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      addAutomaticKeepAlives: false,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) =>
-                                          _UserTile2(tweet: GroupGoalList![index]),
-                                      itemCount: GroupGoalList?.length ?? 0,
-                                      gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount:
-                                        2, // Number of items per row
-                                        crossAxisSpacing:
-                                        5.0, // Horizontal space between items
-                                        mainAxisSpacing:
-                                        5.0, // Vertical space between items
-                                        childAspectRatio:
-                                        0.8, // Aspect ratio of each item
-                                      ),
-                                    ),
+                              GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                addAutomaticKeepAlives: false,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) =>
+                                    _UserTile2(tweet: list![index]),
+                                itemCount: list?.length ?? 0,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      2, // Number of items per row
+                                  crossAxisSpacing:
+                                      5.0, // Horizontal space between items
+                                  mainAxisSpacing:
+                                      5.0, // Vertical space between items
+                                  childAspectRatio:
+                                      0.8, // Aspect ratio of each item
+                                ),
+                              ),
+                              GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  addAutomaticKeepAlives: false,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) =>
+                                      _UserTile2(tweet: GroupGoalList![index]),
+                                  itemCount: GroupGoalList?.length ?? 0,
+                                  gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                    2, // Number of items per row
+                                    crossAxisSpacing:
+                                    5.0, // Horizontal space between items
+                                    mainAxisSpacing:
+                                    5.0, // Vertical space between items
+                                    childAspectRatio:
+                                    0.8, // Aspect ratio of each item
                                   ),
-                                ],
-                              )),
+                                ),
+
                             ],
                           ),
                         ),
@@ -628,237 +621,6 @@ class _UserTile2State extends State<_UserTile2> {
           ],
         );
       },
-    );
-  }
-}
-
-@immutable
-class ExpandableFab extends StatefulWidget {
-  const ExpandableFab({
-    super.key,
-    this.initialOpen,
-    required this.distance,
-    required this.children,
-  });
-
-  final bool? initialOpen;
-  final double distance;
-  final List<Widget> children;
-
-  @override
-  State<ExpandableFab> createState() => _ExpandableFabState();
-}
-
-class _ExpandableFabState extends State<ExpandableFab>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _expandAnimation;
-  bool _open = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _open = widget.initialOpen ?? false;
-    _controller = AnimationController(
-      value: _open ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _expandAnimation = CurvedAnimation(
-      curve: Curves.fastOutSlowIn,
-      reverseCurve: Curves.easeOutQuad,
-      parent: _controller,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _toggle() {
-    setState(() {
-      _open = !_open;
-      if (_open) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        clipBehavior: Clip.none,
-        children: [
-          _buildTapToOpenFab(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTapToCloseFab() {
-    return SizedBox(
-      width: 56,
-      height: 56,
-      child: Center(
-        child: Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 4,
-          child: InkWell(
-            onTap: _toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                Icons.close,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _buildExpandingActionButtons() {
-    final children = <Widget>[];
-    final count = widget.children.length;
-    final step = 90.0 / (count - 1);
-    for (var i = 0, angleInDegrees = 0.0;
-        i < count;
-        i++, angleInDegrees += step) {
-      children.add(
-        _ExpandingActionButton(
-          directionInDegrees: angleInDegrees,
-          maxDistance: widget.distance,
-          progress: _expandAnimation,
-          child: widget.children[i],
-        ),
-      );
-    }
-    return children;
-  }
-
-  Widget _buildTapToOpenFab() {
-    return IgnorePointer(
-      ignoring: _open,
-      child: AnimatedContainer(
-        transformAlignment: Alignment.center,
-        transform: Matrix4.diagonal3Values(
-          _open ? 0.7 : 1.0,
-          _open ? 0.7 : 1.0,
-          1.0,
-        ),
-        duration: const Duration(milliseconds: 250),
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-        child: AnimatedOpacity(
-          opacity: _open ? 0.0 : 1.0,
-          curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
-          duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            backgroundColor: AppColor.PROGRESS_COLOR,
-            foregroundColor: Colors.white,
-            onPressed: _toggle,
-            child: const Icon(Icons.create),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-//29AB87
-@immutable
-class _ExpandingActionButton extends StatelessWidget {
-  const _ExpandingActionButton({
-    required this.directionInDegrees,
-    required this.maxDistance,
-    required this.progress,
-    required this.child,
-  });
-
-  final double directionInDegrees;
-  final double maxDistance;
-  final Animation<double> progress;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: progress,
-      builder: (context, child) {
-        final offset = Offset.fromDirection(
-          directionInDegrees * (math.pi / 180.0),
-          progress.value * maxDistance,
-        );
-        return Positioned(
-          right: 4.0 + offset.dx,
-          bottom: 4.0 + offset.dy,
-          child: Transform.rotate(
-            angle: (1.0 - progress.value) * math.pi / 2,
-            child: child!,
-          ),
-        );
-      },
-      child: FadeTransition(
-        opacity: progress,
-        child: child,
-      ),
-    );
-  }
-}
-
-@immutable
-class ActionButton extends StatelessWidget {
-  const ActionButton({
-    super.key,
-    this.onPressed,
-    required this.icon,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Material(
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      color: AppColor.PROGRESS_COLOR,
-      elevation: 4,
-      child: IconButton(
-        onPressed: onPressed,
-        icon: icon,
-        color: theme.colorScheme.onSecondary,
-      ),
-    );
-  }
-}
-
-@immutable
-class FakeItem extends StatelessWidget {
-  const FakeItem({
-    super.key,
-    required this.isBig,
-  });
-
-  final bool isBig;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-      height: isBig ? 128 : 36,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        color: Colors.grey.shade300,
-      ),
     );
   }
 }
