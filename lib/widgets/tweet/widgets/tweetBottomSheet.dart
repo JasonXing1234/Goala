@@ -438,6 +438,7 @@ class TweetBottomSheet {
                 isPrivate: false,
                 isGroupGoal: false,
                 isCheckedIn: false,
+                isComment: false,
                 childRetwetkey: model.getTweetKeyToRetweet,
                 createdAt: DateTime.now().toUtc().toString(),
                 user: myUser,

@@ -139,14 +139,10 @@ class _ProfilePageState extends State<ProfilePage>
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * .24,
+              expandedHeight: MediaQuery.of(context).size.height * .22,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: const <StretchMode>[
-                    StretchMode.zoomBackground,
-                    StretchMode.blurBackground
-                  ],
                   centerTitle: true,
                   background: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -238,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           : authState.isbusy
                                               ? TwitterColor.dodgeBlue
                                               : isFollower() == "Friend Added"
-                                                  ? TwitterColor.dodgeBlue
+                                                  ? AppColor.PROGRESS_COLOR
                                                   : TwitterColor.white,
                                       border: Border.all(
                                           color: isMyProfile
@@ -270,7 +266,7 @@ class _ProfilePageState extends State<ProfilePage>
                                             ? Colors.black87.withAlpha(180)
                                             : isFollower() == "Friend Added"
                                                 ? TwitterColor.white
-                                                : Colors.blue,
+                                                : Colors.black,
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -280,45 +276,6 @@ class _ProfilePageState extends State<ProfilePage>
                               ]))
                             ],
                           ),
-                          authState.isbusy
-                              ? SizedBox(
-                                  width: 20,
-                                )
-                              : state.isbusy
-                                  ? SizedBox(
-                                      width: 20,
-                                    )
-                                  : authState.profileUserModel.closenessMap ==
-                                          null
-                                      ? SizedBox(
-                                          width: 20,
-                                        )
-                                      : Expanded(
-                                          child: ListView(
-                                          scrollDirection: Axis.horizontal,
-                                          children: authState
-                                              .profileUserModel.closenessMap!
-                                              .map(
-                                            (model) {
-                                              return Row(children: [
-                                                state.getUserList() == null
-                                                    ? SizedBox(
-                                                        width: 20,
-                                                      )
-                                                    : CircularImage(
-                                                        path: state
-                                                            .getSingleUserDetail(
-                                                                model.split(
-                                                                    ' ')[0])
-                                                            .profilePic,
-                                                        height: 37),
-                                                SizedBox(
-                                                  width: 20,
-                                                )
-                                              ]);
-                                            },
-                                          ).toList(),
-                                        ))
                         ]),
                   )),
             ),
@@ -358,14 +315,14 @@ class _ProfilePageState extends State<ProfilePage>
                                 width: 200,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child: Text("Personal Goals"),
+                                  child: Text("Personal"),
                                 ),
                               ),
                               Container(
                                 width: 200,
                                 color: Color(0x69DC9E),
                                 child: Center(
-                                  child: Text("Group Goals"),
+                                  child: Text("Group"),
                                 ),
                               ),
                             ],
@@ -376,54 +333,46 @@ class _ProfilePageState extends State<ProfilePage>
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              // first tab bar view widget
-                              Stack(children: <Widget>[
-                                Center(
-                                    child: Column(
-                                  children: <Widget>[
-                                    SingleChildScrollView(
-                                      child: Center(
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          addAutomaticKeepAlives: false,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) =>
-                                              _UserTile(tweet: list![index]),
-                                          separatorBuilder: (_, index) =>
-                                              const Divider(
-                                            height: 0,
-                                          ),
-                                          itemCount: list?.length ?? 0,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                              ]),
-                              // second tab bar view widget
-                              Center(
-                                  child: Column(
-                                children: <Widget>[
-                                  Center(
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      addAutomaticKeepAlives: false,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) =>
-                                          _UserTile(
-                                              tweet: GroupGoalList![index]),
-                                      separatorBuilder: (_, index) =>
-                                          const Divider(
-                                        height: 0,
-                                      ),
-                                      itemCount: GroupGoalList?.length ?? 0,
-                                    ),
-                                  ),
-                                ],
-                              )),
+                              GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                addAutomaticKeepAlives: false,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) =>
+                                    _UserTile2(tweet: list![index]),
+                                itemCount: list?.length ?? 0,
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                  2, // Number of items per row
+                                  crossAxisSpacing:
+                                  5.0, // Horizontal space between items
+                                  mainAxisSpacing:
+                                  5.0, // Vertical space between items
+                                  childAspectRatio:
+                                  0.8, // Aspect ratio of each item
+                                ),
+                              ),
+                              GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                addAutomaticKeepAlives: false,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) =>
+                                    _UserTile2(tweet: GroupGoalList![index]),
+                                itemCount: GroupGoalList?.length ?? 0,
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                  2, // Number of items per row
+                                  crossAxisSpacing:
+                                  5.0, // Horizontal space between items
+                                  mainAxisSpacing:
+                                  5.0, // Vertical space between items
+                                  childAspectRatio:
+                                  0.8, // Aspect ratio of each item
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -500,7 +449,113 @@ class _UserTileState extends State<_UserTile> {
       subtitle: Text(widget.tweet.description!),
     );
   }
+
 }
+
+class _UserTile2 extends StatefulWidget {
+  const _UserTile2({Key? key, required this.tweet}) : super(key: key);
+  //final UserModel user;
+  final FeedModel tweet;
+
+  @override
+  State<_UserTile2> createState() => _UserTile2State();
+}
+
+class _UserTile2State extends State<_UserTile2> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = Provider.of<FeedState>(context);
+    return GridTile(
+      child: InkWell(
+          onTap: () {
+            state.getPostDetailFromDatabase(null, model: widget.tweet);
+            Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
+          },
+          child:
+          Row(
+              children:
+              [
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 160,
+                      child: Text(
+                        widget.tweet.title!,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),),
+                    ),
+                    SizedBox(height: 3),
+                    SizedBox(
+                      height: 25,
+                      width: 160,
+                      child: CustomProgressBar(
+                        progress: widget.tweet.isHabit == false
+                            ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                            : widget.tweet.checkInList!
+                            .where((item) => item == true)
+                            .length /
+                            8,
+                        height: 25,
+                        width: 160,
+                        backgroundColor: Colors.grey[300]!,
+                        progressColor: widget.tweet.isCheckedIn == true
+                            ? AppColor.PROGRESS_COLOR
+                            : Colors.black,
+                        daysLeft: DateTime(
+                            int.parse(widget.tweet.deadlineDate!.split('-')[0]),
+                            int.parse(widget.tweet.deadlineDate!.split('-')[1]),
+                            int.parse(widget.tweet.deadlineDate!.split('-')[2]))
+                            .difference(DateTime(DateTime
+                            .now()
+                            .year,
+                            DateTime
+                                .now()
+                                .month, DateTime
+                                .now()
+                                .day))
+                            .inDays,
+                        isHabit: widget.tweet.isHabit,
+                        checkInDays: widget.tweet.checkInList!,
+                      ),
+                    ),
+                    SizedBox(height: 7),
+                    if (widget.tweet.coverPhoto != null)
+                      Container(
+                        width: 160, // Specify the width of the container
+                        height: 160, // Specify the height of the container
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          // Use ClipRRect for borderRadius if needed
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            widget.tweet.coverPhoto!,
+                            fit: BoxFit
+                                .cover, // This ensures the image covers the container
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ]
+          )),
+    );
+  }
+}
+
 
 class Choice {
   const Choice(

@@ -9,6 +9,8 @@ import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
+import '../../../GoalaFrontEnd/Comments.dart';
+
 class FeedPostDetail extends StatefulWidget {
   const FeedPostDetail({Key? key, required this.postId}) : super(key: key);
   final String postId;
@@ -46,7 +48,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   }
 
   Widget _commentRow(FeedModel model) {
-    return Tweet(
+    return Comments(
       model: model,
       type: TweetType.Reply,
       trailing: TweetBottomSheet().tweetOptionIcon(context,

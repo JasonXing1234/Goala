@@ -11,7 +11,10 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
-class TweetIconsRow extends StatelessWidget {
+import '../../../helper/constant.dart';
+import '../../../model/user.dart';
+
+class TweetIconsRow extends StatefulWidget {
   final FeedModel model;
   final Color iconColor;
   final Color iconEnableColor;
@@ -30,6 +33,89 @@ class TweetIconsRow extends StatelessWidget {
       required this.scaffoldKey})
       : super(key: key);
 
+  @override
+  State<TweetIconsRow> createState() => _TweetIconsRowState();
+}
+
+class _TweetIconsRowState extends State<TweetIconsRow> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the controller when the widget is removed from the
+    // widget tree. This also removes the listener.
+    _controller.dispose();
+    super.dispose();
+  }
+  void _showBottomPopup(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return
+          Padding(
+            padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          height: 150,
+          child: Column(
+            children: [
+              TextField(
+                controller: _controller,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Comment',
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () async {
+                      var state = Provider.of<FeedState>(context, listen: false);
+                      var authState = Provider.of<AuthState>(context, listen: false);
+                      state.setTweetToReply = widget.model;
+                      var myUser = authState.userModel;
+                      var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
+                      var commentedUser = UserModel(
+                          displayName: myUser.displayName ?? myUser.email!.split('@')[0],
+                          profilePic: profilePic,
+                          userId: myUser.userId,
+                          isVerified: authState.userModel!.isVerified,
+                          userName: authState.userModel!.userName);
+                      FeedModel reply = FeedModel(
+                        isComment: false,
+                        isGroupGoal: false,
+                        description: _controller.text,
+                        lanCode: '',
+                        user: commentedUser,
+                        createdAt: DateTime.now().toUtc().toString(),
+                        grandparentKey: state.tweetToReplyModel == null
+                            ? null
+                            : state.tweetToReplyModel!.parentkey,
+                        parentkey: state.tweetToReplyModel!.key,
+                        userId: myUser.userId!,
+                        isCheckedIn: false,
+                        isPrivate: false,
+                        isHabit: false,
+                      );
+                      String? tweetId = await state.addCommentToPost(reply);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ),
+              // If you want the button outside the TextField
+            ],
+          ),
+        ) );
+      },
+    );
+  }
+
   Widget _likeCommentsIcons(BuildContext context, FeedModel model) {
     var authState = Provider.of<AuthState>(context, listen: false);
 
@@ -39,20 +125,13 @@ class TweetIconsRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(
-            width: 20,
-          ),
           _iconWidget(
             context,
-            text: isTweetDetail ? '' : model.commentCount.toString(),
+            text: widget.isTweetDetail ? '' : model.commentCount.toString(),
             icon: AppIcon.reply,
-            iconColor: iconColor,
-            size: size ?? 20,
-            onPressed: () {
-              var state = Provider.of<FeedState>(context, listen: false);
-              state.setTweetToReply = model;
-              Navigator.of(context).pushNamed('/ComposeTweetPage');
-            },
+            iconColor: widget.iconColor,
+            size: 25,
+            onPressed: () => _showBottomPopup(context),
           ),
           /*_iconWidget(context,
               text: isTweetDetail ? '' : model.retweetCount.toString(),
@@ -64,7 +143,7 @@ class TweetIconsRow extends StatelessWidget {
           }),*/
           _iconWidget(
             context,
-            text: isTweetDetail ? '' : model.likeCount.toString(),
+            text: widget.isTweetDetail ? '' : model.likeCount.toString(),
             icon: model.likeList!.any((userId) => userId == authState.userId)
                 ? AppIcon.heartFill
                 : AppIcon.heartEmpty,
@@ -73,14 +152,14 @@ class TweetIconsRow extends StatelessWidget {
             },
             iconColor:
                 model.likeList!.any((userId) => userId == authState.userId)
-                    ? iconEnableColor
-                    : iconColor,
-            size: size ?? 20,
+                    ? widget.iconEnableColor
+                    : widget.iconColor,
+            size: 25,
           ),
           _iconWidget(context, text: '', icon: null, sysIcon: Icons.share,
               onPressed: () {
             shareTweet(context);
-          }, iconColor: iconColor, size: size ?? 20),
+          }, iconColor: widget.iconColor, size: widget.size ?? 20),
         ],
       ),
     );
@@ -133,7 +212,7 @@ class TweetIconsRow extends StatelessWidget {
         Row(
           children: <Widget>[
             const SizedBox(width: 5),
-            customText(Utility.getPostTime2(model.createdAt),
+            customText(Utility.getPostTime2(widget.model.createdAt),
                 style: TextStyles.textStyle14),
             const SizedBox(width: 10),
             customText('Fwitter for Android',
@@ -147,8 +226,8 @@ class TweetIconsRow extends StatelessWidget {
 
   Widget _likeCommentWidget(BuildContext context) {
     bool isLikeAvailable =
-        model.likeCount != null ? model.likeCount! > 0 : false;
-    bool isRetweetAvailable = model.retweetCount! > 0;
+        widget.model.likeCount != null ? widget.model.likeCount! > 0 : false;
+    bool isRetweetAvailable = widget.model.retweetCount! > 0;
     bool isLikeRetweetAvailable = isRetweetAvailable || isLikeAvailable;
     return Column(
       children: <Widget>[
@@ -168,7 +247,7 @@ class TweetIconsRow extends StatelessWidget {
                   children: <Widget>[
                     !isRetweetAvailable
                         ? const SizedBox.shrink()
-                        : customText(model.retweetCount.toString(),
+                        : customText(widget.model.retweetCount.toString(),
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                     !isRetweetAvailable
@@ -196,10 +275,10 @@ class TweetIconsRow extends StatelessWidget {
                           children: <Widget>[
                             customSwitcherWidget(
                               duraton: const Duration(milliseconds: 300),
-                              child: customText(model.likeCount.toString(),
+                              child: customText(widget.model.likeCount.toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
-                                  key: ValueKey(model.likeCount)),
+                                  key: ValueKey(widget.model.likeCount)),
                             ),
                             const SizedBox(width: 5),
                             customText('Likes', style: TextStyles.subtitleStyle)
@@ -238,7 +317,7 @@ class TweetIconsRow extends StatelessWidget {
   void addLikeToTweet(BuildContext context) {
     var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
-    state.addLikeToTweet(model, authState.userId);
+    state.addLikeToTweet(widget.model, authState.userId);
   }
 
   void onLikeTextPressed(BuildContext context) {
@@ -246,7 +325,7 @@ class TweetIconsRow extends StatelessWidget {
       CustomRoute<bool>(
         builder: (BuildContext context) => UsersListPage(
           pageTitle: "Liked by",
-          userIdsList: model.likeList!.map((userId) => userId).toList(),
+          userIdsList: widget.model.likeList!.map((userId) => userId).toList(),
           emptyScreenText: "This tweet has no like yet",
           emptyScreenSubTileText:
               "Once a user likes this tweet, user list will be shown here",
@@ -256,7 +335,7 @@ class TweetIconsRow extends StatelessWidget {
   }
 
   void shareTweet(BuildContext context) async {
-    TweetBottomSheet().openShareTweetBottomSheet(context, model, type);
+    TweetBottomSheet().openShareTweetBottomSheet(context, widget.model, widget.type);
   }
 
   @override
@@ -265,7 +344,7 @@ class TweetIconsRow extends StatelessWidget {
       children: <Widget>[
         //isTweetDetail ? _timeWidget(context) : const SizedBox(),
         //isTweetDetail ? _likeCommentWidget(context) : const SizedBox(),
-        _likeCommentsIcons(context, model)
+        _likeCommentsIcons(context, widget.model)
       ],
     );
   }

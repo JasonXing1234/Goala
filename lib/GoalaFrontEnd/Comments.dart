@@ -20,13 +20,13 @@ import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
 
-class Tweet extends StatelessWidget {
+class Comments extends StatelessWidget {
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
   final bool isDisplayOnProfile;
   final GlobalKey<ScaffoldState> scaffoldKey;
-  const Tweet({
+  const Comments({
     Key? key,
     required this.model,
     this.trailing,
@@ -40,7 +40,7 @@ class Tweet extends StatelessWidget {
       Utility.copyToClipBoard(
           context: context,
           text: model.description ?? "",
-          message: "Tweet copy to clipboard");
+          message: "Post copy to clipboard");
     }
   }
 
@@ -77,14 +77,7 @@ class Tweet extends StatelessWidget {
                   ),
                 ),
               ),*/
-        InkWell(
-          onLongPress: () {
-            onLongPressedTweet(context);
-          },
-          onTap: () {
-            onTapTweet(context);
-          },
-          child: Column(
+        Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
@@ -95,16 +88,16 @@ class Tweet extends StatelessWidget {
                 ),
                 child: type == TweetType.Tweet || type == TweetType.Reply
                     ? _TweetBody(
-                        isDisplayOnProfile: isDisplayOnProfile,
-                        model: model,
-                        trailing: trailing,
-                        type: type,
-                      )
+                  isDisplayOnProfile: isDisplayOnProfile,
+                  model: model,
+                  trailing: trailing,
+                  type: type,
+                )
                     : _TweetDetailBody(
-                        model: model,
-                        trailing: trailing,
-                        type: type,
-                      ),
+                  model: model,
+                  trailing: trailing,
+                  type: type,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16),
@@ -121,9 +114,9 @@ class Tweet extends StatelessWidget {
                       isImageAvailable: model.imagePath != null &&
                           model.imagePath!.isNotEmpty,
                     ),*/
-              Padding(
+              /*Padding(
                 padding:
-                    EdgeInsets.only(left: type == TweetType.Detail ? 10 : 60),
+                EdgeInsets.only(left: type == TweetType.Detail ? 10 : 60),
                 child: TweetIconsRow(
                   type: type,
                   model: model,
@@ -133,13 +126,13 @@ class Tweet extends StatelessWidget {
                   size: 20,
                   scaffoldKey: GlobalKey<ScaffoldState>(),
                 ),
-              ),
+              ),*/
+              SizedBox(height: 20),
               type == TweetType.ParentTweet
                   ? const SizedBox.shrink()
                   : const Divider(height: .5, thickness: .5)
             ],
           ),
-        ),
       ],
     );
   }
@@ -152,10 +145,10 @@ class _TweetBody extends StatefulWidget {
   final bool isDisplayOnProfile;
   const _TweetBody(
       {Key? key,
-      required this.model,
-      this.trailing,
-      required this.type,
-      required this.isDisplayOnProfile})
+        required this.model,
+        this.trailing,
+        required this.type,
+        required this.isDisplayOnProfile})
       : super(key: key);
 
   @override
@@ -178,7 +171,7 @@ class _TweetBodyState extends State<_TweetBody> {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-              'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
+          'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
         },
         body: jsonEncode(
           <String, dynamic>{
@@ -228,13 +221,13 @@ class _TweetBodyState extends State<_TweetBody> {
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
         : widget.type == TweetType.Detail ||
-                widget.type == TweetType.ParentTweet
-            ? 18
-            : 14;
+        widget.type == TweetType.ParentTweet
+        ? 18
+        : 14;
     FontWeight descriptionFontWeight =
-        widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
-            ? FontWeight.w400
-            : FontWeight.w400;
+    widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
+        ? FontWeight.w400
+        : FontWeight.w400;
 
     TextStyle textStyle = TextStyle(
         color: Colors.black,
@@ -294,11 +287,11 @@ class _TweetBodyState extends State<_TweetBody> {
                               const SizedBox(width: 3),
                               widget.model.user!.isVerified!
                                   ? customIcon(
-                                      context,
-                                      icon: AppIcon.blueTick,
-                                      iconColor: AppColor.primary,
-                                      size: 13,
-                                    )
+                                context,
+                                icon: AppIcon.blueTick,
+                                iconColor: AppColor.primary,
+                                size: 13,
+                              )
                                   : const SizedBox(width: 0),
                               SizedBox(
                                 width: widget.model.user!.isVerified! ? 5 : 0,
@@ -316,92 +309,15 @@ class _TweetBodyState extends State<_TweetBody> {
                         //Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
-                    widget.model.grandparentKey == null
-                        ? Row(
-                            children: [
-                              SizedBox(
-                                height: 25,
-                                width: 230,
-                                child: CustomProgressBar(
-                                  progress: widget.model.isHabit == false
-                                      ? tempModel!.GoalAchieved! /
-                                          tempModel!.GoalSum!
-                                      : tempModel!.checkInList!
-                                              .where((item) => item == true)
-                                              .length / 8,
-                                  height: 25,
-                                  width: 230,
-                                  backgroundColor: Colors.grey[300]!,
-                                  progressColor: AppColor.PROGRESS_COLOR,
-                                  daysLeft: DateTime(
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[0]),
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[1]),
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[2]))
-                                      .difference(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day))
-                                      .inDays,
-                                  isHabit: tempModel!.isHabit,
-                                  checkInDays: tempModel!.checkInList!,
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              PokeButton(onPressed: () {
-                                _onPressPoke(widget.model.deviceToken,
-                                    authState.userModel!.displayName);
-                              }),
-                            ],
-                          )
-                        : SizedBox.shrink(),
-                    widget.model.parentName != null
-                        ? Text(
-                            widget.model.parentName!,
-                            style: TextStyles.bigSubtitleStyle,
-                          )
-                        : Text(''),
-                    SizedBox(height: 10),
-                    widget.model.goalPhotoList != null
-                        ? Container(
-                            width: 230, // Specify the width of the container
-                            height: 230, // Specify the height of the container
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              // Use ClipRRect for borderRadius if needed
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                widget.model.goalPhotoList![0]!,
-                                fit: BoxFit
-                                    .cover, // This ensures the image covers the container
-                              ),
-                            ),
-                          )
-                        //TODO:Keep this listview gallery code, might be useful in the future
-                        /*SizedBox(
-                            height: 200,
-                            child:
-                            ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.model.goalPhotoList!.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  // Add some padding around each image
-                                  child: Image.network(
-                                    widget.model.goalPhotoList![0]!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                );
-                              },
-                            )
-                    )*/
-                        : SizedBox(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: widget.model.description == null
+                          ? const SizedBox()
+                          : Text(widget.model.description!, style: TextStyles.bigSubtitleStyle,),
+                    ),
                   ],
                 ),
               ),
@@ -429,15 +345,15 @@ class _TweetDetailBody extends StatelessWidget {
     double descriptionFontSize = type == TweetType.Tweet
         ? context.getDimension(context, 15)
         : type == TweetType.Detail
-            ? context.getDimension(context, 18)
-            : type == TweetType.ParentTweet
-                ? context.getDimension(context, 14)
-                : 10;
+        ? context.getDimension(context, 18)
+        : type == TweetType.ParentTweet
+        ? context.getDimension(context, 14)
+        : 10;
 
     FontWeight descriptionFontWeight =
-        type == TweetType.Tweet || type == TweetType.Tweet
-            ? FontWeight.w300
-            : FontWeight.w400;
+    type == TweetType.Tweet || type == TweetType.Tweet
+        ? FontWeight.w300
+        : FontWeight.w400;
     TextStyle textStyle = TextStyle(
         color: Colors.black,
         fontSize: descriptionFontSize,
@@ -450,13 +366,13 @@ class _TweetDetailBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         model.parentkey != null &&
-                model.childRetwetkey == null &&
-                type != TweetType.ParentTweet
+            model.childRetwetkey == null &&
+            type != TweetType.ParentTweet
             ? ParentTweetWidget(
-                childRetwetkey: model.parentkey!,
-                trailing: trailing,
-                type: type,
-              )
+          childRetwetkey: model.parentkey!,
+          trailing: trailing,
+          type: type,
+        )
             : const SizedBox.shrink(),
         SizedBox(
           width: double.infinity,
@@ -485,11 +401,11 @@ class _TweetDetailBody extends StatelessWidget {
                     const SizedBox(width: 3),
                     model.user!.isVerified!
                         ? customIcon(
-                            context,
-                            icon: AppIcon.blueTick,
-                            iconColor: AppColor.primary,
-                            size: 13,
-                          )
+                      context,
+                      icon: AppIcon.blueTick,
+                      iconColor: AppColor.primary,
+                      size: 13,
+                    )
                         : const SizedBox(width: 0),
                     SizedBox(
                       width: model.user!.isVerified! ? 5 : 0,
@@ -503,101 +419,15 @@ class _TweetDetailBody extends StatelessWidget {
               model.description == null
                   ? const SizedBox()
                   : Padding(
-                      padding: type == TweetType.ParentTweet
-                          ? const EdgeInsets.only(left: 80, right: 16)
-                          : const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          UrlText(
-                              text: model.description!.removeSpaces,
-                              onHashTagPressed: (tag) {
-                                cprint(tag);
-                              },
-                              style: textStyle,
-                              urlStyle: urlStyle),
-                        ],
-                      ),
-                    ),
-              if (model.imagePath == null && model.description != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: CustomLinkMediaInfo(text: model.description!),
-                )
+                padding: type == TweetType.ParentTweet
+                    ? const EdgeInsets.only(left: 80, right: 16)
+                    : const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(model.description!, style: TextStyles.bigSubtitleStyle,),
+              ),
+
             ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-class CustomProgressBar extends StatelessWidget {
-  final double width;
-  final double height;
-  final double progress;
-  final Color backgroundColor;
-  final Color progressColor;
-  final int daysLeft;
-  final bool isHabit;
-  final List<bool> checkInDays;
-
-  const CustomProgressBar({
-    Key? key,
-    required this.width,
-    required this.height,
-    required this.progress,
-    required this.backgroundColor,
-    required this.progressColor,
-    required this.daysLeft,
-    required this.isHabit,
-    required this.checkInDays,
-  }) : super(key: key);
-
-  int calculateStreak(List<bool> values) {
-    int streak = 0;
-
-    // Iterate over the list from the end to the beginning
-    for (int i = values.length - 1; i >= 0; i--) {
-      // If the value is true, increment the streak
-      if (values[i]) {
-        streak++;
-      } else {
-        // If a false is encountered, break the loop as we only want consecutive trues from the end
-        break;
-      }
-    }
-    return streak;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        Container(
-          width: progress <= 1 ? width * progress : 0,
-          height: height,
-          decoration: BoxDecoration(
-            color: progressColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        Center(
-            child: isHabit == true
-                ? Text(calculateStreak(checkInDays).toString() + ' days streak',
-                    style: TextStyle(fontSize: height * 0.6))
-                : Text(
-                    daysLeft.toString() + ' days left',
-                    style: TextStyle(fontSize: height * 0.6),
-                  )),
       ],
     );
   }

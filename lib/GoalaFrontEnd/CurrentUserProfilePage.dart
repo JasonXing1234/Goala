@@ -266,7 +266,8 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                    child:
+                    Column(
                       children: [
                         // give the tab bar a height [can change hheight to preferred height]
                         Container(
@@ -593,34 +594,6 @@ class _UserTile2State extends State<_UserTile2> {
               ],
             ),]
           )),
-    );
-  }
-
-  void _showPopupWindow(BuildContext context, FeedModel tempFeed) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter an Integer'),
-          content: TextField(
-            controller: _textEditingController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(hintText: "Enter integer here"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Commit'),
-              onPressed: () {
-                var state = Provider.of<FeedState>(context, listen: false);
-                state.addNumberToGoal(
-                    tempFeed, int.parse(_textEditingController.text));
-                print('Entered Integer: ${_textEditingController.text}');
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

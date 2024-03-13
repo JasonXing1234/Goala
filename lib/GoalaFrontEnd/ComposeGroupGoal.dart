@@ -248,6 +248,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
         userName: authState.userModel!.userName);
     var tags = Utility.getHashTags(_descriptionController.text);
     FeedModel reply = FeedModel(
+      isComment: false,
       isGroupGoal: memberListTemp.length == 1 ? false : true,
       title: _titleController.text,
       description: _descriptionController.text,
