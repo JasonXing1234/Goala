@@ -39,8 +39,10 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
+  TextEditingController userController = TextEditingController();
   Widget _usernameInput() {
     return TextField(
+      controller: userController,
       decoration: InputDecoration(
         hintText: "Email",
         hintStyle: TextStyle(fontStyle: FontStyle.italic),
@@ -53,8 +55,10 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
+  TextEditingController passwordController = TextEditingController();
   Widget _passwordInput() {
     return TextField(
+      controller: passwordController,
       decoration: InputDecoration(
         hintText: "Password",
         hintStyle: TextStyle(fontStyle: FontStyle.italic),
