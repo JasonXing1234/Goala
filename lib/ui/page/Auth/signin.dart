@@ -131,8 +131,11 @@ class _SignInState extends State<SignIn> {
       return;
     }
     loader.showLoader(context);
-    var isValid = Utility.validateCredentials(
-        context, _emailController.text, _passwordController.text);
+    bool isValid = Utility.validateCredentials(
+      context,
+      _emailController.text,
+      _passwordController.text,
+    );
     if (isValid) {
       state
           .signIn(_emailController.text, _passwordController.text,
@@ -157,8 +160,11 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: customText('Sign in',
-            context: context, style: const TextStyle(fontSize: 20)),
+        title: customText(
+          'Sign in',
+          context: context,
+          style: const TextStyle(fontSize: 20),
+        ),
         centerTitle: true,
       ),
       body: _body(context),

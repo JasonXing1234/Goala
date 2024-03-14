@@ -203,19 +203,19 @@ class Utility {
   static bool validateCredentials(
       BuildContext context, String? email, String? password) {
     if (email == null || email.isEmpty) {
-      customSnackBar(context, 'Please enter email id');
+      customSnackBar(context, 'Please enter your email');
       return false;
     } else if (password == null || password.isEmpty) {
-      customSnackBar(context, 'Please enter password');
+      customSnackBar(context, 'Please enter your password');
       return false;
     } else if (password.length < 8) {
-      customSnackBar(context, 'Password must me 8 character long');
+      customSnackBar(context, 'Password must be 8 character long');
       return false;
     }
 
     var status = validateEmail(email);
     if (!status) {
-      customSnackBar(context, 'Please enter valid email id');
+      customSnackBar(context, 'Please enter valid email address');
       return false;
     }
     return true;

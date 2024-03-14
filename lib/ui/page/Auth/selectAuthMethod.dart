@@ -1,4 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
+import 'package:Goala/helper/utility.dart';
 import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,7 @@ import 'package:Goala/ui/page/Auth/signup.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import 'signin.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -21,12 +20,30 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   void _onLogInPress() {
     var state = Provider.of<AuthState>(context, listen: false);
-    Navigator.push(
+    if (state.isbusy) {
+      return;
+    }
+    bool isValid = Utility.validateCredentials(
       context,
-      MaterialPageRoute(
-        builder: (context) => SignIn(loginCallback: state.getCurrentUser),
-      ),
+      _emailController.text,
+      _passwordController.text,
     );
+    if (isValid) {
+      cprint("Logged in");
+      state
+          .signIn(_emailController.text, _passwordController.text,
+              context: context)
+          .then((status) {
+        if (state.user != null) {
+          Navigator.pop(context);
+          state.getCurrentUser();
+        } else {
+          cprint('Unable to login', errorIn: '_emailLoginButton');
+        }
+      });
+    } else {
+      cprint("Not logged in");
+    }
   }
 
   void _onCreateAccountPress() {
@@ -39,10 +56,11 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  TextEditingController userController = TextEditingController();
-  Widget _usernameInput() {
+  TextEditingController _emailController = TextEditingController();
+  Widget _emailInput() {
     return TextField(
-      controller: userController,
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         hintText: "Email",
         hintStyle: TextStyle(fontStyle: FontStyle.italic),
@@ -51,14 +69,22 @@ class _WelcomePageState extends State<WelcomePage> {
             Radius.circular(99),
           ),
         ),
+        focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(99),
+            ),
+            borderSide: BorderSide(color: Colors.blue)),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       ),
     );
   }
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   Widget _passwordInput() {
     return TextField(
-      controller: passwordController,
+      controller: _passwordController,
+      obscureText: true,
       decoration: InputDecoration(
         hintText: "Password",
         hintStyle: TextStyle(fontStyle: FontStyle.italic),
@@ -67,9 +93,22 @@ class _WelcomePageState extends State<WelcomePage> {
             Radius.circular(99),
           ),
         ),
-        suffixIcon: Icon(Icons.remove_red_eye),
+        focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(99),
+            ),
+            borderSide: BorderSide(color: Colors.blue)),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
   }
 
   Widget _body() {
@@ -92,7 +131,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
             ),
             const Spacer(),
-            _usernameInput(),
+            _emailInput(),
             const SizedBox(height: 16),
             _passwordInput(),
             const SizedBox(height: 24),
@@ -133,10 +172,6 @@ class _WelcomePageState extends State<WelcomePage> {
                   GoogleLoginButton(
                     loader: CustomLoader(),
                   ),
-                  const SizedBox(width: 24),
-                  GoogleLoginButton(
-                    loader: CustomLoader(),
-                  ),
                 ],
               ),
             ),
@@ -165,6 +200,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     var state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: state.authStatus == AuthStatus.NOT_LOGGED_IN ||
               state.authStatus == AuthStatus.NOT_DETERMINED
           ? _body()
