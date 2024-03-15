@@ -58,54 +58,60 @@ class _SignInPageState extends State<SignInPage> {
 
   TextEditingController _emailController = TextEditingController();
   Widget _emailInput() {
-    return TextField(
-      controller: _emailController,
-      onSubmitted: (_) {
-        _onLogInPress();
-      },
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        hintText: "Email",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: TextField(
+        controller: _emailController,
+        onSubmitted: (_) {
+          _onLogInPress();
+        },
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          hintText: "Email",
+          hintStyle: TextStyle(fontStyle: FontStyle.italic),
+          border: InputBorder.none,
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(99),
             ),
-            borderSide: BorderSide(color: Colors.blue)),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            borderSide: BorderSide(color: AppColor.PROGRESS_COLOR),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        ),
       ),
     );
   }
 
   TextEditingController _passwordController = TextEditingController();
   Widget _passwordInput() {
-    return TextField(
-      controller: _passwordController,
-      onSubmitted: (_) {
-        _onLogInPress();
-      },
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: "Password",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: TextField(
+        controller: _passwordController,
+        onSubmitted: (_) {
+          _onLogInPress();
+        },
+        obscureText: true,
+        decoration: InputDecoration(
+          hintText: "Email",
+          hintStyle: TextStyle(fontStyle: FontStyle.italic),
+          border: InputBorder.none,
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(99),
             ),
-            borderSide: BorderSide(color: Colors.blue)),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            borderSide: BorderSide(color: AppColor.PROGRESS_COLOR),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        ),
       ),
     );
   }
