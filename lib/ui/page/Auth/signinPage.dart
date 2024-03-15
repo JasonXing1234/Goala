@@ -1,7 +1,7 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/helper/utility.dart';
-import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
-import 'package:Goala/widgets/newWidget/customLoader.dart';
+import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
+import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
@@ -18,6 +18,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   void _onLogInPress() {
     var state = Provider.of<AuthState>(context, listen: false);
     if (state.isbusy) {
@@ -56,63 +58,20 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  TextEditingController _emailController = TextEditingController();
   Widget _emailInput() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: _emailController,
-        onSubmitted: (_) {
-          _onLogInPress();
-        },
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          hintText: "Email",
-          hintStyle: TextStyle(fontStyle: FontStyle.italic),
-          border: InputBorder.none,
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(99),
-            ),
-            borderSide: BorderSide(color: AppColor.PROGRESS_COLOR),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-      ),
+    return authTextInput(
+      controller: _emailController,
+      hintText: "Email",
+      onSubmit: (_) => {_onLogInPress()},
     );
   }
 
-  TextEditingController _passwordController = TextEditingController();
   Widget _passwordInput() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: _passwordController,
-        onSubmitted: (_) {
-          _onLogInPress();
-        },
-        obscureText: true,
-        decoration: InputDecoration(
-          hintText: "Email",
-          hintStyle: TextStyle(fontStyle: FontStyle.italic),
-          border: InputBorder.none,
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(99),
-            ),
-            borderSide: BorderSide(color: AppColor.PROGRESS_COLOR),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-      ),
+    return authTextInput(
+      controller: _passwordController,
+      obscureText: true,
+      hintText: "Password",
+      onSubmit: (_) => {_onLogInPress()},
     );
   }
 
@@ -167,26 +126,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             const Spacer(),
-            Text(
-              "OR LOG IN WITH",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: AppColor.extraLightGrey,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 2,
-                  ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GoogleLoginButton(
-                    loader: CustomLoader(),
-                  ),
-                ],
-              ),
-            ),
+            otherLoginOptions(context),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

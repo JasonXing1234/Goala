@@ -1,12 +1,13 @@
 import 'dart:math';
 
+import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
+import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/constant.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
-import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:Goala/widgets/customWidgets.dart';
@@ -57,105 +58,114 @@ class _SignupState extends State<Signup> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _entryField('Name', controller: _nameController),
-            _entryField('Enter email',
-                controller: _emailController, isEmail: true),
-            _entryField('Enter password',
-                controller: _passwordController, isPassword: true),
-            _entryField('Confirm password',
-                controller: _confirmController, isPassword: true),
-            _submitButton(context),
-            const Divider(height: 30),
-            const SizedBox(height: 30),
-            GoogleLoginButton(
-              loginCallback: widget.loginCallback,
-              loader: loader,
+            authTextInput(
+              controller: _nameController,
+              inputType: TextInputType.name,
+              hintText: "Name",
             ),
-            const SizedBox(height: 30),
+            authTextInput(
+              hintText: "Email",
+              controller: _emailController,
+            ),
+            authTextInput(
+              controller: _passwordController,
+              obscureText: true,
+              hintText: "Password",
+            ),
+            authTextInput(
+              controller: _confirmController,
+              obscureText: true,
+              hintText: "Confirm Password",
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              width: double.infinity,
+              child: CustomFlatButton(
+                label: "SIGN UP",
+                onPressed: () => _submitForm(context),
+                borderRadius: 30,
+                color: AppColor.PROGRESS_COLOR,
+              ),
+            ),
+            const Divider(height: 30),
+            otherLoginOptions(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _entryField(String hint,
-      {required TextEditingController controller,
-      bool isPassword = false,
-      bool isEmail = false}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-        style: const TextStyle(
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.normal,
-        ),
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          hintText: hint,
-          border: InputBorder.none,
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
-            ),
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-      ),
-    );
-  }
-
-  Widget _submitButton(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 35),
-      child: CustomFlatButton(
-        label: "Sign up",
-        onPressed: () => _submitForm(context),
-        borderRadius: 30,
-      ),
-    );
-  }
-
   void _submitForm(BuildContext context) {
     if (_nameController.text.isEmpty) {
-      Utility.customSnackBar(context, 'Please enter name');
-      return;
-    }
-    if (_nameController.text.length > 27) {
-      Utility.customSnackBar(context, 'Name length cannot exceed 27 character');
-      return;
-    }
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      Utility.customSnackBar(context, 'Please fill form carefully');
-      return;
-    } else if (_passwordController.text != _confirmController.text) {
       Utility.customSnackBar(
-          context, 'Password and confirm password did not match');
+        context,
+        "Please enter name",
+        backgroundColor: Colors.blue,
+      );
+      return;
+    }
+
+    if (_emailController.text.isEmpty) {
+      Utility.customSnackBar(
+        context,
+        "Please enter email",
+        backgroundColor: Colors.blue,
+      );
+      return;
+    }
+
+    if (_passwordController.text.isEmpty || _confirmController.text.isEmpty) {
+      Utility.customSnackBar(
+        context,
+        "Please enter password",
+        backgroundColor: Colors.blue,
+      );
+      return;
+    }
+
+    if (_nameController.text.length > 27) {
+      Utility.customSnackBar(
+        context,
+        "Name length cannot exceed 27 character",
+        backgroundColor: Colors.blue,
+      );
+      return;
+    }
+
+    if (_passwordController.text != _confirmController.text) {
+      Utility.customSnackBar(
+        context,
+        "Passwords did not match",
+        backgroundColor: Colors.blue,
+      );
+      return;
+    }
+
+    bool isValid = Utility.validateCredentials(
+      context,
+      _emailController.text,
+      _passwordController.text,
+    );
+    if (!isValid) {
       return;
     }
 
     loader.showLoader(context);
     var state = Provider.of<AuthState>(context, listen: false);
     Random random = Random();
-    int randomNumber = random.nextInt(7);
+    int randomNumber = random.nextInt(Constants.dummyProfilePicList.length);
 
     UserModel user = UserModel(
-        email: _emailController.text.toLowerCase(),
-        bio: 'Edit profile to update bio',
-        // contact:  _mobileController.text,
-        displayName: _nameController.text,
-        dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
-            .toString(),
-        location: 'Somewhere in universe',
-        profilePic: Constants.dummyProfilePicList[randomNumber],
-        isVerified: false);
+      email: _emailController.text.toLowerCase(),
+      bio: "Edit profile to update bio",
+      // contact:  _mobileController.text,
+      displayName: _nameController.text,
+      dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
+          .toString(),
+      location: "Somewhere in universe",
+      profilePic: Constants.dummyProfilePicList[randomNumber],
+      isVerified: false,
+    );
     state
         .signUp(
       user,
@@ -180,7 +190,7 @@ class _SignupState extends State<Signup> {
     return Scaffold(
       appBar: AppBar(
         title: customText(
-          'Sign Up',
+          "Sign Up",
           context: context,
           style: const TextStyle(fontSize: 20),
         ),
