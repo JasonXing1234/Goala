@@ -145,8 +145,7 @@ class TweetBottomSheet {
                             _deleteTweet(
                               context,
                               type,
-                              model.key!,
-                              parentkey: model.parentkey,
+                              model.key!
                             );
                           },
                           child: const Text('Confirm'),
@@ -370,7 +369,7 @@ class TweetBottomSheet {
   void _deleteTweet(BuildContext context, TweetType type, String tweetId,
       {String? parentkey}) {
     var state = Provider.of<FeedState>(context, listen: false);
-    state.deleteTweet(tweetId, type, parentkey: parentkey);
+    state.deleteTweet(tweetId);
     // CLose bottom sheet
     Navigator.of(context).pop();
     if (type == TweetType.Detail) {

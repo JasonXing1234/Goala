@@ -27,6 +27,7 @@ import 'package:Goala/ui/page/settings/accountSettings/proxy/proxyPage.dart';
 import 'package:Goala/ui/page/settings/settingsAndPrivacyPage.dart';
 import 'package:provider/provider.dart';
 
+import '../GoalaFrontEnd/EditGoalPage.dart';
 import '../helper/customRoute.dart';
 import '../ui/page/Auth/forgetPasswordPage.dart';
 import '../ui/page/Auth/signin.dart';
@@ -96,7 +97,6 @@ class Routes {
                   child:
                       const ComposeGroupGoal(isRetweet: false, isTweet: true),
                 ));
-
       case "CreateFeedPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) =>
@@ -105,6 +105,15 @@ class Routes {
                   child:
                       const ComposeTweetPage(isRetweet: false, isTweet: true),
                 ));
+      case "CreateEditPage":
+        return CustomRoute<bool>(
+            builder: (BuildContext context) =>
+                ChangeNotifierProvider<ComposeTweetState>(
+                  create: (_) => ComposeTweetState(),
+                  child:
+                  const EditGoal(isRetweet: false, isTweet: true),
+                )
+        );
       case "WelcomePage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const WelcomePage());

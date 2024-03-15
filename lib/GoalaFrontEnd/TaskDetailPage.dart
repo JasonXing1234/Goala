@@ -61,7 +61,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
   void deleteTweet(TweetType type, String tweetId,
       {required String parentkey}) {
     var state = Provider.of<FeedState>(context, listen: false);
-    state.deleteTweet(tweetId, type, parentkey: parentkey);
+    state.deleteTweet(tweetId);
     Navigator.of(context).pop();
     if (type == TweetType.Detail) Navigator.of(context).pop();
   }

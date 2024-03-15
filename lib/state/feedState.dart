@@ -489,24 +489,44 @@ class FeedState extends AppState {
   /// [Delete tweet] in Firebase kDatabase
   /// Remove Tweet if present in home page Tweet list
   /// Remove Tweet if present in Tweet detail page or in comment
-  deleteTweet(String tweetId, TweetType type, {String? parentkey} //FIXME
-      ) {
+  deleteTweet(String tweetId) async {
     try {
-      /// Delete tweet if it is in nested tweet detail page
-      kDatabase.child('tweet').child(tweetId).remove().then((_) {
-        if (type == TweetType.Detail &&
-            _tweetDetailModelList != null &&
-            _tweetDetailModelList!.isNotEmpty) {
-          // var deletedTweet =
-          //     _tweetDetailModelList.firstWhere((x) => x.key == tweetId);
-          _tweetDetailModelList!.remove(_tweetDetailModelList!);
-          if (_tweetDetailModelList!.isEmpty) {
-            _tweetDetailModelList = null;
-          }
+      kDatabase.child('tweet').child(tweetId).remove();
+      final query = kDatabase.child('tweet').orderByChild('parentkey').equalTo(tweetId);
+      final commentQuery = kDatabase.child('tweet').orderByChild('grandparentKey').equalTo(tweetId);
+      final snapshot = await query.once();
+      final snapshot2 = await commentQuery.once();
+      if (snapshot.snapshot.value != null) {
+        // dataSnapshot.snapshot.value is a Map of child keys and their data
+        Map<dynamic, dynamic> data = snapshot.snapshot.value as Map<dynamic, dynamic>;
 
-          cprint('Tweet deleted from nested tweet detail page tweet');
-        }
-      });
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('tweet').child(key).remove().then((_) {
+            print('Post with parentkey $key removed successfully');
+          }).catchError((error) {
+            print('Error removing post with key $key: $error');
+          });
+        });
+      } else {
+        print('No posts found with parentKey');
+      }
+
+      if (snapshot2.snapshot.value != null) {
+        // dataSnapshot.snapshot.value is a Map of child keys and their data
+        Map<dynamic, dynamic> data = snapshot2.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('tweet').child(key).remove().then((_) {
+            print('Post with grandparentkey $key removed successfully');
+          }).catchError((error) {
+            print('Error removing post with key $key: $error');
+          });
+        });
+      } else {
+        print('No posts found with parentKey');
+      }
     } catch (error) {
       cprint(error, errorIn: 'deleteTweet');
     }
@@ -717,7 +737,7 @@ class FeedState extends AppState {
   /// If Yes it will add tweet in comment list.
   /// add [new tweet] comment to comment list
   _onCommentAdded(FeedModel tweet) {
-    if (tweet.childRetwetkey != null) {
+    if (tweet.childRetwetkey != null || tweet.parentkey == null) {
       /// if Tweet is a type of retweet then it can not be a comment.
       return;
     }

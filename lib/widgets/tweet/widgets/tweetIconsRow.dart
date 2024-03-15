@@ -38,83 +38,6 @@ class TweetIconsRow extends StatefulWidget {
 }
 
 class _TweetIconsRowState extends State<TweetIconsRow> {
-  late final TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    // Dispose of the controller when the widget is removed from the
-    // widget tree. This also removes the listener.
-    _controller.dispose();
-    super.dispose();
-  }
-  void _showBottomPopup(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        return
-          Padding(
-            padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          padding: EdgeInsets.all(10),
-          height: 150,
-          child: Column(
-            children: [
-              TextField(
-                controller: _controller,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: 'Comment',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () async {
-                      var state = Provider.of<FeedState>(context, listen: false);
-                      var authState = Provider.of<AuthState>(context, listen: false);
-                      state.setTweetToReply = widget.model;
-                      var myUser = authState.userModel;
-                      var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
-                      var commentedUser = UserModel(
-                          displayName: myUser.displayName ?? myUser.email!.split('@')[0],
-                          profilePic: profilePic,
-                          userId: myUser.userId,
-                          isVerified: authState.userModel!.isVerified,
-                          userName: authState.userModel!.userName);
-                      FeedModel reply = FeedModel(
-                        isComment: false,
-                        isGroupGoal: false,
-                        description: _controller.text,
-                        lanCode: '',
-                        user: commentedUser,
-                        createdAt: DateTime.now().toUtc().toString(),
-                        grandparentKey: state.tweetToReplyModel == null
-                            ? null
-                            : state.tweetToReplyModel!.parentkey,
-                        parentkey: state.tweetToReplyModel!.key,
-                        userId: myUser.userId!,
-                        isCheckedIn: false,
-                        isPrivate: false,
-                        isHabit: false,
-                      );
-                      String? tweetId = await state.addCommentToPost(reply);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ),
-              // If you want the button outside the TextField
-            ],
-          ),
-        ) );
-      },
-    );
-  }
 
   Widget _likeCommentsIcons(BuildContext context, FeedModel model) {
     var authState = Provider.of<AuthState>(context, listen: false);
@@ -131,7 +54,7 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
             icon: AppIcon.reply,
             iconColor: widget.iconColor,
             size: 25,
-            onPressed: () => _showBottomPopup(context),
+            onPressed: null,
           ),
           /*_iconWidget(context,
               text: isTweetDetail ? '' : model.retweetCount.toString(),

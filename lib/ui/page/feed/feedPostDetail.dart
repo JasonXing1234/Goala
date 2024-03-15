@@ -10,6 +10,8 @@ import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
 import '../../../GoalaFrontEnd/Comments.dart';
+import '../../../helper/constant.dart';
+import '../../../model/user.dart';
 
 class FeedPostDetail extends StatefulWidget {
   const FeedPostDetail({Key? key, required this.postId}) : super(key: key);
@@ -28,23 +30,20 @@ class FeedPostDetail extends StatefulWidget {
 }
 
 class _FeedPostDetailState extends State<FeedPostDetail> {
+  late final TextEditingController _controller;
   late String postId;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     postId = widget.postId;
+    _controller = TextEditingController();
     super.initState();
   }
 
-  Widget _floatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {
-        var state = Provider.of<FeedState>(context, listen: false);
-        state.setTweetToReply = state.tweetDetailModel!.last;
-        Navigator.of(context).pushNamed('/ComposeTweetPage/' + postId);
-      },
-      child: const Icon(Icons.add),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Widget _commentRow(FeedModel model) {
@@ -80,7 +79,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   void deleteTweet(TweetType type, String tweetId,
       {required String parentkey}) {
     var state = Provider.of<FeedState>(context, listen: false);
-    state.deleteTweet(tweetId, type, parentkey: parentkey);
+    state.deleteTweet(tweetId);
     Navigator.of(context).pop();
     if (type == TweetType.Detail) Navigator.of(context).pop();
   }
@@ -96,7 +95,6 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        floatingActionButton: _floatingActionButton(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: CustomScrollView(
           slivers: <Widget>[
@@ -125,6 +123,59 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                 ],
               ),
             ),*/
+            SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                height: 95,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _controller,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: 'Comment',
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () async {
+                            var state = Provider.of<FeedState>(context, listen: false);
+                            var authState = Provider.of<AuthState>(context, listen: false);
+                            state.setTweetToReply = state.tweetDetailModel!.last;
+                            var myUser = authState.userModel;
+                            var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
+                            var commentedUser = UserModel(
+                                displayName: myUser.displayName ?? myUser.email!.split('@')[0],
+                                profilePic: profilePic,
+                                userId: myUser.userId,
+                                isVerified: authState.userModel!.isVerified,
+                                userName: authState.userModel!.userName);
+                            FeedModel reply = FeedModel(
+                              isComment: false,
+                              isGroupGoal: false,
+                              description: _controller.text,
+                              lanCode: '',
+                              user: commentedUser,
+                              createdAt: DateTime.now().toUtc().toString(),
+                              grandparentKey: state.tweetToReplyModel == null
+                                  ? null
+                                  : state.tweetToReplyModel!.parentkey,
+                              parentkey: state.tweetToReplyModel!.key,
+                              userId: myUser.userId!,
+                              isCheckedIn: false,
+                              isPrivate: false,
+                              isHabit: false,
+                            );
+                            String? tweetId = await state.addCommentToPost(reply);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                    ),
+                    // If you want the button outside the TextField
+                  ],
+                ),
+              ) ,
+            ),
             SliverList(
               delegate: SliverChildListDelegate(
                 state.tweetReplyMap == null ||

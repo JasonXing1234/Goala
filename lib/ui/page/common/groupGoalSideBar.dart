@@ -254,20 +254,34 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
     final state = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context, listen: false);
     List<FeedModel>? GroupList = [];
-    String id = authState.userId!;
+    String id = authState.userId;
     if (state.feedList != null && state.feedList!.isNotEmpty) {
       GroupList = state.feedList!
           .where((x) => x.memberList!.contains(id) && x.isGroupGoal == true)
           .toList();
     }
-    return Drawer(
+    return SizedBox(
+    width:200,
+      child: Center(
+      child: Drawer(
+
       child: SafeArea(
         child: Stack(
           children: <Widget>[
+
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
-              child: ListView(
+              child:
+                  Column(
+                    children: [
+                      Text('Groups', style: TextStyles.titleStyle,),
+                      SizedBox(
+                        height: 20,
+                      ),
+
+              ListView(
                 // This next line does the trick.
+                shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: GroupList.asMap().entries.map(
                   (model) {
@@ -284,12 +298,13 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
                           Navigator.push(
                               context, TaskDetailPage.getRoute(model.value));
                         },
-                        child: Text(model.value.title!),
+                        child: Text(model.value.title!, style: TextStyles.onGreenButtonText),
                         style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF29AB87)),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               // Change your radius here
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -300,12 +315,12 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
                     ]);
                   },
                 ).toList(),
-              ),
+              ),])
             ),
             _footer()
           ],
         ),
       ),
-    );
+    )));
   }
 }

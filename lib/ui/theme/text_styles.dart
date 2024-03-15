@@ -6,6 +6,9 @@ class TextStyles {
   static TextStyle get onPrimaryTitleText {
     return const TextStyle(color: Colors.white, fontWeight: FontWeight.w600);
   }
+  static TextStyle get onGreenButtonText {
+    return const TextStyle(color: Colors.white);
+  }
 
   static TextStyle get onPrimarySubTitleText {
     return const TextStyle(

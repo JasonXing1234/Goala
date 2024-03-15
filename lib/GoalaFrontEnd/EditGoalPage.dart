@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,8 +24,8 @@ import '../ui/constants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
 import '../widgets/newWidget/customizedTitleText.dart';
 
-class ComposeGroupGoal extends StatefulWidget {
-  const ComposeGroupGoal(
+class EditGoal extends StatefulWidget {
+  const EditGoal(
       {Key? key, required this.isRetweet, this.isTweet = true})
       : super(key: key);
 
@@ -34,7 +35,7 @@ class ComposeGroupGoal extends StatefulWidget {
   _ComposeTweetReplyPageState createState() => _ComposeTweetReplyPageState();
 }
 
-class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
+class _ComposeTweetReplyPageState extends State<EditGoal>
     with TickerProviderStateMixin {
   bool isScrollingDown = false;
   late FeedModel? model;
@@ -47,23 +48,20 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
   late TextEditingController _goalUnitController;
-  late TextEditingController _addUserController;
-  //late TextEditingController _monthController;
-  //late TextEditingController _dayController;
-  //late TextEditingController _yearController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
+  List<bool> _selections = [false, false];
   TimeOfDay? pickedTime;
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, true);
+  List<String?> friendTemp = [];
 
   @override
   void dispose() {
     scrollController.dispose();
     _descriptionController.dispose();
     _titleController.dispose();
-    _addUserController.dispose();
     _goalUnitController.dispose();
     _goalSumController.dispose();
     super.dispose();
@@ -75,11 +73,10 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     model = feedState.tweetToReplyModel;
     _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
-    _descriptionController = TextEditingController();
-    _goalSumController = TextEditingController();
-    _goalUnitController = TextEditingController();
-    _titleController = TextEditingController();
-    _addUserController = TextEditingController();
+    _descriptionController = TextEditingController(text: model == null ? '' : model!.description);
+    _goalSumController = TextEditingController(text: model == null || model?.GoalSum == null ? '' : model!.GoalSum.toString());
+    _goalUnitController = TextEditingController(text: model == null || model?.goalUnit == null ? '' : model!.goalUnit.toString());
+    _titleController = TextEditingController(text: model == null ? '' : model!.title);
     scrollController.addListener(_scrollListener);
     super.initState();
   }
@@ -208,7 +205,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     /// If no user found, compose tweet screen is closed and redirect back to home page.
     await Provider.of<ComposeTweetState>(context, listen: false)
         .sendNotification(
-            tweetModel, Provider.of<SearchState>(context, listen: false))
+        tweetModel, Provider.of<SearchState>(context, listen: false))
         .then((_) {
       /// Hide running loader on screen
       kScreenLoader.hideLoader();
@@ -232,7 +229,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   /// If tweet is new tweet then `parentkey` and `childRetwetkey` should be null
   /// IF tweet is a comment then it should have `parentkey`
   /// IF tweet is a retweet then it should have `childRetwetkey`
-  Future<FeedModel> createTweetModel() async {
+  Future createTweetModel() async {
     var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     var myUser = authState.userModel;
@@ -240,61 +237,35 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     memberListTemp.add(myUser.userId!);
     //memberListTemp.add(_addUserController.text);
     /// User who are creating reply tweet
-    var commentedUser = UserModel(
-        displayName: myUser.displayName ?? myUser.email!.split('@')[0],
-        profilePic: profilePic,
-        userId: myUser.userId,
-        isVerified: authState.userModel!.isVerified,
-        userName: authState.userModel!.userName);
+
     var tags = Utility.getHashTags(_descriptionController.text);
-    FeedModel reply = FeedModel(
-      isComment: false,
-      isGroupGoal: memberListTemp.length == 1 ? false : true,
-      title: _titleController.text,
-      description: _descriptionController.text,
-      lanCode: (await GoogleTranslator().translate(_descriptionController.text))
-          .sourceLanguage
-          .code,
-      user: commentedUser,
-      memberList: memberListTemp.length == 1 ? null : memberListTemp,
-      createdAt: DateTime.now().toUtc().toString(),
-      tags: tags,
-      parentkey: widget.isTweet
-          ? null
-          : widget.isRetweet
-              ? null
-              : state.tweetToReplyModel!.key,
-      childRetwetkey: widget.isTweet
-          ? null
-          : widget.isRetweet
-              ? model!.key
-              : null,
-      userId: myUser.userId!,
-      isCheckedIn: false,
-      isPrivate: false,
-      checkInList: [false],
-      parentName: widget.isTweet
-          ? null
-          : widget.isRetweet
-              ? null
-              : state.tweetToReplyModel!.title,
-      isHabit: widget.isTweet
-          ? isSelected[0] == false
-              ? false
-              : true
-          : state.tweetToReplyModel!.isHabit,
-      GoalSum: isSelected[0] == true
+    final databaseReference = FirebaseDatabase.instance.ref();
+
+    // The specific post you want to update
+    DatabaseReference postRef = databaseReference.child('tweet/$model.key');
+
+    // Fields you want to update
+    postRef.update({
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+      'createdAt': DateTime.now().toUtc().toString(),
+      'memberList': friendTemp,
+      'GoalSum': state.tweetToReplyModel!.isHabit == true
           ? null
           : widget.isTweet
-              ? isSelected[0]
-                  ? 0
-                  : int.parse(_goalSumController.text)
-              : 0,
-      goalUnit: _goalUnitController.text,
-      deadlineDate:
-          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
-    );
-    return reply;
+          ? state.tweetToReplyModel!.isHabit == true
+          ? 0
+          : int.parse(_goalSumController.text)
+          : 0,
+      'isHabit': state.tweetToReplyModel!.isHabit,
+      'goalUnit': _goalUnitController.text,
+      'deadlineDate':
+      "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+    }).then((_) {
+      print('Post updated successfully');
+    }).catchError((error) {
+      print('Failed to update post: $error');
+    });
   }
 
   @override
@@ -302,13 +273,15 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     final _multiSelectKey = GlobalKey<FormFieldState>();
     var authState = Provider.of<AuthState>(context, listen: false);
     var searchstate = Provider.of<SearchState>(context);
+    var feedstate = Provider.of<FeedState>(context);
     List<UserModel?> selectedUsers = [];
     List<UserModel?> FriendList = [];
-    if (authState.userModel!.followingList != null &&
-        authState.userModel!.followingList!.isNotEmpty) {
-      for (int i = 0; i < authState.userModel!.followingList!.length; i++) {
+    List<String> tempString = authState.userModel!.followingList!;
+    tempString.removeWhere((item) => feedstate.tweetToReplyModel!.memberList!.contains(item));
+    if (tempString.isNotEmpty) {
+      for (int i = 0; i < tempString.length; i++) {
         FriendList =
-            searchstate.getuserDetail(authState.userModel!.followingList!);
+            searchstate.getuserDetail(tempString);
       }
     }
     return Scaffold(
@@ -320,11 +293,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
         submitButtonText: widget.isTweet
             ? 'Commit'
             : widget.isRetweet
-                ? 'Retweet'
-                : 'Comment',
+            ? 'Retweet'
+            : 'Comment',
         isSubmitDisable:
-            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-                Provider.of<FeedState>(context).isBusy,
+        !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+            Provider.of<FeedState>(context).isBusy,
         isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -339,39 +312,47 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ToggleButtons(
-                        borderColor: Colors.grey,
-                        fillColor: AppColor.PROGRESS_COLOR,
-                        borderWidth: 2,
-                        selectedBorderColor: AppColor.PROGRESS_COLOR,
-                        selectedColor: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: customizedTitleText('Habit', 18),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: customizedTitleText('Goal', 18),
-                          ),
-                        ],
-                        onPressed: (int index) {
-                          setState(() {
-                            for (int i = 0; i < isSelected.length; i++) {
-                              isSelected[i] = i == index;
-                            }
-                          });
-                        },
-                        isSelected: isSelected,
+                  Row(
+                    children: [
+                      ToggleButtons(
+                          color: Colors.black,
+                          //selectedColor: Colors.white,
+                          fillColor: Colors.white,
+                          renderBorder: false,
+                          onPressed: (int index) {
+                            setState(() {
+                              // This logic sets true for the tapped button and false for the other
+                              for (int buttonIndex = 0; buttonIndex < _selections.length; buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  _selections[buttonIndex] = true;
+                                } else {
+                                  _selections[buttonIndex] = false;
+                                }
+                              }
+                            });
+                          },
+                          isSelected: _selections,
+                          children: List<Widget>.generate(
+                              2,
+                                  (index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: index == 0 ? AppColor.PROGRESS_COLOR : _selections[1] == false ? Colors.grey : Colors.black,
+                                    borderRadius: BorderRadius.circular(8),
+
+                                  ),
+                                  padding: const EdgeInsets.all(5),
+                                  width: 140,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  child: index == 0 ? Text('Yes!', style: TextStyles.onPrimarySubTitleTextBlack) :
+                                  Text('Nope.', style: _selections[1] == false ? TextStyles.onPrimarySubTitleTextBlack : TextStyles.onPrimarySubTitleText),
+                                ),
+                              )
+                          )
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
+                    ],
                   ),
                   if (widget.isTweet)
                     Center(
@@ -385,7 +366,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           textAlign: TextAlign.center,
                           maxLength: 50,
                           decoration:
-                              kTextFieldDecoration.copyWith(hintText: "title"),
+                          kTextFieldDecoration.copyWith(hintText: "title"),
                         ),
                       ),
                     ),
@@ -414,7 +395,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     Center(
-                      child:
+                        child:
                         Row(children: [
                           SizedBox(width: 80),
                           SizedBox(
@@ -459,7 +440,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                               context), // Call the _selectDate function when the button is pressed
                           child: dateSelected == true
                               ? Text(
-                                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
+                              "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
                               : Text('Select Date'),
                         ),
                       ],
@@ -478,6 +459,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           temp.add(updatedFriends[i]!.userId!);
                         }
                         memberListTemp.addAll(temp);
+                        friendTemp = feedstate.tweetToReplyModel!.memberList!;
+                        friendTemp.addAll(memberListTemp);
                       });
                     },
                   ),
@@ -541,6 +524,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -560,35 +544,35 @@ class _UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !Provider.of<ComposeTweetState>(context).displayUserList ||
-            list == null ||
-            list!.length < 0 ||
-            list!.isEmpty
+        list == null ||
+        list!.length < 0 ||
+        list!.isEmpty
         ? const SizedBox.shrink()
         : Container(
-            padding: const EdgeInsetsDirectional.only(bottom: 50),
-            color: TwitterColor.white,
-            constraints:
-                const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
-            child: ListView.builder(
-              itemCount: list!.length,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return _UserTile(
-                  user: list![index],
-                  onUserSelected: (user) {
-                    textEditingController.text =
-                        Provider.of<ComposeTweetState>(context, listen: false)
-                                .getDescription(user.userName!) +
-                            " ";
-                    textEditingController.selection = TextSelection.collapsed(
-                        offset: textEditingController.text.length);
-                    Provider.of<ComposeTweetState>(context, listen: false)
-                        .onUserSelected();
-                  },
-                );
-              },
-            ),
+      padding: const EdgeInsetsDirectional.only(bottom: 50),
+      color: TwitterColor.white,
+      constraints:
+      const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
+      child: ListView.builder(
+        itemCount: list!.length,
+        physics: ClampingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return _UserTile(
+            user: list![index],
+            onUserSelected: (user) {
+              textEditingController.text =
+                  Provider.of<ComposeTweetState>(context, listen: false)
+                      .getDescription(user.userName!) +
+                      " ";
+              textEditingController.selection = TextSelection.collapsed(
+                  offset: textEditingController.text.length);
+              Provider.of<ComposeTweetState>(context, listen: false)
+                  .onUserSelected();
+            },
           );
+        },
+      ),
+    );
   }
 }
 
@@ -609,7 +593,7 @@ class _UserTile extends StatelessWidget {
         children: <Widget>[
           ConstrainedBox(
             constraints:
-                BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
+            BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
             child: TitleText(user.displayName!,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
@@ -618,11 +602,11 @@ class _UserTile extends StatelessWidget {
           const SizedBox(width: 3),
           user.isVerified!
               ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                )
+            context,
+            icon: AppIcon.blueTick,
+            iconColor: AppColor.primary,
+            size: 13,
+          )
               : const SizedBox(width: 0),
         ],
       ),

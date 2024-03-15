@@ -17,6 +17,7 @@ import '../state/authState.dart';
 import '../state/feedState.dart';
 import '../widgets/newWidget/rippleButton.dart';
 import '../ui/page/profile/profileImageView.dart';
+import 'EditGoalPage.dart';
 import 'TaskDetailPage.dart';
 
 class CurrentUserProfilePage extends StatefulWidget {
@@ -159,68 +160,70 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
           state.getDataFromDatabase();
           return Future.value();
         },
-        child: CustomScrollView(
+        child: NestedScrollView(
           //controller: _scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * .20,
-              floating: false,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  background: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.white,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                // Add an image widget to display an image
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 500),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.white, width: 5),
-                                      shape: BoxShape.circle),
-                                  child: RippleButton(
-                                    child: CircularImage(
-                                      path: authState.userModel?.profilePic,
-                                      height: 80,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return[
+              SliverAppBar(
+                expandedHeight: MediaQuery.of(context).size.height * .20,
+                floating: false,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: true,
+                    background: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        color: Colors.white,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  // Add an image widget to display an image
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 20),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.white, width: 5),
+                                        shape: BoxShape.circle),
+                                    child: RippleButton(
+                                      child: CircularImage(
+                                        path: authState.userModel?.profilePic,
+                                        height: 80,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            ProfileImageView.getRoute(authState
+                                                .profileUserModel!.profilePic!));
+                                      },
                                     ),
-                                    borderRadius: BorderRadius.circular(50),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          ProfileImageView.getRoute(authState
-                                              .profileUserModel!.profilePic!));
-                                    },
                                   ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0),
-                                  alignment: Alignment(10.0, 1),
-                                  margin:
-                                  authState.userModel == null
-                                      ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
-                                  child: Text(
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0),
+                                    alignment: Alignment(10.0, 1),
+                                    margin:
                                     authState.userModel == null
-                                        ? ''
-                                        : authState.userModel!.displayName!,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 37,
-                                      fontWeight: FontWeight.w700,
+                                        ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
+                                    child: Text(
+                                      authState.userModel == null
+                                          ? ''
+                                          : authState.userModel!.displayName!,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 37,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            )
-                            /*authState.isbusy
+                                  )
+                                ],
+                              ),
+
+                              /*authState.isbusy
                                 ? SizedBox(
                                     width: 20,
                                   )
@@ -258,64 +261,72 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                               },
                                             ).toList(),
                                           ))*/
-                          ]))),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 800,
+                            ]))),
+              ),
+            ];
+          },
+          body:
+          Container(
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child:
                     Column(
                       children: [
-                        // give the tab bar a height [can change hheight to preferred height]
-                        Container(
-                          height: 45,
-                          width: 330,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(
-                              8.0,
-                            ),
-                          ),
-                          child: TabBar(
-                            labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                            controller: _tabController,
-                            // give the indicator a decoration (color and border radius)
-                            indicator: BoxDecoration(
-                              color: Color(0xFF292A29),
-                              borderRadius: BorderRadius.circular(
-                                8.0,
-                              ),
-                            ),
-                            labelColor: Colors.white,
-                            //91F291
-                            unselectedLabelColor: Colors.black,
-                            tabs: [
-                              Container(
-                                width: 400,
-                                color: Color(0x69DC9E),
-                                child: Center(
-                                  child: Text("Personal", style: TextStyles.titleStyle),
-                                ),
-                              ),
-                              Container(
-                                width: 300,
-                                color: Color(0x69DC9E),
-                                child: Center(
-                                  child: Text("Group", style: TextStyles.titleStyle),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // tab bar view here
+                            Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child:
+                                  Container(
+                                    height: 45,
+                                    width: 330,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(
+                                        8.0,
+                                      ),
+                                    ),
+                                    child: TabBar(
+                                      labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                                      controller: _tabController,
+                                      // give the indicator a decoration (color and border radius)
+                                      indicator: BoxDecoration(
+                                        color: Color(0xFF292A29),
+                                        borderRadius: BorderRadius.circular(
+                                          8.0,
+                                        ),
+                                      ),
+                                      labelColor: Colors.white,
+                                      //91F291
+                                      unselectedLabelColor: Colors.black,
+                                      tabs: [
+                                        Container(
+                                          width: 180,
+                                          color: Color(0x69DC9E),
+                                          child: Center(
+                                            child: Text("Personal", style: TextStyles.titleStyle),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 180,
+                                          color: Color(0x69DC9E),
+                                          child: Center(
+                                            child: Text("Group", style: TextStyles.titleStyle),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),)),
+
                         SizedBox(height:10),
                         Expanded(
                           child: TabBarView(
                             controller: _tabController,
                             children: [
+                              list == null || list.isEmpty ?
+                              Center(
+                                child: Text('Add a personal goal now!',style: TextStyles.bigSubtitleStyle)
+                              ) :
                               GridView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
@@ -323,7 +334,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) =>
                                     _UserTile2(tweet: list![index]),
-                                itemCount: list?.length ?? 0,
+                                itemCount: list.length ?? 0,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount:
@@ -336,6 +347,10 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                       0.8, // Aspect ratio of each item
                                 ),
                               ),
+                              GroupGoalList == null || GroupGoalList.isEmpty ?
+                              Center(
+                                  child: Text('Add a group goal now!',style: TextStyles.bigSubtitleStyle)
+                              ) :
                               GridView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
@@ -343,7 +358,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                   physics: const BouncingScrollPhysics(),
                                   itemBuilder: (context, index) =>
                                       _UserTile2(tweet: GroupGoalList![index]),
-                                  itemCount: GroupGoalList?.length ?? 0,
+                                  itemCount: GroupGoalList.length ?? 0,
                                   gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount:
@@ -365,8 +380,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                   ),
                 ),
               ),
-            )
-          ],
         ),
       ),
     );
@@ -525,7 +538,44 @@ class _UserTile2State extends State<_UserTile2> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<FeedState>(context);
-    return GridTile(
+
+    void _showBottomMenu(BuildContext context) {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 120,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('Edit'),
+                    onTap: () {
+                      //state.setTweetToReply = widget.tweet;
+                      //Navigator.of(context).pushNamed('/CreateEditPage');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('Delete'),
+                    onTap: () {
+                      var state = Provider.of<FeedState>(context, listen: false);
+                      state.deleteTweet(widget.tweet.key!);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            );
+          });
+    }
+
+    return GestureDetector(
+        onLongPress: () => _showBottomMenu(context),
+    child:
+      GridTile(
           child: InkWell(
             onTap: () {
               state.getPostDetailFromDatabase(null, model: widget.tweet);
@@ -574,7 +624,7 @@ class _UserTile2State extends State<_UserTile2> {
                   ),
                 ),
                 SizedBox(height:7),
-                if (widget.tweet.coverPhoto != null)
+
                   Container(
                     width: 160, // Specify the width of the container
                     height: 160, // Specify the height of the container
@@ -584,16 +634,20 @@ class _UserTile2State extends State<_UserTile2> {
                     child: ClipRRect(
                       // Use ClipRRect for borderRadius if needed
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
+                      child: widget.tweet.coverPhoto != null ? Image.network(
                         widget.tweet.coverPhoto!,
                         fit: BoxFit
                             .cover, // This ensures the image covers the container
-                      ),
+                      ) : Image.asset(
+                        'assets/images/icon_512.png',
+                        fit: BoxFit
+                            .cover, // This ensures the image covers the container
+                      )
                     ),
                   ),
               ],
             ),]
           )),
-    );
+    ));
   }
 }

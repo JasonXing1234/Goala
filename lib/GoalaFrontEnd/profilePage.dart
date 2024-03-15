@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage>
               flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   background: Container(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left:8.0, top: 8.0, bottom: 8.0),
                     color: Colors.white,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,12 +199,15 @@ class _ProfilePageState extends State<ProfilePage>
                                           ),
                                         ),
                                 ),
-                                SizedBox(height: 20),
-                                RippleButton(
+                SizedBox(height: 10,),
+                Container(
+                  margin:
+                  const EdgeInsets.only(right: 20),
+                                child: RippleButton(
                                   splashColor:
                                       TwitterColor.dodgeBlue_50.withAlpha(100),
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(60)),
+                                      Radius.circular(8)),
                                   onPressed: () {
                                     setState(() {
                                       if (isMyProfile) {
@@ -272,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),)
                               ]))
                             ],
                           ),
