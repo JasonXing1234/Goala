@@ -1,5 +1,6 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/helper/utility.dart';
+import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
 import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   void _onLogInPress() {
     var state = Provider.of<AuthState>(context, listen: false);
     if (state.isbusy) {
@@ -56,57 +59,20 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  TextEditingController _emailController = TextEditingController();
   Widget _emailInput() {
-    return TextField(
+    return authTextInput(
       controller: _emailController,
-      onSubmitted: (_) {
-        _onLogInPress();
-      },
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        hintText: "Email",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(99),
-            ),
-            borderSide: BorderSide(color: Colors.blue)),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-      ),
+      hintText: "Email",
+      onSubmit: (_) => {_onLogInPress()},
     );
   }
 
-  TextEditingController _passwordController = TextEditingController();
   Widget _passwordInput() {
-    return TextField(
+    return authTextInput(
       controller: _passwordController,
-      onSubmitted: (_) {
-        _onLogInPress();
-      },
       obscureText: true,
-      decoration: InputDecoration(
-        hintText: "Password",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(99),
-            ),
-            borderSide: BorderSide(color: Colors.blue)),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-      ),
+      hintText: "Password",
+      onSubmit: (_) => {_onLogInPress()},
     );
   }
 
