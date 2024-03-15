@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:Goala/ui/page/Auth/selectAuthMethod.dart';
+import 'package:Goala/ui/page/Auth/signinPage.dart';
 import 'package:Goala/ui/page/Auth/verifyEmail.dart';
 import 'package:Goala/ui/page/common/splash.dart';
 import 'package:Goala/GoalaFrontEnd/ComposeGroupGoal.dart';
@@ -30,7 +30,6 @@ import 'package:provider/provider.dart';
 import '../GoalaFrontEnd/EditGoalPage.dart';
 import '../helper/customRoute.dart';
 import '../ui/page/Auth/forgetPasswordPage.dart';
-import '../ui/page/Auth/signin.dart';
 import '../ui/page/Auth/signup.dart';
 import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/message/chatScreenPage.dart';
@@ -116,9 +115,10 @@ class Routes {
         );
       case "WelcomePage":
         return CustomRoute<bool>(
-            builder: (BuildContext context) => const WelcomePage());
+            builder: (BuildContext context) => const SignInPage());
       case "SignIn":
-        return CustomRoute<bool>(builder: (BuildContext context) => SignIn());
+        return CustomRoute<bool>(
+            builder: (BuildContext context) => SignInPage());
       case "SignUp":
         return CustomRoute<bool>(builder: (BuildContext context) => Signup());
       case "ForgetPasswordPage":

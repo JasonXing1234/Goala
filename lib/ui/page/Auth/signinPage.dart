@@ -1,32 +1,51 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
-import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
-import 'package:Goala/widgets/newWidget/customLoader.dart';
+import 'package:Goala/helper/utility.dart';
+import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
+import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import 'signin.dart';
 
-class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
-  _WelcomePageState createState() => _WelcomePageState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _SignInPageState extends State<SignInPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   void _onLogInPress() {
     var state = Provider.of<AuthState>(context, listen: false);
-    Navigator.push(
+    if (state.isbusy) {
+      return;
+    }
+    bool isValid = Utility.validateCredentials(
       context,
-      MaterialPageRoute(
-        builder: (context) => SignIn(loginCallback: state.getCurrentUser),
-      ),
+      _emailController.text,
+      _passwordController.text,
     );
+    if (isValid) {
+      cprint("Logged in");
+      state
+          .signIn(_emailController.text, _passwordController.text,
+              context: context)
+          .then((status) {
+        if (state.user != null) {
+          Navigator.pop(context);
+          state.getCurrentUser();
+        } else {
+          cprint('Unable to login', errorIn: '_emailLoginButton');
+        }
+      });
+    } else {
+      cprint("Not logged in");
+    }
   }
 
   void _onCreateAccountPress() {
@@ -39,33 +58,28 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget _usernameInput() {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Email",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-      ),
+  Widget _emailInput() {
+    return authTextInput(
+      controller: _emailController,
+      hintText: "Email",
+      onSubmit: (_) => {_onLogInPress()},
     );
   }
 
   Widget _passwordInput() {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Password",
-        hintStyle: TextStyle(fontStyle: FontStyle.italic),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(99),
-          ),
-        ),
-        suffixIcon: Icon(Icons.remove_red_eye),
-      ),
+    return authTextInput(
+      controller: _passwordController,
+      obscureText: true,
+      hintText: "Password",
+      onSubmit: (_) => {_onLogInPress()},
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
   }
 
   Widget _body() {
@@ -87,8 +101,8 @@ class _WelcomePageState extends State<WelcomePage> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            const Spacer(),
-            _usernameInput(),
+            const SizedBox(height: 32),
+            _emailInput(),
             const SizedBox(height: 16),
             _passwordInput(),
             const SizedBox(height: 24),
@@ -112,30 +126,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             const Spacer(),
-            Text(
-              "OR LOG IN WITH",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: AppColor.extraLightGrey,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 2,
-                  ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GoogleLoginButton(
-                    loader: CustomLoader(),
-                  ),
-                  const SizedBox(width: 24),
-                  GoogleLoginButton(
-                    loader: CustomLoader(),
-                  ),
-                ],
-              ),
-            ),
+            otherLoginOptions(context),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -161,6 +152,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     var state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: state.authStatus == AuthStatus.NOT_LOGGED_IN ||
               state.authStatus == AuthStatus.NOT_DETERMINED
           ? _body()
