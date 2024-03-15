@@ -1,8 +1,7 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
-import 'package:Goala/ui/page/Auth/widget/googleLoginButton.dart';
-import 'package:Goala/widgets/newWidget/customLoader.dart';
+import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
@@ -127,26 +126,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             const Spacer(),
-            Text(
-              "OR LOG IN WITH",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: AppColor.extraLightGrey,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 2,
-                  ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GoogleLoginButton(
-                    loader: CustomLoader(),
-                  ),
-                ],
-              ),
-            ),
+            otherLoginOptions(context),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
