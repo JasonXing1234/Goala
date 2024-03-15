@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/state/authState.dart';
-import 'package:Goala/ui/page/Auth/selectAuthMethod.dart';
+import 'package:Goala/ui/page/Auth/signinPage.dart';
 import 'package:Goala/ui/page/common/updateApp.dart';
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/ui/theme/theme.dart';
@@ -148,7 +148,7 @@ class _SplashPageState extends State<SplashPage> {
       body: state.authStatus == AuthStatus.NOT_DETERMINED
           ? _body()
           : state.authStatus == AuthStatus.NOT_LOGGED_IN
-              ? const WelcomePage()
+              ? const SignInPage()
               : const HomePage(),
     );
   }

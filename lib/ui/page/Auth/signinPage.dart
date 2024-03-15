@@ -10,14 +10,14 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customFlatButton.dart';
 import 'package:provider/provider.dart';
 
-class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
-  _WelcomePageState createState() => _WelcomePageState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _SignInPageState extends State<SignInPage> {
   void _onLogInPress() {
     var state = Provider.of<AuthState>(context, listen: false);
     if (state.isbusy) {
@@ -60,6 +60,9 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _emailInput() {
     return TextField(
       controller: _emailController,
+      onSubmitted: (_) {
+        _onLogInPress();
+      },
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         hintText: "Email",
@@ -84,6 +87,9 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _passwordInput() {
     return TextField(
       controller: _passwordController,
+      onSubmitted: (_) {
+        _onLogInPress();
+      },
       obscureText: true,
       decoration: InputDecoration(
         hintText: "Password",
@@ -130,7 +136,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            const Spacer(),
+            const SizedBox(height: 32),
             _emailInput(),
             const SizedBox(height: 16),
             _passwordInput(),
