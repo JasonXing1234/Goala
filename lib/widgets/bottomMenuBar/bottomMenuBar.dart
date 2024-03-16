@@ -42,7 +42,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
                   borderRadius: BorderRadius.circular(50),
                   color: tempInt == 0 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
                 ),
-                child: _icon(Icons.person, 0),
+                child: _icon(Icons.person, 0, tempInt== 0 ? Colors.white : Colors.black),
               ),
           Container(
             width: 110,
@@ -50,7 +50,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
               borderRadius: BorderRadius.circular(50),
               color: tempInt == 1 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
             ),
-            child: _icon(Icons.public, 1),
+            child: _icon(Icons.public, 1, tempInt== 1 ? Colors.white : Colors.black),
           ),
           Container(
             width: 110,
@@ -58,7 +58,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
               borderRadius: BorderRadius.circular(50),
               color: tempInt == 2 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
             ),
-            child: _icon(Icons.search, 2),
+            child: _icon(Icons.search, 2, tempInt== 2 ? Colors.white : Colors.black),
           ),
           // _icon(null, 3, icon: Icons.message),
         ],
@@ -66,10 +66,10 @@ class _BottomMenubarState extends State<BottomMenubar> {
     );
   }
 
-  Widget _icon(IconData iconData, int index) {
+  Widget _icon(IconData iconData, int index, Color color) {
     AppState state = Provider.of<AppState>(context);
     return IconButton(
-        icon: Icon(iconData, color: Theme.of(context).primaryColor),
+        icon: Icon(iconData, color: color),
         onPressed: () {
           setState(() {
             state.setPageIndex = index;
