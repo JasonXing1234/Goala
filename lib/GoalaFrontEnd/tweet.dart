@@ -316,6 +316,13 @@ class _TweetBodyState extends State<_TweetBody> {
                         //Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
+                    SizedBox(height: 10),
+                    widget.model.parentName != null
+                        ? Text(
+                      widget.model.parentName!,
+                      style: TextStyles.bigSubtitleStyle,
+                    )
+                        : Text(''),
                     widget.model.grandparentKey == null
                         ? Row(
                             children: [
@@ -357,13 +364,6 @@ class _TweetBodyState extends State<_TweetBody> {
                             ],
                           )
                         : SizedBox.shrink(),
-                    widget.model.parentName != null
-                        ? Text(
-                            widget.model.parentName!,
-                            style: TextStyles.bigSubtitleStyle,
-                          )
-                        : Text(''),
-                    SizedBox(height: 10),
                     widget.model.goalPhotoList != null
                         ? Container(
                             width: 230, // Specify the width of the container

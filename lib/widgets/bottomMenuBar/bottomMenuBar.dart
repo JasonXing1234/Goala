@@ -1,3 +1,4 @@
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/state/appState.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ class BottomMenubar extends StatefulWidget {
 }
 
 class _BottomMenubarState extends State<BottomMenubar> {
+  int tempInt = 0;
   @override
   void initState() {
     super.initState();
@@ -34,9 +36,30 @@ class _BottomMenubarState extends State<BottomMenubar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _icon(Icons.person, 0),
-          _icon(Icons.public, 1),
-          _icon(Icons.search, 2),
+          Container(
+                width: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: tempInt == 0 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
+                ),
+                child: _icon(Icons.person, 0),
+              ),
+          Container(
+            width: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: tempInt == 1 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
+            ),
+            child: _icon(Icons.public, 1),
+          ),
+          Container(
+            width: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: tempInt == 2 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
+            ),
+            child: _icon(Icons.search, 2),
+          ),
           // _icon(null, 3, icon: Icons.message),
         ],
       ),
@@ -45,16 +68,14 @@ class _BottomMenubarState extends State<BottomMenubar> {
 
   Widget _icon(IconData iconData, int index) {
     AppState state = Provider.of<AppState>(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: IconButton(
+    return IconButton(
         icon: Icon(iconData, color: Theme.of(context).primaryColor),
         onPressed: () {
           setState(() {
             state.setPageIndex = index;
+            tempInt = index;
           });
         },
-      ),
     );
   }
 
