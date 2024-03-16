@@ -583,7 +583,7 @@ class CustomProgressBar extends StatelessWidget {
           ),
         ),
         Container(
-          width: progress <= 1 ? width * progress : 0,
+          width: progress <= 1 ? width * progress : width,
           height: height,
           decoration: BoxDecoration(
             color: progressColor,
