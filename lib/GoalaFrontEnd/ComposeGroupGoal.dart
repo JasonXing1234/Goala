@@ -48,9 +48,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _goalSumController;
   late TextEditingController _goalUnitController;
   late TextEditingController _addUserController;
-  //late TextEditingController _monthController;
-  //late TextEditingController _dayController;
-  //late TextEditingController _yearController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
@@ -102,12 +99,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   void _onCrossIconPressed() {
     setState(() {
       _image = null;
-    });
-  }
-
-  void _onImageIconSelected(File file) {
-    setState(() {
-      _image = file;
     });
   }
 
@@ -183,7 +174,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
             NotiModelList.add(NotiModel);
           }
         }
-        if (tweetModel.parentkey == null && !daySelected.contains(true)) {
+        if (tweetModel.parentkey == null && daySelected.contains(true)) {
           state.sendToDatabase(NotiModelList);
         }
       }

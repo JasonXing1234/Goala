@@ -553,8 +553,8 @@ class _UserTile2State extends State<_UserTile2> {
                     leading: Icon(Icons.edit),
                     title: Text('Edit'),
                     onTap: () {
-                      //state.setTweetToReply = widget.tweet;
-                      //Navigator.of(context).pushNamed('/CreateEditPage');
+                      state.setTweetToReply = widget.tweet;
+                      Navigator.of(context).pushNamed('/CreateEditPage');
                     },
                   ),
                   ListTile(

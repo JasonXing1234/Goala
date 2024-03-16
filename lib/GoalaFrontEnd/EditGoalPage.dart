@@ -127,7 +127,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   /// Submit tweet to save in firebase database
   void _submitButton() async {
     if (_descriptionController.text.isEmpty ||
-        _descriptionController.text.length > 50 ||
+        _descriptionController.text.length > 1000 ||
         _titleController.text.isEmpty ||
         _titleController.text.length > 10 ||
         pickedTime == null) {
@@ -137,82 +137,19 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     kScreenLoader.showLoader(context);
 
     List<GoalNotiModel> NotiModelList = [];
-    FeedModel tweetModel = await createTweetModel();
-
-    String? tweetId;
-
-    /// If tweet contain image
-    /// First image is uploaded on firebase storage
-    /// After successful image upload to firebase storage it returns image path
-    /// Add this image path to tweet model and save to firebase database
-    if (_image != null) {
-      await state.uploadFile(_image!).then((imagePath) async {
-        if (imagePath != null) {
-          tweetModel.imagePath = imagePath;
-
-          /// If type of tweet is new tweet
-          if (widget.isTweet) {
-            tweetId = await state.createTweet(tweetModel);
-          }
-
-          /// If type of tweet is  retweet
-          else if (widget.isRetweet) {
-            tweetId = await state.createReTweet(tweetModel);
-          }
-
-          /// If type of tweet is new comment tweet
-          else {
-            tweetId = await state.addCommentToPost(tweetModel);
-          }
-        }
-      });
-    }
-
-    /// If tweet did not contain image
-    else {
-      /// If type of tweet is new tweet
-      if (widget.isTweet) {
-        tweetId = await state.createTweet(tweetModel);
-        for (int i = 0; i < daySelected.length; i++) {
-          if (daySelected[i]) {
-            // Send each selected day with the time to the database
-            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
-            NotiModelList.add(NotiModel);
-          }
-        }
-        if (tweetModel.parentkey == null && !daySelected.contains(true)) {
-          state.sendToDatabase(NotiModelList);
-        }
-      }
-
-      /// If type of tweet is  retweet
-      else if (widget.isRetweet) {
-        tweetId = await state.createReTweet(tweetModel);
-      }
-
-      /// If type of tweet is new comment tweet
-      else {
-        tweetId = await state.addCommentToPost(tweetModel);
-        if (tweetModel.goalPhotoList!.length != 0) {
-          state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
-        }
+    await changeTweetModel();
+    for (int i = 0; i < daySelected.length; i++) {
+      if (daySelected[i]) {
+        // Send each selected day with the time to the database
+        GoalNotiModel NotiModel = await createNotiModel(i + 1, model!.key!);
+        NotiModelList.add(NotiModel);
       }
     }
-    tweetModel.key = tweetId;
-
-    /// Checks for username in tweet description
-    /// If username found, sends notification to all tagged user
-    /// If no user found, compose tweet screen is closed and redirect back to home page.
-    await Provider.of<ComposeTweetState>(context, listen: false)
-        .sendNotification(
-        tweetModel, Provider.of<SearchState>(context, listen: false))
-        .then((_) {
-      /// Hide running loader on screen
-      kScreenLoader.hideLoader();
-
-      /// Navigate back to home page
-      Navigator.pop(context);
-    });
+    if (model!.parentkey == null && daySelected.contains(true)) {
+      state.sendToDatabase(NotiModelList);
+    }
+    kScreenLoader.hideLoader();
+    Navigator.pop(context);
   }
 
   Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
@@ -229,7 +166,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   /// If tweet is new tweet then `parentkey` and `childRetwetkey` should be null
   /// IF tweet is a comment then it should have `parentkey`
   /// IF tweet is a retweet then it should have `childRetwetkey`
-  Future createTweetModel() async {
+  Future changeTweetModel() async {
     var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     var myUser = authState.userModel;
@@ -242,8 +179,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     final databaseReference = FirebaseDatabase.instance.ref();
 
     // The specific post you want to update
-    DatabaseReference postRef = databaseReference.child('tweet/$model.key');
-
+    DatabaseReference postRef = databaseReference.child('tweet/${model!.key}');
     // Fields you want to update
     postRef.update({
       'title': _titleController.text,
@@ -257,7 +193,6 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
           ? 0
           : int.parse(_goalSumController.text)
           : 0,
-      'isHabit': state.tweetToReplyModel!.isHabit,
       'goalUnit': _goalUnitController.text,
       'deadlineDate':
       "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
@@ -266,6 +201,19 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     }).catchError((error) {
       print('Failed to update post: $error');
     });
+
+    final query = await databaseReference.child('GoalNotifications').orderByChild('GoalID').equalTo(model!.key);
+    final snapshot = await query.once();
+    if (snapshot.snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.snapshot.value as Map<dynamic, dynamic>;
+      data.forEach((key, value) {
+        kDatabase.child('GoalNotifications').child(key).remove().then((_) {
+          print('Post with parentkey $key removed successfully');
+        }).catchError((error) {
+          print('Error removing post with key $key: $error');
+        });
+      });
+    }
   }
 
   @override
@@ -312,48 +260,6 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      ToggleButtons(
-                          color: Colors.black,
-                          //selectedColor: Colors.white,
-                          fillColor: Colors.white,
-                          renderBorder: false,
-                          onPressed: (int index) {
-                            setState(() {
-                              // This logic sets true for the tapped button and false for the other
-                              for (int buttonIndex = 0; buttonIndex < _selections.length; buttonIndex++) {
-                                if (buttonIndex == index) {
-                                  _selections[buttonIndex] = true;
-                                } else {
-                                  _selections[buttonIndex] = false;
-                                }
-                              }
-                            });
-                          },
-                          isSelected: _selections,
-                          children: List<Widget>.generate(
-                              2,
-                                  (index) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: index == 0 ? AppColor.PROGRESS_COLOR : _selections[1] == false ? Colors.grey : Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-
-                                  ),
-                                  padding: const EdgeInsets.all(5),
-                                  width: 140,
-                                  height: 50,
-                                  alignment: Alignment.center,
-                                  child: index == 0 ? Text('Yes!', style: TextStyles.onPrimarySubTitleTextBlack) :
-                                  Text('Nope.', style: _selections[1] == false ? TextStyles.onPrimarySubTitleTextBlack : TextStyles.onPrimarySubTitleText),
-                                ),
-                              )
-                          )
-                      ),
-                    ],
-                  ),
                   if (widget.isTweet)
                     Center(
                       child: SizedBox(
@@ -385,15 +291,15 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                         ),
                       ),
                     ),
-                  if (widget.isTweet && isSelected[0] == false)
+                  if (widget.isTweet && model!.isHabit == false)
                     SizedBox(
                       height: 10,
                     ),
-                  if (widget.isTweet && isSelected[0] == false)
+                  if (widget.isTweet && model!.isHabit == false)
                     SizedBox(
                       height: 15,
                     ),
-                  if (widget.isTweet && isSelected[0] == false)
+                  if (widget.isTweet && model!.isHabit == false)
                     Center(
                         child:
                         Row(children: [
@@ -427,9 +333,9 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                           ),
                         ],)
                     ),
-                  if (widget.isTweet && isSelected[0] == false)
+                  if (widget.isTweet && model!.isHabit == false)
                     SizedBox(height: 10),
-                  if (widget.isTweet && isSelected[0] == false)
+                  if (widget.isTweet && model!.isHabit == false)
                     Row(
                       children: [
                         SizedBox(width: 58),
@@ -449,6 +355,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                   SizedBox(
                     height: 20,
                   ),
+                  if (widget.isTweet && model!.isGroupGoal == true)
                   ChildWidget(
                     friends: FriendList,
                     onSelectionChanged: (updatedFriends) {
