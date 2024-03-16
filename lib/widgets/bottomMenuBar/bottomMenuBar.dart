@@ -37,7 +37,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-                width: 50,
+                width: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: tempInt == 0 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
@@ -45,7 +45,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
                 child: _icon(Icons.person, 0),
               ),
           Container(
-            width: 50,
+            width: 110,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               color: tempInt == 1 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
@@ -53,7 +53,7 @@ class _BottomMenubarState extends State<BottomMenubar> {
             child: _icon(Icons.public, 1),
           ),
           Container(
-            width: 50,
+            width: 110,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               color: tempInt == 2 ? AppColor.PROGRESS_COLOR : null, // Change color as needed
