@@ -1,6 +1,8 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
+const moment = require("moment-timezone");
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://motivationapp-fa23c-default-rtdb.firebaseio.com",
@@ -41,12 +43,28 @@ exports.dailyCheckInUpdate = functions.runWith({timeoutSeconds: 300}).pubsub
 exports.sendUserNotifications = functions.pubsub.schedule("* * * * *")
   .onRun(async (context) => {
   const now = new Date();
-  const currentDay = now.getDay(); // Sunday - 0, Monday - 1, ..., Saturday - 6
-  const currentTime = now.toISOString().substring(11, 16); // "HH:MM" format
+  let currentDay = now.getDay();
+  if (now.getDay() == 0) {
+    currentDay = 7;
+  } else {
+    currentDay = now.getDay();
+  }
+  // Sunday - 0, Monday - 1, ..., Saturday - 6
+  // Convert the current time to Mountain Time (MT)
+  const currentTimeMT = moment().tz("America/Denver");
+  let currentTime = currentTimeMT.format("MM/DD/YYYY HH:mm").substring(11, 16); // "HH:MM" format
+  if (currentTime.charAt(0) === "0") {
+    currentTime = currentTimeMT.format("MM/DD/YYYY HH:mm").substring(12, 16);
+  } if (currentTime.charAt(3) === "0") {
+    currentTime = currentTimeMT.format("MM/DD/YYYY HH:mm").substring(11, 14)+currentTimeMT.toISOString().substring(15, 16);
+  } if (currentTime.charAt(0) === "0" && currentTime.charAt(3) === "0") {
+    currentTime = currentTimeMT.format("MM/DD/YYYY HH:mm").substring(12, 14)+currentTimeMT.toISOString().substring(15, 16);
+  }
   admin.database().ref("GoalNotifications").once("value").then((snapshot) => {
     snapshot.forEach((snap) => {
       if (parseInt(snap.val().day) === currentDay) {
         const notificationTime = snap.val().notiTime;
+        console.log((snap.val().notiTime + " / " + currentTime));
         if (notificationTime === currentTime) {
           console.log("sent!");
           sendPushNotification(snap.val().userID, "goal");
@@ -85,26 +103,3 @@ function sendPushNotification(userID, goalID) {
         console.log("Error sending message:", error);
     });
 }
-
-exports.sendPokeNotification = functions.https.onCall((data, context) => {
-  const token = data.token;
-  const displayName = data.user;// Device token of the recipient user
-  console.log("Successfully sent message:", response);
-  const message = {
-    notification: {
-      title: displayName + "You are poked!",
-      body: "You have a new message.",
-    },
-    token: token,
-  };
-  console.log("Successfully sent message:", response);
-
-  return admin.messaging().send(message)
-    .then((response) => {
-      return {success: true, response: response};
-    })
-    .catch((error) => {
-      return {success: false, error: error};
-    });
-});
-
