@@ -86,9 +86,9 @@ class _HomePageState extends State<HomePage> {
 
     /// Subscribe the push notifications
     /// Whenever devices receive push notification, `listenPushNotification` callback will trigger.
-    pushNotificationSubscription = getIt<PushNotificationService>()
-        .pushNotificationResponseStream
-        .listen(listenPushNotification);
+    // pushNotificationSubscription = getIt<PushNotificationService>()
+    //     .pushNotificationResponseStream
+    //     .listen(listenPushNotification);
   }
 
   /// Listen for every push notifications when app is in background
