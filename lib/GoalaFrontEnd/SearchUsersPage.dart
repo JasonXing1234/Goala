@@ -11,6 +11,8 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 
+import '../model/feedModel.dart';
+
 class SearchUsersPage extends StatefulWidget {
   const SearchUsersPage({Key? key, this.scaffoldKey}) : super(key: key);
 
@@ -38,6 +40,7 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
   Widget build(BuildContext context) {
     final state = Provider.of<SearchState>(context);
     final list = state.userlist;
+    final groupList = state.groupList;
     return Scaffold(
       appBar: CustomAppBar(
         scaffoldKey: widget.scaffoldKey,
@@ -45,6 +48,7 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
         //onActionPressed: onSettingIconPressed,
         onSearchChanged: (text) {
           state.filterByUsername(text);
+          state.filterByGroup(text);
         },
       ),
       body: RefreshIndicator(
@@ -52,17 +56,38 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
           state.getDataFromDatabase();
           return Future.value();
         },
-        child: ListView.separated(
-          addAutomaticKeepAlives: false,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => _UserTile(user: list![index]),
-          separatorBuilder: (_, index) => const Divider(
-            height: 0,
+        child: Column(
+          children: [
+    Center(child: Text('People', style: TextStyles.bigSubtitleStyle)),
+          Expanded(child:
+          ListView.separated(
+            addAutomaticKeepAlives: false,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) => _UserTile(user: list![index]),
+            separatorBuilder: (_, index) => const Divider(
+              height: 0,
+            ),
+            itemCount: list?.length ?? 0,
+          ),),
+          Divider(
+            height: 1.0,
+            color: Colors.grey,
           ),
-          itemCount: list?.length ?? 0,
-        ),
+          Center(child: Text('Groups', style: TextStyles.bigSubtitleStyle)),
+          Expanded(child:
+          ListView.separated(
+            addAutomaticKeepAlives: false,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) => _GroupTile(user: groupList![index]),
+            separatorBuilder: (_, index) => const Divider(
+            height: 0,
+            ),
+            itemCount: groupList?.length ?? 0,
+          ),)
+        ]
+
       ),
-    );
+      ));
   }
 }
 
@@ -104,3 +129,35 @@ class _UserTile extends StatelessWidget {
     );
   }
 }
+
+class _GroupTile extends StatelessWidget {
+  const _GroupTile({Key? key, required this.user}) : super(key: key);
+  final FeedModel user;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        if (kReleaseMode) {
+          kAnalytics.logViewSearchResults(searchTerm: user.title!);
+        }
+        Navigator.push(context, ProfilePage.getRoute(profileId: user.userId!));
+      },
+      //leading: CircularImage(path: user.profilePic, height: 40),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Flexible(
+            child: TitleText(user.title!,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                overflow: TextOverflow.ellipsis),
+          ),
+          const SizedBox(width: 3),
+        ],
+      ),
+      //subtitle: Text(user.!),
+    );
+  }
+}
+
