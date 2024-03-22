@@ -11,11 +11,20 @@ class SearchState extends AppState {
   List<UserModel>? _userFilterList;
   List<UserModel>? _userlist;
   List<FeedModel>? _feedList;
+  List<FeedModel>? groupFilterList;
+  List<FeedModel>? _groupList;
   List<UserModel>? get userlist {
     if (_userFilterList == null) {
       return null;
     } else {
       return List.from(_userFilterList!);
+    }
+  }
+  List<FeedModel>? get groupList {
+    if (_groupList == null) {
+      return null;
+    } else {
+      return List.from(groupFilterList!.reversed);
     }
   }
 
@@ -51,6 +60,32 @@ class SearchState extends AppState {
             }
           } else {
             _userlist = null;
+          }
+          isBusy = false;
+        },
+      );
+      kDatabase.child('tweet').once().then(
+            (DatabaseEvent event) {
+          final snapshot = event.snapshot;
+          _groupList = <FeedModel>[];
+          groupFilterList = <FeedModel>[];
+          if (snapshot.value != null) {
+            var map = snapshot.value as Map?;
+            if (map != null) {
+              map.forEach((key, value) {
+                var model = FeedModel.fromJson(value);
+                model.key = key;
+                if(model.isGroupGoal) {
+                  cprint('yes');
+                  _groupList!.add(model);
+                  groupFilterList!.add(model);
+                }
+              });
+              //_userFilterList!.sort((x, y) => y.followers!.compareTo(x.followers!));
+              notifyListeners();
+            }
+          } else {
+            _groupList = null;
           }
           isBusy = false;
         },
@@ -126,6 +161,29 @@ class SearchState extends AppState {
           .where((x) =>
               x.userName != null &&
               x.userName!.toLowerCase().contains(name.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
+  }
+
+  void filterByGroup(String? name) {
+    if (name != null &&
+        name.isEmpty &&
+        _groupList != null &&
+        _groupList!.length != groupFilterList!.length) {
+      groupFilterList = List.from(_groupList!);
+    }
+    // return if userList is empty or null
+    if (_groupList == null && _groupList!.isEmpty) {
+      cprint("User list is empty");
+      return;
+    }
+    // sortBy userlist on the basis of username
+    else if (name != null) {
+      groupFilterList = _groupList!
+          .where((x) =>
+      x.title != null &&
+          x.title!.toLowerCase().contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();

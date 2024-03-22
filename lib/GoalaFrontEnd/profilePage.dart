@@ -136,8 +136,9 @@ class _ProfilePageState extends State<ProfilePage>
           state.getDataFromDatabase();
           return Future.value();
         },
-        child: CustomScrollView(
-          slivers: <Widget>[
+        child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+    return[
             SliverAppBar(
               expandedHeight: MediaQuery.of(context).size.height * .22,
               floating: false,
@@ -281,9 +282,8 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ]),
                   )),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
+            )];},
+            body: Container(
                 height: 800,
                 child: Center(
                   child: Padding(
@@ -384,8 +384,6 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                 ),
               ),
-            )
-          ],
         ),
       ),
     );

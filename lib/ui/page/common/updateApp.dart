@@ -18,7 +18,9 @@ class UpdateApp extends StatefulWidget {
   _UpdateAppState createState() => _UpdateAppState();
 }
 
-class _UpdateAppState extends State<UpdateApp> with WidgetsBindingObserver {
+class _UpdateAppState extends State<
+
+    UpdateApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();

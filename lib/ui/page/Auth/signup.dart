@@ -50,14 +50,14 @@ class _SignupState extends State<Signup> {
 
   Widget _body(BuildContext context) {
     return Container(
-      height: context.height - 88,
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
+            const SizedBox(height: 32),
             authTextInput(
               controller: _nameController,
               inputType: TextInputType.name,
@@ -196,7 +196,9 @@ class _SignupState extends State<Signup> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(child: _body(context)),
+      body: SingleChildScrollView(
+        child: _body(context),
+      ),
     );
   }
 }

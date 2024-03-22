@@ -129,7 +129,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
-    List<GoalNotiModel> NotiModelList = [];
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -165,17 +164,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     else {
       /// If type of tweet is new tweet
       if (widget.isTweet) {
-        tweetId = await state.createTweet(tweetModel);
-        for (int i = 0; i < daySelected.length; i++) {
-          if (daySelected[i]) {
-            // Send each selected day with the time to the database
-            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
-            NotiModelList.add(NotiModel);
-          }
-        }
-        if (tweetModel.parentkey == null && daySelected.contains(true)) {
-          state.sendToDatabase(NotiModelList);
-        }
       }
 
       /// If type of tweet is  retweet
@@ -524,6 +512,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                               child: SizedBox(
                                 width: 300,
                                 child: TextFormField(
+                                  textInputAction: TextInputAction.done,
                                   maxLength: 1000, // Maximum characters
                                   maxLines: null,
                                   style: TextStyle(
