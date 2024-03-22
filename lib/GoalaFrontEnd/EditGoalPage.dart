@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -45,7 +44,6 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
   late TextEditingController _goalUnitController;
-  late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
   List<bool> _selections = [false, false];
@@ -68,7 +66,6 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   void initState() {
     var feedState = Provider.of<FeedState>(context, listen: false);
     model = feedState.tweetToReplyModel;
-    _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     _descriptionController =
         TextEditingController(text: model == null ? '' : model!.description);
@@ -141,30 +138,25 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
 
-    List<GoalNotiModel> NotiModelList = [];
+    List<GoalNotiModel> notiModelList = [];
     await changeTweetModel();
     for (int i = 0; i < daySelected.length; i++) {
       if (daySelected[i]) {
         // Send each selected day with the time to the database
-        GoalNotiModel NotiModel = await createNotiModel(i + 1, model!.key!);
-        NotiModelList.add(NotiModel);
+        GoalNotiModel notiModel = await createNotiModel(
+          i + 1,
+          model!.key!,
+          pickedTime!.hour,
+          pickedTime!.minute,
+        );
+        notiModelList.add(notiModel);
       }
     }
     if (model!.parentkey == null && daySelected.contains(true)) {
-      state.sendToDatabase(NotiModelList);
+      state.sendToDatabase(notiModelList);
     }
     kScreenLoader.hideLoader();
     Navigator.pop(context);
-  }
-
-  Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
-    var authState = Provider.of<AuthState>(context, listen: false);
-    var myUser = authState.userModel;
-    final _messaging = FirebaseMessaging.instance;
-    String? tempToken = await _messaging.getToken();
-    GoalNotiModel temp = GoalNotiModel(
-        tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
-    return temp;
   }
 
   /// Return Tweet model which is either a new Tweet , retweet model or comment model

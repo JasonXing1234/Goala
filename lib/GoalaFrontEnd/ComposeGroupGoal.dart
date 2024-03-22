@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -48,7 +47,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _goalSumController;
   late TextEditingController _goalUnitController;
   late TextEditingController _addUserController;
-  late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
   TimeOfDay? pickedTime;
@@ -70,7 +68,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   void initState() {
     var feedState = Provider.of<FeedState>(context, listen: false);
     model = feedState.tweetToReplyModel;
-    _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     _descriptionController = TextEditingController();
     _goalSumController = TextEditingController();
@@ -130,7 +127,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
 
-    List<GoalNotiModel> NotiModelList = [];
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -167,15 +163,21 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       /// If type of tweet is new tweet
       if (widget.isTweet) {
         tweetId = await state.createTweet(tweetModel);
+        List<GoalNotiModel> notiModelList = [];
         for (int i = 0; i < daySelected.length; i++) {
           if (daySelected[i]) {
             // Send each selected day with the time to the database
-            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
-            NotiModelList.add(NotiModel);
+            GoalNotiModel notiModel = await createNotiModel(
+              i + 1,
+              tweetId!,
+              pickedTime!.hour,
+              pickedTime!.minute,
+            );
+            notiModelList.add(notiModel);
           }
         }
         if (tweetModel.parentkey == null && daySelected.contains(true)) {
-          state.sendToDatabase(NotiModelList);
+          state.sendToDatabase(notiModelList);
         }
       }
 
@@ -207,16 +209,6 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       /// Navigate back to home page
       Navigator.pop(context);
     });
-  }
-
-  Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
-    var authState = Provider.of<AuthState>(context, listen: false);
-    var myUser = authState.userModel;
-    final _messaging = FirebaseMessaging.instance;
-    String? tempToken = await _messaging.getToken();
-    GoalNotiModel temp = GoalNotiModel(
-        tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
-    return temp;
   }
 
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
@@ -290,10 +282,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
 
   @override
   Widget build(BuildContext context) {
-    final _multiSelectKey = GlobalKey<FormFieldState>();
     var authState = Provider.of<AuthState>(context, listen: false);
     var searchstate = Provider.of<SearchState>(context);
-    List<UserModel?> selectedUsers = [];
     List<UserModel?> FriendList = [];
     if (authState.userModel!.followingList != null &&
         authState.userModel!.followingList!.isNotEmpty) {

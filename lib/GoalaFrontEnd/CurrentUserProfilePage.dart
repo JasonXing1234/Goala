@@ -117,18 +117,18 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    List<FeedModel>? list;
-    List<FeedModel>? GroupGoalList;
+    List<FeedModel>? personalGoalList;
+    List<FeedModel>? groupGoalList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context);
     String id = authState.userId!;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      list = feedstate.feedList!
+      personalGoalList = feedstate.feedList!
           .where((x) =>
               x.userId == id && x.isGroupGoal == false && x.parentkey == null)
           .toList();
-      GroupGoalList = feedstate.feedList!
+      groupGoalList = feedstate.feedList!
           .where((x) =>
               x.memberList!.contains(id) &&
               x.isGroupGoal == true &&
@@ -166,70 +166,65 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                 floating: false,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    background: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        color: Colors.white,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  // Add an image widget to display an image
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 20),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.white, width: 5),
-                                        shape: BoxShape.circle),
-                                    child: RippleButton(
-                                      child: CircularImage(
-                                        path: authState.userModel?.profilePic,
-                                        height: 80,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            ProfileImageView.getRoute(authState
-                                                .profileUserModel!
-                                                .profilePic!));
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0),
-                                    alignment: Alignment(10.0, 1),
-                                    margin: authState.userModel == null
-                                        ? const EdgeInsets.only(
-                                            top: 30, right: 20)
-                                        : authState.userModel!.displayName!
-                                                    .length <
-                                                6
-                                            ? const EdgeInsets.only(
-                                                top: 30, right: 20)
-                                            : const EdgeInsets.only(
-                                                top: 30, right: 0),
-                                    child: Text(
-                                      authState.userModel == null
-                                          ? ''
-                                          : authState.userModel!.displayName!,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 37,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                  centerTitle: true,
+                  background: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Add an image widget to display an image
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 500),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 5),
+                                  shape: BoxShape.circle),
+                              child: RippleButton(
+                                child: CircularImage(
+                                  path: authState.userModel?.profilePic,
+                                  height: 80,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      ProfileImageView.getRoute(authState
+                                          .profileUserModel!.profilePic!));
+                                },
                               ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 0),
+                              alignment: Alignment(10.0, 1),
+                              margin: authState.userModel == null
+                                  ? const EdgeInsets.only(top: 30, right: 20)
+                                  : authState.userModel!.displayName!.length < 6
+                                      ? const EdgeInsets.only(
+                                          top: 30, right: 20)
+                                      : const EdgeInsets.only(
+                                          top: 30, right: 0),
+                              child: Text(
+                                authState.userModel == null
+                                    ? ''
+                                    : authState.userModel!.displayName!,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 37,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
 
-                              /*authState.isbusy
+                        /*authState.isbusy
                                 ? SizedBox(
                                     width: 20,
                                   )
@@ -267,7 +262,10 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                               },
                                             ).toList(),
                                           ))*/
-                            ]))),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ];
           },
@@ -328,52 +326,46 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          list == null || list.isEmpty
+                          personalGoalList == null || personalGoalList.isEmpty
                               ? Center(
                                   child: Text('Add a personal goal now!',
-                                      style: TextStyles.bigSubtitleStyle))
+                                      style: TextStyles.bigSubtitleStyle),
+                                )
                               : GridView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   addAutomaticKeepAlives: false,
                                   physics: const BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) =>
-                                      _UserTile2(tweet: list![index]),
-                                  itemCount: list.length ?? 0,
+                                  itemBuilder: (context, index) => _UserTile2(
+                                      tweet: personalGoalList![index]),
+                                  itemCount: personalGoalList.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        2, // Number of items per row
-                                    crossAxisSpacing:
-                                        5.0, // Horizontal space between items
-                                    mainAxisSpacing:
-                                        5.0, // Vertical space between items
-                                    childAspectRatio:
-                                        0.8, // Aspect ratio of each item
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5.0,
+                                    mainAxisSpacing: 5.0,
+                                    childAspectRatio: 0.8,
                                   ),
                                 ),
-                          GroupGoalList == null || GroupGoalList.isEmpty
+                          groupGoalList == null || groupGoalList.isEmpty
                               ? Center(
                                   child: Text('Add a group goal now!',
-                                      style: TextStyles.bigSubtitleStyle))
+                                      style: TextStyles.bigSubtitleStyle),
+                                )
                               : GridView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   addAutomaticKeepAlives: false,
                                   physics: const BouncingScrollPhysics(),
                                   itemBuilder: (context, index) =>
-                                      _UserTile2(tweet: GroupGoalList![index]),
-                                  itemCount: GroupGoalList.length ?? 0,
+                                      _UserTile2(tweet: groupGoalList![index]),
+                                  itemCount: groupGoalList.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        2, // Number of items per row
-                                    crossAxisSpacing:
-                                        5.0, // Horizontal space between items
-                                    mainAxisSpacing:
-                                        5.0, // Vertical space between items
-                                    childAspectRatio:
-                                        0.8, // Aspect ratio of each item
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5.0,
+                                    mainAxisSpacing: 5.0,
+                                    childAspectRatio: 0.8,
                                   ),
                                 ),
                         ],

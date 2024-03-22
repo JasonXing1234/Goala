@@ -12,7 +12,6 @@ import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:Goala/widgets/tweet/widgets/parentTweet.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
 
@@ -211,8 +210,9 @@ class _TweetBodyState extends State<_TweetBody> {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<FeedState>(context, listen: false);
-    var authState = Provider.of<AuthState>(context, listen: false);
+    // Comment because they were unused variables
+    // var state = Provider.of<FeedState>(context, listen: false);
+    // var authState = Provider.of<AuthState>(context, listen: false);
 
     return FutureBuilder(
         future: getParentModel(),
@@ -278,8 +278,8 @@ class _TweetBodyState extends State<_TweetBody> {
                             ],
                           ),
                         ),
-                        //TODO: Pop-up menu, might be useful for the future
-                        //Container(child: widget.trailing ?? const SizedBox()),
+                        // TODO: Pop-up menu, might be useful for the future
+                        // Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
                     SizedBox(
