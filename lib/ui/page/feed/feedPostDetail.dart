@@ -138,13 +138,18 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                         suffixIcon: IconButton(
                           icon: Icon(Icons.send),
                           onPressed: () async {
-                            var state = Provider.of<FeedState>(context, listen: false);
-                            var authState = Provider.of<AuthState>(context, listen: false);
-                            state.setTweetToReply = state.tweetDetailModel!.last;
+                            var state =
+                                Provider.of<FeedState>(context, listen: false);
+                            var authState =
+                                Provider.of<AuthState>(context, listen: false);
+                            state.setTweetToReply =
+                                state.tweetDetailModel!.last;
                             var myUser = authState.userModel;
-                            var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
+                            var profilePic =
+                                myUser!.profilePic ?? Constants.dummyProfilePic;
                             var commentedUser = UserModel(
-                                displayName: myUser.displayName ?? myUser.email!.split('@')[0],
+                                displayName: myUser.displayName ??
+                                    myUser.email!.split('@')[0],
                                 profilePic: profilePic,
                                 userId: myUser.userId,
                                 isVerified: authState.userModel!.isVerified,
@@ -165,7 +170,8 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                               isPrivate: false,
                               isHabit: false,
                             );
-                            String? tweetId = await state.addCommentToPost(reply);
+                            String? tweetId =
+                                await state.addCommentToPost(reply);
                             Navigator.of(context).pop();
                           },
                         ),
@@ -174,7 +180,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                     // If you want the button outside the TextField
                   ],
                 ),
-              ) ,
+              ),
             ),
             SliverList(
               delegate: SliverChildListDelegate(

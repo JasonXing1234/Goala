@@ -319,9 +319,9 @@ class _TweetBodyState extends State<_TweetBody> {
                     SizedBox(height: 10),
                     widget.model.parentName != null
                         ? Text(
-                      widget.model.parentName!,
-                      style: TextStyles.bigSubtitleStyle,
-                    )
+                            widget.model.parentName!,
+                            style: TextStyles.bigSubtitleStyle,
+                          )
                         : Text(''),
                     widget.model.grandparentKey == null
                         ? Row(
@@ -335,7 +335,8 @@ class _TweetBodyState extends State<_TweetBody> {
                                           tempModel!.GoalSum!
                                       : tempModel!.checkInList!
                                               .where((item) => item == true)
-                                              .length / 8,
+                                              .length /
+                                          8,
                                   height: 25,
                                   width: 230,
                                   backgroundColor: Colors.grey[300]!,

@@ -7,5 +7,9 @@ rem     Windows: .\custom_dart_fix.bat
 
 echo -------- Prefer const constructors
 call dart fix --code="prefer_const_constructors" .\lib --apply
+
 echo -------- Remove unused imports
 call dart fix --code=unused_import .\lib --apply
+
+echo -------- Dart format
+call dart format lib

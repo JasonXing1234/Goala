@@ -145,7 +145,8 @@ class _ProfilePageState extends State<ProfilePage>
               flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   background: Container(
-                    padding: const EdgeInsets.only(left:8.0, top: 8.0, bottom: 8.0),
+                    padding:
+                        const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                     color: Colors.white,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,83 +200,85 @@ class _ProfilePageState extends State<ProfilePage>
                                           ),
                                         ),
                                 ),
-                SizedBox(height: 10,),
-                Container(
-                  margin:
-                  const EdgeInsets.only(right: 20),
-                                child: RippleButton(
-                                  splashColor:
-                                      TwitterColor.dodgeBlue_50.withAlpha(100),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (isMyProfile) {
-                                        Navigator.push(context,
-                                            EditProfilePage.getRoute());
-                                      } else {
-                                        if (isFollower() == "Add Friend") {
-                                          authState.addFriend();
-                                        } else if (isFollower() ==
-                                            "Friend Request Sent") {
-                                        } else if (isFollower() ==
-                                            "Accept Friend Request") {
-                                          authState.acceptFriendRequest();
-                                        } else if (isFollower() ==
-                                            "Friend Added") {}
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isMyProfile
-                                          ? TwitterColor.white
-                                          : authState.isbusy
-                                              ? TwitterColor.dodgeBlue
-                                              : isFollower() == "Friend Added"
-                                                  ? AppColor.PROGRESS_COLOR
-                                                  : TwitterColor.white,
-                                      border: Border.all(
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(right: 20),
+                                  child: RippleButton(
+                                    splashColor: TwitterColor.dodgeBlue_50
+                                        .withAlpha(100),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8)),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isMyProfile) {
+                                          Navigator.push(context,
+                                              EditProfilePage.getRoute());
+                                        } else {
+                                          if (isFollower() == "Add Friend") {
+                                            authState.addFriend();
+                                          } else if (isFollower() ==
+                                              "Friend Request Sent") {
+                                          } else if (isFollower() ==
+                                              "Accept Friend Request") {
+                                            authState.acceptFriendRequest();
+                                          } else if (isFollower() ==
+                                              "Friend Added") {}
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isMyProfile
+                                            ? TwitterColor.white
+                                            : authState.isbusy
+                                                ? TwitterColor.dodgeBlue
+                                                : isFollower() == "Friend Added"
+                                                    ? AppColor.PROGRESS_COLOR
+                                                    : TwitterColor.white,
+                                        border: Border.all(
+                                            color: isMyProfile
+                                                ? Colors.black87.withAlpha(180)
+                                                : Colors.blue,
+                                            width: 1),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+
+                                      /// If [isMyProfile] is true then Edit profile button will display
+                                      // Otherwise Follow/Following button will be display
+                                      child: Text(
+                                        isMyProfile
+                                            ? 'Edit Profile'
+                                            : isFollower() == "Add Friend"
+                                                ? 'Add Friend'
+                                                : isFollower() ==
+                                                        "Friend Request Sent"
+                                                    ? 'Friend Request Sent'
+                                                    : isFollower() ==
+                                                            "Accept Friend Request"
+                                                        ? 'Accept Friend Request'
+                                                        : isFollower() ==
+                                                                "Friend Added"
+                                                            ? 'Friend Added'
+                                                            : '',
+                                        style: TextStyle(
                                           color: isMyProfile
                                               ? Colors.black87.withAlpha(180)
-                                              : Colors.blue,
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-
-                                    /// If [isMyProfile] is true then Edit profile button will display
-                                    // Otherwise Follow/Following button will be display
-                                    child: Text(
-                                      isMyProfile
-                                          ? 'Edit Profile'
-                                          : isFollower() == "Add Friend"
-                                              ? 'Add Friend'
-                                              : isFollower() ==
-                                                      "Friend Request Sent"
-                                                  ? 'Friend Request Sent'
-                                                  : isFollower() ==
-                                                          "Accept Friend Request"
-                                                      ? 'Accept Friend Request'
-                                                      : isFollower() ==
-                                                              "Friend Added"
-                                                          ? 'Friend Added'
-                                                          : '',
-                                      style: TextStyle(
-                                        color: isMyProfile
-                                            ? Colors.black87.withAlpha(180)
-                                            : isFollower() == "Friend Added"
-                                                ? TwitterColor.white
-                                                : Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
+                                              : isFollower() == "Friend Added"
+                                                  ? TwitterColor.white
+                                                  : Colors.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),)
+                                )
                               ]))
                             ],
                           ),
@@ -345,15 +348,14 @@ class _ProfilePageState extends State<ProfilePage>
                                     _UserTile2(tweet: list![index]),
                                 itemCount: list?.length ?? 0,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                  2, // Number of items per row
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, // Number of items per row
                                   crossAxisSpacing:
-                                  5.0, // Horizontal space between items
+                                      5.0, // Horizontal space between items
                                   mainAxisSpacing:
-                                  5.0, // Vertical space between items
+                                      5.0, // Vertical space between items
                                   childAspectRatio:
-                                  0.8, // Aspect ratio of each item
+                                      0.8, // Aspect ratio of each item
                                 ),
                               ),
                               GridView.builder(
@@ -365,15 +367,14 @@ class _ProfilePageState extends State<ProfilePage>
                                     _UserTile2(tweet: GroupGoalList![index]),
                                 itemCount: GroupGoalList?.length ?? 0,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                  2, // Number of items per row
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, // Number of items per row
                                   crossAxisSpacing:
-                                  5.0, // Horizontal space between items
+                                      5.0, // Horizontal space between items
                                   mainAxisSpacing:
-                                  5.0, // Vertical space between items
+                                      5.0, // Vertical space between items
                                   childAspectRatio:
-                                  0.8, // Aspect ratio of each item
+                                      0.8, // Aspect ratio of each item
                                 ),
                               ),
                             ],
@@ -443,7 +444,8 @@ class _UserTileState extends State<_UserTile> {
                       int.parse(widget.tweet.deadlineDate!.split('-')[2]))
                   .difference(DateTime(DateTime.now().year,
                       DateTime.now().month, DateTime.now().day))
-                  .inDays, isHabit: widget.tweet.isHabit,
+                  .inDays,
+              isHabit: widget.tweet.isHabit,
               checkInDays: widget.tweet.checkInList!,
             ),
           )
@@ -452,7 +454,6 @@ class _UserTileState extends State<_UserTile> {
       subtitle: Text(widget.tweet.description!),
     );
   }
-
 }
 
 class _UserTile2 extends StatefulWidget {
@@ -482,83 +483,73 @@ class _UserTile2State extends State<_UserTile2> {
             state.getPostDetailFromDatabase(null, model: widget.tweet);
             Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
           },
-          child:
-          Row(
-              children:
-              [
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 160,
-                      child: Text(
-                        widget.tweet.title!,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),),
+          child: Row(children: [
+            SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 160,
+                  child: Text(
+                    widget.tweet.title!,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 3),
-                    SizedBox(
-                      height: 25,
-                      width: 160,
-                      child: CustomProgressBar(
-                        progress: widget.tweet.isHabit == false
-                            ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                            : widget.tweet.checkInList!
-                            .where((item) => item == true)
-                            .length /
+                  ),
+                ),
+                SizedBox(height: 3),
+                SizedBox(
+                  height: 25,
+                  width: 160,
+                  child: CustomProgressBar(
+                    progress: widget.tweet.isHabit == false
+                        ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                        : widget.tweet.checkInList!
+                                .where((item) => item == true)
+                                .length /
                             8,
-                        height: 25,
-                        width: 160,
-                        backgroundColor: Colors.grey[300]!,
-                        progressColor: widget.tweet.isCheckedIn == true
-                            ? AppColor.PROGRESS_COLOR
-                            : Colors.black,
-                        daysLeft: DateTime(
+                    height: 25,
+                    width: 160,
+                    backgroundColor: Colors.grey[300]!,
+                    progressColor: widget.tweet.isCheckedIn == true
+                        ? AppColor.PROGRESS_COLOR
+                        : Colors.black,
+                    daysLeft: DateTime(
                             int.parse(widget.tweet.deadlineDate!.split('-')[0]),
                             int.parse(widget.tweet.deadlineDate!.split('-')[1]),
                             int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                            .difference(DateTime(DateTime
-                            .now()
-                            .year,
-                            DateTime
-                                .now()
-                                .month, DateTime
-                                .now()
-                                .day))
-                            .inDays,
-                        isHabit: widget.tweet.isHabit,
-                        checkInDays: widget.tweet.checkInList!,
+                        .difference(DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day))
+                        .inDays,
+                    isHabit: widget.tweet.isHabit,
+                    checkInDays: widget.tweet.checkInList!,
+                  ),
+                ),
+                SizedBox(height: 7),
+                if (widget.tweet.coverPhoto != null)
+                  Container(
+                    width: 160, // Specify the width of the container
+                    height: 160, // Specify the height of the container
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      // Use ClipRRect for borderRadius if needed
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.tweet.coverPhoto!,
+                        fit: BoxFit
+                            .cover, // This ensures the image covers the container
                       ),
                     ),
-                    SizedBox(height: 7),
-                    if (widget.tweet.coverPhoto != null)
-                      Container(
-                        width: 160, // Specify the width of the container
-                        height: 160, // Specify the height of the container
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ClipRRect(
-                          // Use ClipRRect for borderRadius if needed
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            widget.tweet.coverPhoto!,
-                            fit: BoxFit
-                                .cover, // This ensures the image covers the container
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ]
-          )),
+                  ),
+              ],
+            ),
+          ])),
     );
   }
 }
-
 
 class Choice {
   const Choice(

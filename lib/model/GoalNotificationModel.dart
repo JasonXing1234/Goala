@@ -1,4 +1,3 @@
-
 class GoalNotiModel {
   String GoalID;
   String userID;

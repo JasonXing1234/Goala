@@ -77,16 +77,14 @@ class _TaskDetailState extends State<TaskDetailPage> {
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
-            title:
-                Column(children: [
-                  Container(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: Text(
-                      tempFeed.title!,
-                      style: TextStyles.barTitleStyle
-                  ),),
-                ],),
-
+            title: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: Text(tempFeed.title!, style: TextStyles.barTitleStyle),
+                ),
+              ],
+            ),
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             bottom: PreferredSize(

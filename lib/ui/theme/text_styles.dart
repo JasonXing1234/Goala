@@ -6,21 +6,19 @@ class TextStyles {
   static TextStyle get onPrimaryTitleText {
     return const TextStyle(color: Colors.white, fontWeight: FontWeight.w600);
   }
+
   static TextStyle get onGreenButtonText {
     return const TextStyle(color: Colors.white);
   }
 
   static TextStyle get onPrimarySubTitleText {
     return const TextStyle(
-      color: Colors.white,
-        fontSize: 16, fontWeight: FontWeight.bold
-    );
+        color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
   }
+
   static TextStyle get onPrimarySubTitleTextBlack {
     return const TextStyle(
-      color: Colors.black,
-        fontSize: 16, fontWeight: FontWeight.bold
-    );
+        color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold);
   }
 
   static TextStyle get titleStyle {
@@ -29,31 +27,33 @@ class TextStyles {
       fontWeight: FontWeight.bold,
     );
   }
+
   static TextStyle get bigTitleStyle {
     return const TextStyle(
       fontSize: 35,
       fontWeight: FontWeight.bold,
     );
   }
+
   static TextStyle get barTitleStyle {
     return const TextStyle(
       fontSize: 33,
     );
   }
+
   static TextStyle get bigSubtitleStyle {
     return const TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.bold,
     );
   }
+
   static TextStyle get subtitleStyle {
-    return const TextStyle(
-        fontSize: 16, fontWeight: FontWeight.bold);
+    return const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   }
 
   static TextStyle get buttonTextStyle {
-    return const TextStyle(
-        fontSize: 18);
+    return const TextStyle(fontSize: 18);
   }
 
   static TextStyle get userNameStyle {

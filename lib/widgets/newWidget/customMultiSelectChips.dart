@@ -49,22 +49,23 @@ class _ChildWidgetState extends State<ChildWidget> {
             ),
           ),
         ),
-        Center(child:
-        Wrap(
-          children: _selectedFriends
-              .map((friend) => ChoiceChip(
-            selectedColor: AppColor.PROGRESS_COLOR,
-            label: Text(friend.displayName!),
-            selected: true,
-            onSelected: (isSelected) {
-              setState(() {
-                _selectedFriends.removeWhere((f) => f == friend);
-                widget.onSelectionChanged(_selectedFriends);
-              });
-            },
-          ))
-              .toList(),
-        ),),
+        Center(
+          child: Wrap(
+            children: _selectedFriends
+                .map((friend) => ChoiceChip(
+                      selectedColor: AppColor.PROGRESS_COLOR,
+                      label: Text(friend.displayName!),
+                      selected: true,
+                      onSelected: (isSelected) {
+                        setState(() {
+                          _selectedFriends.removeWhere((f) => f == friend);
+                          widget.onSelectionChanged(_selectedFriends);
+                        });
+                      },
+                    ))
+                .toList(),
+          ),
+        ),
       ],
     );
   }

@@ -142,11 +142,7 @@ class TweetBottomSheet {
                           ),
                           onPressed: () {
                             Navigator.pop(context);
-                            _deleteTweet(
-                              context,
-                              type,
-                              model.key!
-                            );
+                            _deleteTweet(context, type, model.key!);
                           },
                           child: const Text('Confirm'),
                         ),
