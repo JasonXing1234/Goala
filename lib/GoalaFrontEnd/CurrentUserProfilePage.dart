@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 import 'dart:math' as math;
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/helper/utility.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -37,7 +39,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       new AndroidInitializationSettings('goala');
 
   @override
-  void dispose(){
+  void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
@@ -53,7 +55,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     listenForForegroundNotifications();
     super.initState();
   }
-
 
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
@@ -79,41 +80,65 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     }
   }
 
+  // TODO: How am I supposed to know this function is here?
+  // TODO: This could all be refactored to work better.
+  // This should be in a different file
   void listenForForegroundNotifications() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('pushing goals!');
       // print('Message data: ${message.data}');
 
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Notifications',
-        description: 'This channel is used for important notifications.',
-        importance: Importance.max,
-      );
+      if (Platform.isAndroid) {
+        cprint("Making an Android notification");
+        const AndroidNotificationChannel channel = AndroidNotificationChannel(
+          'high_importance_channel',
+          'High Importance Notifications',
+          description: 'This channel is used for important notifications.',
+          importance: Importance.max,
+        );
+        final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
 
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.createNotificationChannel(channel);
+        //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        if (notification != null && android != null) {
+          cprint("Showing the Android notification");
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: '@mipmap/ic_launcher',
+                ),
+              ));
+        }
+      } else if (Platform.isIOS) {
+        cprint("Making an iOS notification");
+        const DarwinNotificationDetails iosDetails =
+            DarwinNotificationDetails();
+        const NotificationDetails notificationDetails =
+            NotificationDetails(iOS: iosDetails);
 
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-      //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
+        RemoteNotification? notification = message.notification;
+        if (notification != null) {
+          cprint("Showing the iOS notification");
+          int id = notification.hashCode.toUnsigned(31);
+          await FlutterLocalNotificationsPlugin().show(
+            id,
             notification.title,
             notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channelDescription: channel.description,
-                icon: '@mipmap/ic_launcher',
-              ),
-            ));
+            notificationDetails,
+            payload: 'item x',
+          );
+        }
       }
     });
   }
@@ -163,7 +188,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
         child: NestedScrollView(
           //controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return[
+            return [
               SliverAppBar(
                 expandedHeight: MediaQuery.of(context).size.height * .20,
                 floating: false,
@@ -177,7 +202,8 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   // Add an image widget to display an image
@@ -199,7 +225,8 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                         Navigator.push(
                                             context,
                                             ProfileImageView.getRoute(authState
-                                                .profileUserModel!.profilePic!));
+                                                .profileUserModel!
+                                                .profilePic!));
                                       },
                                     ),
                                   ),
@@ -207,9 +234,16 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 0),
                                     alignment: Alignment(10.0, 1),
-                                    margin:
-                                    authState.userModel == null
-                                        ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
+                                    margin: authState.userModel == null
+                                        ? const EdgeInsets.only(
+                                            top: 30, right: 20)
+                                        : authState.userModel!.displayName!
+                                                    .length <
+                                                6
+                                            ? const EdgeInsets.only(
+                                                top: 30, right: 20)
+                                            : const EdgeInsets.only(
+                                                top: 30, right: 0),
                                     child: Text(
                                       authState.userModel == null
                                           ? ''
@@ -265,93 +299,92 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
               ),
             ];
           },
-          body:
-          Container(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                    Column(
-                      children: [
-                            Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child:
-                                  Container(
-                                    height: 45,
-                                    width: 330,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(
-                                        8.0,
-                                      ),
-                                    ),
-                                    child: TabBar(
-                                      labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                                      controller: _tabController,
-                                      // give the indicator a decoration (color and border radius)
-                                      indicator: BoxDecoration(
-                                        color: Color(0xFF292A29),
-                                        borderRadius: BorderRadius.circular(
-                                          8.0,
-                                        ),
-                                      ),
-                                      labelColor: Colors.white,
-                                      //91F291
-                                      unselectedLabelColor: Colors.black,
-                                      tabs: [
-                                        Container(
-                                          width: 180,
-                                          color: Color(0x69DC9E),
-                                          child: Center(
-                                            child: Text("Personal", style: TextStyles.titleStyle),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 180,
-                                          color: Color(0x69DC9E),
-                                          child: Center(
-                                            child: Text("Group", style: TextStyles.titleStyle),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),)),
-
-                        SizedBox(height:10),
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: [
-                              list == null || list.isEmpty ?
-                              Center(
-                                child: Text('Add a personal goal now!',style: TextStyles.bigSubtitleStyle)
-                              ) :
-                              GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                addAutomaticKeepAlives: false,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) =>
-                                    _UserTile2(tweet: list![index]),
-                                itemCount: list.length ?? 0,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      2, // Number of items per row
-                                  crossAxisSpacing:
-                                      5.0, // Horizontal space between items
-                                  mainAxisSpacing:
-                                      5.0, // Vertical space between items
-                                  childAspectRatio:
-                                      0.8, // Aspect ratio of each item
-                                ),
+          body: Container(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 45,
+                        width: 330,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(
+                            8.0,
+                          ),
+                        ),
+                        child: TabBar(
+                          labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                          controller: _tabController,
+                          // give the indicator a decoration (color and border radius)
+                          indicator: BoxDecoration(
+                            color: Color(0xFF292A29),
+                            borderRadius: BorderRadius.circular(
+                              8.0,
+                            ),
+                          ),
+                          labelColor: Colors.white,
+                          //91F291
+                          unselectedLabelColor: Colors.black,
+                          tabs: [
+                            Container(
+                              width: 180,
+                              color: Color(0x69DC9E),
+                              child: Center(
+                                child: Text("Personal",
+                                    style: TextStyles.titleStyle),
                               ),
-                              GroupGoalList == null || GroupGoalList.isEmpty ?
-                              Center(
-                                  child: Text('Add a group goal now!',style: TextStyles.bigSubtitleStyle)
-                              ) :
-                              GridView.builder(
+                            ),
+                            Container(
+                              width: 180,
+                              color: Color(0x69DC9E),
+                              child: Center(
+                                child:
+                                    Text("Group", style: TextStyles.titleStyle),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          list == null || list.isEmpty
+                              ? Center(
+                                  child: Text('Add a personal goal now!',
+                                      style: TextStyles.bigSubtitleStyle))
+                              : GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  addAutomaticKeepAlives: false,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) =>
+                                      _UserTile2(tweet: list![index]),
+                                  itemCount: list.length ?? 0,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                        2, // Number of items per row
+                                    crossAxisSpacing:
+                                        5.0, // Horizontal space between items
+                                    mainAxisSpacing:
+                                        5.0, // Vertical space between items
+                                    childAspectRatio:
+                                        0.8, // Aspect ratio of each item
+                                  ),
+                                ),
+                          GroupGoalList == null || GroupGoalList.isEmpty
+                              ? Center(
+                                  child: Text('Add a group goal now!',
+                                      style: TextStyles.bigSubtitleStyle))
+                              : GridView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   addAutomaticKeepAlives: false,
@@ -360,26 +393,25 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                       _UserTile2(tweet: GroupGoalList![index]),
                                   itemCount: GroupGoalList.length ?? 0,
                                   gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount:
-                                    2, // Number of items per row
+                                        2, // Number of items per row
                                     crossAxisSpacing:
-                                    5.0, // Horizontal space between items
+                                        5.0, // Horizontal space between items
                                     mainAxisSpacing:
-                                    5.0, // Vertical space between items
+                                        5.0, // Vertical space between items
                                     childAspectRatio:
-                                    0.8, // Aspect ratio of each item
+                                        0.8, // Aspect ratio of each item
                                   ),
                                 ),
-
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
+            ),
+          ),
         ),
       ),
     );
@@ -431,7 +463,8 @@ class _UserTileState extends State<_UserTile> {
                     ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
                     : widget.tweet.checkInList!
                             .where((item) => item == true)
-                            .length / 8,
+                            .length /
+                        8,
                 height: 20,
                 width: 120,
                 backgroundColor: Colors.grey[300]!,
@@ -561,7 +594,8 @@ class _UserTile2State extends State<_UserTile2> {
                     leading: Icon(Icons.delete),
                     title: Text('Delete'),
                     onTap: () {
-                      var state = Provider.of<FeedState>(context, listen: false);
+                      var state =
+                          Provider.of<FeedState>(context, listen: false);
                       state.deleteTweet(widget.tweet.key!);
                       Navigator.pop(context);
                     },
@@ -574,80 +608,83 @@ class _UserTile2State extends State<_UserTile2> {
 
     return GestureDetector(
         onLongPress: () => _showBottomMenu(context),
-    child:
-      GridTile(
+        child: GridTile(
           child: InkWell(
-            onTap: () {
-              state.getPostDetailFromDatabase(null, model: widget.tweet);
-              Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-            },
-            child:
-            Row(
-            children:
-            [
-              SizedBox(width:12),
-              Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: Text(
-                    widget.tweet.title!,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),),
-                ),
-                SizedBox(height:3),
-                SizedBox(
-                  height: 25,
-                  width: 160,
-                  child: CustomProgressBar(
-                    progress: widget.tweet.isHabit == false
-                        ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                        : widget.tweet.checkInList!
-                        .where((item) => item == true)
-                        .length /
-                        8,
-                    height: 25,
-                    width: 160,
-                    backgroundColor: Colors.grey[300]!,
-                    progressColor: widget.tweet.isCheckedIn == true ? AppColor.PROGRESS_COLOR : Colors.black,
-                    daysLeft: DateTime(
-                        int.parse(widget.tweet.deadlineDate!.split('-')[0]),
-                        int.parse(widget.tweet.deadlineDate!.split('-')[1]),
-                        int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                        .difference(DateTime(DateTime.now().year,
-                        DateTime.now().month, DateTime.now().day))
-                        .inDays,
-                    isHabit: widget.tweet.isHabit, checkInDays: widget.tweet.checkInList!,
-                  ),
-                ),
-                SizedBox(height:7),
-
-                  Container(
-                    width: 160, // Specify the width of the container
-                    height: 160, // Specify the height of the container
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+              onTap: () {
+                state.getPostDetailFromDatabase(null, model: widget.tweet);
+                Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
+              },
+              child: Row(children: [
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 160,
+                      child: Text(
+                        widget.tweet.title!,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    child: ClipRRect(
-                      // Use ClipRRect for borderRadius if needed
-                      borderRadius: BorderRadius.circular(12),
-                      child: widget.tweet.coverPhoto != null ? Image.network(
-                        widget.tweet.coverPhoto!,
-                        fit: BoxFit
-                            .cover, // This ensures the image covers the container
-                      ) : Image.asset(
-                        'assets/images/icon_512.png',
-                        fit: BoxFit
-                            .cover, // This ensures the image covers the container
-                      )
+                    SizedBox(height: 3),
+                    SizedBox(
+                      height: 25,
+                      width: 160,
+                      child: CustomProgressBar(
+                        progress: widget.tweet.isHabit == false
+                            ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
+                            : widget.tweet.checkInList!
+                                    .where((item) => item == true)
+                                    .length /
+                                8,
+                        height: 25,
+                        width: 160,
+                        backgroundColor: Colors.grey[300]!,
+                        progressColor: widget.tweet.isCheckedIn == true
+                            ? AppColor.PROGRESS_COLOR
+                            : Colors.black,
+                        daysLeft: DateTime(
+                                int.parse(
+                                    widget.tweet.deadlineDate!.split('-')[0]),
+                                int.parse(
+                                    widget.tweet.deadlineDate!.split('-')[1]),
+                                int.parse(
+                                    widget.tweet.deadlineDate!.split('-')[2]))
+                            .difference(DateTime(DateTime.now().year,
+                                DateTime.now().month, DateTime.now().day))
+                            .inDays,
+                        isHabit: widget.tweet.isHabit,
+                        checkInDays: widget.tweet.checkInList!,
+                      ),
                     ),
-                  ),
-              ],
-            ),]
-          )),
-    ));
+                    SizedBox(height: 7),
+                    Container(
+                      width: 160, // Specify the width of the container
+                      height: 160, // Specify the height of the container
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                          // Use ClipRRect for borderRadius if needed
+                          borderRadius: BorderRadius.circular(12),
+                          child: widget.tweet.coverPhoto != null
+                              ? Image.network(
+                                  widget.tweet.coverPhoto!,
+                                  fit: BoxFit
+                                      .cover, // This ensures the image covers the container
+                                )
+                              : Image.asset(
+                                  'assets/images/icon_512.png',
+                                  fit: BoxFit
+                                      .cover, // This ensures the image covers the container
+                                )),
+                    ),
+                  ],
+                ),
+              ])),
+        ));
   }
 }
