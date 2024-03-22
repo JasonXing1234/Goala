@@ -18,15 +18,12 @@ import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import 'package:translator/translator.dart';
 import '../model/GoalNotificationModel.dart';
-import '../ui/constants.dart';
+import '../ui/styleConstants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
-import '../widgets/newWidget/customizedTitleText.dart';
 
 class EditGoal extends StatefulWidget {
-  const EditGoal(
-      {Key? key, required this.isRetweet, this.isTweet = true})
+  const EditGoal({Key? key, required this.isRetweet, this.isTweet = true})
       : super(key: key);
 
   final bool isRetweet;
@@ -73,10 +70,18 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     model = feedState.tweetToReplyModel;
     _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
-    _descriptionController = TextEditingController(text: model == null ? '' : model!.description);
-    _goalSumController = TextEditingController(text: model == null || model?.GoalSum == null ? '' : model!.GoalSum.toString());
-    _goalUnitController = TextEditingController(text: model == null || model?.goalUnit == null ? '' : model!.goalUnit.toString());
-    _titleController = TextEditingController(text: model == null ? '' : model!.title);
+    _descriptionController =
+        TextEditingController(text: model == null ? '' : model!.description);
+    _goalSumController = TextEditingController(
+        text: model == null || model?.GoalSum == null
+            ? ''
+            : model!.GoalSum.toString());
+    _goalUnitController = TextEditingController(
+        text: model == null || model?.goalUnit == null
+            ? ''
+            : model!.goalUnit.toString());
+    _titleController =
+        TextEditingController(text: model == null ? '' : model!.title);
     scrollController.addListener(_scrollListener);
     super.initState();
   }
@@ -189,23 +194,27 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
       'GoalSum': state.tweetToReplyModel!.isHabit == true
           ? null
           : widget.isTweet
-          ? state.tweetToReplyModel!.isHabit == true
-          ? 0
-          : int.parse(_goalSumController.text)
-          : 0,
+              ? state.tweetToReplyModel!.isHabit == true
+                  ? 0
+                  : int.parse(_goalSumController.text)
+              : 0,
       'goalUnit': _goalUnitController.text,
       'deadlineDate':
-      "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     }).then((_) {
       print('Post updated successfully');
     }).catchError((error) {
       print('Failed to update post: $error');
     });
 
-    final query = await databaseReference.child('GoalNotifications').orderByChild('GoalID').equalTo(model!.key);
+    final query = await databaseReference
+        .child('GoalNotifications')
+        .orderByChild('GoalID')
+        .equalTo(model!.key);
     final snapshot = await query.once();
     if (snapshot.snapshot.value != null) {
-      Map<dynamic, dynamic> data = snapshot.snapshot.value as Map<dynamic, dynamic>;
+      Map<dynamic, dynamic> data =
+          snapshot.snapshot.value as Map<dynamic, dynamic>;
       data.forEach((key, value) {
         kDatabase.child('GoalNotifications').child(key).remove().then((_) {
           print('Post with parentkey $key removed successfully');
@@ -225,11 +234,11 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     List<UserModel?> selectedUsers = [];
     List<UserModel?> FriendList = [];
     List<String> tempString = authState.userModel!.followingList!;
-    tempString.removeWhere((item) => feedstate.tweetToReplyModel!.memberList!.contains(item));
+    tempString.removeWhere(
+        (item) => feedstate.tweetToReplyModel!.memberList!.contains(item));
     if (tempString.isNotEmpty) {
       for (int i = 0; i < tempString.length; i++) {
-        FriendList =
-            searchstate.getuserDetail(tempString);
+        FriendList = searchstate.getuserDetail(tempString);
       }
     }
     return Scaffold(
@@ -241,11 +250,11 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
         submitButtonText: widget.isTweet
             ? 'Commit'
             : widget.isRetweet
-            ? 'Retweet'
-            : 'Comment',
+                ? 'Retweet'
+                : 'Comment',
         isSubmitDisable:
-        !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-            Provider.of<FeedState>(context).isBusy,
+            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+                Provider.of<FeedState>(context).isBusy,
         isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -272,7 +281,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                           textAlign: TextAlign.center,
                           maxLength: 50,
                           decoration:
-                          kTextFieldDecoration.copyWith(hintText: "title"),
+                              kTextFieldDecoration.copyWith(hintText: "title"),
                         ),
                       ),
                     ),
@@ -301,38 +310,40 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                     ),
                   if (widget.isTweet && model!.isHabit == false)
                     Center(
-                        child:
-                        Row(children: [
-                          SizedBox(width: 80),
-                          SizedBox(
-                            width: 60,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary),
-                              cursorColor: Theme.of(context).colorScheme.secondary,
-                              controller: _goalSumController,
-                              textAlign: TextAlign.center,
-                              decoration: kTextFieldDecoration.copyWith(
-                                  hintText: "#"),
-                            ),
+                        child: Row(
+                      children: [
+                        SizedBox(width: 80),
+                        SizedBox(
+                          width: 60,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                            cursorColor:
+                                Theme.of(context).colorScheme.secondary,
+                            controller: _goalSumController,
+                            textAlign: TextAlign.center,
+                            decoration:
+                                kTextFieldDecoration.copyWith(hintText: "#"),
                           ),
-                          SizedBox(width: 10),
-                          SizedBox(
-                            width: 150,
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary),
-                              cursorColor: Theme.of(context).colorScheme.secondary,
-                              controller: _goalUnitController,
-                              textAlign: TextAlign.center,
-                              decoration: kTextFieldDecoration.copyWith(
-                                  hintText: "Units"),
-                            ),
+                        ),
+                        SizedBox(width: 10),
+                        SizedBox(
+                          width: 150,
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                            cursorColor:
+                                Theme.of(context).colorScheme.secondary,
+                            controller: _goalUnitController,
+                            textAlign: TextAlign.center,
+                            decoration: kTextFieldDecoration.copyWith(
+                                hintText: "Units"),
                           ),
-                        ],)
-                    ),
+                        ),
+                      ],
+                    )),
                   if (widget.isTweet && model!.isHabit == false)
                     SizedBox(height: 10),
                   if (widget.isTweet && model!.isHabit == false)
@@ -346,7 +357,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                               context), // Call the _selectDate function when the button is pressed
                           child: dateSelected == true
                               ? Text(
-                              "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
+                                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
                               : Text('Select Date'),
                         ),
                       ],
@@ -356,21 +367,21 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                     height: 20,
                   ),
                   if (widget.isTweet && model!.isGroupGoal == true)
-                  ChildWidget(
-                    friends: FriendList,
-                    onSelectionChanged: (updatedFriends) {
-                      setState(() {
-                        memberListTemp.clear();
-                        List<String> temp = [];
-                        for (int i = 0; i < updatedFriends.length; i++) {
-                          temp.add(updatedFriends[i]!.userId!);
-                        }
-                        memberListTemp.addAll(temp);
-                        friendTemp = feedstate.tweetToReplyModel!.memberList!;
-                        friendTemp.addAll(memberListTemp);
-                      });
-                    },
-                  ),
+                    ChildWidget(
+                      friends: FriendList,
+                      onSelectionChanged: (updatedFriends) {
+                        setState(() {
+                          memberListTemp.clear();
+                          List<String> temp = [];
+                          for (int i = 0; i < updatedFriends.length; i++) {
+                            temp.add(updatedFriends[i]!.userId!);
+                          }
+                          memberListTemp.addAll(temp);
+                          friendTemp = feedstate.tweetToReplyModel!.memberList!;
+                          friendTemp.addAll(memberListTemp);
+                        });
+                      },
+                    ),
                   SizedBox(
                     height: 20,
                   ),
@@ -431,7 +442,6 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -451,35 +461,35 @@ class _UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !Provider.of<ComposeTweetState>(context).displayUserList ||
-        list == null ||
-        list!.length < 0 ||
-        list!.isEmpty
+            list == null ||
+            list!.length < 0 ||
+            list!.isEmpty
         ? const SizedBox.shrink()
         : Container(
-      padding: const EdgeInsetsDirectional.only(bottom: 50),
-      color: TwitterColor.white,
-      constraints:
-      const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
-      child: ListView.builder(
-        itemCount: list!.length,
-        physics: ClampingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return _UserTile(
-            user: list![index],
-            onUserSelected: (user) {
-              textEditingController.text =
-                  Provider.of<ComposeTweetState>(context, listen: false)
-                      .getDescription(user.userName!) +
-                      " ";
-              textEditingController.selection = TextSelection.collapsed(
-                  offset: textEditingController.text.length);
-              Provider.of<ComposeTweetState>(context, listen: false)
-                  .onUserSelected();
-            },
+            padding: const EdgeInsetsDirectional.only(bottom: 50),
+            color: TwitterColor.white,
+            constraints:
+                const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
+            child: ListView.builder(
+              itemCount: list!.length,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return _UserTile(
+                  user: list![index],
+                  onUserSelected: (user) {
+                    textEditingController.text =
+                        Provider.of<ComposeTweetState>(context, listen: false)
+                                .getDescription(user.userName!) +
+                            " ";
+                    textEditingController.selection = TextSelection.collapsed(
+                        offset: textEditingController.text.length);
+                    Provider.of<ComposeTweetState>(context, listen: false)
+                        .onUserSelected();
+                  },
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
   }
 }
 
@@ -500,7 +510,7 @@ class _UserTile extends StatelessWidget {
         children: <Widget>[
           ConstrainedBox(
             constraints:
-            BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
+                BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
             child: TitleText(user.displayName!,
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
@@ -509,11 +519,11 @@ class _UserTile extends StatelessWidget {
           const SizedBox(width: 3),
           user.isVerified!
               ? customIcon(
-            context,
-            icon: AppIcon.blueTick,
-            iconColor: AppColor.primary,
-            size: 13,
-          )
+                  context,
+                  icon: AppIcon.blueTick,
+                  iconColor: AppColor.primary,
+                  size: 13,
+                )
               : const SizedBox(width: 0),
         ],
       ),

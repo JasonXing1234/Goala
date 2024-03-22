@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/timelinePosts.dart';
-import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
-import 'package:Goala/widgets/customWidgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

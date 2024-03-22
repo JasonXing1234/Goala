@@ -12,19 +12,15 @@ import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/model/GoalNotificationModel.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
-import 'package:Goala/ui/page/feed/composeTweet/widget/composeTweetImage.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/searchState.dart';
-import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../ui/constants.dart';
-import '../widgets/newWidget/customizedTitleText.dart';
+import '../ui/styleConstants.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
@@ -177,11 +173,10 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         if (tweetModel.goalPhotoList!.length != 0) {
           state.uploadCoverPhoto(tweetModel.goalPhotoList?[0]);
         }
-        if(model!.isHabit == true && _selections[0] == true) {
+        if (model!.isHabit == true && _selections[0] == true) {
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
-          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
-          true;
+          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -193,12 +188,10 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(onError)));
           });
-        }
-        else if(model!.isHabit == false) {
+        } else if (model!.isHabit == false) {
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
-          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] =
-          true;
+          tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -331,7 +324,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     if (image == null) {
       return;
     }
-    final ref = FirebaseStorage.instance.ref().child('Goals').child('$imageUid.jpg');
+    final ref =
+        FirebaseStorage.instance.ref().child('Goals').child('$imageUid.jpg');
     await ref.putFile(File(image.path));
     imageUrl = await ref.getDownloadURL();
     setState(() {
@@ -343,48 +337,47 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        title: customTitleText(''),
-        onActionPressed: _submitButton,
-        isCrossButton: true,
-        submitButtonText: widget.isTweet
-            ? 'Tweet'
-            : widget.isRetweet
-                ? 'Retweet'
-                : 'Reply',
-        isSubmitDisable:
-            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-                Provider.of<FeedState>(context).isBusy,
-        isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body:
-      ProgressHUD(
-    child: Builder(builder: (context) {
-      return Stack(
-        //!Removed container
-        children: <Widget>[
-          SingleChildScrollView(
-            controller: scrollController,
-            child:
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child: Text(model!.title!, style: TextStyles.bigTitleStyle),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Text(model!.description!, style: TextStyles.bigSubtitleStyle),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Center(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          title: customTitleText(''),
+          onActionPressed: _submitButton,
+          isCrossButton: true,
+          submitButtonText: widget.isTweet
+              ? 'Tweet'
+              : widget.isRetweet
+                  ? 'Retweet'
+                  : 'Reply',
+          isSubmitDisable:
+              !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+                  Provider.of<FeedState>(context).isBusy,
+          isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: ProgressHUD(child: Builder(builder: (context) {
+          return Stack(
+            //!Removed container
+            children: <Widget>[
+              SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      child:
+                          Text(model!.title!, style: TextStyles.bigTitleStyle),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(model!.description!,
+                          style: TextStyles.bigSubtitleStyle),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Center(
                       child: Container(
                         width: 330,
                         padding: EdgeInsets.all(8),
@@ -394,120 +387,169 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             width: 0.2, // Width of the border
                           ),
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
+                              const BorderRadius.all(Radius.circular(8.0)),
                         ),
-                        child:
-                        Column(
+                        child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             SizedBox(
+                              height: 41,
+                              width: 300,
+                              child: CustomProgressBar(
+                                progress: model!.isHabit == false
+                                    ? tempString != ''
+                                        ? (model!.GoalAchieved! +
+                                                int.parse(
+                                                    _goalAchievedController
+                                                        .text)) /
+                                            model!.GoalSum!
+                                        : model!.GoalAchieved! / model!.GoalSum!
+                                    : _selections[0] == true
+                                        ? model!.checkInList!
+                                                .where((item) => item == true)
+                                                .length +
+                                            1 / 8
+                                        : model!.checkInList!
+                                                .where((item) => item == true)
+                                                .length /
+                                            8,
                                 height: 41,
                                 width: 300,
-                                child:
-                                  CustomProgressBar(
-                                    progress:
-                                    model!.isHabit == false
-                                        ? tempString != ''
-                                        ? (model!.GoalAchieved! + int.parse(_goalAchievedController.text)) / model!.GoalSum!
-                                    : model!.GoalAchieved! / model!.GoalSum!
-                                        : _selections[0] == true
-                                        ? model!.checkInList!.where((item) => item == true).length + 1 / 8
-                                    : model!.checkInList!.where((item) => item == true).length / 8,
-                                    height: 41,
-                                    width: 300,
-                                    backgroundColor: Colors.grey[300]!,
-                                    progressColor: model!.isCheckedIn || _goalAchievedController.text != '' || _selections[0] == true ? AppColor.PROGRESS_COLOR : Colors.black,
-                                    daysLeft: DateTime(
-                                        int.parse(model!.deadlineDate!.split('-')[0]),
-                                        int.parse(model!.deadlineDate!.split('-')[1]),
-                                        int.parse(model!.deadlineDate!.split('-')[2]))
-                                        .difference(DateTime(DateTime.now().year,
-                                        DateTime.now().month, DateTime.now().day))
-                                        .inDays, isHabit: model!.isHabit,
-                                    checkInDays: model!.checkInList!,
-                                  ),
+                                backgroundColor: Colors.grey[300]!,
+                                progressColor: model!.isCheckedIn ||
+                                        _goalAchievedController.text != '' ||
+                                        _selections[0] == true
+                                    ? AppColor.PROGRESS_COLOR
+                                    : Colors.black,
+                                daysLeft: DateTime(
+                                        int.parse(
+                                            model!.deadlineDate!.split('-')[0]),
+                                        int.parse(
+                                            model!.deadlineDate!.split('-')[1]),
+                                        int.parse(
+                                            model!.deadlineDate!.split('-')[2]))
+                                    .difference(DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day))
+                                    .inDays,
+                                isHabit: model!.isHabit,
+                                checkInDays: model!.checkInList!,
+                              ),
                             ),
                             SizedBox(
                               height: 15,
                             ),
-                          if (model!.isHabit == true && model!.isCheckedIn == false) Text('Did you?', style: TextStyles.subtitleStyle),
+                            if (model!.isHabit == true &&
+                                model!.isCheckedIn == false)
+                              Text('Did you?', style: TextStyles.subtitleStyle),
                             SizedBox(
                               height: 10,
                             ),
-                            if (model!.isHabit == true && model!.isCheckedIn == false) Center(
-                                child:Row(
+                            if (model!.isHabit == true &&
+                                model!.isCheckedIn == false)
+                              Center(
+                                child: Row(
                                   children: [
                                     ToggleButtons(
-                                      color: Colors.black,
-                                      //selectedColor: Colors.white,
-                                      fillColor: Colors.white,
-                                      renderBorder: false,
-                                      onPressed: (int index) {
-                                        setState(() {
-                                          // This logic sets true for the tapped button and false for the other
-                                          for (int buttonIndex = 0; buttonIndex < _selections.length; buttonIndex++) {
-                                            if (buttonIndex == index) {
-                                              _selections[buttonIndex] = true;
-                                            } else {
-                                              _selections[buttonIndex] = false;
+                                        color: Colors.black,
+                                        //selectedColor: Colors.white,
+                                        fillColor: Colors.white,
+                                        renderBorder: false,
+                                        onPressed: (int index) {
+                                          setState(() {
+                                            // This logic sets true for the tapped button and false for the other
+                                            for (int buttonIndex = 0;
+                                                buttonIndex <
+                                                    _selections.length;
+                                                buttonIndex++) {
+                                              if (buttonIndex == index) {
+                                                _selections[buttonIndex] = true;
+                                              } else {
+                                                _selections[buttonIndex] =
+                                                    false;
+                                              }
                                             }
-                                          }
-                                        });
-                                      },
-                                      isSelected: _selections,
-                                      children: List<Widget>.generate(
-                                        2,
-                                        (index) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: index == 0 ? AppColor.PROGRESS_COLOR : _selections[1] == false ? Colors.grey : Colors.black,
-                                              borderRadius: BorderRadius.circular(8),
-
-                                            ),
-                                          padding: const EdgeInsets.all(5),
-                                          width: 140,
-                                          height: 50,
-                                          alignment: Alignment.center,
-                                          child: index == 0 ? Text('Yes!', style: TextStyles.onPrimarySubTitleTextBlack) :
-                                          Text('Nope.', style: _selections[1] == false ? TextStyles.onPrimarySubTitleTextBlack : TextStyles.onPrimarySubTitleText),
-                                          ),
-                                        )
-                                      )
-                                    ),
+                                          });
+                                        },
+                                        isSelected: _selections,
+                                        children: List<Widget>.generate(
+                                            2,
+                                            (index) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: index == 0
+                                                          ? AppColor
+                                                              .PROGRESS_COLOR
+                                                          : _selections[1] ==
+                                                                  false
+                                                              ? Colors.grey
+                                                              : Colors.black,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    width: 140,
+                                                    height: 50,
+                                                    alignment: Alignment.center,
+                                                    child: index == 0
+                                                        ? Text('Yes!',
+                                                            style: TextStyles
+                                                                .onPrimarySubTitleTextBlack)
+                                                        : Text('Nope.',
+                                                            style: _selections[
+                                                                        1] ==
+                                                                    false
+                                                                ? TextStyles
+                                                                    .onPrimarySubTitleTextBlack
+                                                                : TextStyles
+                                                                    .onPrimarySubTitleText),
+                                                  ),
+                                                ))),
                                   ],
                                 ),
-                            ),
-                            if(model!.isHabit == false && model!.isCheckedIn == false) Row(children: [
-                              SizedBox(width: 80),
-                              SizedBox(
-                                width: 100,
-                                child: TextFormField(
-                                  onChanged: (val){
-                                    setState((){
-                                      tempString = _goalAchievedController.text;
-                                    });
-                                  },
-                                  keyboardType: TextInputType.number,
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                      color: Theme.of(context).colorScheme.secondary),
-                                  cursorColor: Theme.of(context).colorScheme.secondary,
-                                  controller: _goalAchievedController,
-                                  textAlign: TextAlign.center,
-                                  decoration: kTextFieldDecoration.copyWith(
-                                      hintText: "#"),
-                                ),
                               ),
-                              SizedBox(width: 10),
-                              Text(model!.goalUnit!,
-                                  style: TextStyles.titleStyle),
-
-                            ],),
+                            if (model!.isHabit == false &&
+                                model!.isCheckedIn == false)
+                              Row(
+                                children: [
+                                  SizedBox(width: 80),
+                                  SizedBox(
+                                    width: 100,
+                                    child: TextFormField(
+                                      onChanged: (val) {
+                                        setState(() {
+                                          tempString =
+                                              _goalAchievedController.text;
+                                        });
+                                      },
+                                      keyboardType: TextInputType.number,
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary),
+                                      cursorColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      controller: _goalAchievedController,
+                                      textAlign: TextAlign.center,
+                                      decoration: kTextFieldDecoration.copyWith(
+                                          hintText: "#"),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(model!.goalUnit!,
+                                      style: TextStyles.titleStyle),
+                                ],
+                              ),
                             SizedBox(
                               height: 15,
                             ),
-
                             Center(
                               child: SizedBox(
                                 width: 300,
@@ -516,8 +558,11 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                   maxLength: 1000, // Maximum characters
                                   maxLines: null,
                                   style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary),
-                                  cursorColor: Theme.of(context).colorScheme.secondary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                  cursorColor:
+                                      Theme.of(context).colorScheme.secondary,
                                   controller: _descriptionController,
                                   textAlign: TextAlign.center,
                                   decoration: kTextFieldDecoration.copyWith(
@@ -528,92 +573,110 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                             widget.isTweet
                                 ? const SizedBox.shrink()
                                 : Center(
-                              child:
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0, horizontal: 0.0),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: imageUrl.isEmpty ? 89.0 : 0.0,
-                                      horizontal: imageUrl.isEmpty ? 89.0 : 0.0
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(0xFF, 0xEC, 0xEC, 0xEC),
-                                    border: Border.all(
-                                        color: Colors.grey,
-                                        width: 1.0),
-                                    borderRadius:
-                                    const BorderRadius.all(Radius.circular(8.0)),
-                                  ),
-                                  child: imageUrl.isEmpty
-                                      ? IconButton(
-                                    icon: Icon(
-                                      Icons.add_photo_alternate_outlined,
-                                      color: Colors.grey,
-                                    ),
-                                    iconSize: imageUrl.isEmpty ? 100 : null,
-                                    onPressed: () async {
-                                      final progress = ProgressHUD.of(context);
-                                      progress!.showWithText('Loading');
-                                      await setImage(ImageSource.gallery);
-                                      progress.dismiss();
-                                    },
-                                  )
-                                      : ClipRRect(
-                                    borderRadius:
-                                    const BorderRadius.all(Radius.circular(8.0)),
-                                    child: Stack(
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl: imageUrl,
-                                          placeholder: (context, url) => Center(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(100.0),
-                                                child: Image.asset(
-                                                  'assets/images/icon_512_transparent.png',
-                                                  width: 100,
-                                                  height: 100,
-                                                ),
-                                              )),
-                                          errorWidget: (context, url, error) =>
-                                          const Center(
-                                            child: Text('Unable to load image...'),
-                                          ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20.0, horizontal: 0.0),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical:
+                                                imageUrl.isEmpty ? 89.0 : 0.0,
+                                            horizontal:
+                                                imageUrl.isEmpty ? 89.0 : 0.0),
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                              0xFF, 0xEC, 0xEC, 0xEC),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1.0),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(8.0)),
                                         ),
-                                        Positioned(
-                                          left: 0.0,
-                                          top: 0.0,
-                                          child: FloatingActionButton(
-                                            mini: true,
-                                            backgroundColor: Colors.red,
-                                            foregroundColor: Colors.white,
-                                            onPressed: () {
-                                              setState(() {
-                                                imageUrl = '';
-                                                selectedImages.clear();
-                                              });
-                                            },
-                                            child: const Icon(Icons.remove),
-                                          ),
-                                        )
-                                      ],
+                                        child: imageUrl.isEmpty
+                                            ? IconButton(
+                                                icon: Icon(
+                                                  Icons
+                                                      .add_photo_alternate_outlined,
+                                                  color: Colors.grey,
+                                                ),
+                                                iconSize: imageUrl.isEmpty
+                                                    ? 100
+                                                    : null,
+                                                onPressed: () async {
+                                                  final progress =
+                                                      ProgressHUD.of(context);
+                                                  progress!
+                                                      .showWithText('Loading');
+                                                  await setImage(
+                                                      ImageSource.gallery);
+                                                  progress.dismiss();
+                                                },
+                                              )
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(8.0)),
+                                                child: Stack(
+                                                  children: [
+                                                    CachedNetworkImage(
+                                                      imageUrl: imageUrl,
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          Center(
+                                                              child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(100.0),
+                                                        child: Image.asset(
+                                                          'assets/images/icon_512_transparent.png',
+                                                          width: 100,
+                                                          height: 100,
+                                                        ),
+                                                      )),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Center(
+                                                        child: Text(
+                                                            'Unable to load image...'),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      left: 0.0,
+                                                      top: 0.0,
+                                                      child:
+                                                          FloatingActionButton(
+                                                        mini: true,
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        foregroundColor:
+                                                            Colors.white,
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            imageUrl = '';
+                                                            selectedImages
+                                                                .clear();
+                                                          });
+                                                        },
+                                                        child: const Icon(
+                                                            Icons.remove),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
-          ),
-        ],
-      );}))
-    );
+            ],
+          );
+        })));
   }
 }

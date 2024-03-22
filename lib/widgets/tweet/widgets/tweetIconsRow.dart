@@ -11,8 +11,6 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
-import '../../../helper/constant.dart';
-import '../../../model/user.dart';
 
 class TweetIconsRow extends StatefulWidget {
   final FeedModel model;

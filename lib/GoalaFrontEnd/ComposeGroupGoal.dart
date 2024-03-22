@@ -19,7 +19,7 @@ import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
 import '../model/GoalNotificationModel.dart';
-import '../ui/constants.dart';
+import '../ui/styleConstants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
 import '../widgets/newWidget/customizedTitleText.dart';
 
@@ -405,38 +405,40 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     ),
                   if (widget.isTweet && isSelected[0] == false)
                     Center(
-                      child:
-                        Row(children: [
-                          SizedBox(width: 80),
-                          SizedBox(
-                            width: 60,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary),
-                              cursorColor: Theme.of(context).colorScheme.secondary,
-                              controller: _goalSumController,
-                              textAlign: TextAlign.center,
-                              decoration: kTextFieldDecoration.copyWith(
-                                  hintText: "#"),
-                            ),
+                        child: Row(
+                      children: [
+                        SizedBox(width: 80),
+                        SizedBox(
+                          width: 60,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                            cursorColor:
+                                Theme.of(context).colorScheme.secondary,
+                            controller: _goalSumController,
+                            textAlign: TextAlign.center,
+                            decoration:
+                                kTextFieldDecoration.copyWith(hintText: "#"),
                           ),
-                          SizedBox(width: 10),
-                          SizedBox(
-                            width: 150,
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary),
-                              cursorColor: Theme.of(context).colorScheme.secondary,
-                              controller: _goalUnitController,
-                              textAlign: TextAlign.center,
-                              decoration: kTextFieldDecoration.copyWith(
-                                  hintText: "Units"),
-                            ),
+                        ),
+                        SizedBox(width: 10),
+                        SizedBox(
+                          width: 150,
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                            cursorColor:
+                                Theme.of(context).colorScheme.secondary,
+                            controller: _goalUnitController,
+                            textAlign: TextAlign.center,
+                            decoration: kTextFieldDecoration.copyWith(
+                                hintText: "Units"),
                           ),
-                        ],)
-                    ),
+                        ),
+                      ],
+                    )),
                   if (widget.isTweet && isSelected[0] == false)
                     SizedBox(height: 10),
                   if (widget.isTweet && isSelected[0] == false)
