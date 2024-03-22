@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../state/authState.dart';
 import '../ui/theme/theme.dart';
 import '../widgets/tweet/widgets/tweetBottomSheet.dart';
 
@@ -67,6 +68,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
+    var authState = Provider.of<AuthState>(context);
     final scrollController = ScrollController();
     return Scaffold(
       key: scaffoldKey,
@@ -98,7 +100,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
           SliverToBoxAdapter(
               child: Column(
             children: [
-              ElevatedButton(
+              if(authState.userModel!.userId! == tempFeed.userId) ElevatedButton(
                   onPressed: () {
                     var state = Provider.of<FeedState>(context, listen: false);
                     state.setTweetToReply = tempFeed;

@@ -4,18 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 class customizedTitleText extends StatelessWidget {
   final String text;
   final double fontSize;
-  final Color color;
+  final Color customizedColor;
   final FontWeight fontWeight;
   final TextAlign textAlign;
   final TextOverflow overflow;
   const customizedTitleText(
     this.text,
-    this.fontSize, {
+    this.fontSize, this.customizedColor, {
     Key? key,
-    this.color = Colors.black,
     this.fontWeight = FontWeight.w600,
     this.textAlign = TextAlign.left,
-    this.overflow = TextOverflow.visible,
+    this.overflow = TextOverflow.visible
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class customizedTitleText extends StatelessWidget {
       style: GoogleFonts.mulish(
         fontSize: fontSize,
         fontWeight: fontWeight,
-        color: color,
+        color: customizedColor,
       ),
       textAlign: textAlign,
       overflow: overflow,

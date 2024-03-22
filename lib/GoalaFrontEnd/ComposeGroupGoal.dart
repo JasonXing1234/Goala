@@ -333,11 +333,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: customizedTitleText('Habit', 18),
+                            child: customizedTitleText('Habit', 18, isSelected[0] == true ? Colors.white : Colors.black),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: customizedTitleText('Goal', 18),
+                            child: customizedTitleText('Goal', 18, isSelected[1] == true ? Colors.white : Colors.black),
                           ),
                         ],
                         onPressed: (int index) {
