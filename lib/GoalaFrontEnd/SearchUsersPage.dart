@@ -1,3 +1,4 @@
+import 'package:Goala/helper/uiUtility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/utility.dart';
@@ -41,53 +42,58 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
     final state = Provider.of<SearchState>(context);
     final list = state.userlist;
     final groupList = state.groupList;
-    return Scaffold(
-      appBar: CustomAppBar(
-        scaffoldKey: widget.scaffoldKey,
-        //icon: AppIcon.settings,
-        //onActionPressed: onSettingIconPressed,
-        onSearchChanged: (text) {
-          state.filterByUsername(text);
-          state.filterByGroup(text);
-        },
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          state.getDataFromDatabase();
-          return Future.value();
-        },
-        child: Column(
-          children: [
-    Center(child: Text('People', style: TextStyles.bigSubtitleStyle)),
-          Expanded(child:
-          ListView.separated(
-            addAutomaticKeepAlives: false,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => _UserTile(user: list![index]),
-            separatorBuilder: (_, index) => const Divider(
-              height: 0,
-            ),
-            itemCount: list?.length ?? 0,
-          ),),
-          Divider(
-            height: 1.0,
-            color: Colors.grey,
+    return KeyboardDismisser(
+      context: context,
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: CustomAppBar(
+            scaffoldKey: widget.scaffoldKey,
+            //icon: AppIcon.settings,
+            //onActionPressed: onSettingIconPressed,
+            onSearchChanged: (text) {
+              state.filterByUsername(text);
+              state.filterByGroup(text);
+            },
           ),
-          Center(child: Text('Groups', style: TextStyles.bigSubtitleStyle)),
-          Expanded(child:
-          ListView.separated(
-            addAutomaticKeepAlives: false,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => _GroupTile(user: groupList![index]),
-            separatorBuilder: (_, index) => const Divider(
-            height: 0,
-            ),
-            itemCount: groupList?.length ?? 0,
-          ),)
-        ]
-
-      ),
-      ));
+          body: RefreshIndicator(
+            onRefresh: () async {
+              state.getDataFromDatabase();
+              return Future.value();
+            },
+            child: Column(children: [
+              Center(child: Text('People', style: TextStyles.bigSubtitleStyle)),
+              Expanded(
+                child: ListView.separated(
+                  addAutomaticKeepAlives: false,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      _UserTile(user: list![index]),
+                  separatorBuilder: (_, index) => const Divider(
+                    height: 0,
+                  ),
+                  itemCount: list?.length ?? 0,
+                ),
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.grey,
+              ),
+              Center(child: Text('Groups', style: TextStyles.bigSubtitleStyle)),
+              Expanded(
+                child: ListView.separated(
+                  addAutomaticKeepAlives: false,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      _GroupTile(user: groupList![index]),
+                  separatorBuilder: (_, index) => const Divider(
+                    height: 0,
+                  ),
+                  itemCount: groupList?.length ?? 0,
+                ),
+              )
+            ]),
+          )),
+    );
   }
 }
 
@@ -160,4 +166,3 @@ class _GroupTile extends StatelessWidget {
     );
   }
 }
-

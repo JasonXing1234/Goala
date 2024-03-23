@@ -27,7 +27,8 @@ class FollowerListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String>? tempList = [];
-    if(profile!.pendingRequestList != null && !profile!.pendingRequestList!.isEmpty){
+    if (profile!.pendingRequestList != null &&
+        !profile!.pendingRequestList!.isEmpty) {
       tempList = profile!.pendingRequestList;
     }
     if (context.watch<FollowListState>().isbusy) {
@@ -45,8 +46,7 @@ class FollowerListPage extends StatelessWidget {
       userIdsList: userList,
       pendingList: tempList,
       emptyScreenText: 'You don\'t have friends yet',
-      emptyScreenSubTileText:
-          'Invite your friends to use the app!',
+      emptyScreenSubTileText: 'Invite your friends to use the app!',
       isFollowing: (user) {
         return context.watch<FollowListState>().isFollowing(user);
       },

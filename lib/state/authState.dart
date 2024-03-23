@@ -404,7 +404,6 @@ class AuthState extends AppState {
     }
   }
 
-
   /// if firebase token not available in profile
   /// Then get token from firebase and save it to profile
   /// When someone sends you a message FCM token is used

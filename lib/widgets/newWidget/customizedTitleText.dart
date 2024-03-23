@@ -8,14 +8,12 @@ class customizedTitleText extends StatelessWidget {
   final FontWeight fontWeight;
   final TextAlign textAlign;
   final TextOverflow overflow;
-  const customizedTitleText(
-    this.text,
-    this.fontSize, this.customizedColor, {
-    Key? key,
-    this.fontWeight = FontWeight.w600,
-    this.textAlign = TextAlign.left,
-    this.overflow = TextOverflow.visible
-  }) : super(key: key);
+  const customizedTitleText(this.text, this.fontSize, this.customizedColor,
+      {Key? key,
+      this.fontWeight = FontWeight.w600,
+      this.textAlign = TextAlign.left,
+      this.overflow = TextOverflow.visible})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(

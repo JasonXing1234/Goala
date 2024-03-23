@@ -11,9 +11,6 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
-import '../../../helper/constant.dart';
-import '../../../model/user.dart';
-
 class TweetIconsRow extends StatefulWidget {
   final FeedModel model;
   final Color iconColor;
@@ -38,7 +35,6 @@ class TweetIconsRow extends StatefulWidget {
 }
 
 class _TweetIconsRowState extends State<TweetIconsRow> {
-
   Widget _likeCommentsIcons(BuildContext context, FeedModel model) {
     var authState = Provider.of<AuthState>(context, listen: false);
 
@@ -198,7 +194,8 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
                           children: <Widget>[
                             customSwitcherWidget(
                               duraton: const Duration(milliseconds: 300),
-                              child: customText(widget.model.likeCount.toString(),
+                              child: customText(
+                                  widget.model.likeCount.toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                   key: ValueKey(widget.model.likeCount)),
@@ -258,7 +255,8 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
   }
 
   void shareTweet(BuildContext context) async {
-    TweetBottomSheet().openShareTweetBottomSheet(context, widget.model, widget.type);
+    TweetBottomSheet()
+        .openShareTweetBottomSheet(context, widget.model, widget.type);
   }
 
   @override

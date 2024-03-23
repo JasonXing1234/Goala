@@ -20,6 +20,7 @@ class SearchState extends AppState {
       return List.from(_userFilterList!);
     }
   }
+
   List<FeedModel>? get groupList {
     if (_groupList == null) {
       return null;
@@ -65,7 +66,7 @@ class SearchState extends AppState {
         },
       );
       kDatabase.child('tweet').once().then(
-            (DatabaseEvent event) {
+        (DatabaseEvent event) {
           final snapshot = event.snapshot;
           _groupList = <FeedModel>[];
           groupFilterList = <FeedModel>[];
@@ -75,7 +76,7 @@ class SearchState extends AppState {
               map.forEach((key, value) {
                 var model = FeedModel.fromJson(value);
                 model.key = key;
-                if(model.isGroupGoal) {
+                if (model.isGroupGoal) {
                   cprint('yes');
                   _groupList!.add(model);
                   groupFilterList!.add(model);
@@ -182,8 +183,8 @@ class SearchState extends AppState {
     else if (name != null) {
       groupFilterList = _groupList!
           .where((x) =>
-      x.title != null &&
-          x.title!.toLowerCase().contains(name.toLowerCase()))
+              x.title != null &&
+              x.title!.toLowerCase().contains(name.toLowerCase()))
           .toList();
     }
     notifyListeners();

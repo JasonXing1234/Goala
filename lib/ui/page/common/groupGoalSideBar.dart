@@ -261,66 +261,67 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
           .toList();
     }
     return SizedBox(
-    width:200,
-      child: Center(
-      child: Drawer(
-
-      child: SafeArea(
-        child: Stack(
-          children: <Widget>[
-
-            Padding(
-              padding: const EdgeInsets.only(bottom: 45),
-              child:
-                  Column(
-                    children: [
-                      Text('Groups', style: TextStyles.titleStyle,),
+        width: 200,
+        child: Center(
+            child: Drawer(
+          child: SafeArea(
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 45),
+                    child: Column(children: [
+                      Text(
+                        'Groups',
+                        style: TextStyles.titleStyle,
+                      ),
                       SizedBox(
                         height: 20,
                       ),
-
-              ListView(
-                // This next line does the trick.
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                children: GroupList.asMap().entries.map(
-                  (model) {
-                    return Row(children: [
-                      SizedBox(
-                        width: 20,
+                      ListView(
+                        // This next line does the trick.
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children: GroupList.asMap().entries.map(
+                          (model) {
+                            return Row(children: [
+                              SizedBox(
+                                width: 20,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    state.getPostDetailFromDatabase(null,
+                                        model: model.value);
+                                  });
+                                  Navigator.push(context,
+                                      TaskDetailPage.getRoute(model.value));
+                                },
+                                child: Text(model.value.title!,
+                                    style: TextStyles.onGreenButtonText),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xFF29AB87)),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      // Change your radius here
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              )
+                            ]);
+                          },
+                        ).toList(),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            state.getPostDetailFromDatabase(null,
-                                model: model.value);
-                          });
-                          Navigator.push(
-                              context, TaskDetailPage.getRoute(model.value));
-                        },
-                        child: Text(model.value.title!, style: TextStyles.onGreenButtonText),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF29AB87)),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              // Change your radius here
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      )
-                    ]);
-                  },
-                ).toList(),
-              ),])
+                    ])),
+                _footer()
+              ],
             ),
-            _footer()
-          ],
-        ),
-      ),
-    )));
+          ),
+        )));
   }
 }

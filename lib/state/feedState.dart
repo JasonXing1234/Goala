@@ -492,13 +492,18 @@ class FeedState extends AppState {
   deleteTweet(String tweetId) async {
     try {
       kDatabase.child('tweet').child(tweetId).remove();
-      final query = kDatabase.child('tweet').orderByChild('parentkey').equalTo(tweetId);
-      final commentQuery = kDatabase.child('tweet').orderByChild('grandparentKey').equalTo(tweetId);
+      final query =
+          kDatabase.child('tweet').orderByChild('parentkey').equalTo(tweetId);
+      final commentQuery = kDatabase
+          .child('tweet')
+          .orderByChild('grandparentKey')
+          .equalTo(tweetId);
       final snapshot = await query.once();
       final snapshot2 = await commentQuery.once();
       if (snapshot.snapshot.value != null) {
         // dataSnapshot.snapshot.value is a Map of child keys and their data
-        Map<dynamic, dynamic> data = snapshot.snapshot.value as Map<dynamic, dynamic>;
+        Map<dynamic, dynamic> data =
+            snapshot.snapshot.value as Map<dynamic, dynamic>;
 
         data.forEach((key, value) {
           // Delete each post that matches the parentKey
@@ -514,7 +519,8 @@ class FeedState extends AppState {
 
       if (snapshot2.snapshot.value != null) {
         // dataSnapshot.snapshot.value is a Map of child keys and their data
-        Map<dynamic, dynamic> data = snapshot2.snapshot.value as Map<dynamic, dynamic>;
+        Map<dynamic, dynamic> data =
+            snapshot2.snapshot.value as Map<dynamic, dynamic>;
 
         data.forEach((key, value) {
           // Delete each post that matches the parentKey

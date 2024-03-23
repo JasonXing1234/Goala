@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 import '../state/authState.dart';
 
 class FriendsPage extends StatelessWidget {
-  const FriendsPage(
-      {Key? key, required this.profile, required this.userList})
+  const FriendsPage({Key? key, required this.profile, required this.userList})
       : super(key: key);
   final List<String> userList;
   final UserModel profile;
@@ -44,7 +43,7 @@ class FriendsPage extends StatelessWidget {
       pageTitle: 'Following',
       userIdsList: userList,
       emptyScreenText:
-      '${profile.userName ?? profile.userName} isn\'t follow anyone',
+          '${profile.userName ?? profile.userName} isn\'t follow anyone',
       emptyScreenSubTileText: 'When they do they\'ll be listed here.',
       onFollowPressed: (user) {
         context.read<FollowListState>().followUser(user);

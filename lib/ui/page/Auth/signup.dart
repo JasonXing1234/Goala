@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
 import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
@@ -187,17 +188,20 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: customText(
-          "Sign Up",
-          context: context,
-          style: const TextStyle(fontSize: 20),
+    return KeyboardDismisser(
+      context: context,
+      child: Scaffold(
+        appBar: AppBar(
+          title: customText(
+            "Sign Up",
+            context: context,
+            style: const TextStyle(fontSize: 20),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: _body(context),
+        body: SingleChildScrollView(
+          child: _body(context),
+        ),
       ),
     );
   }

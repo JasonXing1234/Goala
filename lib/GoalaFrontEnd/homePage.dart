@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/push_notification_model.dart';
-import 'package:Goala/resource/push_notification_service.dart';
 import 'package:Goala/state/appState.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/chats/chatState.dart';
@@ -21,7 +20,6 @@ import 'package:Goala/GoalaFrontEnd/SearchUsersPage.dart';
 import 'package:Goala/widgets/bottomMenuBar/bottomMenuBar.dart';
 import 'package:provider/provider.dart';
 
-import '../ui/page/common/locator.dart';
 import '../ui/page/common/sidebar.dart';
 import 'FeedPage1.dart';
 import 'CurrentUserProfilePage.dart';

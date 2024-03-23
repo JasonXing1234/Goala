@@ -13,15 +13,12 @@ import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:Goala/widgets/tweet/widgets/parentTweet.dart';
-import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
 import 'package:Goala/widgets/url_text/customUrlText.dart';
 import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
-import '../widgets/tweet/widgets/PokeButton.dart';
-import '../widgets/tweet/widgets/tweetImage.dart';
 
 class TimelinePosts extends StatelessWidget {
   final FeedModel model;
@@ -91,20 +88,20 @@ class TimelinePosts extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-
                 child: type == TweetType.Tweet || type == TweetType.Reply
-                    ?
-                Center(child: _TweetBody(
-                  isDisplayOnProfile: isDisplayOnProfile,
-                  model: model,
-                  trailing: trailing,
-                  type: type,
-                ),)
+                    ? Center(
+                        child: _TweetBody(
+                          isDisplayOnProfile: isDisplayOnProfile,
+                          model: model,
+                          trailing: trailing,
+                          type: type,
+                        ),
+                      )
                     : _TweetDetailBody(
-                  model: model,
-                  trailing: trailing,
-                  type: type,
-                ),
+                        model: model,
+                        trailing: trailing,
+                        type: type,
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16),
@@ -147,10 +144,10 @@ class _TweetBody extends StatefulWidget {
   final bool isDisplayOnProfile;
   const _TweetBody(
       {Key? key,
-        required this.model,
-        this.trailing,
-        required this.type,
-        required this.isDisplayOnProfile})
+      required this.model,
+      this.trailing,
+      required this.type,
+      required this.isDisplayOnProfile})
       : super(key: key);
 
   @override
@@ -175,7 +172,7 @@ class _TweetBodyState extends State<_TweetBody> {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-          'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
+              'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
         },
         body: jsonEncode(
           <String, dynamic>{
@@ -225,13 +222,13 @@ class _TweetBodyState extends State<_TweetBody> {
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
         : widget.type == TweetType.Detail ||
-        widget.type == TweetType.ParentTweet
-        ? 18
-        : 14;
+                widget.type == TweetType.ParentTweet
+            ? 18
+            : 14;
     FontWeight descriptionFontWeight =
-    widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
-        ? FontWeight.w400
-        : FontWeight.w400;
+        widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
+            ? FontWeight.w400
+            : FontWeight.w400;
 
     TextStyle textStyle = TextStyle(
         color: Colors.black,
@@ -248,83 +245,78 @@ class _TweetBodyState extends State<_TweetBody> {
             // Future hasn't finished yet, return a placeholder
             return Text('Loading');
           }*/
-          return
-            SingleChildScrollView(
+          return SingleChildScrollView(
               controller: scrollController,
               child: Column(
-            mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 30,
+                    width: 330,
+                    child: CustomProgressBar(
+                      progress: widget.model.isHabit == false
+                          ? tempModel!.GoalAchieved! / tempModel!.GoalSum!
+                          : tempModel!.checkInList!
+                                  .where((item) => item == true)
+                                  .length /
+                              8,
                       height: 30,
                       width: 330,
-                      child: CustomProgressBar(
-                        progress: widget.model.isHabit == false
-                            ? tempModel!.GoalAchieved! /
-                            tempModel!.GoalSum!
-                            : tempModel!.checkInList!
-                            .where((item) => item == true)
-                            .length / 8,
-                        height: 30,
-                        width: 330,
-                        backgroundColor: Colors.grey[300]!,
-                        progressColor: AppColor.PROGRESS_COLOR,
-                        daysLeft: DateTime(
-                            int.parse(tempModel!.deadlineDate!
-                                .split('-')[0]),
-                            int.parse(tempModel!.deadlineDate!
-                                .split('-')[1]),
-                            int.parse(tempModel!.deadlineDate!
-                                .split('-')[2]))
-                            .difference(DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day))
-                            .inDays,
-                        isHabit: tempModel!.isHabit,
-                        checkInDays: tempModel!.checkInList!,
-                      ),
+                      backgroundColor: Colors.grey[300]!,
+                      progressColor: AppColor.PROGRESS_COLOR,
+                      daysLeft: DateTime(
+                              int.parse(tempModel!.deadlineDate!.split('-')[0]),
+                              int.parse(tempModel!.deadlineDate!.split('-')[1]),
+                              int.parse(tempModel!.deadlineDate!.split('-')[2]))
+                          .difference(DateTime(DateTime.now().year,
+                              DateTime.now().month, DateTime.now().day))
+                          .inDays,
+                      isHabit: tempModel!.isHabit,
+                      checkInDays: tempModel!.checkInList!,
                     ),
-                    SizedBox(height: 5),
-                    widget.model.goalPhotoList != null
-                        ? Container(
-                      width: 330,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xFFECECEC),
-                        border: Border.all(
-                          color: Colors.black, // Border color
-                          width: 0.45, // Border width
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 330, // Specify the width of the container
-                            height: 330, // Specify the height of the container
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              // Use ClipRRect for borderRadius if needed
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                widget.model.goalPhotoList![0]!,
-                                fit: BoxFit
-                                    .cover, // This ensures the image covers the container
-                              ),
+                  ),
+                  SizedBox(height: 5),
+                  widget.model.goalPhotoList != null
+                      ? Container(
+                          width: 330,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFFECECEC),
+                            border: Border.all(
+                              color: Colors.black, // Border color
+                              width: 0.45, // Border width
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Text(widget.model.description!, style: TextStyles.subtitleStyle),
-                          )
-
-                        ],
-                      )
-                    )
-                    //TODO:Keep this listview gallery code, might be useful in the future
-                    /*SizedBox(
+                          child: Column(
+                            children: [
+                              Container(
+                                width:
+                                    330, // Specify the width of the container
+                                height:
+                                    330, // Specify the height of the container
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  // Use ClipRRect for borderRadius if needed
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    widget.model.goalPhotoList![0]!,
+                                    fit: BoxFit
+                                        .cover, // This ensures the image covers the container
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Text(widget.model.description!,
+                                    style: TextStyles.subtitleStyle),
+                              )
+                            ],
+                          ))
+                      //TODO:Keep this listview gallery code, might be useful in the future
+                      /*SizedBox(
                             height: 200,
                             child:
                             ListView.builder(
@@ -343,10 +335,10 @@ class _TweetBodyState extends State<_TweetBody> {
                               },
                             )
                     )*/
-                        : SizedBox(),
-                    SizedBox(height: 20),
-                  ],
-                ));
+                      : SizedBox(),
+                  SizedBox(height: 20),
+                ],
+              ));
         });
   }
 }
@@ -368,15 +360,15 @@ class _TweetDetailBody extends StatelessWidget {
     double descriptionFontSize = type == TweetType.Tweet
         ? context.getDimension(context, 15)
         : type == TweetType.Detail
-        ? context.getDimension(context, 18)
-        : type == TweetType.ParentTweet
-        ? context.getDimension(context, 14)
-        : 10;
+            ? context.getDimension(context, 18)
+            : type == TweetType.ParentTweet
+                ? context.getDimension(context, 14)
+                : 10;
 
     FontWeight descriptionFontWeight =
-    type == TweetType.Tweet || type == TweetType.Tweet
-        ? FontWeight.w300
-        : FontWeight.w400;
+        type == TweetType.Tweet || type == TweetType.Tweet
+            ? FontWeight.w300
+            : FontWeight.w400;
     TextStyle textStyle = TextStyle(
         color: Colors.black,
         fontSize: descriptionFontSize,
@@ -389,13 +381,13 @@ class _TweetDetailBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         model.parentkey != null &&
-            model.childRetwetkey == null &&
-            type != TweetType.ParentTweet
+                model.childRetwetkey == null &&
+                type != TweetType.ParentTweet
             ? ParentTweetWidget(
-          childRetwetkey: model.parentkey!,
-          trailing: trailing,
-          type: type,
-        )
+                childRetwetkey: model.parentkey!,
+                trailing: trailing,
+                type: type,
+              )
             : const SizedBox.shrink(),
         SizedBox(
           width: double.infinity,
@@ -424,11 +416,11 @@ class _TweetDetailBody extends StatelessWidget {
                     const SizedBox(width: 3),
                     model.user!.isVerified!
                         ? customIcon(
-                      context,
-                      icon: AppIcon.blueTick,
-                      iconColor: AppColor.primary,
-                      size: 13,
-                    )
+                            context,
+                            icon: AppIcon.blueTick,
+                            iconColor: AppColor.primary,
+                            size: 13,
+                          )
                         : const SizedBox(width: 0),
                     SizedBox(
                       width: model.user!.isVerified! ? 5 : 0,
@@ -440,22 +432,22 @@ class _TweetDetailBody extends StatelessWidget {
               model.description == null
                   ? const SizedBox()
                   : Padding(
-                padding: type == TweetType.ParentTweet
-                    ? const EdgeInsets.only(left: 80, right: 16)
-                    : const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    UrlText(
-                        text: model.description!.removeSpaces,
-                        onHashTagPressed: (tag) {
-                          cprint(tag);
-                        },
-                        style: textStyle,
-                        urlStyle: urlStyle),
-                  ],
-                ),
-              ),
+                      padding: type == TweetType.ParentTweet
+                          ? const EdgeInsets.only(left: 80, right: 16)
+                          : const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          UrlText(
+                              text: model.description!.removeSpaces,
+                              onHashTagPressed: (tag) {
+                                cprint(tag);
+                              },
+                              style: textStyle,
+                              urlStyle: urlStyle),
+                        ],
+                      ),
+                    ),
               if (model.imagePath == null && model.description != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

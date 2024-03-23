@@ -109,10 +109,8 @@ class Routes {
             builder: (BuildContext context) =>
                 ChangeNotifierProvider<ComposeTweetState>(
                   create: (_) => ComposeTweetState(),
-                  child:
-                  const EditGoal(isRetweet: false, isTweet: true),
-                )
-        );
+                  child: const EditGoal(isRetweet: false, isTweet: true),
+                ));
       case "WelcomePage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const SignInPage());

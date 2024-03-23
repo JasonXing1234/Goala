@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/timelinePosts.dart';
-import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
-import 'package:Goala/widgets/customWidgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -81,16 +79,14 @@ class _TaskDetailState extends State<TaskDetailPage> {
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
-            title:
-                Column(children: [
-                  Container(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: Text(
-                      tempFeed.title!,
-                      style: TextStyles.barTitleStyle
-                  ),),
-                ],),
-
+            title: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: Text(tempFeed.title!, style: TextStyles.barTitleStyle),
+                ),
+              ],
+            ),
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             bottom: PreferredSize(
@@ -104,15 +100,17 @@ class _TaskDetailState extends State<TaskDetailPage> {
           SliverToBoxAdapter(
               child: Column(
             children: [
-              if(authState.userModel!.userId! == tempFeed.userId) ElevatedButton(
-                  onPressed: () {
-                    var state = Provider.of<FeedState>(context, listen: false);
-                    state.setTweetToReply = tempFeed;
-                    Navigator.of(context).pushNamed('/ComposeTweetPage');
-                  },
-                  child: Text('Add Post')
-                  //isEditing == true ? Text('Finish') : Text('Edit')
-                  ),
+              if (authState.userModel!.userId! == tempFeed.userId)
+                ElevatedButton(
+                    onPressed: () {
+                      var state =
+                          Provider.of<FeedState>(context, listen: false);
+                      state.setTweetToReply = tempFeed;
+                      Navigator.of(context).pushNamed('/ComposeTweetPage');
+                    },
+                    child: Text('Add Post')
+                    //isEditing == true ? Text('Finish') : Text('Edit')
+                    ),
               ListView(
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
