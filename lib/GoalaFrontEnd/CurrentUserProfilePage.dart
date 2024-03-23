@@ -265,7 +265,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
 
                                                   /// If [isMyProfile] is true then Edit profile button will display
                                                   // Otherwise Follow/Following button will be display
-                                                  child: Text('${authState.isbusy == true || authState.userModel?.friendList == null ? 0 : authState.userModel?.friendList!.length} Friends',
+                                                  child: Text(authState.isbusy == true || authState.userModel?.friendList == null ? '${0} Friend' : authState.userModel?.friendList!.length == 1 ? '1 Friend' : '${authState.userModel?.friendList!.length} Friends',
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 17,
