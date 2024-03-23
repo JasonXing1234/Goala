@@ -12,19 +12,15 @@ import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/model/GoalNotificationModel.dart';
 import 'package:Goala/ui/page/feed/composeTweet/state/composeTweetState.dart';
-import 'package:Goala/ui/page/feed/composeTweet/widget/composeTweetImage.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/searchState.dart';
-import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../ui/constants.dart';
-import '../widgets/newWidget/customizedTitleText.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
@@ -94,28 +90,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         ScrollDirection.forward) {
       Provider.of<ComposeTweetState>(context, listen: false)
           .setIsScrollingDown = false;
-    }
-  }
-
-  void _onCrossIconPressed() {
-    setState(() {
-      _image = null;
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000), // The earliest allowable date
-      lastDate: DateTime(2025), // The latest allowable date
-      // You can also add more arguments to customize the DatePicker, like `initialDatePickerMode` and `helpText`.
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        dateSelected = true;
-        selectedDate = picked;
-      });
     }
   }
 

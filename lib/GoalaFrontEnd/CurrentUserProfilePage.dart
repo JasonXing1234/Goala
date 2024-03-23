@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../model/feedModel.dart';
 import '../state/authState.dart';
 import '../state/feedState.dart';
+import '../ui/page/profile/follow/followerListPage.dart';
 import '../widgets/newWidget/rippleButton.dart';
 import '../ui/page/profile/profileImageView.dart';
 import 'EditGoalPage.dart';
@@ -122,6 +123,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
   Widget build(BuildContext context) {
     List<FeedModel>? list;
     List<FeedModel>? GroupGoalList;
+    late List<String> usersList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context);
@@ -203,22 +205,97 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0),
-                                    alignment: Alignment(10.0, 1),
-                                    margin:
-                                    authState.userModel == null
-                                        ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
-                                    child: Text(
+                                  Column(children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0),
+                                      alignment: Alignment(10.0, 1),
+                                      margin:
                                       authState.userModel == null
-                                          ? ''
-                                          : authState.userModel!.displayName!,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 37,
-                                        fontWeight: FontWeight.w700,
+                                          ? const EdgeInsets.only(top: 30, right: 20) : authState.userModel!.displayName!.length < 6 ? const EdgeInsets.only(top: 30, right: 20) : const EdgeInsets.only(top: 30, right: 0),
+                                      child: Text(
+                                        authState.userModel == null
+                                            ? ''
+                                            : authState.userModel!.displayName!,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 37,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ),
+                                    SizedBox(height: 5,),
+                                    Stack(children: [
+                                      Container(
+                                        margin:
+                                        const EdgeInsets.only(right: 5, top: 10),
+                                        child:
+
+                                              RippleButton(
+                                                splashColor:
+                                                TwitterColor.dodgeBlue_50.withAlpha(100),
+                                                borderRadius: const BorderRadius.all(
+                                                    Radius.circular(8)),
+                                                onPressed: () {
+                                                  if(authState.userModel!.friendList != null){
+                                                    usersList = authState.userModel!.friendList!;
+                                                  }
+                                                  else{
+                                                    usersList = [];
+                                                  }
+                                                  Navigator.push(
+                                                    context,
+                                                    FollowerListPage.getRoute(
+                                                      profile: authState.userModel!,
+                                                      userList: usersList,
+                                                    ),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 5,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: TwitterColor.white,
+                                                    border: Border.all(
+                                                        color: Colors.black87.withAlpha(180),
+                                                        width: 1),
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+
+                                                  /// If [isMyProfile] is true then Edit profile button will display
+                                                  // Otherwise Follow/Following button will be display
+                                                  child: Text('Friends',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 17,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    //Text('${authState.isbusy == true || authState.userModel?.friendList == null ? 0 : authState.userModel?.friendList!.length} Friends',
+                                                  ),
+                                                ),
+                                              ),
+                                      ),
+                                      if (authState.userModel?.pendingRequestList != null && !authState.userModel!.pendingRequestList!.isEmpty) // Show the red circle if there are new messages
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            padding: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              color: AppColor.PROGRESS_COLOR,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Text(
+                                              authState.userModel!.pendingRequestList!.length.toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),]
+                                      )
+                                    ]
                                   )
                                 ],
                               ),

@@ -6,19 +6,22 @@ import 'package:Goala/ui/page/profile/follow/followListState.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:provider/provider.dart';
 
-class FollowerListPage extends StatelessWidget {
-  const FollowerListPage({Key? key, this.userList, this.profile})
+import '../state/authState.dart';
+
+class FriendsPage extends StatelessWidget {
+  const FriendsPage(
+      {Key? key, required this.profile, required this.userList})
       : super(key: key);
-  final List<String>? userList;
-  final UserModel? profile;
+  final List<String> userList;
+  final UserModel profile;
 
   static MaterialPageRoute getRoute(
       {required List<String> userList, required UserModel profile}) {
     return MaterialPageRoute(
       builder: (BuildContext context) {
         return ChangeNotifierProvider(
-          create: (_) => FollowListState(StateType.follower),
-          child: FollowerListPage(userList: userList, profile: profile),
+          create: (_) => FollowListState(StateType.following),
+          child: FriendsPage(profile: profile, userList: userList),
         );
       },
     );
@@ -26,10 +29,7 @@ class FollowerListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String>? tempList = [];
-    if(profile!.pendingRequestList != null && !profile!.pendingRequestList!.isEmpty){
-      tempList = profile!.pendingRequestList;
-    }
+    var state = Provider.of<AuthState>(context, listen: false);
     if (context.watch<FollowListState>().isbusy) {
       return SizedBox(
         height: context.height,
@@ -41,18 +41,18 @@ class FollowerListPage extends StatelessWidget {
       );
     }
     return UsersListPage(
-      pageTitle: 'Friends',
+      pageTitle: 'Following',
       userIdsList: userList,
-      pendingList: tempList,
-      emptyScreenText: 'You don\'t have friends yet',
-      emptyScreenSubTileText:
-          'Invite your friends to use the app!',
-      isFollowing: (user) {
-        return context.watch<FollowListState>().isFollowing(user);
-      },
+      emptyScreenText:
+      '${profile.userName ?? profile.userName} isn\'t follow anyone',
+      emptyScreenSubTileText: 'When they do they\'ll be listed here.',
       onFollowPressed: (user) {
         context.read<FollowListState>().followUser(user);
       },
+      isFollowing: (user) {
+        return context.watch<FollowListState>().isFollowing(user);
+      },
+      pendingList: state.userModel!.pendingRequestList!,
     );
   }
 }

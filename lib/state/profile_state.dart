@@ -164,17 +164,34 @@ class ProfileState extends ChangeNotifier {
       userModel.followingList!.add(profileUserModel.userId!);
       // update logged-in user's following count
       userModel.following = userModel.followingList!.length;
+      userModel.pendingRequestList!.remove(profileUserModel.userId);
       kDatabase
           .child('profile')
           .child(userModel.userId!)
           .child('followingList')
           .set(userModel.followingList);
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .child('friendList')
+          .set(userModel.followingList);
+      kDatabase
+          .child('profile')
+          .child(profileUserModel.userId!)
+          .child('friendList')
+          .set(profileUserModel.followingList);
+      kDatabase
+          .child('profile')
+          .child(userModel.userId!)
+          .child('pendingRequestList')
+          .set(userModel.pendingRequestList);
       cprint('user added to following list', event: 'add_follow');
       notifyListeners();
     } catch (error) {
       cprint(error, errorIn: 'followUser');
     }
   }
+
 
   addFriend() {
     /// `userModel` is user who is logged-in app.
@@ -183,6 +200,14 @@ class ProfileState extends ChangeNotifier {
       // update profile user's user follower count
       userModel.followingList ??= [];
       userModel.followingList!.add(profileUserModel.userId!);
+      List<String>? tempList = [];
+      if(profileUserModel.pendingRequestList != null) {
+        tempList = profileUserModel.pendingRequestList!;
+        tempList.add(userModel.userId!);
+      }
+      else{
+        tempList.add(userModel.userId!);
+      }
       // update logged-in user's following count
       userModel.following = userModel.followingList!.length;
       kDatabase
@@ -190,6 +215,11 @@ class ProfileState extends ChangeNotifier {
           .child(userModel.userId!)
           .child('followingList')
           .set(userModel.followingList);
+      kDatabase
+          .child('profile')
+          .child(profileUserModel.userId!)
+          .child('pendingRequestList')
+          .set(tempList);
       cprint('user added to following list', event: 'add_follow');
       notifyListeners();
     } catch (error) {

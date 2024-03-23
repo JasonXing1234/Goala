@@ -184,20 +184,19 @@ class _ProfilePageState extends State<ProfilePage>
                               SingleChildScrollView(
                                   child: Column(children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(vertical: 0),
                                   alignment: Alignment(10.0, 1),
                                   margin:
-                                      const EdgeInsets.only(top: 30, right: 30),
+                                      const EdgeInsets.only(top: 30, right: 20),
                                   child: authState.isbusy
                                       ? const SizedBox.shrink()
                                       : Text(
                                           authState
                                               .profileUserModel.displayName!,
-                                          style: GoogleFonts.openSans(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                         ),
                                 ),
                 SizedBox(height: 10,),
@@ -236,16 +235,16 @@ class _ProfilePageState extends State<ProfilePage>
                                       color: isMyProfile
                                           ? TwitterColor.white
                                           : authState.isbusy
-                                              ? TwitterColor.dodgeBlue
+                                              ? AppColor.PROGRESS_COLOR
                                               : isFollower() == "Friend Added"
                                                   ? AppColor.PROGRESS_COLOR
                                                   : TwitterColor.white,
                                       border: Border.all(
                                           color: isMyProfile
                                               ? Colors.black87.withAlpha(180)
-                                              : Colors.blue,
+                                              : AppColor.PROGRESS_COLOR,
                                           width: 1),
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
 
                                     /// If [isMyProfile] is true then Edit profile button will display

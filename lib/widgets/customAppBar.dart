@@ -123,7 +123,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            iconTheme: const IconThemeData(color: Colors.blue),
+            iconTheme: const IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
             leading: isBackButton
                 ? const BackButton()

@@ -30,6 +30,7 @@ class UserListWidget extends StatelessWidget {
     var state = Provider.of<AuthState>(context, listen: false);
     final currentUser = state.userModel!;
     return ListView.separated(
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         return UserTile(
           user: list[index],
@@ -141,7 +142,8 @@ class UserTile extends StatelessWidget {
               ],
             ),
             subtitle: Text(user.userName!),
-            trailing: RippleButton(
+            // TODO: Delete friend code, keep this
+            /*trailing: RippleButton(
               onPressed: onTrailingPressed,
               splashColor: TwitterColor.dodgeBlue_50.withAlpha(100),
               borderRadius: BorderRadius.circular(25),
@@ -168,7 +170,7 @@ class UserTile extends StatelessWidget {
                       ),
                     ),
                   ),
-            ),
+            ),*/
           ),
           getBio(user.bio) == null
               ? const SizedBox.shrink()

@@ -404,6 +404,7 @@ class AuthState extends AppState {
     }
   }
 
+
   /// if firebase token not available in profile
   /// Then get token from firebase and save it to profile
   /// When someone sends you a message FCM token is used
@@ -429,6 +430,44 @@ class AuthState extends AppState {
       cprint('UserModel Updated');
       getIt<SharedPreferenceHelper>().saveUserProfile(_userModel!);
       notifyListeners();
+    }
+  }
+
+  acceptFriendRequest2(UserModel tempModel) {
+    if (_userModel == null) {
+      return;
+    }
+    try {
+      // update profile user's user follower count
+      _userModel!.followingList ??= [];
+      _userModel!.followingList!.add(tempModel.userId!);
+      // update logged-in user's following count
+      _userModel!.following = userModel!.followingList!.length;
+      _userModel!.pendingRequestList!.remove(tempModel.userId);
+      kDatabase
+          .child('profile')
+          .child(_userModel!.userId!)
+          .child('followingList')
+          .set(_userModel!.followingList);
+      kDatabase
+          .child('profile')
+          .child(_userModel!.userId!)
+          .child('friendList')
+          .set(_userModel!.followingList);
+      kDatabase
+          .child('profile')
+          .child(tempModel.userId!)
+          .child('friendList')
+          .set(tempModel.followingList);
+      kDatabase
+          .child('profile')
+          .child(_userModel!.userId!)
+          .child('pendingRequestList')
+          .set(_userModel!.pendingRequestList);
+      cprint('user added to following list', event: 'add_follow');
+      notifyListeners();
+    } catch (error) {
+      cprint(error, errorIn: 'followUser');
     }
   }
 
