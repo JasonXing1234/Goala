@@ -78,35 +78,34 @@ class Comments extends StatelessWidget {
                 ),
               ),*/
         Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(
-                  top: type == TweetType.Tweet || type == TweetType.Reply
-                      ? 12
-                      : 0,
-                ),
-                child: type == TweetType.Tweet || type == TweetType.Reply
-                    ? _TweetBody(
-                  isDisplayOnProfile: isDisplayOnProfile,
-                  model: model,
-                  trailing: trailing,
-                  type: type,
-                )
-                    : _TweetDetailBody(
-                  model: model,
-                  trailing: trailing,
-                  type: type,
-                ),
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(
+                top:
+                    type == TweetType.Tweet || type == TweetType.Reply ? 12 : 0,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: TweetImage(
-                  model: model,
-                  type: type,
-                ),
+              child: type == TweetType.Tweet || type == TweetType.Reply
+                  ? _TweetBody(
+                      isDisplayOnProfile: isDisplayOnProfile,
+                      model: model,
+                      trailing: trailing,
+                      type: type,
+                    )
+                  : _TweetDetailBody(
+                      model: model,
+                      trailing: trailing,
+                      type: type,
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: TweetImage(
+                model: model,
+                type: type,
               ),
-              /*model.childRetwetkey == null
+            ),
+            /*model.childRetwetkey == null
                   ? const SizedBox.shrink()
                   : RetweetWidget(
                       childRetwetkey: model.childRetwetkey!,
@@ -114,7 +113,7 @@ class Comments extends StatelessWidget {
                       isImageAvailable: model.imagePath != null &&
                           model.imagePath!.isNotEmpty,
                     ),*/
-              /*Padding(
+            /*Padding(
                 padding:
                 EdgeInsets.only(left: type == TweetType.Detail ? 10 : 60),
                 child: TweetIconsRow(
@@ -127,12 +126,12 @@ class Comments extends StatelessWidget {
                   scaffoldKey: GlobalKey<ScaffoldState>(),
                 ),
               ),*/
-              SizedBox(height: 20),
-              type == TweetType.ParentTweet
-                  ? const SizedBox.shrink()
-                  : const Divider(height: .5, thickness: .5)
-            ],
-          ),
+            SizedBox(height: 20),
+            type == TweetType.ParentTweet
+                ? const SizedBox.shrink()
+                : const Divider(height: .5, thickness: .5)
+          ],
+        ),
       ],
     );
   }
@@ -145,10 +144,10 @@ class _TweetBody extends StatefulWidget {
   final bool isDisplayOnProfile;
   const _TweetBody(
       {Key? key,
-        required this.model,
-        this.trailing,
-        required this.type,
-        required this.isDisplayOnProfile})
+      required this.model,
+      this.trailing,
+      required this.type,
+      required this.isDisplayOnProfile})
       : super(key: key);
 
   @override
@@ -164,6 +163,7 @@ class _TweetBodyState extends State<_TweetBody> {
     getParentModel();
   }
 
+  // TODO: I had this button hooked up somewhere... Why is it unused now?
   Future<void> _onPressPoke(String? token, String? displayName) async {
     try {
       await http.post(
@@ -171,7 +171,7 @@ class _TweetBodyState extends State<_TweetBody> {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-          'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
+              'key=AAAAv0Rlcww:APA91bElZKaKqCu2rk6NTlubBQ93BGfB_RVbT-Gn89tgrirBzXcXt1EZpFulH2OjsTymUul9LfXnlrTdHOiab_cuwajAcvbrxWpd9P8z-9W4Ppb093v2b9v-0TCSAUf5At91l8Ybu9SK'
         },
         body: jsonEncode(
           <String, dynamic>{
@@ -221,13 +221,13 @@ class _TweetBodyState extends State<_TweetBody> {
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
         : widget.type == TweetType.Detail ||
-        widget.type == TweetType.ParentTweet
-        ? 18
-        : 14;
+                widget.type == TweetType.ParentTweet
+            ? 18
+            : 14;
     FontWeight descriptionFontWeight =
-    widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
-        ? FontWeight.w400
-        : FontWeight.w400;
+        widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
+            ? FontWeight.w400
+            : FontWeight.w400;
 
     TextStyle textStyle = TextStyle(
         color: Colors.black,
@@ -287,11 +287,11 @@ class _TweetBodyState extends State<_TweetBody> {
                               const SizedBox(width: 3),
                               widget.model.user!.isVerified!
                                   ? customIcon(
-                                context,
-                                icon: AppIcon.blueTick,
-                                iconColor: AppColor.primary,
-                                size: 13,
-                              )
+                                      context,
+                                      icon: AppIcon.blueTick,
+                                      iconColor: AppColor.primary,
+                                      size: 13,
+                                    )
                                   : const SizedBox(width: 0),
                               SizedBox(
                                 width: widget.model.user!.isVerified! ? 5 : 0,
@@ -316,7 +316,10 @@ class _TweetBodyState extends State<_TweetBody> {
                       alignment: Alignment.centerLeft,
                       child: widget.model.description == null
                           ? const SizedBox()
-                          : Text(widget.model.description!, style: TextStyles.bigSubtitleStyle,),
+                          : Text(
+                              widget.model.description!,
+                              style: TextStyles.bigSubtitleStyle,
+                            ),
                     ),
                   ],
                 ),
@@ -345,15 +348,15 @@ class _TweetDetailBody extends StatelessWidget {
     double descriptionFontSize = type == TweetType.Tweet
         ? context.getDimension(context, 15)
         : type == TweetType.Detail
-        ? context.getDimension(context, 18)
-        : type == TweetType.ParentTweet
-        ? context.getDimension(context, 14)
-        : 10;
+            ? context.getDimension(context, 18)
+            : type == TweetType.ParentTweet
+                ? context.getDimension(context, 14)
+                : 10;
 
     FontWeight descriptionFontWeight =
-    type == TweetType.Tweet || type == TweetType.Tweet
-        ? FontWeight.w300
-        : FontWeight.w400;
+        type == TweetType.Tweet || type == TweetType.Tweet
+            ? FontWeight.w300
+            : FontWeight.w400;
     TextStyle textStyle = TextStyle(
         color: Colors.black,
         fontSize: descriptionFontSize,
@@ -366,13 +369,13 @@ class _TweetDetailBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         model.parentkey != null &&
-            model.childRetwetkey == null &&
-            type != TweetType.ParentTweet
+                model.childRetwetkey == null &&
+                type != TweetType.ParentTweet
             ? ParentTweetWidget(
-          childRetwetkey: model.parentkey!,
-          trailing: trailing,
-          type: type,
-        )
+                childRetwetkey: model.parentkey!,
+                trailing: trailing,
+                type: type,
+              )
             : const SizedBox.shrink(),
         SizedBox(
           width: double.infinity,
@@ -401,11 +404,11 @@ class _TweetDetailBody extends StatelessWidget {
                     const SizedBox(width: 3),
                     model.user!.isVerified!
                         ? customIcon(
-                      context,
-                      icon: AppIcon.blueTick,
-                      iconColor: AppColor.primary,
-                      size: 13,
-                    )
+                            context,
+                            icon: AppIcon.blueTick,
+                            iconColor: AppColor.primary,
+                            size: 13,
+                          )
                         : const SizedBox(width: 0),
                     SizedBox(
                       width: model.user!.isVerified! ? 5 : 0,
@@ -419,12 +422,14 @@ class _TweetDetailBody extends StatelessWidget {
               model.description == null
                   ? const SizedBox()
                   : Padding(
-                padding: type == TweetType.ParentTweet
-                    ? const EdgeInsets.only(left: 80, right: 16)
-                    : const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(model.description!, style: TextStyles.bigSubtitleStyle,),
-              ),
-
+                      padding: type == TweetType.ParentTweet
+                          ? const EdgeInsets.only(left: 80, right: 16)
+                          : const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        model.description!,
+                        style: TextStyles.bigSubtitleStyle,
+                      ),
+                    ),
             ],
           ),
         ),
