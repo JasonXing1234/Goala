@@ -58,15 +58,6 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
   }
 
-  int tabIndex = 0;
-  void _onTabPress(int index) {
-    debugPrint("You pressed on tab $index");
-    debugPrint("hello");
-    setState(() {
-      tabIndex = index;
-    });
-  }
-
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
   }
@@ -252,7 +243,6 @@ class _ProfilePageState extends State<ProfilePage>
               alignment: Alignment.center,
               child: TabBar(
                 controller: _tabController,
-                onTap: _onTabPress,
                 indicator: BoxDecoration(
                   color: Color(0xFF292A29),
                   borderRadius: BorderRadius.circular(8.0),
@@ -274,40 +264,45 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
-          // The Grid with the personal goals
-          if (tabIndex == 0)
-            GridView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              addAutomaticKeepAlives: false,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) =>
-                  _UserTile2(tweet: personalGoalList![index]),
-              itemCount: personalGoalList?.length ?? 0,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-                childAspectRatio: 0.8,
-              ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // The Grid with the personal goals
+                GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  addAutomaticKeepAlives: false,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      _UserTile2(tweet: personalGoalList![index]),
+                  itemCount: personalGoalList?.length ?? 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                    childAspectRatio: 0.8,
+                  ),
+                ),
+                // The Grid with the group goals
+                GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  addAutomaticKeepAlives: false,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      _UserTile2(tweet: groupGoalList![index]),
+                  itemCount: groupGoalList?.length ?? 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                    childAspectRatio: 0.8,
+                  ),
+                ),
+              ],
             ),
-          // The Grid with the group goals
-          if (tabIndex == 1)
-            GridView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              addAutomaticKeepAlives: false,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) =>
-                  _UserTile2(tweet: groupGoalList![index]),
-              itemCount: groupGoalList?.length ?? 0,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-                childAspectRatio: 0.8,
-              ),
-            ),
+          ),
         ],
       ),
     );
