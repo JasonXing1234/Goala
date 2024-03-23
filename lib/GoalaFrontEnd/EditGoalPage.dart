@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Goala/helper/uiUtility.dart';
+import 'package:Goala/ui/styleConstants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,6 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
 import '../model/GoalNotificationModel.dart';
-import '../ui/constants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
 
 class EditGoal extends StatefulWidget {

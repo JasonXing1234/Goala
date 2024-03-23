@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:Goala/helper/uiUtility.dart';
+import 'package:Goala/ui/styleConstants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,7 +22,6 @@ import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../ui/constants.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
