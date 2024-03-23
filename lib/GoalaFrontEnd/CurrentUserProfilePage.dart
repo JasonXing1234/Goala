@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'dart:math' as math;
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,7 +17,6 @@ import '../state/feedState.dart';
 import '../ui/page/profile/follow/followerListPage.dart';
 import '../widgets/newWidget/rippleButton.dart';
 import '../ui/page/profile/profileImageView.dart';
-import 'EditGoalPage.dart';
 import 'TaskDetailPage.dart';
 
 class CurrentUserProfilePage extends StatefulWidget {

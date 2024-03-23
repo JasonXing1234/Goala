@@ -1,6 +1,4 @@
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
-import 'package:Goala/helper/utility.dart';
-import 'package:Goala/widgets/customAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
@@ -10,7 +8,6 @@ import 'package:Goala/ui/page/profile/profileImageView.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/rippleButton.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../state/authState.dart';
 import '../state/searchState.dart';

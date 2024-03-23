@@ -192,7 +192,6 @@ class ProfileState extends ChangeNotifier {
     }
   }
 
-
   addFriend() {
     /// `userModel` is user who is logged-in app.
     /// `profileUserModel` is user whoose profile is open in app.
@@ -201,11 +200,10 @@ class ProfileState extends ChangeNotifier {
       userModel.followingList ??= [];
       userModel.followingList!.add(profileUserModel.userId!);
       List<String>? tempList = [];
-      if(profileUserModel.pendingRequestList != null) {
+      if (profileUserModel.pendingRequestList != null) {
         tempList = profileUserModel.pendingRequestList!;
         tempList.add(userModel.userId!);
-      }
-      else{
+      } else {
         tempList.add(userModel.userId!);
       }
       // update logged-in user's following count

@@ -19,11 +19,9 @@ import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import 'package:translator/translator.dart';
 import '../model/GoalNotificationModel.dart';
 import '../ui/constants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
-import '../widgets/newWidget/customizedTitleText.dart';
 
 class EditGoal extends StatefulWidget {
   const EditGoal({Key? key, required this.isRetweet, this.isTweet = true})

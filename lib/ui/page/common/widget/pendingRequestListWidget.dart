@@ -6,9 +6,7 @@ import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/rippleButton.dart';
-import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
-import '../../../../state/profile_state.dart';
 
 class pendingListWidget extends StatefulWidget {
   final List<UserModel> list;
@@ -76,7 +74,6 @@ class UserTile extends StatefulWidget {
 }
 
 class _UserTileState extends State<UserTile> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,13 +84,13 @@ class _UserTileState extends State<UserTile> {
         children: <Widget>[
           ListTile(
             onTap: () {
-              Navigator.push(
-                  context, ProfilePage.getRoute(profileId: widget.user.userId!));
+              Navigator.push(context,
+                  ProfilePage.getRoute(profileId: widget.user.userId!));
             },
             leading: RippleButton(
               onPressed: () {
-                Navigator.push(
-                    context, ProfilePage.getRoute(profileId: widget.user.userId!));
+                Navigator.push(context,
+                    ProfilePage.getRoute(profileId: widget.user.userId!));
               },
               borderRadius: const BorderRadius.all(Radius.circular(60)),
               child: CircularImage(path: widget.user.profilePic, height: 55),
@@ -102,18 +99,20 @@ class _UserTileState extends State<UserTile> {
               children: <Widget>[
                 ConstrainedBox(
                   constraints:
-                  BoxConstraints(minWidth: 0, maxWidth: context.width * .4),
-                  child: Text(widget.user.displayName!,
-                      style: TextStyles.subtitleStyle,),
+                      BoxConstraints(minWidth: 0, maxWidth: context.width * .4),
+                  child: Text(
+                    widget.user.displayName!,
+                    style: TextStyles.subtitleStyle,
+                  ),
                 ),
                 const SizedBox(width: 3),
                 widget.user.isVerified!
                     ? customIcon(
-                  context,
-                  icon: AppIcon.blueTick,
-                  iconColor: AppColor.primary,
-                  size: 13,
-                )
+                        context,
+                        icon: AppIcon.blueTick,
+                        iconColor: AppColor.primary,
+                        size: 13,
+                      )
                     : const SizedBox(width: 0),
               ],
             ),
@@ -130,18 +129,14 @@ class _UserTileState extends State<UserTile> {
                     ),
                     decoration: BoxDecoration(
                       color: TwitterColor.white,
-                      border:
-                      Border.all(color: Colors.black, width: 1),
+                      border: Border.all(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      'Accept Request',
-                      style: TextStyles.subtitleStyle14
-                    ),
+                    child: Text('Accept Request',
+                        style: TextStyles.subtitleStyle14),
                   ),
             ),
           ),
-
         ],
       ),
     );

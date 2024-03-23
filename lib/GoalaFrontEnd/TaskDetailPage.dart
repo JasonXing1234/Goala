@@ -100,15 +100,17 @@ class _TaskDetailState extends State<TaskDetailPage> {
           SliverToBoxAdapter(
               child: Column(
             children: [
-              if(authState.userModel!.userId! == tempFeed.userId) ElevatedButton(
-                  onPressed: () {
-                    var state = Provider.of<FeedState>(context, listen: false);
-                    state.setTweetToReply = tempFeed;
-                    Navigator.of(context).pushNamed('/ComposeTweetPage');
-                  },
-                  child: Text('Add Post')
-                  //isEditing == true ? Text('Finish') : Text('Edit')
-                  ),
+              if (authState.userModel!.userId! == tempFeed.userId)
+                ElevatedButton(
+                    onPressed: () {
+                      var state =
+                          Provider.of<FeedState>(context, listen: false);
+                      state.setTweetToReply = tempFeed;
+                      Navigator.of(context).pushNamed('/ComposeTweetPage');
+                    },
+                    child: Text('Add Post')
+                    //isEditing == true ? Text('Finish') : Text('Edit')
+                    ),
               ListView(
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
