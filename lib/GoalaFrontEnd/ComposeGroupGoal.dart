@@ -295,11 +295,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     var searchstate = Provider.of<SearchState>(context);
     List<UserModel?> selectedUsers = [];
     List<UserModel?> FriendList = [];
-    if (authState.userModel!.followingList != null &&
-        authState.userModel!.followingList!.isNotEmpty) {
-      for (int i = 0; i < authState.userModel!.followingList!.length; i++) {
+    if (authState.userModel!.friendList != null &&
+        authState.userModel!.friendList!.isNotEmpty) {
+      for (int i = 0; i < authState.userModel!.friendList!.length; i++) {
         FriendList =
-            searchstate.getuserDetail(authState.userModel!.followingList!);
+            searchstate.getuserDetail(authState.userModel!.friendList!);
       }
     }
     return Scaffold(
