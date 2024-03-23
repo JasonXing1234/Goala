@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math' as math;
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,8 +15,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../model/feedModel.dart';
 import '../state/authState.dart';
 import '../state/feedState.dart';
+import '../ui/page/profile/follow/followerListPage.dart';
 import '../widgets/newWidget/rippleButton.dart';
 import '../ui/page/profile/profileImageView.dart';
+import 'EditGoalPage.dart';
 import 'TaskDetailPage.dart';
 
 class CurrentUserProfilePage extends StatefulWidget {
@@ -56,21 +59,23 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     Navigator.pushNamed(context, '/TrendsPage');
   }
 
+  /// Request the Notification permission
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true);
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User Granted Permission');
+      print('User Granted Notification Permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User Granted Permission');
+      print('User Granted Notification Permission');
     } else {
       print('declined');
     }
@@ -117,18 +122,19 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    List<FeedModel>? personalGoalList;
-    List<FeedModel>? groupGoalList;
+    List<FeedModel>? list;
+    List<FeedModel>? GroupGoalList;
+    late List<String> usersList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context);
     String id = authState.userId!;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      personalGoalList = feedstate.feedList!
+      list = feedstate.feedList!
           .where((x) =>
               x.userId == id && x.isGroupGoal == false && x.parentkey == null)
           .toList();
-      groupGoalList = feedstate.feedList!
+      GroupGoalList = feedstate.feedList!
           .where((x) =>
               x.memberList!.contains(id) &&
               x.isGroupGoal == true &&
@@ -166,65 +172,157 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                 floating: false,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  background: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // Add an image widget to display an image
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 500),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.white, width: 5),
-                                  shape: BoxShape.circle),
-                              child: RippleButton(
-                                child: CircularImage(
-                                  path: authState.userModel?.profilePic,
-                                  height: 80,
-                                ),
-                                borderRadius: BorderRadius.circular(50),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      ProfileImageView.getRoute(authState
-                                          .profileUserModel!.profilePic!));
-                                },
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 0),
-                              alignment: Alignment(10.0, 1),
-                              margin: authState.userModel == null
-                                  ? const EdgeInsets.only(top: 30, right: 20)
-                                  : authState.userModel!.displayName!.length < 6
-                                      ? const EdgeInsets.only(
-                                          top: 30, right: 20)
-                                      : const EdgeInsets.only(
-                                          top: 30, right: 0),
-                              child: Text(
-                                authState.userModel == null
-                                    ? ''
-                                    : authState.userModel!.displayName!,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 37,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                    centerTitle: true,
+                    background: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        color: Colors.white,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  // Add an image widget to display an image
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 20),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.white, width: 5),
+                                        shape: BoxShape.circle),
+                                    child: RippleButton(
+                                      child: CircularImage(
+                                        path: authState.userModel?.profilePic,
+                                        height: 80,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            ProfileImageView.getRoute(authState
+                                                .profileUserModel!
+                                                .profilePic!));
+                                      },
+                                    ),
+                                  ),
+                                  Column(children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0),
+                                      alignment: Alignment(10.0, 1),
+                                      margin: authState.userModel == null
+                                          ? const EdgeInsets.only(
+                                              top: 30, right: 20)
+                                          : authState.userModel!.displayName!
+                                                      .length <
+                                                  6
+                                              ? const EdgeInsets.only(
+                                                  top: 30, right: 20)
+                                              : const EdgeInsets.only(
+                                                  top: 30, right: 0),
+                                      child: Text(
+                                        authState.userModel == null
+                                            ? ''
+                                            : authState.userModel!.displayName!,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 37,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Stack(children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 5, top: 10),
+                                        child: RippleButton(
+                                          splashColor: TwitterColor.dodgeBlue_50
+                                              .withAlpha(100),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(8)),
+                                          onPressed: () {
+                                            if (authState
+                                                    .userModel!.friendList !=
+                                                null) {
+                                              usersList = authState
+                                                  .userModel!.friendList!;
+                                            } else {
+                                              usersList = [];
+                                            }
+                                            Navigator.push(
+                                              context,
+                                              FollowerListPage.getRoute(
+                                                profile: authState.userModel!,
+                                                userList: usersList,
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 5,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: TwitterColor.white,
+                                              border: Border.all(
+                                                  color: Colors.black87
+                                                      .withAlpha(180),
+                                                  width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
 
-                        /*authState.isbusy
+                                            /// If [isMyProfile] is true then Edit profile button will display
+                                            // Otherwise Follow/Following button will be display
+                                            child: Text(
+                                              'Friends',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              //Text('${authState.isbusy == true || authState.userModel?.friendList == null ? 0 : authState.userModel?.friendList!.length} Friends',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      if (authState.userModel
+                                                  ?.pendingRequestList !=
+                                              null &&
+                                          !authState
+                                              .userModel!
+                                              .pendingRequestList!
+                                              .isEmpty) // Show the red circle if there are new messages
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            padding: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              color: AppColor.PROGRESS_COLOR,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Text(
+                                              authState.userModel!
+                                                  .pendingRequestList!.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ])
+                                  ])
+                                ],
+                              ),
+
+                              /*authState.isbusy
                                 ? SizedBox(
                                     width: 20,
                                   )
@@ -262,10 +360,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                               },
                                             ).toList(),
                                           ))*/
-                      ],
-                    ),
-                  ),
-                ),
+                            ]))),
               ),
             ];
           },
@@ -326,46 +421,52 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          personalGoalList == null || personalGoalList.isEmpty
+                          list == null || list.isEmpty
                               ? Center(
                                   child: Text('Add a personal goal now!',
-                                      style: TextStyles.bigSubtitleStyle),
-                                )
-                              : GridView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  addAutomaticKeepAlives: false,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) => _UserTile2(
-                                      tweet: personalGoalList![index]),
-                                  itemCount: personalGoalList.length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 5.0,
-                                    mainAxisSpacing: 5.0,
-                                    childAspectRatio: 0.8,
-                                  ),
-                                ),
-                          groupGoalList == null || groupGoalList.isEmpty
-                              ? Center(
-                                  child: Text('Add a group goal now!',
-                                      style: TextStyles.bigSubtitleStyle),
-                                )
+                                      style: TextStyles.bigSubtitleStyle))
                               : GridView.builder(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   addAutomaticKeepAlives: false,
                                   physics: const BouncingScrollPhysics(),
                                   itemBuilder: (context, index) =>
-                                      _UserTile2(tweet: groupGoalList![index]),
-                                  itemCount: groupGoalList.length,
+                                      _UserTile2(tweet: list![index]),
+                                  itemCount: list.length ?? 0,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 5.0,
-                                    mainAxisSpacing: 5.0,
-                                    childAspectRatio: 0.8,
+                                    crossAxisCount:
+                                        2, // Number of items per row
+                                    crossAxisSpacing:
+                                        5.0, // Horizontal space between items
+                                    mainAxisSpacing:
+                                        5.0, // Vertical space between items
+                                    childAspectRatio:
+                                        0.8, // Aspect ratio of each item
+                                  ),
+                                ),
+                          GroupGoalList == null || GroupGoalList.isEmpty
+                              ? Center(
+                                  child: Text('Add a group goal now!',
+                                      style: TextStyles.bigSubtitleStyle))
+                              : GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  addAutomaticKeepAlives: false,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) =>
+                                      _UserTile2(tweet: GroupGoalList![index]),
+                                  itemCount: GroupGoalList.length ?? 0,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                        2, // Number of items per row
+                                    crossAxisSpacing:
+                                        5.0, // Horizontal space between items
+                                    mainAxisSpacing:
+                                        5.0, // Vertical space between items
+                                    childAspectRatio:
+                                        0.8, // Aspect ratio of each item
                                   ),
                                 ),
                         ],

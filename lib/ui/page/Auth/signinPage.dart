@@ -1,4 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/homePage.dart';
+import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
 import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
@@ -151,12 +152,15 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<AuthState>(context, listen: false);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: state.authStatus == AuthStatus.NOT_LOGGED_IN ||
-              state.authStatus == AuthStatus.NOT_DETERMINED
-          ? _body()
-          : const HomePage(),
+    return KeyboardDismisser(
+      context: context,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: state.authStatus == AuthStatus.NOT_LOGGED_IN ||
+                state.authStatus == AuthStatus.NOT_DETERMINED
+            ? _body()
+            : const HomePage(),
+      ),
     );
   }
 }

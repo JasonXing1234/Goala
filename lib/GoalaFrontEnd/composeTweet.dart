@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/helper/uiUtility.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,7 +21,7 @@ import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../ui/styleConstants.dart';
+import '../ui/constants.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
@@ -90,28 +91,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
         ScrollDirection.forward) {
       Provider.of<ComposeTweetState>(context, listen: false)
           .setIsScrollingDown = false;
-    }
-  }
-
-  void _onCrossIconPressed() {
-    setState(() {
-      _image = null;
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000), // The earliest allowable date
-      lastDate: DateTime(2025), // The latest allowable date
-      // You can also add more arguments to customize the DatePicker, like `initialDatePickerMode` and `helpText`.
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        dateSelected = true;
-        selectedDate = picked;
-      });
     }
   }
 
@@ -225,6 +204,16 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     });
   }
 
+  Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
+    var authState = Provider.of<AuthState>(context, listen: false);
+    var myUser = authState.userModel;
+    final _messaging = FirebaseMessaging.instance;
+    String? tempToken = await _messaging.getToken();
+    GoalNotiModel temp = GoalNotiModel(
+        tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
+    return temp;
+  }
+
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
   /// If tweet is new tweet then `parentkey` and `childRetwetkey` should be null
   /// IF tweet is a comment then it should have `parentkey`
@@ -326,26 +315,27 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        title: customTitleText(''),
-        onActionPressed: _submitButton,
-        isCrossButton: true,
-        submitButtonText: widget.isTweet
-            ? 'Tweet'
-            : widget.isRetweet
-                ? 'Retweet'
-                : 'Reply',
-        isSubmitDisable:
-            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-                Provider.of<FeedState>(context).isBusy,
-        isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: ProgressHUD(
-        child: Builder(
-          builder: (context) {
+    return KeyboardDismisser(
+      context: context,
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: CustomAppBar(
+            title: customTitleText(''),
+            onActionPressed: _submitButton,
+            isCrossButton: true,
+            submitButtonText: widget.isTweet
+                ? 'Tweet'
+                : widget.isRetweet
+                    ? 'Retweet'
+                    : 'Reply',
+            isSubmitDisable:
+                !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+                    Provider.of<FeedState>(context).isBusy,
+            isBottomLine:
+                Provider.of<ComposeTweetState>(context).isScrollingDown,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: ProgressHUD(child: Builder(builder: (context) {
             return Stack(
               //!Removed container
               children: <Widget>[
@@ -677,9 +667,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                 ),
               ],
             );
-          },
-        ),
-      ),
+          }))),
     );
   }
 }

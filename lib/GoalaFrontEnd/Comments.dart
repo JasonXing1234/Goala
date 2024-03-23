@@ -10,9 +10,14 @@ import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:Goala/widgets/tweet/widgets/parentTweet.dart';
+import 'package:Goala/widgets/tweet/widgets/tweetIconsRow.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
+import 'package:Goala/widgets/url_text/custom_link_media_info.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
+import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
 
 class Comments extends StatelessWidget {
@@ -158,6 +163,7 @@ class _TweetBodyState extends State<_TweetBody> {
     getParentModel();
   }
 
+  // TODO: I had this button hooked up somewhere... Why is it unused now?
   Future<void> _onPressPoke(String? token, String? displayName) async {
     try {
       await http.post(
@@ -210,13 +216,34 @@ class _TweetBodyState extends State<_TweetBody> {
 
   @override
   Widget build(BuildContext context) {
-    // Comment because they were unused variables
-    // var state = Provider.of<FeedState>(context, listen: false);
-    // var authState = Provider.of<AuthState>(context, listen: false);
+    var state = Provider.of<FeedState>(context, listen: false);
+    var authState = Provider.of<AuthState>(context, listen: false);
+    double descriptionFontSize = widget.type == TweetType.Tweet
+        ? 15
+        : widget.type == TweetType.Detail ||
+                widget.type == TweetType.ParentTweet
+            ? 18
+            : 14;
+    FontWeight descriptionFontWeight =
+        widget.type == TweetType.Tweet || widget.type == TweetType.Tweet
+            ? FontWeight.w400
+            : FontWeight.w400;
 
+    TextStyle textStyle = TextStyle(
+        color: Colors.black,
+        fontSize: descriptionFontSize,
+        fontWeight: descriptionFontWeight);
+    TextStyle urlStyle = TextStyle(
+        color: Colors.blue,
+        fontSize: descriptionFontSize,
+        fontWeight: descriptionFontWeight);
     return FutureBuilder(
         future: getParentModel(),
         builder: (context, snapshot) {
+          /*if (snapshot.connectionState != ConnectionState.done) {
+            // Future hasn't finished yet, return a placeholder
+            return Text('Loading');
+          }*/
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -278,8 +305,8 @@ class _TweetBodyState extends State<_TweetBody> {
                             ],
                           ),
                         ),
-                        // TODO: Pop-up menu, might be useful for the future
-                        // Container(child: widget.trailing ?? const SizedBox()),
+                        //TODO: Pop-up menu, might be useful for the future
+                        //Container(child: widget.trailing ?? const SizedBox()),
                       ],
                     ),
                     SizedBox(
@@ -318,6 +345,26 @@ class _TweetDetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double descriptionFontSize = type == TweetType.Tweet
+        ? context.getDimension(context, 15)
+        : type == TweetType.Detail
+            ? context.getDimension(context, 18)
+            : type == TweetType.ParentTweet
+                ? context.getDimension(context, 14)
+                : 10;
+
+    FontWeight descriptionFontWeight =
+        type == TweetType.Tweet || type == TweetType.Tweet
+            ? FontWeight.w300
+            : FontWeight.w400;
+    TextStyle textStyle = TextStyle(
+        color: Colors.black,
+        fontSize: descriptionFontSize,
+        fontWeight: descriptionFontWeight);
+    TextStyle urlStyle = TextStyle(
+        color: Colors.blue,
+        fontSize: descriptionFontSize,
+        fontWeight: descriptionFontWeight);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -368,6 +415,8 @@ class _TweetDetailBody extends StatelessWidget {
                     ),
                   ],
                 ),
+                /*subtitle: customText('${model.user!.userName}',
+                    style: TextStyles.userNameStyle),*/
                 trailing: trailing,
               ),
               model.description == null

@@ -18,12 +18,15 @@ class UserModel extends Equatable {
   bool? isVerified;
   int? followers;
   int? following;
+  int? pendingRequests;
   int? groups;
   List<String>? closenessMap;
   String? fcmToken;
   List<String>? followersList;
   List<String>? followingList;
-
+  List<String>? pendingRequestList;
+  List<String>? friendList;
+  int? numFriends;
   List<String>? grouplist;
 
   UserModel(
@@ -41,6 +44,7 @@ class UserModel extends Equatable {
       this.userName,
       this.followers,
       this.following,
+        this.pendingRequests,
       this.webSite,
       this.isVerified,
       this.fcmToken,
@@ -48,7 +52,11 @@ class UserModel extends Equatable {
       this.followingList,
       this.grouplist,
       this.groups,
-      this.closenessMap});
+        this.pendingRequestList,
+      this.closenessMap,
+        this.friendList,
+        this.numFriends
+      });
 
   UserModel.fromJson(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -69,6 +77,8 @@ class UserModel extends Equatable {
     groups = map['groups'];
     followers = map['followers'];
     following = map['following'];
+    numFriends = map['numFriends'];
+    pendingRequests = map['pendingRequests'];
     userName = map['userName'];
     webSite = map['webSite'];
     fcmToken = map['fcmToken'];
@@ -79,6 +89,13 @@ class UserModel extends Equatable {
         followingList!.add(value);
       });
     }
+    if (map['pendingRequestList'] != null) {
+      pendingRequestList = <String>[];
+      map['pendingRequestList'].forEach((value) {
+        pendingRequestList!.add(value);
+      });
+    }
+    pendingRequests = pendingRequestList != null ? pendingRequestList!.length : null;
     if (map['closenessMap'] != null) {
       closenessMap = <String>[];
       map['closenessMap'].forEach((value) {
@@ -99,6 +116,13 @@ class UserModel extends Equatable {
         grouplist!.add(value);
       });
     }
+    if (map['friendList'] != null) {
+      friendList = <String>[];
+      map['friendList'].forEach((value) {
+        friendList!.add(value);
+      });
+    }
+    numFriends = friendList != null ? friendList!.length : null;
     groups = grouplist != null ? grouplist!.length : null;
   }
   toJson() {
@@ -116,15 +140,18 @@ class UserModel extends Equatable {
       'createdAt': createdAt,
       'followers': followersList != null ? followersList!.length : null,
       'following': followingList != null ? followingList!.length : null,
+      'pendingRequests': pendingRequestList != null ? pendingRequestList!.length : null,
       'userName': userName,
       'webSite': webSite,
       'isVerified': isVerified ?? false,
       'fcmToken': fcmToken,
       'followerList': followersList,
       'followingList': followingList,
+      'friendList': friendList,
       'grouplist': grouplist,
       'groups': grouplist,
-      'closenessMap': closenessMap
+      'closenessMap': closenessMap,
+      'pendingRequestList': pendingRequestList
     };
   }
 
@@ -148,6 +175,9 @@ class UserModel extends Equatable {
       String? fcmToken,
       List<String>? followingList,
       List<String>? followersList,
+        List<String>? pendingRequestList,
+        List<String>? friendList,
+        int? numFriends,
       List<String>? grouplist,
       List<String>? closenessMap,
       int? groups}) {
@@ -171,6 +201,9 @@ class UserModel extends Equatable {
         fcmToken: fcmToken ?? this.fcmToken,
         followersList: followersList ?? this.followersList,
         followingList: followingList ?? this.followingList,
+        pendingRequestList: pendingRequestList ?? this.pendingRequestList,
+        friendList: friendList ?? this.friendList,
+        numFriends: numFriends ?? this.numFriends,
         grouplist: grouplist ?? this.grouplist,
         closenessMap: closenessMap ?? this.closenessMap);
   }
@@ -181,6 +214,14 @@ class UserModel extends Equatable {
 
   String get getFollowing {
     return '${following ?? 0}';
+  }
+
+  String get getPendingRequests {
+    return '${pendingRequests ?? 0}';
+  }
+
+  String get getFriends {
+    return '${numFriends ?? 0}';
   }
 
   @override
@@ -206,6 +247,9 @@ class UserModel extends Equatable {
         followingList,
         grouplist,
         groups,
-        closenessMap
+        closenessMap,
+    pendingRequests,
+    pendingRequestList,
+    friendList
       ];
 }

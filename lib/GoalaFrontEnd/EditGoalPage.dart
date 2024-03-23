@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:Goala/helper/uiUtility.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Goala/helper/constant.dart';
@@ -17,9 +19,11 @@ import 'package:Goala/widgets/customAppBar.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
 import 'package:provider/provider.dart';
+import 'package:translator/translator.dart';
 import '../model/GoalNotificationModel.dart';
-import '../ui/styleConstants.dart';
+import '../ui/constants.dart';
 import '../widgets/newWidget/customMultiSelectChips.dart';
+import '../widgets/newWidget/customizedTitleText.dart';
 
 class EditGoal extends StatefulWidget {
   const EditGoal({Key? key, required this.isRetweet, this.isTweet = true})
@@ -44,6 +48,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   late TextEditingController _titleController;
   late TextEditingController _goalSumController;
   late TextEditingController _goalUnitController;
+  late TabController _tabController;
   late final List<String> memberListTemp = [];
   List<bool> isSelected = [true, false];
   List<bool> _selections = [false, false];
@@ -66,6 +71,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   void initState() {
     var feedState = Provider.of<FeedState>(context, listen: false);
     model = feedState.tweetToReplyModel;
+    _tabController = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     _descriptionController =
         TextEditingController(text: model == null ? '' : model!.description);
@@ -138,25 +144,30 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
 
-    List<GoalNotiModel> notiModelList = [];
+    List<GoalNotiModel> NotiModelList = [];
     await changeTweetModel();
     for (int i = 0; i < daySelected.length; i++) {
       if (daySelected[i]) {
         // Send each selected day with the time to the database
-        GoalNotiModel notiModel = await createNotiModel(
-          i + 1,
-          model!.key!,
-          pickedTime!.hour,
-          pickedTime!.minute,
-        );
-        notiModelList.add(notiModel);
+        GoalNotiModel NotiModel = await createNotiModel(i + 1, model!.key!);
+        NotiModelList.add(NotiModel);
       }
     }
     if (model!.parentkey == null && daySelected.contains(true)) {
-      state.sendToDatabase(notiModelList);
+      state.sendToDatabase(NotiModelList);
     }
     kScreenLoader.hideLoader();
     Navigator.pop(context);
+  }
+
+  Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
+    var authState = Provider.of<AuthState>(context, listen: false);
+    var myUser = authState.userModel;
+    final _messaging = FirebaseMessaging.instance;
+    String? tempToken = await _messaging.getToken();
+    GoalNotiModel temp = GoalNotiModel(
+        tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
+    return temp;
   }
 
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
@@ -233,212 +244,220 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
         FriendList = searchstate.getuserDetail(tempString);
       }
     }
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        title: customTitleText(''),
-        onActionPressed: _submitButton,
-        isCrossButton: true,
-        submitButtonText: widget.isTweet
-            ? 'Commit'
-            : widget.isRetweet
-                ? 'Retweet'
-                : 'Comment',
-        isSubmitDisable:
-            !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
-                Provider.of<FeedState>(context).isBusy,
-        isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Stack(
-        //!Removed container
-        children: <Widget>[
-          SingleChildScrollView(
-            controller: scrollController,
-            child: Container(
-              height: context.height,
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  if (widget.isTweet)
-                    Center(
-                      child: SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _titleController,
-                          textAlign: TextAlign.center,
-                          maxLength: 50,
-                          decoration:
-                              kTextFieldDecoration.copyWith(hintText: "title"),
-                        ),
-                      ),
-                    ),
-                  if (widget.isTweet)
-                    Center(
-                      child: SizedBox(
-                        width: 340,
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                          cursorColor: Theme.of(context).colorScheme.secondary,
-                          controller: _descriptionController,
-                          textAlign: TextAlign.center,
-                          decoration: kTextFieldDecoration.copyWith(
-                              hintText: "description"),
-                        ),
-                      ),
-                    ),
-                  if (widget.isTweet && model!.isHabit == false)
-                    SizedBox(
-                      height: 10,
-                    ),
-                  if (widget.isTweet && model!.isHabit == false)
-                    SizedBox(
-                      height: 15,
-                    ),
-                  if (widget.isTweet && model!.isHabit == false)
-                    Center(
-                        child: Row(
-                      children: [
-                        SizedBox(width: 80),
-                        SizedBox(
-                          width: 60,
+    return KeyboardDismisser(
+      context: context,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          title: customTitleText(''),
+          onActionPressed: _submitButton,
+          isCrossButton: true,
+          submitButtonText: widget.isTweet
+              ? 'Commit'
+              : widget.isRetweet
+                  ? 'Retweet'
+                  : 'Comment',
+          isSubmitDisable:
+              !Provider.of<ComposeTweetState>(context).enableSubmitButton ||
+                  Provider.of<FeedState>(context).isBusy,
+          isBottomLine: Provider.of<ComposeTweetState>(context).isScrollingDown,
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: Stack(
+          //!Removed container
+          children: <Widget>[
+            SingleChildScrollView(
+              controller: scrollController,
+              child: Container(
+                height: context.height,
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.isTweet)
+                      Center(
+                        child: SizedBox(
+                          width: 200,
                           child: TextFormField(
-                            keyboardType: TextInputType.number,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary),
                             cursorColor:
                                 Theme.of(context).colorScheme.secondary,
-                            controller: _goalSumController,
+                            controller: _titleController,
                             textAlign: TextAlign.center,
-                            decoration:
-                                kTextFieldDecoration.copyWith(hintText: "#"),
+                            maxLength: 50,
+                            decoration: kTextFieldDecoration.copyWith(
+                                hintText: "title"),
                           ),
                         ),
-                        SizedBox(width: 10),
-                        SizedBox(
-                          width: 150,
+                      ),
+                    if (widget.isTweet)
+                      Center(
+                        child: SizedBox(
+                          width: 340,
                           child: TextFormField(
-                            keyboardType: TextInputType.text,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary),
                             cursorColor:
                                 Theme.of(context).colorScheme.secondary,
-                            controller: _goalUnitController,
+                            controller: _descriptionController,
                             textAlign: TextAlign.center,
                             decoration: kTextFieldDecoration.copyWith(
-                                hintText: "Units"),
+                                hintText: "description"),
                           ),
                         ),
-                      ],
-                    )),
-                  if (widget.isTweet && model!.isHabit == false)
-                    SizedBox(height: 10),
-                  if (widget.isTweet && model!.isHabit == false)
-                    Row(
-                      children: [
-                        SizedBox(width: 58),
-                        customTitleText('Complete By:'),
-                        SizedBox(width: 15),
-                        ElevatedButton(
-                          onPressed: () => _selectDate(
-                              context), // Call the _selectDate function when the button is pressed
-                          child: dateSelected == true
-                              ? Text(
-                                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
-                              : Text('Select Date'),
-                        ),
-                      ],
-                    ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  if (widget.isTweet && model!.isGroupGoal == true)
-                    ChildWidget(
-                      friends: FriendList,
-                      onSelectionChanged: (updatedFriends) {
-                        setState(() {
-                          memberListTemp.clear();
-                          List<String> temp = [];
-                          for (int i = 0; i < updatedFriends.length; i++) {
-                            temp.add(updatedFriends[i]!.userId!);
-                          }
-                          memberListTemp.addAll(temp);
-                          friendTemp = feedstate.tweetToReplyModel!.memberList!;
-                          friendTemp.addAll(memberListTemp);
-                        });
-                      },
-                    ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    children: [
-                      Center(
-                        child: Wrap(
-                          children: List.generate(days.length, (index) {
-                            return Padding(
-                              padding: EdgeInsets.all(1.0),
-                              child: ChoiceChip(
-                                selectedColor: AppColor.PROGRESS_COLOR,
-                                showCheckmark: false,
-                                label: Text(days[index]),
-                                selected: daySelected[index],
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    daySelected[index] = selected;
-                                  });
-                                },
-                              ),
-                            );
-                          }),
-                        ),
                       ),
+                    if (widget.isTweet && model!.isHabit == false)
+                      SizedBox(
+                        height: 10,
+                      ),
+                    if (widget.isTweet && model!.isHabit == false)
                       SizedBox(
                         height: 15,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final TimeOfDay? time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                          );
-                          if (time != null) {
-                            setState(() {
-                              pickedTime = time;
-                            });
-                          }
-                        },
-                        child: pickedTime == null
-                            ? Text('Pick a Time')
-                            : Text(pickedTime.toString().substring(10, 15)),
+                    if (widget.isTweet && model!.isHabit == false)
+                      Center(
+                          child: Row(
+                        children: [
+                          SizedBox(width: 80),
+                          SizedBox(
+                            width: 60,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                              cursorColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              controller: _goalSumController,
+                              textAlign: TextAlign.center,
+                              decoration:
+                                  kTextFieldDecoration.copyWith(hintText: "#"),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          SizedBox(
+                            width: 150,
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                              cursorColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              controller: _goalUnitController,
+                              textAlign: TextAlign.center,
+                              decoration: kTextFieldDecoration.copyWith(
+                                  hintText: "Units"),
+                            ),
+                          ),
+                        ],
+                      )),
+                    if (widget.isTweet && model!.isHabit == false)
+                      SizedBox(height: 10),
+                    if (widget.isTweet && model!.isHabit == false)
+                      Row(
+                        children: [
+                          SizedBox(width: 58),
+                          customTitleText('Complete By:'),
+                          SizedBox(width: 15),
+                          ElevatedButton(
+                            onPressed: () => _selectDate(
+                                context), // Call the _selectDate function when the button is pressed
+                            child: dateSelected == true
+                                ? Text(
+                                    "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
+                                : Text('Select Date'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Flexible(
-                    child: Stack(
-                      children: <Widget>[
-                        ComposeTweetImage(
-                          image: _image,
-                          onCrossIconPressed: _onCrossIconPressed,
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    if (widget.isTweet && model!.isGroupGoal == true)
+                      ChildWidget(
+                        friends: FriendList,
+                        onSelectionChanged: (updatedFriends) {
+                          setState(() {
+                            memberListTemp.clear();
+                            List<String> temp = [];
+                            for (int i = 0; i < updatedFriends.length; i++) {
+                              temp.add(updatedFriends[i]!.userId!);
+                            }
+                            memberListTemp.addAll(temp);
+                            friendTemp =
+                                feedstate.tweetToReplyModel!.memberList!;
+                            friendTemp.addAll(memberListTemp);
+                          });
+                        },
+                      ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: [
+                        Center(
+                          child: Wrap(
+                            children: List.generate(days.length, (index) {
+                              return Padding(
+                                padding: EdgeInsets.all(1.0),
+                                child: ChoiceChip(
+                                  selectedColor: AppColor.PROGRESS_COLOR,
+                                  showCheckmark: false,
+                                  label: Text(days[index]),
+                                  selected: daySelected[index],
+                                  onSelected: (bool selected) {
+                                    setState(() {
+                                      daySelected[index] = selected;
+                                    });
+                                  },
+                                ),
+                              );
+                            }),
+                          ),
                         ),
-                        _UserList(
-                          list: Provider.of<SearchState>(context).userlist,
-                          textEditingController: _descriptionController,
-                        )
+                        SizedBox(
+                          height: 15,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final TimeOfDay? time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            if (time != null) {
+                              setState(() {
+                                pickedTime = time;
+                              });
+                            }
+                          },
+                          child: pickedTime == null
+                              ? Text('Pick a Time')
+                              : Text(pickedTime.toString().substring(10, 15)),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    Flexible(
+                      child: Stack(
+                        children: <Widget>[
+                          ComposeTweetImage(
+                            image: _image,
+                            onCrossIconPressed: _onCrossIconPressed,
+                          ),
+                          _UserList(
+                            list: Provider.of<SearchState>(context).userlist,
+                            textEditingController: _descriptionController,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

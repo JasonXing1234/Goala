@@ -1,3 +1,5 @@
+import 'package:Goala/ui/page/common/widget/pendingRequestListWidget.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/searchState.dart';
@@ -8,7 +10,10 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/newWidget/emptyList.dart';
 import 'package:provider/provider.dart';
 
-class UsersListPage extends StatelessWidget {
+import '../../../helper/utility.dart';
+import '../../../state/authState.dart';
+
+class UsersListPage extends StatefulWidget {
   const UsersListPage({
     Key? key,
     this.pageTitle = "",
@@ -16,7 +21,7 @@ class UsersListPage extends StatelessWidget {
     required this.emptyScreenSubTileText,
     this.userIdsList,
     this.onFollowPressed,
-    this.isFollowing,
+    this.isFollowing, this.pendingList,
   }) : super(key: key);
 
   final String pageTitle;
@@ -24,42 +29,94 @@ class UsersListPage extends StatelessWidget {
   final String emptyScreenSubTileText;
   final bool Function(UserModel user)? isFollowing;
   final List<String>? userIdsList;
+  final List<String>? pendingList;
   final Function(UserModel user)? onFollowPressed;
 
   @override
+  State<UsersListPage> createState() => _UsersListPageState();
+}
+
+class _UsersListPageState extends State<UsersListPage> {
+  late DatabaseReference _databaseReference;
+  @override
+  void initState() {
+    super.initState();
+    _databaseReference = FirebaseDatabase.instance.ref();
+  }
+  @override
   Widget build(BuildContext context) {
     List<UserModel>? userList;
+    List<UserModel>? pendingUserList;
+    var state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
       backgroundColor: TwitterColor.mystic,
       appBar: CustomAppBar(
         isBackButton: true,
-        title: customTitleText(
-          pageTitle,
+        title: Text(
+          widget.pageTitle,
+          style: TextStyles.bigSubtitleStyle,
         ),
       ),
-      body: Consumer<SearchState>(
-        builder: (context, state, child) {
-          if (userIdsList != null && userIdsList!.isNotEmpty) {
-            userList = state.getuserDetail(userIdsList!);
-          }
-          return userList != null && userList!.isNotEmpty
-              ? UserListWidget(
-                  list: userList!,
-                  emptyScreenText: emptyScreenText,
-                  emptyScreenSubTileText: emptyScreenSubTileText,
-                  onFollowPressed: onFollowPressed,
-                  isFollowing: isFollowing,
-                )
-              : Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 0, left: 30, right: 30),
-                  child: NotifyText(
-                    title: emptyScreenText,
-                    subTitle: emptyScreenSubTileText,
-                  ),
-                );
-        },
-      ),
+      body:
+        StreamBuilder(
+        stream: kDatabase.child('profile').child(state.userModel!.userId!).onValue,
+    builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+    if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
+      var data = (snapshot.data!.snapshot.value as Map);
+      var friendList = (data['friendList'] as List?)?.cast<String>() ?? [];
+      var pendingRequestList = (data['pendingRequestList'] as List?)?.cast<String>() ?? [];
+        return Column(children: [
+          if(!pendingRequestList.isEmpty) Text('Friend Requests', style: TextStyles.bigSubtitleStyle),
+          if(!pendingRequestList.isEmpty) Consumer<SearchState>(
+            builder: (context, state, child) {
+              if (pendingRequestList.isNotEmpty) {
+                pendingUserList = state.getuserDetail(pendingRequestList);
+              }
+              return pendingRequestList!.isNotEmpty
+                  ? pendingListWidget(
+                list: pendingUserList!,
+                emptyScreenText: widget.emptyScreenText,
+                emptyScreenSubTileText: widget.emptyScreenSubTileText,
+              )
+                  : Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(top: 0, left: 30, right: 30),
+                child: NotifyText(
+                  title: widget.emptyScreenText,
+                  subTitle: widget.emptyScreenSubTileText,
+                ),
+              );
+            },
+          ),
+          if(!pendingRequestList.isEmpty) SizedBox(height: 60),
+          Consumer<SearchState>(
+            builder: (context, state, child) {
+              if (friendList.isNotEmpty) {
+                userList = state.getuserDetail(friendList);
+              }
+              return userList != null && userList!.isNotEmpty
+                  ? UserListWidget(
+                      list: userList!,
+                      emptyScreenText: widget.emptyScreenText,
+                      emptyScreenSubTileText: widget.emptyScreenSubTileText,
+                      onFollowPressed: widget.onFollowPressed,
+                      isFollowing: widget.isFollowing,
+                    )
+                  : Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 0, left: 30, right: 30),
+                      child: NotifyText(
+                        title: widget.emptyScreenText,
+                        subTitle: widget.emptyScreenSubTileText,
+                      ),
+                    );
+            },
+          ),]
+        );
+    }else {
+      return CircularProgressIndicator(); // Loading indicator
+    }}
+    )
     );
   }
 }
