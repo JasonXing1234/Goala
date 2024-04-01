@@ -122,6 +122,7 @@ class Routes {
       case "ForgetPasswordPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const ForgetPasswordPage());
+      // TODO: This is not right...
       case "SearchPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => CurrentUserProfilePage());

@@ -1,10 +1,8 @@
-import 'package:Goala/GoalaFrontEnd/homePage.dart';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
 import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
 import 'package:flutter/material.dart';
-import 'package:Goala/helper/enum.dart';
 import 'package:Goala/ui/page/Auth/signup.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/theme/theme.dart';
@@ -32,20 +30,19 @@ class _SignInPageState extends State<SignInPage> {
       _passwordController.text,
     );
     if (isValid) {
-      cprint("Logged in");
+      cprint("credentials are valid");
       state
           .signIn(_emailController.text, _passwordController.text,
               context: context)
           .then((status) {
         if (state.user != null) {
-          Navigator.pop(context);
           state.getCurrentUser();
         } else {
-          cprint('Unable to login', errorIn: '_emailLoginButton');
+          cprint('Unable to login', errorIn: '_onLogInPress');
         }
       });
     } else {
-      cprint("Not logged in");
+      cprint("credentials are NOT valid");
     }
   }
 
@@ -151,15 +148,11 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<AuthState>(context, listen: false);
     return KeyboardDismisser(
       context: context,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: state.authStatus == AuthStatus.NOT_LOGGED_IN ||
-                state.authStatus == AuthStatus.NOT_DETERMINED
-            ? _body()
-            : const HomePage(),
+        body: _body(),
       ),
     );
   }

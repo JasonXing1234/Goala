@@ -596,7 +596,8 @@ class CustomProgressBar extends StatelessWidget {
                 ? Text(calculateStreak(checkInDays).toString() + ' days streak',
                     style: TextStyle(fontSize: height * 0.6))
                 : Text(
-                    daysLeft.toString() + ' days left',
+                    (daysLeft > 0 ? daysLeft : 0).toString() +
+                        ' day${daysLeft > 1 ? "s" : ""} left',
                     style: TextStyle(fontSize: height * 0.6),
                   )),
       ],
