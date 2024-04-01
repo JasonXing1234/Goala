@@ -117,14 +117,14 @@ class _ProfilePageState extends State<ProfilePage>
               x.userId == widget.profileId &&
               x.isGroupGoal == false &&
               x.parentkey == null &&
-              x.isPrivate == false)
+              x.isPrivate == false && ((!x.isPrivate && x.visibleUsersList == null) || (!x.isPrivate && x.visibleUsersList != null && x.visibleUsersList!.contains(authState.userModel.userId))))
           .toList();
       groupGoalList = feedstate.feedList!
           .where((x) =>
               x.memberList!.contains(widget.profileId) &&
               x.isGroupGoal == true &&
               x.parentkey == null &&
-              x.isPrivate == false)
+              x.isPrivate == false && ((!x.isPrivate && x.visibleUsersList == null) || (!x.isPrivate && x.visibleUsersList != null && x.visibleUsersList!.contains(authState.userModel.userId))))
           .toList();
     }
 

@@ -80,7 +80,7 @@ class _UsersListPageState extends State<UsersListPage> {
                           pendingUserList =
                               state.getuserDetail(pendingRequestList);
                         }
-                        return pendingRequestList!.isNotEmpty
+                        return pendingRequestList.isNotEmpty
                             ? pendingListWidget(
                                 list: pendingUserList!,
                                 emptyScreenText: widget.emptyScreenText,
@@ -105,14 +105,17 @@ class _UsersListPageState extends State<UsersListPage> {
                         userList = state.getuserDetail(friendList);
                       }
                       return userList != null && userList!.isNotEmpty
-                          ? UserListWidget(
-                              list: userList!,
-                              emptyScreenText: widget.emptyScreenText,
-                              emptyScreenSubTileText:
-                                  widget.emptyScreenSubTileText,
-                              onFollowPressed: widget.onFollowPressed,
-                              isFollowing: widget.isFollowing,
-                            )
+                          ? Column(children: [
+                              Text('Friends', style: TextStyles.bigSubtitleStyle,),
+                              UserListWidget(
+                                list: userList!,
+                                emptyScreenText: widget.emptyScreenText,
+                                emptyScreenSubTileText:
+                                    widget.emptyScreenSubTileText,
+                                onFollowPressed: widget.onFollowPressed,
+                                isFollowing: widget.isFollowing,
+                              )
+                            ])
                           : Container(
                               width: double.infinity,
                               padding: const EdgeInsets.only(

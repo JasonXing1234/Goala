@@ -129,7 +129,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
                         ])
                       ]
                     : state.tweetReplyMap![widget.tempFeed.key!]!
-                        .map((x) => _commentRow(x))
+                        .map((x) => _commentRow(x, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == state.tweetReplyMap![widget.tempFeed.key!]!.length - 1, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == 0))
                         .toList(),
               )
 
@@ -187,10 +187,12 @@ class _TaskDetailState extends State<TaskDetailPage> {
     );
   }
 
-  Widget _commentRow(FeedModel model) {
+  Widget _commentRow(FeedModel model, bool isLastOne, bool tempFirstOne) {
     return TimelinePosts(
+      isFirstOne: tempFirstOne,
       model: model,
       type: TweetType.Reply,
+      isLastOne: isLastOne,
       trailing: TweetBottomSheet().tweetOptionIcon(context,
           scaffoldKey: scaffoldKey, model: model, type: TweetType.Reply),
       scaffoldKey: scaffoldKey,

@@ -218,7 +218,7 @@ class FeedState extends AppState {
     return list;
   }
 
-  Future<void> addNumberToGoal(FeedModel tempFeed, int tempInt) async {
+  Future<void> addNumberToGoal(FeedModel tempFeed, double tempInt) async {
     await kDatabase.child('tweet').child(tempFeed.key!).update({
       'GoalAchieved': tempFeed.GoalAchieved == null
           ? tempInt

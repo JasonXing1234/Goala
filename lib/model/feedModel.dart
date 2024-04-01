@@ -23,8 +23,9 @@ class FeedModel {
   int? commentCount;
   int? retweetCount;
   int? memberCount;
-  int? GoalSum;
-  int? GoalAchieved;
+  double? GoalSum;
+  double? GoalAchieved;
+  double? GoalAchievedToday;
   late String createdAt;
   String? deadlineDate;
   String? imagePath;
@@ -33,6 +34,7 @@ class FeedModel {
   String? coverPhoto;
   List<String>? memberList;
   List<String?>? replyTweetKeyList;
+  List<String>? visibleUsersList;
   List<bool>? checkInList;
   String?
       lanCode; //Saving the language of the tweet so to not translate to check which language
@@ -58,6 +60,7 @@ class FeedModel {
       this.memberCount,
       this.GoalAchieved,
       this.GoalSum,
+        this.GoalAchievedToday,
       required this.createdAt,
       this.deadlineDate,
       this.imagePath,
@@ -65,6 +68,7 @@ class FeedModel {
       this.tags,
       this.goalPhotoList,
       this.memberList,
+        this.visibleUsersList,
       this.checkInList,
       this.user,
       this.replyTweetKeyList,
@@ -82,14 +86,15 @@ class FeedModel {
       "userId": userId,
       "deviceToken": deviceToken,
       "title": title,
-      "GoalSum": GoalSum,
+      "GoalSum": GoalSum ?? 0.0,
+      "GoalAchievedToday": GoalAchievedToday ?? 0.0,
       "description": description,
       "goalUnit": goalUnit,
       "likeCount": likeCount,
       "commentCount": commentCount ?? 0,
       "retweetCount": retweetCount ?? 0,
       "memberCount": memberCount ?? 0,
-      "GoalAchieved": GoalAchieved ?? 0,
+      "GoalAchieved": GoalAchieved,
       "createdAt": createdAt,
       "deadlineDate": deadlineDate,
       "imagePath": imagePath,
@@ -98,6 +103,7 @@ class FeedModel {
       "goalPhotoList": goalPhotoList,
       "coverPhoto": coverPhoto,
       "memberList": memberList,
+      "visibleUsersList": visibleUsersList,
       "replyTweetKeyList": replyTweetKeyList,
       "checkInList": checkInList,
       "user": user == null ? null : user!.toJson(),
@@ -125,8 +131,9 @@ class FeedModel {
     commentCount = map['commentCount'];
     retweetCount = map["retweetCount"] ?? 0;
     memberCount = map["memberCount"] ?? 0;
-    GoalAchieved = map["GoalAchieved"] ?? 0;
-    GoalSum = map["GoalSum"] ?? 0;
+    GoalAchieved = map["GoalAchieved"];
+    GoalSum = map["GoalSum"];
+    GoalAchievedToday = map["GoalAchievedToday"];
     imagePath = map['imagePath'];
     createdAt = map['createdAt'];
     deadlineDate = map['deadlineDate'];
@@ -214,6 +221,26 @@ class FeedModel {
       memberList = [];
       memberCount = 0;
     }
+
+    if (map["visibleUsersList"] != null) {
+      visibleUsersList = <String>[];
+
+      final list = map['visibleUsersList'];
+
+      /// In new tweet db schema likeList is stored as a List<String>()
+      ///
+      if (list is List) {
+        map['visibleUsersList'].forEach((value) {
+          if (value is String) {
+            visibleUsersList!.add(value);
+          }
+        });
+      }
+
+    } else {
+      visibleUsersList = [];
+    }
+
     if (map['replyTweetKeyList'] != null) {
       map['replyTweetKeyList'].forEach((value) {
         replyTweetKeyList = <String>[];
@@ -227,6 +254,8 @@ class FeedModel {
       commentCount = 0;
     }
   }
+
+
 
   bool get isValidTweet {
     bool isValid = false;

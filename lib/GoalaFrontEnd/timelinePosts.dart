@@ -21,6 +21,8 @@ import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 
 class TimelinePosts extends StatelessWidget {
+  final bool isFirstOne;
+  final bool isLastOne;
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -32,7 +34,7 @@ class TimelinePosts extends StatelessWidget {
     this.trailing,
     this.type = TweetType.Tweet,
     this.isDisplayOnProfile = false,
-    required this.scaffoldKey,
+    required this.scaffoldKey, required this.isLastOne, required this.isFirstOne,
   }) : super(key: key);
 
   void onLongPressedTweet(BuildContext context) {
@@ -92,9 +94,10 @@ class TimelinePosts extends StatelessWidget {
                     ? Center(
                         child: _TweetBody(
                           isDisplayOnProfile: isDisplayOnProfile,
+                          isEnd: isLastOne,
                           model: model,
                           trailing: trailing,
-                          type: type,
+                          type: type, isFirst: isFirstOne,
                         ),
                       )
                     : _TweetDetailBody(
@@ -138,6 +141,8 @@ class TimelinePosts extends StatelessWidget {
 }
 
 class _TweetBody extends StatefulWidget {
+  final bool isFirst;
+  final bool isEnd;
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -147,7 +152,8 @@ class _TweetBody extends StatefulWidget {
       required this.model,
       this.trailing,
       required this.type,
-      required this.isDisplayOnProfile})
+      required this.isDisplayOnProfile,
+        required this.isEnd, required this.isFirst})
       : super(key: key);
 
   @override
@@ -254,10 +260,8 @@ class _TweetBodyState extends State<_TweetBody> {
                   SizedBox(
                     height: 30,
                     width: 330,
-                    child: CustomProgressBar(
-                      progress: widget.model.isHabit == false
-                          ? tempModel!.GoalAchieved! / tempModel!.GoalSum!
-                          : tempModel!.checkInList!
+                    child: widget.model.isHabit == true ? CustomProgressBar(
+                      progress: tempModel!.checkInList!
                                   .where((item) => item == true)
                                   .length /
                               8,
@@ -274,6 +278,26 @@ class _TweetBodyState extends State<_TweetBody> {
                           .inDays,
                       isHabit: tempModel!.isHabit,
                       checkInDays: tempModel!.checkInList!,
+                    ) :
+                    CustomProgressBar2(
+                      GoalAchieved: tempModel!.GoalAchieved!,
+                      GoalSum: tempModel!.GoalSum!,
+                      oldProgress:
+                      tempModel!.GoalAchieved == null || tempModel!.GoalAchieved == 0 ? 0 : widget.isEnd ? (tempModel!.GoalAchieved! - tempModel!.GoalAchievedToday!) / tempModel!.GoalSum! : tempModel!.GoalAchieved! / tempModel!.GoalSum!,
+                      height: 30,
+                      width: 330,
+                      backgroundColor: Colors.grey[300]!,
+                      progressColor: AppColor.PROGRESS_COLOR,
+                      daysLeft: DateTime(
+                          int.parse(tempModel!.deadlineDate!.split('-')[0]),
+                          int.parse(tempModel!.deadlineDate!.split('-')[1]),
+                          int.parse(tempModel!.deadlineDate!.split('-')[2]))
+                          .difference(DateTime(DateTime.now().year,
+                          DateTime.now().month, DateTime.now().day))
+                          .inDays,
+                      isHabit: tempModel!.isHabit,
+                      checkInDays: tempModel!.checkInList!,
+                      newProgress: tempModel!.GoalAchievedToday == null || tempModel!.GoalAchievedToday == 0 || !widget.isEnd ? 0 : tempModel!.GoalAchievedToday! / tempModel!.GoalSum!,
                     ),
                   ),
                   SizedBox(height: 5),

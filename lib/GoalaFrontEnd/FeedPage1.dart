@@ -40,7 +40,7 @@ class FeedPage extends StatelessWidget {
                 //only show posts under the main goals, don't show the comments under the posts
                 final List<FeedModel>? list = state
                     .getCommentList(authState.userModel)
-                    ?.where((x) => x.grandparentKey == null)
+                    ?.where((x) => x.grandparentKey == null && ((!x.isPrivate && x.visibleUsersList == null) || (!x.isPrivate && x.visibleUsersList != null && x.visibleUsersList!.contains(authState.userModel!.userId))))
                     .toList();
                 return CustomScrollView(
                   slivers: <Widget>[

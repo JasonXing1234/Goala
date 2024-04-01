@@ -156,6 +156,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
           tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
+          tweetModel.checkInList = tempTweet.checkInList!;
+          tweetModel.isCheckedIn = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -171,6 +173,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
           tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
+          tweetModel.checkInList = tempTweet.checkInList!;
+          tweetModel.isCheckedIn = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -178,14 +182,16 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               .update({
             "checkInList": tempTweet.checkInList,
             "isCheckedIn": true,
+            "GoalAchievedToday": double.parse(_goalAchievedController.text) + 0.000001
           }).catchError((onError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(onError)));
           });
           state.addNumberToGoal(
-              model!, int.parse(_goalAchievedController.text));
+              model!, double.parse(_goalAchievedController.text));
         }
       }
+
     }
     tweetModel.key = tweetId;
 
@@ -256,8 +262,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? model!.key
               : null,
       userId: myUser.userId!,
-      isCheckedIn: false,
-      isPrivate: false,
+      isCheckedIn: true,
+      isPrivate: state.tweetToReplyModel!.isPrivate,
+      visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
       checkInList: widget.isTweet
           ? [false]
           : widget.isRetweet
@@ -274,11 +281,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalSum: widget.isTweet
-          ? isSelected[0]
-              ? 0
-              : int.parse(_goalAchievedController.text)
-          : 0,
+      GoalAchievedToday: double.parse(_goalAchievedController.text) + 0.000001,
+      GoalAchieved: model?.GoalAchieved == null ? double.parse(_goalAchievedController.text) : model!.GoalAchieved! + double.parse(_goalAchievedController.text),
+      GoalSum: state.tweetToReplyModel!.isHabit || state.tweetToReplyModel!.GoalSum == null ? 0.0 : state.tweetToReplyModel!.GoalSum,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
       deviceToken: token,
@@ -515,7 +520,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                                 _goalAchievedController.text;
                                           });
                                         },
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Theme.of(context)

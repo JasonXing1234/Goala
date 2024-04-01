@@ -127,7 +127,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<AuthState>(context);
-    String id = authState.userId!;
+    String id = authState.userId;
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
       list = feedstate.feedList!
           .where((x) =>
@@ -229,7 +229,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                                         margin:
                                         const EdgeInsets.only(right: 5, top: 10),
                                         child:
-
                                               RippleButton(
                                                 splashColor:
                                                 TwitterColor.dodgeBlue_50.withAlpha(100),
@@ -582,7 +581,7 @@ class _UserTileState extends State<_UserTile> {
               onPressed: () {
                 var state = Provider.of<FeedState>(context, listen: false);
                 state.addNumberToGoal(
-                    tempFeed, int.parse(_textEditingController.text));
+                    tempFeed, double.parse(_textEditingController.text));
                 print('Entered Integer: ${_textEditingController.text}');
                 Navigator.of(context).pop(); // Close the dialog
               },

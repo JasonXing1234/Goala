@@ -42,7 +42,7 @@ class FollowerListPage extends StatelessWidget {
       );
     }
     return UsersListPage(
-      pageTitle: 'Friends',
+      pageTitle: 'Your Friends',
       userIdsList: userList,
       pendingList: tempList,
       emptyScreenText: 'You don\'t have friends yet',
