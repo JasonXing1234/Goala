@@ -3,7 +3,6 @@ import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/state/searchState.dart';
 import 'package:Goala/ui/theme/theme.dart';
@@ -39,73 +38,11 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       state.resetFilterList();
     });
     _tabController = TabController(length: 2, vsync: this);
-    requestPermission();
-    listenForForegroundNotifications();
     super.initState();
   }
 
   void onSettingIconPressed() {
     Navigator.pushNamed(context, '/TrendsPage');
-  }
-
-  // TODO: Why is the permissions and notifications in this file?
-  void requestPermission() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true);
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User Granted Permission');
-    } else if (settings.authorizationStatus ==
-        AuthorizationStatus.provisional) {
-      print('User Granted Permission');
-    } else {
-      print('declined');
-    }
-  }
-
-  void listenForForegroundNotifications() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('pushing goals!');
-      // print('Message data: ${message.data}');
-
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Notifications',
-        description: 'This channel is used for important notifications.',
-        importance: Importance.max,
-      );
-
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-      //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channelDescription: channel.description,
-                icon: '@mipmap/ic_launcher',
-              ),
-            ));
-      }
-    });
   }
 
   @override
