@@ -21,8 +21,8 @@ import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 
 class TimelinePosts extends StatelessWidget {
-  final bool isFirstOne;
-  final bool isLastOne;
+  final bool isLast;
+  final bool isFirst;
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -34,7 +34,7 @@ class TimelinePosts extends StatelessWidget {
     this.trailing,
     this.type = TweetType.Tweet,
     this.isDisplayOnProfile = false,
-    required this.scaffoldKey, required this.isLastOne, required this.isFirstOne,
+    required this.scaffoldKey, required this.isFirst, required this.isLast,
   }) : super(key: key);
 
   void onLongPressedTweet(BuildContext context) {
@@ -94,10 +94,10 @@ class TimelinePosts extends StatelessWidget {
                     ? Center(
                         child: _TweetBody(
                           isDisplayOnProfile: isDisplayOnProfile,
-                          isEnd: isLastOne,
+                          isEnd: isFirst,
                           model: model,
                           trailing: trailing,
-                          type: type, isFirst: isFirstOne,
+                          type: type, isFirst: isLast,
                         ),
                       )
                     : _TweetDetailBody(
@@ -283,7 +283,9 @@ class _TweetBodyState extends State<_TweetBody> {
                       GoalAchieved: tempModel!.GoalAchieved!,
                       GoalSum: tempModel!.GoalSum!,
                       oldProgress:
-                      tempModel!.GoalAchieved == null || tempModel!.GoalAchieved == 0 ? 0 : widget.isEnd ? (tempModel!.GoalAchieved! - tempModel!.GoalAchievedToday!) / tempModel!.GoalSum! : tempModel!.GoalAchieved! / tempModel!.GoalSum!,
+                      widget.isEnd && widget.isFirst ? 0 : widget.isFirst && !widget.isEnd ? widget.model.GoalAchievedToday! / widget.model.GoalSum! :
+                          widget.isEnd && !widget.isFirst ? (widget.model.GoalAchieved! - widget.model.GoalAchievedToday!) / widget.model.GoalSum! :
+                          widget.model.GoalAchieved! / widget.model.GoalSum!,
                       height: 30,
                       width: 330,
                       backgroundColor: Colors.grey[300]!,
@@ -297,7 +299,9 @@ class _TweetBodyState extends State<_TweetBody> {
                           .inDays,
                       isHabit: tempModel!.isHabit,
                       checkInDays: tempModel!.checkInList!,
-                      newProgress: tempModel!.GoalAchievedToday == null || tempModel!.GoalAchievedToday == 0 || !widget.isEnd ? 0 : tempModel!.GoalAchievedToday! / tempModel!.GoalSum!,
+                      newProgress: widget.isEnd && widget.isFirst ? widget.model.GoalAchieved! / widget.model.GoalSum! : widget.isFirst && !widget.isEnd ? 0 :
+                      widget.isEnd && !widget.isFirst ? widget.model.GoalAchievedToday! / widget.model.GoalSum! :
+                      0,
                     ),
                   ),
                   SizedBox(height: 5),

@@ -125,14 +125,33 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     }
   }
 
+  void _showErrorMessage(BuildContext context, String error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          error,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   /// Submit tweet to save in firebase database
   /// TODO: We need to make a snackbar to show the user why they can't submit their goal if they don't fill everything out right.
   void _submitButton() async {
     if (_descriptionController.text.isEmpty ||
-        _descriptionController.text.length > 50 ||
-        _titleController.text.isEmpty ||
-        _titleController.text.length > 10 ||
-        pickedTime == null) {
+        _descriptionController.text.length > 200) {
+      _showErrorMessage(context, 'Please fill out description');
+      return;
+    }
+    if (_titleController.text.isEmpty ||
+        _titleController.text.length > 15) {
+      _showErrorMessage(context, 'Please fill out title');
+      return;
+    }
+    if (pickedTime == null) {
+      _showErrorMessage(context, 'Please pick notification time');
       return;
     }
     var state = Provider.of<FeedState>(context, listen: false);
@@ -285,14 +304,14 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               : true
           : state.tweetToReplyModel!.isHabit,
       GoalSum: isSelected[0] == true
-          ? null
+          ? 0
           : widget.isTweet
               ? isSelected[0]
-                  ? 0.00001
-                  : double.parse(_goalSumController.text) + 0.00001
-              : 0.00001,
-      GoalAchieved: .00001,
-      GoalAchievedToday: .00001,
+                  ? 0
+                  : int.parse(_goalSumController.text)
+              : 0,
+      GoalAchieved: 0,
+      GoalAchievedToday: 0,
       goalUnit: _goalUnitController.text,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
@@ -418,7 +437,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                 Theme.of(context).colorScheme.secondary,
                             controller: _titleController,
                             textAlign: TextAlign.center,
-                            maxLength: 50,
+                            maxLength: 15,
                             decoration: kTextFieldDecoration.copyWith(
                                 hintText: "title"),
                           ),
@@ -435,6 +454,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                 Theme.of(context).colorScheme.secondary,
                             controller: _descriptionController,
                             textAlign: TextAlign.center,
+                            maxLength: 200,
+                            maxLines: null,
                             decoration: kTextFieldDecoration.copyWith(
                                 hintText: "description"),
                           ),
@@ -456,7 +477,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           SizedBox(
                             width: 60,
                             child: TextFormField(
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              keyboardType: TextInputType.number,
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary),

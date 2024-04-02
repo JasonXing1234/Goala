@@ -182,7 +182,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               .update({
             "checkInList": tempTweet.checkInList,
             "isCheckedIn": true,
-            "GoalAchievedToday": double.parse(_goalAchievedController.text) + 0.000001
+            "GoalAchievedToday": double.parse(_goalAchievedController.text)
           }).catchError((onError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(onError)));
@@ -281,9 +281,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalAchievedToday: double.parse(_goalAchievedController.text) + 0.000001,
-      GoalAchieved: model?.GoalAchieved == null ? double.parse(_goalAchievedController.text) : model!.GoalAchieved! + double.parse(_goalAchievedController.text),
-      GoalSum: state.tweetToReplyModel!.isHabit || state.tweetToReplyModel!.GoalSum == null ? 0.0 : state.tweetToReplyModel!.GoalSum,
+      GoalAchievedToday: _goalAchievedController.text == '' ? 0 : int.parse(_goalAchievedController.text) + 0,
+      GoalAchieved: _goalAchievedController.text == '' ? 0 : model?.GoalAchieved == null ? int.parse(_goalAchievedController.text) : model!.GoalAchieved! + int.parse(_goalAchievedController.text),
+      GoalSum: state.tweetToReplyModel!.isHabit || state.tweetToReplyModel!.GoalSum == null ? 0 : state.tweetToReplyModel!.GoalSum,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
       deviceToken: token,

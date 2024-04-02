@@ -189,10 +189,10 @@ class _TaskDetailState extends State<TaskDetailPage> {
 
   Widget _commentRow(FeedModel model, bool isLastOne, bool tempFirstOne) {
     return TimelinePosts(
-      isFirstOne: tempFirstOne,
+      isLast: isLastOne,
       model: model,
       type: TweetType.Reply,
-      isLastOne: isLastOne,
+      isFirst: tempFirstOne,
       trailing: TweetBottomSheet().tweetOptionIcon(context,
           scaffoldKey: scaffoldKey, model: model, type: TweetType.Reply),
       scaffoldKey: scaffoldKey,

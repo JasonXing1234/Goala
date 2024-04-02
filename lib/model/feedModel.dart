@@ -23,9 +23,9 @@ class FeedModel {
   int? commentCount;
   int? retweetCount;
   int? memberCount;
-  double? GoalSum;
-  double? GoalAchieved;
-  double? GoalAchievedToday;
+  int? GoalSum;
+  int? GoalAchieved;
+  int? GoalAchievedToday;
   late String createdAt;
   String? deadlineDate;
   String? imagePath;
@@ -86,8 +86,8 @@ class FeedModel {
       "userId": userId,
       "deviceToken": deviceToken,
       "title": title,
-      "GoalSum": GoalSum ?? 0.0,
-      "GoalAchievedToday": GoalAchievedToday ?? 0.0,
+      "GoalSum": GoalSum ?? 0,
+      "GoalAchievedToday": GoalAchievedToday ?? 0,
       "description": description,
       "goalUnit": goalUnit,
       "likeCount": likeCount,

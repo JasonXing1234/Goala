@@ -608,8 +608,8 @@ class CustomProgressBar extends StatelessWidget {
 class CustomProgressBar2 extends StatelessWidget {
   final double width;
   final double height;
-  final double GoalAchieved;
-  final double GoalSum;
+  final int GoalAchieved;
+  final int GoalSum;
   final double oldProgress;
   final double newProgress;
   final Color backgroundColor;
