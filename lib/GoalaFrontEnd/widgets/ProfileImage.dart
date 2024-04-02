@@ -1,30 +1,33 @@
+import 'package:Goala/helper/constant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:Goala/helper/constant.dart';
 
-class CircularImage extends StatelessWidget {
-  const CircularImage({
-    Key? key,
+class ProfileImage extends StatelessWidget {
+  // The border raduis used for rounding these edges
+  static const double BORDER_RADIUS = 8;
+  const ProfileImage({
+    this.size = 90,
     this.path,
-    this.height = 50,
-    this.isBorder = false,
-  }) : super(key: key);
+  });
+
   final String? path;
-  final double height;
-  final bool isBorder;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      maxRadius: height / 2,
-      backgroundColor: Theme.of(context).cardColor,
-      backgroundImage:
-          customAdvanceNetworkImage(path ?? Constants.dummyProfilePic),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+      child: Image(
+        image: customAdvanceNetworkImage(path ?? Constants.dummyProfilePic),
+        height: size,
+        fit: BoxFit.contain,
+      ),
     );
   }
 }
 
 CachedNetworkImageProvider customAdvanceNetworkImage(String? path) {
+  // TODO: This path does not work
   if (path ==
       'http://www.azembelani.co.za/wp-content/uploads/2016/07/20161014_58006bf6e7079-3.png') {
     path = Constants.dummyProfilePic;
