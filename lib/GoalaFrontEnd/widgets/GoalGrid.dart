@@ -46,7 +46,7 @@ class _GoalGridState extends State<GoalGrid> {
       addAutomaticKeepAlives: false,
       physics: const BouncingScrollPhysics(),
       itemCount: goals.length,
-      itemBuilder: (context, index) => UserTile2(tweet: goals[index]),
+      itemBuilder: (context, index) => GoalTile(tweet: goals[index]),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 5.0,

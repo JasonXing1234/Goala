@@ -125,7 +125,6 @@ class _ProfilePageState extends State<ProfilePage>
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // TODO: There's a problem here with the late init of profileUserModel
           ProfileHeader(
             userModel: authState.profileUserModel,
             isCurrentUser: false,
