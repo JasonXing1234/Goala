@@ -1,7 +1,7 @@
+import 'package:Goala/ui/page/profile/widgets/Choices.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/customRoute.dart';
 import 'package:Goala/helper/utility.dart';
-import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 
@@ -15,13 +15,21 @@ class ProfileImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<Choice> choices = <Choice>[
-      Choice(title: 'Share image link', icon: Icons.share, isEnable: true),
+    const List<Choice> choices = [
       Choice(
-          title: 'Open in browser',
-          icon: Icons.open_in_browser,
-          isEnable: true),
-      Choice(title: 'Save', icon: Icons.save),
+        title: 'Share image link',
+        icon: Icons.share,
+        isEnable: true,
+      ),
+      Choice(
+        title: 'Open in browser',
+        icon: Icons.open_in_browser,
+        isEnable: true,
+      ),
+      Choice(
+        title: 'Save',
+        icon: Icons.save,
+      ),
     ];
     return Scaffold(
       backgroundColor: TwitterColor.white,

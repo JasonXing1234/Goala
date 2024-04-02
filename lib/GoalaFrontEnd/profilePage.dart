@@ -1,7 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/widgets/GoalGrid.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
-import 'package:Goala/GoalaFrontEnd/widgets/UserTile.dart';
-import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
@@ -35,7 +33,6 @@ class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool isMyProfile = false;
-  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
 
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -103,7 +100,6 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     List<FeedModel>? personalGoalsList;
     List<FeedModel>? groupGoalsList;
-    final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<ProfileState>(context, listen: true);
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
@@ -150,19 +146,3 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
-// TODO: This shouldn't be in this page...
-class Choice {
-  const Choice(
-      {required this.title, required this.icon, this.isEnable = false});
-  final bool isEnable;
-  final IconData icon;
-  final String title;
-}
-
-const List<Choice> choices = <Choice>[
-  Choice(title: 'Share', icon: Icons.directions_car, isEnable: true),
-  Choice(title: 'QR code', icon: Icons.directions_railway, isEnable: true),
-  Choice(title: 'Draft', icon: Icons.directions_bike),
-  Choice(title: 'View Lists', icon: Icons.directions_boat),
-  Choice(title: 'View Moments', icon: Icons.directions_bus),
-];
