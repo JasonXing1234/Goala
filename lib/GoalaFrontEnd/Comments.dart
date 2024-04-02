@@ -5,7 +5,7 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
