@@ -1,5 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/widgets/GoalGrid.dart';
-import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CurrentProfileHeader.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
@@ -48,6 +48,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     Navigator.pushNamed(context, '/TrendsPage');
   }
 
+  // TODO: Why is the permissions and notifications in this file?
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -145,7 +146,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       ),
       body: Column(
         children: [
-          ProfileHeader(userModel: authState.userModel),
+          CurrentProfileHeader(userModel: authState.userModel),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),

@@ -1,20 +1,13 @@
-import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/GoalGrid.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/UserTile.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/profile_state.dart';
-import 'package:Goala/ui/page/profile/EditProfilePage.dart';
-import 'package:Goala/ui/page/profile/profileImageView.dart';
-import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
-import 'package:Goala/ui/theme/theme.dart';
-import 'package:Goala/widgets/newWidget/rippleButton.dart';
 import 'package:provider/provider.dart';
-import '../state/authState.dart';
 import '../state/searchState.dart';
-import '../widgets/newWidget/title_text.dart';
-import 'TaskDetailPage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.profileId}) : super(key: key);
@@ -108,20 +101,20 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    List<FeedModel>? personalGoalList;
-    List<FeedModel>? groupGoalList;
+    List<FeedModel>? personalGoalsList;
+    List<FeedModel>? groupGoalsList;
     final state = Provider.of<SearchState>(context);
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<ProfileState>(context, listen: true);
     if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      personalGoalList = feedstate.feedList!
+      personalGoalsList = feedstate.feedList!
           .where((x) =>
               x.userId == widget.profileId &&
               x.isGroupGoal == false &&
               x.parentkey == null &&
               x.isPrivate == false)
           .toList();
-      groupGoalList = feedstate.feedList!
+      groupGoalsList = feedstate.feedList!
           .where((x) =>
               x.memberList!.contains(widget.profileId) &&
               x.isGroupGoal == true &&
@@ -139,168 +132,18 @@ class _ProfilePageState extends State<ProfilePage>
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProfileHeader(userModel: authState.profileUserModel,),
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 5),
-                    shape: BoxShape.circle),
-                child: RippleButton(
-                  child: authState.isbusy
-                      ? const SizedBox.shrink()
-                      : CircularImage(
-                          path: authState.profileUserModel.profilePic!,
-                          height: 80,
-                        ),
-                  borderRadius: BorderRadius.circular(50),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        ProfileImageView.getRoute(
-                            authState.profileUserModel.profilePic!));
-                  },
-                ),
-              ),
-              const SizedBox(width: 10),
-              RippleButton(
-                splashColor: TwitterColor.dodgeBlue_50.withAlpha(100),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                onPressed: () {
-                  setState(() {
-                    if (isMyProfile) {
-                      Navigator.push(context, EditProfilePage.getRoute());
-                    } else {
-                      if (isFollower() == "Add Friend") {
-                        authState.addFriend();
-                      } else if (isFollower() == "Friend Request Sent") {
-                      } else if (isFollower() == "Accept Friend Request") {
-                        authState.acceptFriendRequest();
-                      } else if (isFollower() == "Friend Added") {}
-                    }
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isMyProfile
-                        ? TwitterColor.white
-                        : authState.isbusy
-                            ? AppColor.PROGRESS_COLOR
-                            : isFollower() == "Friend Added"
-                                ? AppColor.PROGRESS_COLOR
-                                : TwitterColor.white,
-                    border: Border.all(
-                        color: isMyProfile
-                            ? Colors.black87.withAlpha(180)
-                            : AppColor.PROGRESS_COLOR,
-                        width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-
-                  /// If [isMyProfile] is true then Edit profile button will display
-                  // Otherwise Follow/Following button will be display
-                  child: Text(
-                    isMyProfile
-                        ? 'Edit Profile'
-                        : isFollower() == "Add Friend"
-                            ? 'Add Friend'
-                            : isFollower() == "Friend Request Sent"
-                                ? 'Friend Request Sent'
-                                : isFollower() == "Accept Friend Request"
-                                    ? 'Accept Friend Request'
-                                    : isFollower() == "Friend Added"
-                                        ? 'Friend Added'
-                                        : '',
-                    style: TextStyle(
-                      color: isMyProfile
-                          ? Colors.black87.withAlpha(180)
-                          : isFollower() == "Friend Added"
-                              ? TwitterColor.white
-                              : Colors.black,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // The Personal/Group container
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                  color: Color(0xFF292A29),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  Container(
-                    child: Center(
-                      child: Text("Personal"),
-                    ),
-                  ),
-                  Container(
-                    child: Center(
-                      child: Text("Group"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          ProfileHeader(
+            userModel: authState.profileUserModel,
+            isCurrentUser: false,
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // The Grid with the personal goals
-                GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  addAutomaticKeepAlives: false,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      UserTile2(tweet: personalGoalList![index]),
-                  itemCount: personalGoalList?.length ?? 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5.0,
-                    mainAxisSpacing: 5.0,
-                    childAspectRatio: 0.8,
-                  ),
-                ),
-                // The Grid with the group goals
-                GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  addAutomaticKeepAlives: false,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      UserTile2(tweet: groupGoalList![index]),
-                  itemCount: groupGoalList?.length ?? 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5.0,
-                    mainAxisSpacing: 5.0,
-                    childAspectRatio: 0.8,
-                  ),
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: GoalGrid(
+                groupGoals: groupGoalsList ?? [],
+                personalGoals: personalGoalsList ?? [],
+                tabController: _tabController,
+              ),
             ),
           ),
         ],
@@ -308,7 +151,6 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 }
-
 
 class Choice {
   const Choice(
