@@ -1,7 +1,7 @@
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'UserTile.dart';
+import 'GoalTile.dart';
 
 class GoalGrid extends StatefulWidget {
   final TabController tabController;
