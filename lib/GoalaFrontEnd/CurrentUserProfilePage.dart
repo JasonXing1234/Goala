@@ -6,7 +6,6 @@ import 'package:Goala/state/feedState.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/state/searchState.dart';
 import 'package:Goala/ui/theme/theme.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class CurrentUserProfilePage extends StatefulWidget {
@@ -21,13 +20,9 @@ class CurrentUserProfilePage extends StatefulWidget {
 class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final ScrollController _scrollController = ScrollController();
-  var initializationSettingsAndroid =
-      new AndroidInitializationSettings('goala');
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -39,10 +34,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
     });
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
-  }
-
-  void onSettingIconPressed() {
-    Navigator.pushNamed(context, '/TrendsPage');
   }
 
   @override
