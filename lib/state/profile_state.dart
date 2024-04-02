@@ -82,6 +82,7 @@ class ProfileState extends ChangeNotifier {
     assert(userProfileId != null);
     try {
       loading = true;
+      _profileUserModel = UserModel();
       kDatabase
           .child("profile")
           .child(userProfileId!)
