@@ -125,13 +125,11 @@ class _ProfilePageState extends State<ProfilePage>
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(
-            authState.isbusy ? "" : authState.profileUserModel.displayName!),
-      ),
+      appBar: AppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // TODO: There's a problem here with the late init of profileUserModel
           ProfileHeader(
             userModel: authState.profileUserModel,
             isCurrentUser: false,
@@ -152,6 +150,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
+// TODO: This shouldn't be in this page...
 class Choice {
   const Choice(
       {required this.title, required this.icon, this.isEnable = false});

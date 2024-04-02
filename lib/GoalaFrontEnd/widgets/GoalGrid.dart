@@ -93,6 +93,7 @@ class _GoalGridState extends State<GoalGrid> {
             ),
           ),
         ),
+        const Divider(),
         Expanded(
           child: TabBarView(
             controller: widget.tabController,

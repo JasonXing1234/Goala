@@ -20,7 +20,8 @@ class ProfileImage extends StatelessWidget {
       child: Image(
         image: customAdvanceNetworkImage(path ?? Constants.dummyProfilePic),
         height: size,
-        fit: BoxFit.contain,
+        width: size,
+        fit: BoxFit.cover,
       ),
     );
   }

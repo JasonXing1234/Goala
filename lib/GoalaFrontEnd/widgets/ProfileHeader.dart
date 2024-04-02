@@ -20,8 +20,6 @@ class ProfileHeader extends StatefulWidget {
 }
 
 class _ProfileHeaderState extends State<ProfileHeader> {
-  late List<String> usersList;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,57 +65,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             ),
             const SizedBox(width: 16),
           ],
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: RippleButton(
-              splashColor: TwitterColor.dodgeBlue_50,
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              onPressed: () {
-                if (widget.userModel?.friendList != null) {
-                  usersList = widget.userModel!.friendList!;
-                } else {
-                  usersList = [];
-                }
-                Navigator.push(
-                  context,
-                  FollowerListPage.getRoute(
-                    profile: widget.userModel!,
-                    userList: usersList,
-                  ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: TwitterColor.white,
-                  border: Border.all(
-                      color: Colors.black87.withAlpha(180), width: 1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-
-                /// If [isMyProfile] is true then Edit profile button will display
-                // Otherwise Follow/Following button will be display
-                child: Text(
-                  widget.userModel?.friendList == null
-                      ? '${0} Friend'
-                      : widget.userModel?.friendList!.length == 1
-                          ? '1 Friend'
-                          : '${widget.userModel?.friendList!.length} Friends',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ),
       ],
     );
