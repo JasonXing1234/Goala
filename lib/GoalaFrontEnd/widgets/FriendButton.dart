@@ -6,21 +6,22 @@ import 'package:Goala/widgets/newWidget/rippleButton.dart';
 import 'package:flutter/material.dart';
 
 class FriendButton extends StatelessWidget {
-  final UserModel? userModel;
+  final List<String> friendsList;
+  final UserModel? user;
+  final bool isCurrentUser;
   FriendButton({
-    required this.userModel,
+    required this.friendsList,
+    required this.user,
+    required this.isCurrentUser,
   });
 
+  // TODO: The right data gets here, but it doesn't show the right page.
+  // You can test by putting a breakpoint here and looking at it.
   void _onPressFriendButton(BuildContext context) {
     cprint("Friend button pressed");
-    List<String> usersList = [];
-
-    if (userModel?.friendList != null) {
-      usersList = userModel!.friendList!;
-    }
     Navigator.push(
       context,
-      FollowerListPage.getRoute(profile: userModel!, userList: usersList),
+      FollowerListPage.getRoute(profile: user!, userList: friendsList),
     );
   }
 
@@ -43,19 +44,16 @@ class FriendButton extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: TwitterColor.white,
-              border:
-                  Border.all(color: Colors.black87.withAlpha(180), width: 1),
+              border: Border.all(
+                color: Colors.black87.withAlpha(180),
+                width: 1,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
-
-            /// If [isMyProfile] is true then Edit profile button will display
-            // Otherwise Follow/Following button will be display
             child: Text(
-              userModel?.friendList == null
-                  ? '0 Friends'
-                  : userModel?.friendList!.length == 1
-                      ? '1 Friend'
-                      : '${userModel?.friendList!.length} Friends',
+              friendsList.length == 1
+                  ? '1 Friend'
+                  : '${friendsList.length} Friends',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 17,

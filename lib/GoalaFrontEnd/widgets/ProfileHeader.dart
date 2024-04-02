@@ -1,3 +1,4 @@
+import 'package:Goala/GoalaFrontEnd/widgets/FriendButton.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/ProfileImage.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatefulWidget {
   final UserModel? userModel;
-  // TODO: Move the CurrentProfileHeader and the Profile Header into one file here
   final bool isCurrentUser;
   ProfileHeader({
     required this.userModel,
@@ -66,6 +66,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             const SizedBox(width: 16),
           ],
         ),
+        FriendButton(
+          friendsList: widget.userModel?.friendList ?? [],
+          user: widget.userModel,
+          isCurrentUser: widget.isCurrentUser,
+        ),
       ],
     );
   }
@@ -95,68 +100,9 @@ child: RippleButton(
 ),
 const SizedBox(width: 10),
 RippleButton(
-splashColor: TwitterColor.dodgeBlue_50.withAlpha(100),
-borderRadius: const BorderRadius.all(Radius.circular(8)),
-onPressed: () {
-  setState(() {
-    if (isMyProfile) {
-      Navigator.push(context, EditProfilePage.getRoute());
-    } else {
-      if (isFollower() == "Add Friend") {
-        authState.addFriend();
-      } else if (isFollower() == "Friend Request Sent") {
-      } else if (isFollower() == "Accept Friend Request") {
-        authState.acceptFriendRequest();
-      } else if (isFollower() == "Friend Added") {}
-    }
-  });
-},
-child: Container(
-  padding: const EdgeInsets.symmetric(
-    horizontal: 10,
-    vertical: 5,
-  ),
-  decoration: BoxDecoration(
-    color: isMyProfile
-        ? TwitterColor.white
-        : authState.isbusy
-            ? AppColor.PROGRESS_COLOR
-            : isFollower() == "Friend Added"
-                ? AppColor.PROGRESS_COLOR
-                : TwitterColor.white,
-    border: Border.all(
-        color: isMyProfile
-            ? Colors.black87.withAlpha(180)
-            : AppColor.PROGRESS_COLOR,
-        width: 1),
-    borderRadius: BorderRadius.circular(8),
-  ),
-
-  /// If [isMyProfile] is true then Edit profile button will display
-  // Otherwise Follow/Following button will be display
-  child: Text(
-    isMyProfile
-        ? 'Edit Profile'
-        : isFollower() == "Add Friend"
-            ? 'Add Friend'
-            : isFollower() == "Friend Request Sent"
-                ? 'Friend Request Sent'
-                : isFollower() == "Accept Friend Request"
-                    ? 'Accept Friend Request'
-                    : isFollower() == "Friend Added"
-                        ? 'Friend Added'
-                        : '',
-    style: TextStyle(
-      color: isMyProfile
-          ? Colors.black87.withAlpha(180)
-          : isFollower() == "Friend Added"
-              ? TwitterColor.white
-              : Colors.black,
-      fontSize: 17,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-),
+  splashColor: TwitterColor.dodgeBlue_50.withAlpha(100),
+  borderRadius: const BorderRadius.all(Radius.circular(8)),
+  
 ),
 ],
 ),

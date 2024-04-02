@@ -1,5 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/widgets/GoalGrid.dart';
-import 'package:Goala/GoalaFrontEnd/widgets/CurrentProfileHeader.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
@@ -146,7 +146,10 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       ),
       body: Column(
         children: [
-          CurrentProfileHeader(userModel: authState.userModel),
+          ProfileHeader(
+            userModel: authState.userModel,
+            isCurrentUser: true,
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),
