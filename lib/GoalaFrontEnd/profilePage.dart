@@ -1,4 +1,6 @@
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/UserTile.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
@@ -137,6 +139,7 @@ class _ProfilePageState extends State<ProfilePage>
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ProfileHeader(userModel: authState.profileUserModel,),
           Row(
             children: [
               const SizedBox(width: 10),
@@ -272,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage>
                   addAutomaticKeepAlives: false,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) =>
-                      _UserTile2(tweet: personalGoalList![index]),
+                      UserTile2(tweet: personalGoalList![index]),
                   itemCount: personalGoalList?.length ?? 0,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -288,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage>
                   addAutomaticKeepAlives: false,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) =>
-                      _UserTile2(tweet: groupGoalList![index]),
+                      UserTile2(tweet: groupGoalList![index]),
                   itemCount: groupGoalList?.length ?? 0,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -306,163 +309,6 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
-class _UserTile extends StatefulWidget {
-  const _UserTile({Key? key, required this.tweet}) : super(key: key);
-  //final UserModel user;
-  final FeedModel tweet;
-
-  @override
-  State<_UserTile> createState() => _UserTileState();
-}
-
-class _UserTileState extends State<_UserTile> {
-  @override
-  Widget build(BuildContext context) {
-    final state = Provider.of<SearchState>(context);
-    var authState = Provider.of<AuthState>(context, listen: false);
-    final feedState = Provider.of<FeedState>(context);
-    return ListTile(
-      onTap: () {
-        feedState.getPostDetailFromDatabase(null, model: widget.tweet);
-        Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-      },
-      title: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 90,
-            child: TitleText(widget.tweet.title!,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                overflow: TextOverflow.ellipsis),
-          ),
-          SizedBox(width: 5),
-          SizedBox(
-            height: 20,
-            width: 120,
-            child: CustomProgressBar(
-              progress: widget.tweet.isHabit == false
-                  ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                  : widget.tweet.checkInList!
-                          .where((item) => item == true)
-                          .length /
-                      8,
-              height: 20,
-              width: 120,
-              backgroundColor: Colors.grey[300]!,
-              progressColor: AppColor.PROGRESS_COLOR,
-              daysLeft: DateTime(
-                      int.parse(widget.tweet.deadlineDate!.split('-')[0]),
-                      int.parse(widget.tweet.deadlineDate!.split('-')[1]),
-                      int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                  .difference(DateTime(DateTime.now().year,
-                      DateTime.now().month, DateTime.now().day))
-                  .inDays,
-              isHabit: widget.tweet.isHabit,
-              checkInDays: widget.tweet.checkInList!,
-            ),
-          )
-        ],
-      ),
-      subtitle: Text(widget.tweet.description!),
-    );
-  }
-}
-
-class _UserTile2 extends StatefulWidget {
-  const _UserTile2({Key? key, required this.tweet}) : super(key: key);
-  //final UserModel user;
-  final FeedModel tweet;
-
-  @override
-  State<_UserTile2> createState() => _UserTile2State();
-}
-
-class _UserTile2State extends State<_UserTile2> {
-  late TextEditingController _textEditingController;
-
-  @override
-  void initState() {
-    _textEditingController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = Provider.of<FeedState>(context);
-    return GridTile(
-      child: InkWell(
-          onTap: () {
-            state.getPostDetailFromDatabase(null, model: widget.tweet);
-            Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
-          },
-          child: Row(children: [
-            SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: Text(
-                    widget.tweet.title!,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 3),
-                SizedBox(
-                  height: 25,
-                  width: 160,
-                  child: CustomProgressBar(
-                    progress: widget.tweet.isHabit == false
-                        ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                        : widget.tweet.checkInList!
-                                .where((item) => item == true)
-                                .length /
-                            8,
-                    height: 25,
-                    width: 160,
-                    backgroundColor: Colors.grey[300]!,
-                    progressColor: widget.tweet.isCheckedIn == true
-                        ? AppColor.PROGRESS_COLOR
-                        : Colors.black,
-                    daysLeft: DateTime(
-                            int.parse(widget.tweet.deadlineDate!.split('-')[0]),
-                            int.parse(widget.tweet.deadlineDate!.split('-')[1]),
-                            int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                        .difference(DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day))
-                        .inDays,
-                    isHabit: widget.tweet.isHabit,
-                    checkInDays: widget.tweet.checkInList!,
-                  ),
-                ),
-                SizedBox(height: 7),
-                if (widget.tweet.coverPhoto != null)
-                  Container(
-                    width: 160, // Specify the width of the container
-                    height: 160, // Specify the height of the container
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      // Use ClipRRect for borderRadius if needed
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        widget.tweet.coverPhoto!,
-                        fit: BoxFit
-                            .cover, // This ensures the image covers the container
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ])),
-    );
-  }
-}
 
 class Choice {
   const Choice(

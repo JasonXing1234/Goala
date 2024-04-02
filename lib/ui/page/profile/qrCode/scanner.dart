@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/user.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

@@ -6,7 +6,7 @@ import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/chats/chatState.dart';
 import 'package:Goala/state/searchState.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';

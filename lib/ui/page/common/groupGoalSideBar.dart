@@ -3,7 +3,7 @@ import 'package:Goala/helper/constant.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/ui/page/profile/follow/followerListPage.dart';
 import 'package:Goala/ui/page/profile/follow/followingListPage.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/qrCode/scanner.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';

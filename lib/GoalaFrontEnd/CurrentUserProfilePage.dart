@@ -145,7 +145,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       ),
       body: Column(
         children: [
-          ProfileHeader(),
+          ProfileHeader(userModel: authState.userModel),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),

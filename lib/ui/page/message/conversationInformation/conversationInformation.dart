@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/page/settings/widgets/headerWidget.dart';
 import 'package:Goala/ui/page/settings/widgets/settingsRowWidget.dart';
