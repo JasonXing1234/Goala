@@ -32,7 +32,7 @@ class _GoalGridState extends State<GoalGrid> {
         child: Align(
           alignment: Alignment.topCenter,
           child: Text(
-            "No goals...\nGo make some now!",
+            "No goals to show.",
             style: Theme.of(context).textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
