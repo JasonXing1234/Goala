@@ -595,9 +595,9 @@ class CustomProgressBar extends StatelessWidget {
             child: isHabit == true
                 ? Text(calculateStreak(checkInDays).toString() + ' days streak',
                     style: TextStyle(fontSize: height * 0.6))
-                : Text(
-                    (daysLeft > 0 ? daysLeft : 0).toString() +
-                        ' day${daysLeft > 1 ? "s" : ""} left',
+                : Text(((progress/1) * 100).toString() + '%',
+                    //(daysLeft > 0 ? daysLeft : 0).toString() +
+                        //' day${daysLeft > 1 ? "s" : ""} left',
                     style: TextStyle(fontSize: height * 0.6),
                   )),
       ],
@@ -614,7 +614,7 @@ class CustomProgressBar2 extends StatelessWidget {
   final double newProgress;
   final Color backgroundColor;
   final Color progressColor;
-  final int daysLeft;
+  final num percentage;
   final bool isHabit;
   final List<bool> checkInDays;
 
@@ -625,27 +625,11 @@ class CustomProgressBar2 extends StatelessWidget {
     required this.oldProgress,
     required this.backgroundColor,
     required this.progressColor,
-    required this.daysLeft,
+    required this.percentage,
     required this.isHabit,
     required this.checkInDays,
     required this.newProgress, required this.GoalAchieved, required this.GoalSum,
   }) : super(key: key);
-
-  int calculateStreak(List<bool> values) {
-    int streak = 0;
-
-    // Iterate over the list from the end to the beginning
-    for (int i = values.length - 1; i >= 0; i--) {
-      // If the value is true, increment the streak
-      if (values[i]) {
-        streak++;
-      } else {
-        // If a false is encountered, break the loop as we only want consecutive trues from the end
-        break;
-      }
-    }
-    return streak;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -678,7 +662,7 @@ class CustomProgressBar2 extends StatelessWidget {
           )
         ]),
         Center(
-            child: Text(((newProgress / 1) * 100).toString() + '%',
+            child: Text((percentage * 100).toInt().toString() + '%',
                 style: TextStyle(fontSize: height * 0.6))
 
         ),
