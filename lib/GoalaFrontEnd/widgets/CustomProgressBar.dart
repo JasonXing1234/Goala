@@ -88,7 +88,7 @@ class _HabitText extends StatelessWidget {
     return Center(
       child: Text(
         "${_calculateStreak(checkInDays)} day streak",
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
       ),
@@ -116,7 +116,7 @@ class _GoalText extends StatelessWidget {
     return Center(
       child: Text(
         _getTextFromDaysLeft(daysLeft),
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
       ),

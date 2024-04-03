@@ -4,6 +4,7 @@ import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class GoalTile extends StatefulWidget {
@@ -86,38 +87,53 @@ class GoalTileState extends State<GoalTile> {
       return widget.tweet.checkInList!.where((item) => item == true).length / 8;
     }
 
-    return GestureDetector(
-      onLongPress: () => _showBottomMenu(context),
-      child: GridTile(
-        child: InkWell(
-          onTap: _onPressGoal,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              Text(
-                widget.tweet.title!,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: Colors.grey.shade300,
+          width: 2.0,
+        ),
+      ),
+      child: GestureDetector(
+        onLongPress: () => _showBottomMenu(context),
+        child: GridTile(
+          child: InkWell(
+            onTap: _onPressGoal,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title
+                Text(
+                  widget.tweet.title!,
+                  style: GoogleFonts.rubik().copyWith(
+                    fontSize: 24,
+                    color: widget.tweet.isCheckedIn == true
+                        ? AppColor.PROGRESS_COLOR
+                        : AppColor.DARK_GREY_COLOR,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              // ProgressBar
-              CustomProgressBar(
-                progress: widget.tweet.isHabit
-                    ? _getHabitProgress()
-                    : _getGoalProgress(),
-                backgroundColor: Colors.grey.shade300,
-                progressColor: widget.tweet.isCheckedIn == true
-                    ? AppColor.PROGRESS_COLOR
-                    : AppColor.DARK_GREY_COLOR,
-                daysLeft: _getDaysLeft(widget.tweet.deadlineDate!),
-                isHabit: widget.tweet.isHabit,
-                checkInDays: widget.tweet.checkInList!,
-              ),
-              // Cover Photo
-              _CoverPhoto(widget.tweet.coverPhoto),
-            ],
+                // ProgressBar
+                CustomProgressBar(
+                  progress: widget.tweet.isHabit
+                      ? _getHabitProgress()
+                      : _getGoalProgress(),
+                  backgroundColor: Colors.grey.shade300,
+                  progressColor: widget.tweet.isCheckedIn == true
+                      ? AppColor.PROGRESS_COLOR
+                      : AppColor.DARK_GREY_COLOR,
+                  daysLeft: _getDaysLeft(widget.tweet.deadlineDate!),
+                  isHabit: widget.tweet.isHabit,
+                  checkInDays: widget.tweet.checkInList!,
+                ),
+                // Cover Photo
+                Center(
+                  child: _CoverPhoto(widget.tweet.coverPhoto),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -139,12 +155,12 @@ class _CoverPhoto extends StatelessWidget {
           ? Image.asset(
               'assets/images/icon_512.png',
               fit: BoxFit.cover,
-              height: 175,
+              height: 150,
             )
           : Image.network(
               imageSrc!,
               fit: BoxFit.cover,
-              height: 175,
+              height: 150,
             ),
     );
   }

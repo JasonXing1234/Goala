@@ -49,8 +49,9 @@ class _GoalGridState extends State<GoalGrid> {
       itemBuilder: (context, index) => GoalTile(tweet: goals[index]),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 5.0,
-        mainAxisSpacing: 5.0,
+        crossAxisSpacing: 4.0,
+        mainAxisSpacing: 6.0,
+        // This value essentially specifies the height of the tiles
         childAspectRatio: 0.8,
       ),
     );
