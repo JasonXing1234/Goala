@@ -22,11 +22,6 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
   late TabController _tabController;
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = Provider.of<SearchState>(context, listen: false);

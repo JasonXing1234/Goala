@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
@@ -34,7 +36,9 @@ class TimelinePosts extends StatelessWidget {
     this.trailing,
     this.type = TweetType.Tweet,
     this.isDisplayOnProfile = false,
-    required this.scaffoldKey, required this.isFirst, required this.isLast,
+    required this.scaffoldKey,
+    required this.isFirst,
+    required this.isLast,
   }) : super(key: key);
 
   void onLongPressedTweet(BuildContext context) {
@@ -97,7 +101,8 @@ class TimelinePosts extends StatelessWidget {
                           isEnd: isFirst,
                           model: model,
                           trailing: trailing,
-                          type: type, isFirst: isLast,
+                          type: type,
+                          isFirst: isLast,
                         ),
                       )
                     : _TweetDetailBody(
@@ -153,7 +158,8 @@ class _TweetBody extends StatefulWidget {
       this.trailing,
       required this.type,
       required this.isDisplayOnProfile,
-        required this.isEnd, required this.isFirst})
+      required this.isEnd,
+      required this.isFirst})
       : super(key: key);
 
   @override
@@ -260,49 +266,68 @@ class _TweetBodyState extends State<_TweetBody> {
                   SizedBox(
                     height: 30,
                     width: 330,
-                    child: widget.model.isHabit == true ? CustomProgressBar(
-                      progress: tempModel!.checkInList!
-                                  .where((item) => item == true)
-                                  .length /
-                              8,
-                      height: 30,
-                      width: 330,
-                      backgroundColor: Colors.grey[300]!,
-                      progressColor: AppColor.PROGRESS_COLOR,
-                      daysLeft: DateTime(
-                              int.parse(tempModel!.deadlineDate!.split('-')[0]),
-                              int.parse(tempModel!.deadlineDate!.split('-')[1]),
-                              int.parse(tempModel!.deadlineDate!.split('-')[2]))
-                          .difference(DateTime(DateTime.now().year,
-                              DateTime.now().month, DateTime.now().day))
-                          .inDays,
-                      isHabit: tempModel!.isHabit,
-                      checkInDays: tempModel!.checkInList!,
-                    ) :
-                    CustomProgressBar2(
-                      GoalAchieved: tempModel!.GoalAchieved!,
-                      GoalSum: tempModel!.GoalSum!,
-                      oldProgress:
-                      widget.isEnd && widget.isFirst ? 0 : widget.isFirst && !widget.isEnd ? widget.model.GoalAchievedToday! / widget.model.GoalSum! :
-                          widget.isEnd && !widget.isFirst ? (widget.model.GoalAchieved! - widget.model.GoalAchievedToday!) / widget.model.GoalSum! :
-                          widget.model.GoalAchieved! / widget.model.GoalSum!,
-                      height: 30,
-                      width: 330,
-                      backgroundColor: Colors.grey[300]!,
-                      progressColor: AppColor.PROGRESS_COLOR,
-                      daysLeft: DateTime(
-                          int.parse(tempModel!.deadlineDate!.split('-')[0]),
-                          int.parse(tempModel!.deadlineDate!.split('-')[1]),
-                          int.parse(tempModel!.deadlineDate!.split('-')[2]))
-                          .difference(DateTime(DateTime.now().year,
-                          DateTime.now().month, DateTime.now().day))
-                          .inDays,
-                      isHabit: tempModel!.isHabit,
-                      checkInDays: tempModel!.checkInList!,
-                      newProgress: widget.isEnd && widget.isFirst ? widget.model.GoalAchieved! / widget.model.GoalSum! : widget.isFirst && !widget.isEnd ? 0 :
-                      widget.isEnd && !widget.isFirst ? widget.model.GoalAchievedToday! / widget.model.GoalSum! :
-                      0,
-                    ),
+                    child: widget.model.isHabit == true
+                        ? CustomProgressBar(
+                            progress: tempModel!.checkInList!
+                                    .where((item) => item == true)
+                                    .length /
+                                8,
+                            backgroundColor: Colors.grey[300]!,
+                            progressColor: AppColor.PROGRESS_COLOR,
+                            daysLeft: DateTime(
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[0]),
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[1]),
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[2]))
+                                .difference(DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day))
+                                .inDays,
+                            isHabit: tempModel!.isHabit,
+                            checkInDays: tempModel!.checkInList!,
+                          )
+                        : CustomProgressBar2(
+                            GoalAchieved: tempModel!.GoalAchieved!,
+                            GoalSum: tempModel!.GoalSum!,
+                            oldProgress: widget.isEnd && widget.isFirst
+                                ? 0
+                                : widget.isFirst && !widget.isEnd
+                                    ? widget.model.GoalAchievedToday! /
+                                        widget.model.GoalSum!
+                                    : widget.isEnd && !widget.isFirst
+                                        ? (widget.model.GoalAchieved! -
+                                                widget
+                                                    .model.GoalAchievedToday!) /
+                                            widget.model.GoalSum!
+                                        : widget.model.GoalAchieved! /
+                                            widget.model.GoalSum!,
+                            height: 30,
+                            width: 330,
+                            backgroundColor: Colors.grey[300]!,
+                            progressColor: AppColor.PROGRESS_COLOR,
+                            daysLeft: DateTime(
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[0]),
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[1]),
+                                    int.parse(
+                                        tempModel!.deadlineDate!.split('-')[2]))
+                                .difference(DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day))
+                                .inDays,
+                            isHabit: tempModel!.isHabit,
+                            checkInDays: tempModel!.checkInList!,
+                            newProgress: widget.isEnd && widget.isFirst
+                                ? widget.model.GoalAchieved! /
+                                    widget.model.GoalSum!
+                                : widget.isFirst && !widget.isEnd
+                                    ? 0
+                                    : widget.isEnd && !widget.isFirst
+                                        ? widget.model.GoalAchievedToday! /
+                                            widget.model.GoalSum!
+                                        : 0,
+                          ),
                   ),
                   SizedBox(height: 5),
                   widget.model.goalPhotoList != null

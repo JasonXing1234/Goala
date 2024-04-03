@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/ui/styleConstants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -191,7 +192,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               model!, double.parse(_goalAchievedController.text));
         }
       }
-
     }
     tweetModel.key = tweetId;
 
@@ -281,9 +281,18 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalAchievedToday: _goalAchievedController.text == '' ? 0 : int.parse(_goalAchievedController.text) + 0,
-      GoalAchieved: _goalAchievedController.text == '' ? 0 : model?.GoalAchieved == null ? int.parse(_goalAchievedController.text) : model!.GoalAchieved! + int.parse(_goalAchievedController.text),
-      GoalSum: state.tweetToReplyModel!.isHabit || state.tweetToReplyModel!.GoalSum == null ? 0 : state.tweetToReplyModel!.GoalSum,
+      GoalAchievedToday: _goalAchievedController.text == ''
+          ? 0
+          : int.parse(_goalAchievedController.text) + 0,
+      GoalAchieved: _goalAchievedController.text == ''
+          ? 0
+          : model?.GoalAchieved == null
+              ? int.parse(_goalAchievedController.text)
+              : model!.GoalAchieved! + int.parse(_goalAchievedController.text),
+      GoalSum: state.tweetToReplyModel!.isHabit ||
+              state.tweetToReplyModel!.GoalSum == null
+          ? 0
+          : state.tweetToReplyModel!.GoalSum,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
       deviceToken: token,
@@ -401,8 +410,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                                   .where((item) => item == true)
                                                   .length /
                                               8,
-                                  height: 41,
-                                  width: 300,
                                   backgroundColor: Colors.grey[300]!,
                                   progressColor: model!.isCheckedIn ||
                                           _goalAchievedController.text != '' ||
@@ -520,7 +527,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                                 _goalAchievedController.text;
                                           });
                                         },
-                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Theme.of(context)
