@@ -1,3 +1,5 @@
+import 'package:Goala/GoalaFrontEnd/widgets/progress_widgets/GoalBar.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/progress_widgets/HabitBar.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -28,73 +30,86 @@ class CustomProgressBar extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
       double maxWidth = constraints.maxWidth;
 
+      // TODO: Make two different stacks?
       return Stack(
         children: [
           // The background color container
-          Container(
-            width: maxWidth,
-            height: PROGRESS_BAR_HEIGHT,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(4),
+          if (isHabit)
+            Container(
+              height: PROGRESS_BAR_HEIGHT,
+            )
+          else
+            Container(
+              width: maxWidth,
+              height: PROGRESS_BAR_HEIGHT,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
-          ),
           // The foreground color progress
-          Container(
-            width: maxWidth * progress,
-            height: PROGRESS_BAR_HEIGHT,
-            decoration: BoxDecoration(
-              color: progressColor,
-              borderRadius: BorderRadius.circular(4),
+          // Can be either HabitBar or GoalBar
+          if (isHabit)
+            HabitBar(
+              width: maxWidth,
+              progress: progress,
+              checkInDays: checkInDays,
+              progressColor: progressColor,
+            )
+          else
+            GoalBar(
+              width: maxWidth,
+              progress: progress,
+              progressColor: progressColor,
             ),
-          ),
           // The Goal or Habit text
           if (isHabit)
-            _GoalText(daysLeft: daysLeft)
+            Container()
+          // _HabitText(checkInDays: checkInDays)
           else
-            _HabitText(checkInDays: checkInDays)
+            _GoalText(daysLeft: daysLeft),
         ],
       );
     });
   }
 }
 
-class _HabitText extends StatelessWidget {
-  final List<bool> checkInDays;
+// class _HabitText extends StatelessWidget {
+//   final List<bool> checkInDays;
 
-  _HabitText({
-    required this.checkInDays,
-  });
+//   _HabitText({
+//     required this.checkInDays,
+//   });
 
-  /// Calculate the total streak value.
-  /// This is how many days in a row that you have reported on the habit.
-  int _calculateStreak(List<bool> days) {
-    int streak = 0;
-    // Iterate over the list from the end to the beginning
-    for (int i = days.length - 1; i >= 0; i--) {
-      // If the value is true, increment the streak
-      if (days[i]) {
-        streak++;
-      } else {
-        // If a false is encountered, break the loop as we only want consecutive trues from the end
-        break;
-      }
-    }
-    return streak;
-  }
+//   /// Calculate the total streak value.
+//   /// This is how many days in a row that you have reported on the habit.
+//   int _calculateStreak(List<bool> days) {
+//     int streak = 0;
+//     // Iterate over the list from the end to the beginning
+//     for (int i = days.length - 1; i >= 0; i--) {
+//       // If the value is true, increment the streak
+//       if (days[i]) {
+//         streak++;
+//       } else {
+//         // If a false is encountered, break the loop as we only want consecutive trues from the end
+//         break;
+//       }
+//     }
+//     return streak;
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "${_calculateStreak(checkInDays)} day streak",
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text(
+//         "${_calculateStreak(checkInDays)} day streak",
+//         style: Theme.of(context).textTheme.titleMedium?.copyWith(
+//               fontWeight: FontWeight.bold,
+//             ),
+//       ),
+//     );
+//   }
+// }
 
 class _GoalText extends StatelessWidget {
   final int daysLeft;
