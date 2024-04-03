@@ -272,6 +272,8 @@ class _TweetBodyState extends State<_TweetBody> {
                                     .where((item) => item == true)
                                     .length /
                                 8,
+                            height: 30,
+                            width: 330,
                             backgroundColor: Colors.grey[300]!,
                             progressColor: AppColor.PROGRESS_COLOR,
                             daysLeft: DateTime(
@@ -306,16 +308,8 @@ class _TweetBodyState extends State<_TweetBody> {
                             width: 330,
                             backgroundColor: Colors.grey[300]!,
                             progressColor: AppColor.PROGRESS_COLOR,
-                            daysLeft: DateTime(
-                                    int.parse(
-                                        tempModel!.deadlineDate!.split('-')[0]),
-                                    int.parse(
-                                        tempModel!.deadlineDate!.split('-')[1]),
-                                    int.parse(
-                                        tempModel!.deadlineDate!.split('-')[2]))
-                                .difference(DateTime(DateTime.now().year,
-                                    DateTime.now().month, DateTime.now().day))
-                                .inDays,
+                            percentage: widget.model.GoalAchieved! /
+                                widget.model.GoalSum!,
                             isHabit: tempModel!.isHabit,
                             checkInDays: tempModel!.checkInList!,
                             newProgress: widget.isEnd && widget.isFirst
