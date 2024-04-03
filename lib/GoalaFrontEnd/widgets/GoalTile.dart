@@ -1,5 +1,4 @@
 import 'package:Goala/GoalaFrontEnd/TaskDetailPage.dart';
-import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
@@ -66,6 +65,27 @@ class GoalTileState extends State<GoalTile> {
       Navigator.push(context, TaskDetailPage.getRoute(widget.tweet));
     }
 
+    // TODO: Move this to Utils
+    int _getDaysLeft(String deadlineDate) {
+      return DateTime(
+              int.parse(deadlineDate.split('-')[0]),
+              int.parse(deadlineDate.split('-')[1]),
+              int.parse(deadlineDate.split('-')[2]))
+          .difference(DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day))
+          .inDays;
+    }
+
+    // TODO: Paramaterize this function
+    double _getGoalProgress() {
+      return widget.tweet.GoalAchieved! / widget.tweet.GoalSum!;
+    }
+
+    // TODO: Paramaterize this function
+    double _getHabitProgress() {
+      return widget.tweet.checkInList!.where((item) => item == true).length / 8;
+    }
+
     return GestureDetector(
       onLongPress: () => _showBottomMenu(context),
       child: GridTile(
@@ -84,23 +104,14 @@ class GoalTileState extends State<GoalTile> {
               ),
               // ProgressBar
               CustomProgressBar(
-                progress: widget.tweet.isHabit == false
-                    ? widget.tweet.GoalAchieved! / widget.tweet.GoalSum!
-                    : widget.tweet.checkInList!
-                            .where((item) => item == true)
-                            .length /
-                        8,
+                progress: widget.tweet.isHabit
+                    ? _getHabitProgress()
+                    : _getGoalProgress(),
                 backgroundColor: Colors.grey.shade300,
                 progressColor: widget.tweet.isCheckedIn == true
                     ? AppColor.PROGRESS_COLOR
                     : AppColor.DARK_GREY_COLOR,
-                daysLeft: DateTime(
-                        int.parse(widget.tweet.deadlineDate!.split('-')[0]),
-                        int.parse(widget.tweet.deadlineDate!.split('-')[1]),
-                        int.parse(widget.tweet.deadlineDate!.split('-')[2]))
-                    .difference(DateTime(DateTime.now().year,
-                        DateTime.now().month, DateTime.now().day))
-                    .inDays,
+                daysLeft: _getDaysLeft(widget.tweet.deadlineDate!),
                 isHabit: widget.tweet.isHabit,
                 checkInDays: widget.tweet.checkInList!,
               ),
@@ -115,6 +126,7 @@ class GoalTileState extends State<GoalTile> {
 }
 
 // TODO: If the image is null, return the description
+// TODO: Make it take the necessary height instead of hardcoding it?
 class _CoverPhoto extends StatelessWidget {
   final String? imageSrc;
   const _CoverPhoto(this.imageSrc);
@@ -127,10 +139,12 @@ class _CoverPhoto extends StatelessWidget {
           ? Image.asset(
               'assets/images/icon_512.png',
               fit: BoxFit.cover,
+              height: 175,
             )
           : Image.network(
               imageSrc!,
               fit: BoxFit.cover,
+              height: 175,
             ),
     );
   }
