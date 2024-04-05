@@ -36,6 +36,7 @@ class FeedModel {
   List<String?>? replyTweetKeyList;
   List<String>? visibleUsersList;
   List<bool>? checkInList;
+  List<bool>? checkInListPost;
   String?
       lanCode; //Saving the language of the tweet so to not translate to check which language
   UserModel? user;
@@ -70,6 +71,7 @@ class FeedModel {
       this.memberList,
         this.visibleUsersList,
       this.checkInList,
+        this.checkInListPost,
       this.user,
       this.replyTweetKeyList,
       this.parentkey,
@@ -106,6 +108,7 @@ class FeedModel {
       "visibleUsersList": visibleUsersList,
       "replyTweetKeyList": replyTweetKeyList,
       "checkInList": checkInList,
+      "checkInListPost": checkInListPost,
       "user": user == null ? null : user!.toJson(),
       "parentkey": parentkey,
       "parentName": parentName,
@@ -148,6 +151,12 @@ class FeedModel {
       checkInList = <bool>[];
       map['checkInList'].forEach((value) {
         checkInList!.add(value);
+      });
+    }
+    if (map['checkInListPost'] != null) {
+      checkInListPost = <bool>[];
+      map['checkInListPost'].forEach((value) {
+        checkInListPost!.add(value);
       });
     }
     if (map['tags'] != null) {

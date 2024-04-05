@@ -268,7 +268,7 @@ class _TweetBodyState extends State<_TweetBody> {
                     width: 330,
                     child: widget.model.isHabit == true
                         ? CustomProgressBar(
-                            progress: tempModel!.checkInList!
+                            progress: widget.model.checkInListPost!
                                     .where((item) => item == true)
                                     .length /
                                 8,
@@ -276,7 +276,7 @@ class _TweetBodyState extends State<_TweetBody> {
                             progressColor: AppColor.PROGRESS_COLOR,
                       percentage: 0,
                             isHabit: tempModel!.isHabit,
-                            checkInDays: tempModel!.checkInList!,
+                            checkInDays: widget.model.checkInListPost!,
                           )
                         : CustomProgressBar2(
                             GoalAchieved: tempModel!.GoalAchieved!,

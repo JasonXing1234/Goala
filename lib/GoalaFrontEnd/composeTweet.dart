@@ -57,6 +57,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, false);
   List<bool> _selections = [false, false];
+  List<bool> tempCheckInList = [false];
   String tempString = '';
   @override
   void dispose() {
@@ -77,6 +78,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     _titleController = TextEditingController();
     scrollController.addListener(_scrollListener);
     _tabController = TabController(length: 2, vsync: this);
+    tempCheckInList = model!.checkInList!;
     super.initState();
   }
 
@@ -105,6 +107,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
+    tempCheckInList[tempCheckInList.length - 1] = true;
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -265,11 +268,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
       isCheckedIn: true,
       isPrivate: state.tweetToReplyModel!.isPrivate,
       visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
-      checkInList: widget.isTweet
-          ? [false]
-          : widget.isRetweet
-              ? null
-              : state.tweetToReplyModel!.checkInList,
+      checkInListPost: tempCheckInList,
       goalPhotoList: selectedImages,
       parentName: widget.isTweet
           ? null
