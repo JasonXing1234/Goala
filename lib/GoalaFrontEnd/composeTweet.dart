@@ -416,18 +416,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                           _selections[0] == true
                                       ? AppColor.PROGRESS_COLOR
                                       : Colors.black,
-                                  daysLeft: DateTime(
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[0]),
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[1]),
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[2]))
-                                      .difference(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day))
-                                      .inDays,
+                                  percentage: model!.GoalAchieved! / model!.GoalSum!,
                                   isHabit: model!.isHabit,
                                   checkInDays: model!.checkInList!,
                                 ),

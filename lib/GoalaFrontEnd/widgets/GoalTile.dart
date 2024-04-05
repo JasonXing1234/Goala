@@ -88,6 +88,7 @@ class GoalTileState extends State<GoalTile> {
     }
 
     return Container(
+
       padding: EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
@@ -115,6 +116,7 @@ class GoalTileState extends State<GoalTile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                Spacer(),
                 // ProgressBar
                 CustomProgressBar(
                   progress: widget.tweet.isHabit
@@ -124,10 +126,11 @@ class GoalTileState extends State<GoalTile> {
                   progressColor: widget.tweet.isCheckedIn == true
                       ? AppColor.PROGRESS_COLOR
                       : AppColor.DARK_GREY_COLOR,
-                  daysLeft: _getDaysLeft(widget.tweet.deadlineDate!),
+                  percentage: widget.tweet.GoalAchieved! / widget.tweet.GoalSum!,
                   isHabit: widget.tweet.isHabit,
                   checkInDays: widget.tweet.checkInList!,
                 ),
+                Spacer(),
                 // Cover Photo
                 Center(
                   child: _CoverPhoto(widget.tweet.coverPhoto),

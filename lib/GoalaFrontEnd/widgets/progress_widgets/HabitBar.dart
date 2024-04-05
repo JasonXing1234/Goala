@@ -1,4 +1,5 @@
 import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class HabitBar extends StatelessWidget {
@@ -15,34 +16,29 @@ class HabitBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-          width: width / 7,
-          color: progressColor,
-        ),
-        Container(
-          height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-          width: width / 7,
-          color: progressColor,
-        ),
-        Container(
-          height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-          width: width / 7,
-          color: progressColor,
-        ),
-      ],
-    );
-
     return Container(
-      width: width * progress,
-      height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-      decoration: BoxDecoration(
-        color: progressColor,
-        borderRadius: BorderRadius.circular(4),
-      ),
-    );
+      width: width,
+      height: 25,
+      child:
+        ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: checkInDays.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Align(
+              alignment: Alignment.centerLeft,
+                child: Container(
+                  margin: EdgeInsets.only(right: 3),
+                  decoration: BoxDecoration(
+                    color: checkInDays[index] == true ? AppColor.PROGRESS_COLOR : AppColor.DARK_GREY_COLOR,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
+                  width: 17.6,
+                  //color: checkInDays[index] == true ? progressColor : Colors.amber,
+                )
+            );
+          }
+      ));
   }
 }

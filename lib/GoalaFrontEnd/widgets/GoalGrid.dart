@@ -52,7 +52,7 @@ class _GoalGridState extends State<GoalGrid> {
         crossAxisSpacing: 4.0,
         mainAxisSpacing: 6.0,
         // This value essentially specifies the height of the tiles
-        childAspectRatio: 0.8,
+        childAspectRatio: 0.76,
       ),
     );
   }

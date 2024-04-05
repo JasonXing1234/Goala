@@ -7,18 +7,18 @@ class CustomProgressBar extends StatelessWidget {
   final double progress;
   final Color backgroundColor;
   final Color progressColor;
-  final int daysLeft;
+  final num percentage;
   final bool isHabit;
   final List<bool> checkInDays;
 
-  static const double PROGRESS_BAR_HEIGHT = 30;
+  static const double PROGRESS_BAR_HEIGHT = 25;
 
   const CustomProgressBar({
     Key? key,
     required this.progress,
     required this.backgroundColor,
     this.progressColor = AppColor.PROGRESS_COLOR,
-    required this.daysLeft,
+    required this.percentage,
     required this.isHabit,
     required this.checkInDays,
   }) : super(key: key);
@@ -36,6 +36,7 @@ class CustomProgressBar extends StatelessWidget {
           // The background color container
           if (isHabit)
             Container(
+              width:20,
               height: PROGRESS_BAR_HEIGHT,
             )
           else
@@ -67,7 +68,7 @@ class CustomProgressBar extends StatelessWidget {
             Container()
           // _HabitText(checkInDays: checkInDays)
           else
-            _GoalText(daysLeft: daysLeft),
+            _GoalText(percentage: percentage),
         ],
       );
     });
@@ -112,25 +113,17 @@ class CustomProgressBar extends StatelessWidget {
 // }
 
 class _GoalText extends StatelessWidget {
-  final int daysLeft;
+  final num percentage;
 
   _GoalText({
-    required this.daysLeft,
+    required this.percentage,
   });
-
-  String _getTextFromDaysLeft(int days) {
-    if (days < 0) days = 0;
-    if (days == 1) {
-      return "1 day left";
-    }
-    return "$days days left";
-  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        _getTextFromDaysLeft(daysLeft),
+        (percentage * 100).toInt().toString() + '%',
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
