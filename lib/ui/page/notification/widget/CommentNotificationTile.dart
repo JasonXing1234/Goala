@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+import 'package:Goala/model/notificationModel.dart';
+import 'package:Goala/model/user.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
+import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
+import 'package:Goala/ui/theme/theme.dart';
+import 'package:Goala/widgets/customWidgets.dart';
+import 'package:Goala/widgets/url_text/customUrlText.dart';
+
+class CommentNotificationTile extends StatelessWidget {
+  final NotificationModel model;
+  const CommentNotificationTile({Key? key, required this.model})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: TwitterColor.white,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 26),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  customIcon(context, icon: AppIcon.messageFill),
+                  const SizedBox(width: 10),
+                  Text(
+                    model.user.displayName!,
+                    style: TextStyles.subtitleStyle,
+                  ),
+                  Text(" Commented on your post", style: TextStyles.subtitleStyle),
+                ],
+              ),
+              const SizedBox(width: 10),
+              Text("\"${model.message!}\"", style: TextStyles.bigSubtitleStyle),
+            ],
+          ),
+        ),
+        const Divider(height: 0, thickness: .6)
+      ],
+    );
+  }
+}
+
+class _UserCard extends StatelessWidget {
+  final UserModel user;
+  const _UserCard({Key? key, required this.user}) : super(key: key);
+  String getBio(String bio) {
+    if (bio == "Edit profile to update bio") {
+      return "No bio available";
+    } else {
+      return bio.takeOnly(100);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 30, top: 10, bottom: 8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColor.extraLightGrey, width: .5),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircularImage(path: user.profilePic, height: 40),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: <Widget>[
+                    UrlText(
+                      text: user.displayName!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    user.isVerified!
+                        ? customIcon(
+                      context,
+                      icon: AppIcon.blueTick,
+                      iconColor: AppColor.primary,
+                      size: 13,
+                    )
+                        : const SizedBox(width: 0),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 9),
+                child: customText(
+                  '${user.userName}',
+                  style: TextStyles.subtitleStyle.copyWith(fontSize: 13),
+                ),
+              ),
+              if (getBio(user.bio!).isNotEmpty) ...[
+                Padding(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: customText(
+                    getBio(user.bio!),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ).ripple(() {
+          Navigator.push(
+              context, ProfilePage.getRoute(profileId: user.userId!));
+        }, borderRadius: BorderRadius.circular(15)));
+  }
+}

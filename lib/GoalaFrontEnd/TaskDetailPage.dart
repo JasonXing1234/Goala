@@ -40,23 +40,6 @@ class _TaskDetailState extends State<TaskDetailPage> {
     super.initState();
   }
 
-  Widget _floatingActionButton() {
-    var state = Provider.of<FeedState>(context, listen: false);
-    return FloatingActionButton(
-      onPressed: () {
-        ImagePicker()
-            .pickImage(source: ImageSource.gallery, imageQuality: 50)
-            .then((
-          XFile? file,
-        ) async {
-          imagePicked = File(file!.path);
-          state.addPhoto(tempFeed, await state.uploadFile(imagePicked!));
-        });
-      },
-      child: const Icon(Icons.add),
-    );
-  }
-
   void deleteTweet(TweetType type, String tweetId,
       {required String parentkey}) {
     var state = Provider.of<FeedState>(context, listen: false);
@@ -132,54 +115,6 @@ class _TaskDetailState extends State<TaskDetailPage> {
                         .map((x) => _commentRow(x, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == state.tweetReplyMap![widget.tempFeed.key!]!.length - 1, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == 0))
                         .toList(),
               )
-
-              /*tempFeed.goalPhotoList == null ? SizedBox() :
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            padding: const EdgeInsets.all(8.0),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, // Adjust the number of columns here
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
-                            ),
-                            itemCount: tempFeed.goalPhotoList!.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FullScreenPhoto(photoUrl: tempFeed.goalPhotoList![index]),
-                                    ),
-                                  );
-                                },
-                                child: Hero(
-                                    tag: 'photo$index',
-                                    child:
-                                    Stack(children: [
-                                      Image.network(tempFeed.goalPhotoList![index], fit: BoxFit.cover),
-                                      isEditing == false ? SizedBox() :
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
-                                        child: TextButton(
-                                          onPressed: (){
-
-                                          },
-                                          style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                              fixedSize: MaterialStateProperty.all<Size>(Size(1, 1)),
-                                          ),
-                                          child: Text('-'),
-                                        ),
-                                      )
-                                    ],)
-
-                                ),
-                              );
-                            },
-                          ),*/
             ],
           ))
         ],

@@ -596,9 +596,33 @@ class FeedState extends AppState {
     });
   }
 
+  addCommentToTweet(FeedModel tweet, UserModel userModel, String comment) {
+    kDatabase
+        .child('notification')
+        .child(tweet.userId)
+        .push().set({
+      'data':
+      UserModel(
+          displayName: userModel.displayName,
+          profilePic: userModel.profilePic,
+          isVerified: userModel.isVerified,
+          userId: userModel.userId,
+          bio: userModel.bio == "Edit profile to update bio"
+              ? ""
+              : userModel.bio,
+          userName: userModel.userName).toJson(),
+      'message': comment,
+      'type':
+          NotificationType.Reply.toString(),
+      'tweetKey': tweet.key!,
+      'updatedAt':
+          DateTime.now().toUtc().toString(),
+    });
+  }
+
   /// Add/Remove like on a Tweet
   /// [postId] is tweet id, [userId] is user's id who like/unlike Tweet
-  addLikeToTweet(FeedModel tweet, String userId) {
+  addLikeToTweet(FeedModel tweet, String userId) async {
     try {
       if (tweet.likeList != null &&
           tweet.likeList!.isNotEmpty &&
@@ -621,19 +645,36 @@ class FeedState extends AppState {
 
       // Sends notification to user who created tweet
       // UserModel owner can see notification on notification page
-      kDatabase
+      var query = await kDatabase
           .child('notification')
           .child(tweet.userId)
-          .child(tweet.key!)
-          .set({
-        'type':
-            tweet.likeList!.isEmpty ? null : NotificationType.Like.toString(),
-        'updatedAt':
+          .orderByChild('tweetKey')
+          .equalTo(tweet.key)
+          .once();
+      if (query.snapshot.value != null) {
+        Map<dynamic, dynamic> data =
+        query.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('notification').child(tweet.userId).child(key).update({
+            'updatedAt':
             tweet.likeList!.isEmpty ? null : DateTime.now().toUtc().toString(),
-      });
+          });
+        });
+      } else{
+        kDatabase.child('notification').child(tweet.userId).push().set({
+          'type':
+          tweet.likeList!.isEmpty ? null : NotificationType.Like.toString(),
+          'tweetKey': tweet.key!,
+          'updatedAt':
+          tweet.likeList!.isEmpty ? null : DateTime.now().toUtc().toString(),
+        });
+      }
     } catch (error) {
       cprint(error, errorIn: 'addLikeToTweet');
     }
+
   }
 
   /// Add [new comment tweet] to any tweet

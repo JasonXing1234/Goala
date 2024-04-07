@@ -87,12 +87,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        Provider.of<FeedState>(context, listen: false)
-            .removeLastTweetDetail(postId);
-        return Future.value(true);
-      },
+    return PopScope(
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -142,8 +137,9 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                                 Provider.of<FeedState>(context, listen: false);
                             var authState =
                                 Provider.of<AuthState>(context, listen: false);
+                            FeedModel? tempFeed = await state.fetchTweet(postId);
                             state.setTweetToReply =
-                                state.tweetDetailModel!.last;
+                                tempFeed!;
                             var myUser = authState.userModel;
                             var profilePic =
                                 myUser!.profilePic ?? Constants.dummyProfilePic;
@@ -172,6 +168,7 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
                             );
                             String? tweetId =
                                 await state.addCommentToPost(reply);
+                            state.addCommentToTweet(state.tweetToReplyModel!, authState.userModel!, _controller.text);
                             Navigator.of(context).pop();
                           },
                         ),

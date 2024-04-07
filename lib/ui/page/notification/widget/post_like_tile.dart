@@ -14,10 +14,12 @@ import 'package:provider/provider.dart';
 
 class PostLikeTile extends StatelessWidget {
   final FeedModel model;
+
   const PostLikeTile({Key? key, required this.model}) : super(key: key);
   Widget _userList(BuildContext context, List<String>? list) {
     int length = list?.length ?? 0;
     List<Widget> avaterList = [];
+    String firstUser = list?.last ?? '';
     var state = Provider.of<NotificationState>(context);
     if (list != null) {
       if (list.length > 5) {
@@ -55,7 +57,7 @@ class PostLikeTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 60, bottom: 5, top: 5),
           child: TitleText(
-            '$length people like your post',
+            '${length} people like your post',
             fontSize: 18,
             color: Colors.black87,
             fontWeight: FontWeight.w500,

@@ -20,6 +20,7 @@ import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
+import 'TaskDetailPage.dart';
 
 class Tweet extends StatelessWidget {
   final FeedModel model;
@@ -45,7 +46,7 @@ class Tweet extends StatelessWidget {
     }
   }
 
-  void onTapTweet(BuildContext context) {
+  Future<void> onTapTweet(BuildContext context) async {
     var feedState = Provider.of<FeedState>(context, listen: false);
     if (type == TweetType.Detail || type == TweetType.ParentTweet) {
       return;
@@ -54,7 +55,8 @@ class Tweet extends StatelessWidget {
       feedState.clearAllDetailAndReplyTweetStack();
     }
     feedState.getPostDetailFromDatabase(null, model: model);
-    Navigator.push(context, FeedPostDetail.getRoute(model.key!));
+    FeedModel? parent = await feedState.fetchTweet(model.parentkey!);
+    Navigator.push(context, TaskDetailPage.getRoute(parent!));
   }
 
   @override
@@ -248,10 +250,10 @@ class _TweetBodyState extends State<_TweetBody> {
     return FutureBuilder(
         future: getParentModel(),
         builder: (context, snapshot) {
-          /*if (snapshot.connectionState != ConnectionState.done) {
+          if (snapshot.connectionState != ConnectionState.done) {
             // Future hasn't finished yet, return a placeholder
-            return Text('Loading');
-          }*/
+            return const Center(child: CircularProgressIndicator());}
+            else {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -396,7 +398,7 @@ class _TweetBodyState extends State<_TweetBody> {
               ),
               const SizedBox(width: 10),
             ],
-          );
+          );};
         });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:Goala/ui/page/notification/widget/CommentNotificationTile.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/model/feedModel.dart';
@@ -62,6 +63,11 @@ class NotificationPageBody extends StatelessWidget {
     var state = Provider.of<NotificationState>(context);
     if (model.type == NotificationType.Follow.toString()) {
       return FollowNotificationTile(
+        model: model,
+      );
+    }
+    if (model.type == NotificationType.Reply.toString()) {
+      return CommentNotificationTile(
         model: model,
       );
     }
