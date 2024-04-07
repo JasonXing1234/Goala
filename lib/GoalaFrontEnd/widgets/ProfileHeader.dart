@@ -14,9 +14,10 @@ import '../../ui/page/profile/EditProfilePage.dart';
 class ProfileHeader extends StatefulWidget {
   final UserModel? userModel;
   final bool isCurrentUser;
+  final bool isMyProfile;
   ProfileHeader({
     required this.userModel,
-    this.isCurrentUser = true,
+    this.isCurrentUser = true, required this.isMyProfile,
   });
 
   @override
@@ -116,14 +117,18 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             const SizedBox(width: 16),
           ],
         ),
-        Row(
+        SizedBox(
+          height: 20,
+        ),
+        Center(child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
           children:[
-            RippleButton(
+            widget.isMyProfile == true ? SizedBox.shrink() : RippleButton(
               splashColor: TwitterColor.dodgeBlue_50.withAlpha(100),
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               onPressed: () {
                 setState(() {
-                  if (isMyProfile) {
+                  if (widget.isMyProfile) {
                     Navigator.push(context, EditProfilePage.getRoute());
                   } else {
                     if (isFollower() == "Add Friend") {
@@ -141,7 +146,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: isMyProfile
+                  color: widget.isMyProfile
                       ? TwitterColor.white
                       : authState.isbusy
                       ? AppColor.PROGRESS_COLOR
@@ -149,7 +154,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       ? AppColor.PROGRESS_COLOR
                       : TwitterColor.white,
                   border: Border.all(
-                      color: isMyProfile
+                      color: widget.isMyProfile
                           ? Colors.black87.withAlpha(180)
                           : AppColor.PROGRESS_COLOR,
                       width: 1),
@@ -159,7 +164,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 /// If [isMyProfile] is true then Edit profile button will display
                 // Otherwise Follow/Following button will be display
                 child: Text(
-                  isMyProfile
+                  widget.isMyProfile
                       ? 'Edit Profile'
                       : isFollower() == "Add Friend"
                       ? 'Add Friend'
@@ -171,7 +176,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       ? 'Friend Added'
                       : '',
                   style: TextStyle(
-                    color: isMyProfile
+                    color: widget.isMyProfile
                         ? Colors.black87.withAlpha(180)
                         : isFollower() == "Friend Added"
                         ? TwitterColor.white
@@ -187,7 +192,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 user: widget.userModel,
                 isCurrentUser: widget.isCurrentUser,
               ),
-          ]),
+          ])),
       ],
     );
   }

@@ -1,12 +1,18 @@
+import 'package:Goala/GoalaFrontEnd/widgets/FriendButton.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/GoalGrid.dart';
 import 'package:Goala/GoalaFrontEnd/widgets/ProfileHeader.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/ProfileImage.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/authState.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/state/searchState.dart';
 import 'package:Goala/ui/theme/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../ui/page/profile/profileImageView.dart';
+import '../widgets/newWidget/rippleButton.dart';
 
 class CurrentUserProfilePage extends StatefulWidget {
   const CurrentUserProfilePage({Key? key, this.scaffoldKey}) : super(key: key);
@@ -69,9 +75,57 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
       ),
       body: Column(
         children: [
-          ProfileHeader(
-            userModel: authState.userModel,
-            isCurrentUser: true,
+          Column(
+            children: [
+              Row(
+                children: [
+                  const SizedBox(width: 16),
+                  // Profile picture
+                  RippleButton(
+                    child: ProfileImage(
+                      path: authState.userModel?.profilePic,
+                    ),
+                    borderRadius: BorderRadius.circular(ProfileImage.BORDER_RADIUS),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        ProfileImageView.getRoute(
+                          authState.userModel!.profilePic!,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  // Name
+                  Expanded(
+                    child: Text(
+                      authState.userModel?.displayName ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.rubik().copyWith(
+                        fontSize: 30,
+                        color: AppColor.PROGRESS_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  // Emoji
+                  const SizedBox(width: 16),
+                  Text(
+                    "🌋",
+                    style: Theme.of(context).textTheme.displayLarge,
+                  ),
+                  const SizedBox(width: 16),
+                ],
+              ),
+              FriendButton(
+                friendsList: authState.userModel?.friendList ?? [],
+                user: authState.userModel,
+                isCurrentUser: true,
+              ),
+
+            ],
           ),
           Expanded(
             child: Padding(

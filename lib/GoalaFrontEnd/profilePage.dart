@@ -53,25 +53,33 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    List<FeedModel>? personalGoalsList;
-    List<FeedModel>? groupGoalsList;
+    List<FeedModel>? personalGoalsList=[];
+    List<FeedModel>? groupGoalsList=[];
     var feedstate = Provider.of<FeedState>(context);
     var authState = Provider.of<ProfileState>(context, listen: true);
-    if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
-      personalGoalsList = feedstate.feedList!
-          .where((x) =>
-              x.userId == widget.profileId &&
-              x.isGroupGoal == false &&
-              x.parentkey == null &&
-              x.isPrivate == false && ((!x.isPrivate && x.visibleUsersList == null) || (!x.isPrivate && x.visibleUsersList != null && x.visibleUsersList!.contains(authState.userModel.userId))))
-          .toList();
-      groupGoalsList = feedstate.feedList!
-          .where((x) =>
-              x.memberList!.contains(widget.profileId) &&
-              x.isGroupGoal == true &&
-              x.parentkey == null &&
-              x.isPrivate == false && ((!x.isPrivate && x.visibleUsersList == null) || (!x.isPrivate && x.visibleUsersList != null && x.visibleUsersList!.contains(authState.userModel.userId))))
-          .toList();
+    if(authState.isbusy == true) {
+      if (feedstate.feedList != null && feedstate.feedList!.isNotEmpty) {
+        personalGoalsList = feedstate.feedList!
+            .where((x) =>
+        x.userId == widget.profileId &&
+            x.isGroupGoal == false &&
+            x.parentkey == null &&
+            x.isPrivate == false &&
+            ((!x.isPrivate && x.visibleUsersList == null) ||
+                (!x.isPrivate && x.visibleUsersList != null &&
+                    x.visibleUsersList!.contains(authState.userModel.userId))))
+            .toList();
+        groupGoalsList = feedstate.feedList!
+            .where((x) =>
+        x.memberList!.contains(widget.profileId) &&
+            x.isGroupGoal == true &&
+            x.parentkey == null &&
+            x.isPrivate == false &&
+            ((!x.isPrivate && x.visibleUsersList == null) ||
+                (!x.isPrivate && x.visibleUsersList != null &&
+                    x.visibleUsersList!.contains(authState.userModel.userId))))
+            .toList();
+      }
     }
 
     return Scaffold(
@@ -82,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage>
         children: [
           ProfileHeader(
             userModel: authState.profileUserModel,
-            isCurrentUser: false,
+            isCurrentUser: false, isMyProfile: isMyProfile,
           ),
           Expanded(
             child: Padding(
