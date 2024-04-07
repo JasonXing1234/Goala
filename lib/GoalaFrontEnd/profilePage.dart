@@ -51,51 +51,6 @@ class _ProfilePageState extends State<ProfilePage>
     Navigator.pushNamed(context, '/TrendsPage');
   }
 
-  String? isFollower() {
-    var authState = Provider.of<ProfileState>(context, listen: false);
-    if (authState.isbusy == false) {
-      if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false ||
-              authState.profileUserModel.followingList?.any((x) => x == authState.userId) ==
-                  null) &&
-          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false ||
-              authState.userModel.followingList?.any((x) => x == authState.profileId) ==
-                  null)) {
-        return "Add Friend";
-      } else if (authState.profileUserModel.followingList?.any((x) => x == authState.userId) == true &&
-          (authState.userModel.followingList?.any((x) => x == authState.profileId) == false ||
-              authState.userModel.followingList?.any((x) => x == authState.profileId) ==
-                  null)) {
-        return "Accept Friend Request";
-      } else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId) == false ||
-              authState.profileUserModel.followingList
-                      ?.any((x) => x == authState.userId) ==
-                  null) &&
-          (authState.userModel.followingList?.any((x) => x == authState.profileId)) ==
-              true) {
-        return "Friend Request Sent";
-      } else if ((authState.profileUserModel.followingList?.any((x) => x == authState.userId)) == true &&
-          (authState.userModel.followingList?.any((x) => x == authState.profileId)) == true) {
-        return "Friend Added";
-      }
-    }
-    return "";
-  }
-
-  bool isFriendRequestSent() {
-    var authState = Provider.of<ProfileState>(context, listen: false);
-    if (authState.profileUserModel.followingList != null &&
-        authState.profileUserModel.followingList!.isNotEmpty &&
-        authState.userModel.followingList != null &&
-        authState.userModel.followingList!.isNotEmpty) {
-      return (authState.profileUserModel.followingList!
-              .any((x) => x == authState.userId)) &&
-          (authState.userModel.followingList!
-              .any((x) => x == authState.profileId));
-    } else {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     List<FeedModel>? personalGoalsList;
@@ -144,4 +99,5 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 }
+
 
