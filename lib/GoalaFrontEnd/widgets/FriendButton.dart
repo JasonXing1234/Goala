@@ -23,7 +23,7 @@ class FriendButton extends StatelessWidget {
     cprint("Friend button pressed");
     Navigator.push(
       context,
-      FollowerListPage.getRoute(profile: user!, userList: friendsList),
+      FollowerListPage.getRoute(profile: user!, userList: friendsList, isMyProfile: isCurrentUser),
     );
   }
 
@@ -31,9 +31,10 @@ class FriendButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
-      child: Padding(
+      child: Stack(children: [ Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-        child: Stack(children: [RippleButton(
+        child:
+          RippleButton(
           splashColor: TwitterColor.dodgeBlue_50,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           onPressed: () {
@@ -64,28 +65,28 @@ class FriendButton extends StatelessWidget {
             ),
           ),
         ),
-          if (!pendingRequestList
-                  .isEmpty) // Show the red circle if there are new messages
-            Positioned(
-              top: -10,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColor.PROGRESS_COLOR,
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  pendingRequestList.length
-                      .toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+
+    ),
+        if (!pendingRequestList
+            .isEmpty && isCurrentUser) // Show the red circle if there are new messages
+          Positioned(
+            top: -6,
+            right: 9,
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColor.PROGRESS_COLOR,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                pendingRequestList.length
+                    .toString(),
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
             ),
-        ],
-      ),
-    ));
+          ),
+      ]));
   }
 }

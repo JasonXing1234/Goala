@@ -21,9 +21,10 @@ class UsersListPage extends StatefulWidget {
     this.userIdsList,
     this.onFollowPressed,
     this.isFollowing,
-    this.pendingList,
+    this.pendingList, required this.isMyProfile,
   }) : super(key: key);
 
+  final bool isMyProfile;
   final String pageTitle;
   final String emptyScreenText;
   final String emptyScreenSubTileText;
@@ -71,9 +72,9 @@ class _UsersListPageState extends State<UsersListPage> {
                 var pendingRequestList =
                     (data['pendingRequestList'] as List?)?.cast<String>() ?? [];
                 return Column(children: [
-                  if (!pendingRequestList.isEmpty)
+                  if (!pendingRequestList.isEmpty && widget.isMyProfile)
                     Text('Friend Requests', style: TextStyles.bigSubtitleStyle),
-                  if (!pendingRequestList.isEmpty)
+                  if (!pendingRequestList.isEmpty && widget.isMyProfile)
                     Consumer<SearchState>(
                       builder: (context, state, child) {
                         if (pendingRequestList.isNotEmpty) {

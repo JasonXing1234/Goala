@@ -137,20 +137,6 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
     state.addLikeToTweet(widget.model, authState.userId);
   }
 
-  void onLikeTextPressed(BuildContext context) {
-    Navigator.of(context).push(
-      CustomRoute<bool>(
-        builder: (BuildContext context) => UsersListPage(
-          pageTitle: "Liked by",
-          userIdsList: widget.model.likeList!.map((userId) => userId).toList(),
-          emptyScreenText: "This tweet has no like yet",
-          emptyScreenSubTileText:
-              "Once a user likes this tweet, user list will be shown here",
-        ),
-      ),
-    );
-  }
-
   void shareTweet(BuildContext context) async {
     TweetBottomSheet()
         .openShareTweetBottomSheet(context, widget.model, widget.type);

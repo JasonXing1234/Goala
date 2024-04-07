@@ -525,11 +525,10 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      height: 20,
+                    if (widget.isTweet && isSelected[0] == false)SizedBox(
+                      height: 30,
                     ),
-                    ChildWidget(
+                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
                       friends: FriendList,
                       onSelectionChanged: (updatedFriends) {
                         setState(() {

@@ -193,7 +193,7 @@ class Routes {
         );
       case "FollowerListPage":
         return CustomRoute<bool>(
-          builder: (BuildContext context) => FollowerListPage(),
+          builder: (BuildContext context) => FollowerListPage(isMyProfile: false,),
         );
       case "VerifyEmailPage":
         return CustomRoute<bool>(

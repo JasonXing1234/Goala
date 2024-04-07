@@ -38,6 +38,7 @@ class FollowingListPage extends StatelessWidget {
       );
     }
     return UsersListPage(
+      isMyProfile: false,
       pageTitle: 'Following',
       userIdsList: userList,
       emptyScreenText:

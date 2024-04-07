@@ -134,7 +134,7 @@ class _SidebarMenuState extends State<groupSidebarMenu> {
               context,
               FollowerListPage.getRoute(
                 profile: authState.userModel!,
-                userList: usersList,
+                userList: usersList, isMyProfile: true,
               ),
             );
             break;

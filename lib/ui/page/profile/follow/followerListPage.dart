@@ -7,18 +7,19 @@ import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:provider/provider.dart';
 
 class FollowerListPage extends StatelessWidget {
-  const FollowerListPage({Key? key, this.userList, this.profile})
+  const FollowerListPage({Key? key, this.userList, this.profile, required this.isMyProfile})
       : super(key: key);
   final List<String>? userList;
   final UserModel? profile;
+  final bool isMyProfile;
 
   static MaterialPageRoute getRoute(
-      {required List<String> userList, required UserModel profile}) {
+      {required List<String> userList, required UserModel profile, required bool isMyProfile}) {
     return MaterialPageRoute(
       builder: (BuildContext context) {
         return ChangeNotifierProvider(
           create: (_) => FollowListState(StateType.follower),
-          child: FollowerListPage(userList: userList, profile: profile),
+          child: FollowerListPage(userList: userList, profile: profile, isMyProfile: isMyProfile),
         );
       },
     );
@@ -42,6 +43,7 @@ class FollowerListPage extends StatelessWidget {
       );
     }
     return UsersListPage(
+      isMyProfile: isMyProfile,
       pageTitle: 'Your Friends',
       userIdsList: userList,
       pendingList: tempList,
