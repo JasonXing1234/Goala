@@ -9,10 +9,12 @@ class FriendButton extends StatelessWidget {
   final List<String> friendsList;
   final UserModel? user;
   final bool isCurrentUser;
+  final List<String> pendingRequestList;
   FriendButton({
     required this.friendsList,
     required this.user,
     required this.isCurrentUser,
+    required this.pendingRequestList,
   });
 
   // TODO: The right data gets here, but it doesn't show the right page.
@@ -30,8 +32,8 @@ class FriendButton extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: RippleButton(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        child: Stack(children: [RippleButton(
           splashColor: TwitterColor.dodgeBlue_50,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           onPressed: () {
@@ -62,7 +64,28 @@ class FriendButton extends StatelessWidget {
             ),
           ),
         ),
+          if (!pendingRequestList
+                  .isEmpty) // Show the red circle if there are new messages
+            Positioned(
+              top: -10,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: AppColor.PROGRESS_COLOR,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  pendingRequestList.length
+                      .toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
-    );
+    ));
   }
 }

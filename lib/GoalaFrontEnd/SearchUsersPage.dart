@@ -52,7 +52,6 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
             //onActionPressed: onSettingIconPressed,
             onSearchChanged: (text) {
               state.filterByUsername(text);
-              state.filterByGroup(text);
             },
           ),
           body: RefreshIndicator(
@@ -78,19 +77,6 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
                 height: 1.0,
                 color: Colors.grey,
               ),
-              Center(child: Text('Groups', style: TextStyles.bigSubtitleStyle)),
-              Expanded(
-                child: ListView.separated(
-                  addAutomaticKeepAlives: false,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      _GroupTile(user: groupList![index]),
-                  separatorBuilder: (_, index) => const Divider(
-                    height: 0,
-                  ),
-                  itemCount: groupList?.length ?? 0,
-                ),
-              )
             ]),
           )),
     );

@@ -119,10 +119,14 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                   const SizedBox(width: 16),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               FriendButton(
                 friendsList: authState.userModel?.friendList ?? [],
                 user: authState.userModel,
                 isCurrentUser: true,
+                pendingRequestList: authState.userModel?.pendingRequestList ?? [],
               ),
 
             ],

@@ -190,7 +190,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               FriendButton(
                 friendsList: widget.userModel?.friendList ?? [],
                 user: widget.userModel,
-                isCurrentUser: widget.isCurrentUser,
+                isCurrentUser: widget.isCurrentUser, pendingRequestList: widget.userModel?.pendingRequestList ?? [],
               ),
           ])),
       ],
