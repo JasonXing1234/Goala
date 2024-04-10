@@ -205,6 +205,8 @@ class _TweetBodyState extends State<_TweetBody> {
     } catch (e) {
       print('error');
     }
+    var state = Provider.of<FeedState>(context, listen: false);
+    state.addPokeNoti(tempModel!, displayName!);
     /*try {
       HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('sendPokeNotification');
       final result = await callable.call({
@@ -226,7 +228,6 @@ class _TweetBodyState extends State<_TweetBody> {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
@@ -344,7 +345,7 @@ class _TweetBodyState extends State<_TweetBody> {
                                   progressColor: AppColor.PROGRESS_COLOR,
                                   percentage: tempModel!.GoalAchieved! / tempModel!.GoalSum!,
                                   isHabit: tempModel!.isHabit,
-                                  checkInDays: tempModel!.checkInList!,
+                                  checkInDays: tempModel!.checkInList!, isPost: true, isCreate: false, isTimeline: false,
                                 ),
                               ),
                               SizedBox(width: 20),

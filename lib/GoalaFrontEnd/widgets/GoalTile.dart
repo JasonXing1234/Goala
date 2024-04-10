@@ -128,7 +128,7 @@ class GoalTileState extends State<GoalTile> {
                       : AppColor.DARK_GREY_COLOR,
                   percentage: widget.tweet.GoalAchieved! / widget.tweet.GoalSum!,
                   isHabit: widget.tweet.isHabit,
-                  checkInDays: widget.tweet.checkInList!,
+                  checkInDays: widget.tweet.checkInList!, isPost: false, isCreate: false, isTimeline: false,
                 ),
                 Spacer(),
                 // Cover Photo

@@ -417,7 +417,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                       : Colors.black,
                                   percentage: model!.GoalAchieved! / model!.GoalSum!,
                                   isHabit: model!.isHabit,
-                                  checkInDays: model!.checkInList!,
+                                  checkInDays: model!.checkInList!, isPost: false, isCreate: true, isTimeline: false,
                                 ),
                               ),
                               SizedBox(

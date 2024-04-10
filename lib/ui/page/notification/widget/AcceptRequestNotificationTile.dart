@@ -7,9 +7,9 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/url_text/customUrlText.dart';
 
-class CommentNotificationTile extends StatelessWidget {
+class AcceptRequestNotificationTile extends StatelessWidget {
   final NotificationModel model;
-  const CommentNotificationTile({Key? key, required this.model})
+  const AcceptRequestNotificationTile({Key? key, required this.model})
       : super(key: key);
 
   @override
@@ -23,17 +23,14 @@ class CommentNotificationTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  customIcon(context, icon: AppIcon.messageFill),
+                  customIcon(context, icon: AppIcon.profile),
                   const SizedBox(width: 10),
-                  Text(
-                    model.user.displayName!,
-                    style: TextStyles.subtitleStyle,
-                  ),
-                  Text(" Commented on your post", style: TextStyles.subtitleStyle),
+                  Container(
+                      width: 300,
+                      child: Text(model.message!, style: TextStyles.subtitleStyle))
                 ],
               ),
               const SizedBox(width: 10),
-              Text("\"${model.message!}\"", style: TextStyles.bigSubtitleStyle),
             ],
           ),
         ),

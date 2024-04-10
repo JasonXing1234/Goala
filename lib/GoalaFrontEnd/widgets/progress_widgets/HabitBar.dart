@@ -7,11 +7,14 @@ class HabitBar extends StatelessWidget {
   final double progress;
   final Color progressColor;
   final List<bool> checkInDays;
+  final bool isTimeline;
+  final bool isPost;
+  final bool isCreate;
   HabitBar({
     required this.width,
     required this.progress,
     required this.progressColor,
-    required this.checkInDays,
+    required this.checkInDays, required this.isTimeline, required this.isPost, required this.isCreate,
   });
 
   @override
@@ -34,7 +37,7 @@ class HabitBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-                  width: 17.6,
+                  width: isTimeline ? 38.0 : isPost ? 30.0 : isCreate ? 34.0 : 17.6,
                   //color: checkInDays[index] == true ? progressColor : Colors.amber,
                 )
             );

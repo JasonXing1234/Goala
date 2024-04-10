@@ -1,3 +1,4 @@
+import 'package:Goala/ui/page/notification/widget/AcceptRequestNotificationTile.dart';
 import 'package:Goala/ui/page/notification/widget/CommentNotificationTile.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
@@ -66,8 +67,13 @@ class NotificationPageBody extends StatelessWidget {
         model: model,
       );
     }
-    if (model.type == NotificationType.Reply.toString()) {
+    else if (model.type == NotificationType.Reply.toString()) {
       return CommentNotificationTile(
+        model: model,
+      );
+    }
+    else if (model.type == NotificationType.Accept.toString()) {
+      return AcceptRequestNotificationTile(
         model: model,
       );
     }

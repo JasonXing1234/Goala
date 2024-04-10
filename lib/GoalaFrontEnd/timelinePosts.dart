@@ -276,7 +276,7 @@ class _TweetBodyState extends State<_TweetBody> {
                             progressColor: AppColor.PROGRESS_COLOR,
                       percentage: 0,
                             isHabit: tempModel!.isHabit,
-                            checkInDays: widget.model.checkInListPost!,
+                            checkInDays: widget.model.checkInListPost!, isPost: false, isCreate: false, isTimeline: true,
                           )
                         : CustomProgressBar2(
                             GoalAchieved: tempModel!.GoalAchieved!,

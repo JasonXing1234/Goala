@@ -464,6 +464,26 @@ class AuthState extends AppState {
           .child('pendingRequestList')
           .set(_userModel!.pendingRequestList);
       cprint('user added to following list', event: 'add_follow');
+      kDatabase
+          .child('notification')
+          .child(tempModel.userId!)
+          .push().set({
+        'data':
+        UserModel(
+            displayName: _userModel!.displayName,
+            profilePic: _userModel!.profilePic,
+            isVerified: _userModel!.isVerified,
+            userId: _userModel!.userId,
+            bio: _userModel!.bio == "Edit profile to update bio"
+                ? ""
+                : _userModel!.bio,
+            userName: _userModel!.userName).toJson(),
+        'message': '${_userModel!.displayName} just accepted your friend request',
+        'type':
+        NotificationType.Accept.toString(),
+        'updatedAt':
+        DateTime.now().toUtc().toString(),
+      });
       notifyListeners();
     } catch (error) {
       cprint(error, errorIn: 'followUser');

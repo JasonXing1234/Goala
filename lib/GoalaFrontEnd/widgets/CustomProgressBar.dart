@@ -10,6 +10,9 @@ class CustomProgressBar extends StatelessWidget {
   final num percentage;
   final bool isHabit;
   final List<bool> checkInDays;
+  final bool isPost;
+  final bool isCreate;
+  final bool isTimeline;
 
   static const double PROGRESS_BAR_HEIGHT = 25;
 
@@ -20,7 +23,7 @@ class CustomProgressBar extends StatelessWidget {
     this.progressColor = AppColor.PROGRESS_COLOR,
     required this.percentage,
     required this.isHabit,
-    required this.checkInDays,
+    required this.checkInDays, required this.isPost, required this.isCreate, required this.isTimeline,
   }) : super(key: key);
 
   @override
@@ -55,7 +58,7 @@ class CustomProgressBar extends StatelessWidget {
               width: maxWidth,
               progress: progress,
               checkInDays: checkInDays,
-              progressColor: progressColor,
+              progressColor: progressColor, isTimeline: isTimeline, isPost: isPost, isCreate: isCreate,
             )
           else
             GoalBar(

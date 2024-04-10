@@ -620,6 +620,40 @@ class FeedState extends AppState {
     });
   }
 
+  addPokeNoti(FeedModel tweet, String displayName) async {
+    try {
+      var query = await kDatabase
+          .child('notification')
+          .child(tweet.userId)
+          .orderByChild('tweetKey')
+          .equalTo(tweet.key)
+          .once();
+      if (query.snapshot.value != null) {
+        Map<dynamic, dynamic> data =
+        query.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('notification').child(tweet.userId).child(key).update({
+            'updatedAt':
+            DateTime.now().toUtc().toString(),
+          });
+        });
+      } else{
+        kDatabase.child('notification').child(tweet.userId).push().set({
+          'type':
+          NotificationType.Accept.toString(),
+          'tweetKey': tweet.key!,
+          'message': '${displayName} poked you',
+          'updatedAt':
+          DateTime.now().toUtc().toString(),
+        });
+      }
+    } catch (error) {
+      cprint(error, errorIn: 'addPokeNoti');
+    }
+  }
+
   /// Add/Remove like on a Tweet
   /// [postId] is tweet id, [userId] is user's id who like/unlike Tweet
   addLikeToTweet(FeedModel tweet, String userId) async {
@@ -674,7 +708,6 @@ class FeedState extends AppState {
     } catch (error) {
       cprint(error, errorIn: 'addLikeToTweet');
     }
-
   }
 
   /// Add [new comment tweet] to any tweet
