@@ -80,6 +80,10 @@ class AuthState extends AppState {
           email: email, password: password);
       user = result.user;
       userId = user!.uid;
+      String? token = await FirebaseMessaging.instance.getToken();
+      kDatabase.child('profile').child(userId).update({
+        "deviceToken": token
+      });
       return user!.uid;
     } on FirebaseException catch (error) {
       if (error.code == 'firebase_auth/user-not-found') {

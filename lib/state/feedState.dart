@@ -486,6 +486,32 @@ class FeedState extends AppState {
     return tweetKey;
   }
 
+  deletePost(String tweetId) async {
+    try {
+      kDatabase.child('tweet').child(tweetId).remove();
+      final query =
+      kDatabase.child('tweet').orderByChild('parentkey').equalTo(tweetId);
+      final snapshot = await query.once();
+      if (snapshot.snapshot.value != null) {
+        // dataSnapshot.snapshot.value is a Map of child keys and their data
+        Map<dynamic, dynamic> data =
+        snapshot.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('tweet').child(key).remove().then((_) {
+            print('Post with parentkey $key removed successfully');
+          }).catchError((error) {
+            print('Error removing post with key $key: $error');
+          });
+        });
+      } else {
+        print('No posts found with parentKey');
+      }
+    } catch (error) {
+      cprint(error, errorIn: 'deleteTweet');
+    }
+  }
   /// [Delete tweet] in Firebase kDatabase
   /// Remove Tweet if present in home page Tweet list
   /// Remove Tweet if present in Tweet detail page or in comment

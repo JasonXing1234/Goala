@@ -1,3 +1,4 @@
+import 'package:Goala/GoalaFrontEnd/widgets/SearchAppBar.dart';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
       context: context,
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
+          appBar: SearchAppBar(
             scaffoldKey: widget.scaffoldKey,
             //icon: AppIcon.settings,
             //onActionPressed: onSettingIconPressed,
@@ -60,7 +61,6 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
               return Future.value();
             },
             child: Column(children: [
-              Center(child: Text('People', style: TextStyles.bigSubtitleStyle)),
               Expanded(
                 child: ListView.separated(
                   addAutomaticKeepAlives: false,

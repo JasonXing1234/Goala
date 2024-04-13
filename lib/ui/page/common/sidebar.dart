@@ -95,72 +95,12 @@ class _SidebarMenuState extends State<SidebarMenu> {
                 iconColor: AppColor.primary,
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              child: Row(
-                children: <Widget>[
-                  const SizedBox(
-                    width: 17,
-                  ),
-                  _textButton(context, state.userModel!.getFollower,
-                      ' Followers', 'FollowerListPage'),
-                  const SizedBox(width: 10),
-                  _textButton(context, state.userModel!.getFollowing,
-                      ' Following', 'FollowingListPage'),
-                ],
-              ),
-            ),
           ],
         ),
       );
     }
   }
 
-  Widget _textButton(
-      BuildContext context, String count, String text, String navigateTo) {
-    return InkWell(
-      onTap: () {
-        var authState = context.read<AuthState>();
-        late List<String> usersList;
-        authState.getProfileUser();
-        Navigator.pop(context);
-        switch (navigateTo) {
-          case "FollowerListPage":
-            usersList = authState.userModel!.followersList!;
-            Navigator.push(
-              context,
-              FollowerListPage.getRoute(
-                profile: authState.userModel!,
-                userList: usersList, isMyProfile: true,
-              ),
-            );
-            break;
-          case "FollowingListPage":
-            usersList = authState.userModel!.followingList!;
-            Navigator.push(
-              context,
-              FollowingListPage.getRoute(
-                profile: authState.userModel!,
-                userList: usersList,
-              ),
-            );
-            break;
-        }
-      },
-      child: Row(
-        children: <Widget>[
-          customText(
-            '$count ',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-          ),
-          customText(
-            text,
-            style: const TextStyle(color: AppColor.darkGrey, fontSize: 17),
-          ),
-        ],
-      ),
-    );
-  }
 
   ListTile _menuListRowButton(String title,
       {Function? onPressed, IconData? icon, bool isEnable = false}) {
@@ -273,21 +213,17 @@ class _SidebarMenuState extends State<SidebarMenu> {
                       Navigator.push(context, BookmarkPage.getRoute());
                     },
                   ),
-                  _menuListRowButton('Lists', icon: AppIcon.lists),
-                  _menuListRowButton('Moments', icon: AppIcon.moments),
-                  const Divider(),
-                  _menuListRowButton('Settings and privacy', isEnable: true,
+                  //const Divider(),
+                  /*_menuListRowButton('Settings and privacy', isEnable: true,
                       onPressed: () {
                     _navigateTo('SettingsAndPrivacyPage');
-                  }),
-                  _menuListRowButton('Help Center'),
-                  const Divider(),
+                  }),*/
                   _menuListRowButton('Logout',
                       icon: null, onPressed: _logOut, isEnable: true),
                 ],
               ),
             ),
-            _footer()
+            //_footer()
           ],
         ),
       ),

@@ -85,15 +85,17 @@ class _TaskDetailState extends State<TaskDetailPage> {
             children: [
               if (authState.userModel!.userId! == tempFeed.userId)
                 ElevatedButton(
-                    onPressed: () {
-                      var state =
-                          Provider.of<FeedState>(context, listen: false);
-                      state.setTweetToReply = tempFeed;
-                      Navigator.of(context).pushNamed('/ComposeTweetPage');
-                    },
-                    child: Text('Report')
-                    //isEditing == true ? Text('Finish') : Text('Edit')
-                    ),
+                  onPressed: () {
+                    var state =
+                        Provider.of<FeedState>(context, listen: false);
+                    state.setTweetToReply = tempFeed;
+                    Navigator.of(context).pushNamed('/ComposeTweetPage');
+                  },
+                  child: Text('Report', style: TextStyle(color: Colors.white)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(AppColor.PROGRESS_COLOR), // Set the desired color here
+                  ),
+                ),
               ListView(
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
