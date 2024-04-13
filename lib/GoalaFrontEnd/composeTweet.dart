@@ -269,6 +269,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
       isPrivate: state.tweetToReplyModel!.isPrivate,
       visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
       checkInListPost: tempCheckInList,
+      checkInList: [false], //this is dummy list for posts so feedpage doesn't return null pointer
       goalPhotoList: selectedImages,
       parentName: widget.isTweet
           ? null

@@ -91,7 +91,7 @@ class _TaskDetailState extends State<TaskDetailPage> {
                       state.setTweetToReply = tempFeed;
                       Navigator.of(context).pushNamed('/ComposeTweetPage');
                     },
-                    child: Text('Add Post')
+                    child: Text('Report')
                     //isEditing == true ? Text('Finish') : Text('Edit')
                     ),
               ListView(

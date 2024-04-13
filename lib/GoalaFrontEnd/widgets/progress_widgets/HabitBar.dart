@@ -19,6 +19,7 @@ class HabitBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       width: width,
       height: 25,
@@ -30,7 +31,7 @@ class HabitBar extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Align(
               alignment: Alignment.centerLeft,
-                child: Container(
+                child: (index == checkInDays.length - 1) ? Container(
                   margin: EdgeInsets.only(right: 3),
                   decoration: BoxDecoration(
                     color: checkInDays[index] == true ? AppColor.PROGRESS_COLOR : AppColor.DARK_GREY_COLOR,
@@ -39,6 +40,25 @@ class HabitBar extends StatelessWidget {
                   //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
                   width: isTimeline ? 38.0 : isPost ? 30.0 : isCreate ? 34.0 : 17.6,
                   //color: checkInDays[index] == true ? progressColor : Colors.amber,
+                ) : Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 3),
+                      decoration: BoxDecoration(
+                        color: checkInDays[index] == true ? AppColor.PROGRESS_COLOR : AppColor.DARK_GREY_COLOR,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
+                      width: isTimeline ? 38.0 : isPost ? 30.0 : isCreate ? 34.0 : 17.6,
+                      //color: checkInDays[index] == true ? progressColor : Colors.amber,
+                    ),
+                    Text(
+                      (percentage * 100).toInt().toString() + '%',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 )
             );
           }
