@@ -11,6 +11,8 @@ import 'package:Goala/widgets/customWidgets.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
+import '../../../ui/page/feed/feedPostDetail.dart';
+
 class TweetIconsRow extends StatefulWidget {
   final FeedModel model;
   final Color iconColor;
@@ -50,16 +52,10 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
             icon: AppIcon.reply,
             iconColor: widget.iconColor,
             size: 25,
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(context, FeedPostDetail.getRoute(model.key!));
+            },
           ),
-          /*_iconWidget(context,
-              text: isTweetDetail ? '' : model.retweetCount.toString(),
-              icon: AppIcon.retweet,
-              iconColor: iconColor,
-              size: size ?? 20, onPressed: () {
-            TweetBottomSheet().openRetweetBottomSheet(context,
-                type: type, model: model, scaffoldKey: scaffoldKey);
-          }),*/
           _iconWidget(
             context,
             text: widget.isTweetDetail ? '' : model.likeCount.toString(),
@@ -124,105 +120,6 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
     );
   }
 
-  Widget _timeWidget(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const SizedBox(height: 8),
-        Row(
-          children: <Widget>[
-            const SizedBox(width: 5),
-            customText(Utility.getPostTime2(widget.model.createdAt),
-                style: TextStyles.textStyle14),
-            const SizedBox(width: 10),
-            customText('Fwitter for Android',
-                style: TextStyle(color: Theme.of(context).primaryColor))
-          ],
-        ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
-
-  Widget _likeCommentWidget(BuildContext context) {
-    bool isLikeAvailable =
-        widget.model.likeCount != null ? widget.model.likeCount! > 0 : false;
-    bool isRetweetAvailable = widget.model.retweetCount! > 0;
-    bool isLikeRetweetAvailable = isRetweetAvailable || isLikeAvailable;
-    return Column(
-      children: <Widget>[
-        const Divider(
-          endIndent: 10,
-          height: 0,
-        ),
-        AnimatedContainer(
-          padding:
-              EdgeInsets.symmetric(vertical: isLikeRetweetAvailable ? 12 : 0),
-          duration: const Duration(milliseconds: 500),
-          child: !isLikeRetweetAvailable
-              ? const SizedBox.shrink()
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    !isRetweetAvailable
-                        ? const SizedBox.shrink()
-                        : customText(widget.model.retweetCount.toString(),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                    !isRetweetAvailable
-                        ? const SizedBox.shrink()
-                        : const SizedBox(width: 5),
-                    AnimatedCrossFade(
-                      firstChild: const SizedBox.shrink(),
-                      secondChild: customText('Retweets',
-                          style: TextStyles.subtitleStyle),
-                      crossFadeState: !isRetweetAvailable
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: const Duration(milliseconds: 800),
-                    ),
-                    !isRetweetAvailable
-                        ? const SizedBox.shrink()
-                        : const SizedBox(width: 20),
-                    InkWell(
-                      onTap: () {
-                        onLikeTextPressed(context);
-                      },
-                      child: AnimatedCrossFade(
-                        firstChild: const SizedBox.shrink(),
-                        secondChild: Row(
-                          children: <Widget>[
-                            customSwitcherWidget(
-                              duraton: const Duration(milliseconds: 300),
-                              child: customText(
-                                  widget.model.likeCount.toString(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  key: ValueKey(widget.model.likeCount)),
-                            ),
-                            const SizedBox(width: 5),
-                            customText('Likes', style: TextStyles.subtitleStyle)
-                          ],
-                        ),
-                        crossFadeState: !isLikeAvailable
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                        duration: const Duration(milliseconds: 300),
-                      ),
-                    )
-                  ],
-                ),
-        ),
-        !isLikeRetweetAvailable
-            ? const SizedBox.shrink()
-            : const Divider(
-                endIndent: 10,
-                height: 0,
-              ),
-      ],
-    );
-  }
-
   Widget customSwitcherWidget(
       {required child, Duration duraton = const Duration(milliseconds: 500)}) {
     return AnimatedSwitcher(
@@ -238,20 +135,6 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
     var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     state.addLikeToTweet(widget.model, authState.userId);
-  }
-
-  void onLikeTextPressed(BuildContext context) {
-    Navigator.of(context).push(
-      CustomRoute<bool>(
-        builder: (BuildContext context) => UsersListPage(
-          pageTitle: "Liked by",
-          userIdsList: widget.model.likeList!.map((userId) => userId).toList(),
-          emptyScreenText: "This tweet has no like yet",
-          emptyScreenSubTileText:
-              "Once a user likes this tweet, user list will be shown here",
-        ),
-      ),
-    );
   }
 
   void shareTweet(BuildContext context) async {

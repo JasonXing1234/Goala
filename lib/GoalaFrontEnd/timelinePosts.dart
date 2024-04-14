@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
@@ -8,7 +10,7 @@ import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
@@ -20,7 +22,9 @@ import 'package:http/http.dart' as http;
 import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 
-class TimelinePosts extends StatelessWidget {
+class TimelinePosts extends StatefulWidget {
+  final bool isLast;
+  final bool isFirst;
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -33,31 +37,41 @@ class TimelinePosts extends StatelessWidget {
     this.type = TweetType.Tweet,
     this.isDisplayOnProfile = false,
     required this.scaffoldKey,
+    required this.isFirst,
+    required this.isLast,
   }) : super(key: key);
 
+  @override
+  State<TimelinePosts> createState() => _TimelinePostsState();
+}
+
+class _TimelinePostsState extends State<TimelinePosts> {
+  bool isButtonVisible = false;
+
   void onLongPressedTweet(BuildContext context) {
-    if (type == TweetType.Detail || type == TweetType.ParentTweet) {
-      Utility.copyToClipBoard(
-          context: context,
-          text: model.description ?? "",
-          message: "Tweet copy to clipboard");
-    }
+    setState(() {
+      isButtonVisible = true;
+    });
   }
 
   void onTapTweet(BuildContext context) {
-    var feedState = Provider.of<FeedState>(context, listen: false);
-    if (type == TweetType.Detail || type == TweetType.ParentTweet) {
+    /*var feedState = Provider.of<FeedState>(context, listen: false);
+    if (widget.type == TweetType.Detail || widget.type == TweetType.ParentTweet) {
       return;
     }
-    if (type == TweetType.Tweet && !isDisplayOnProfile) {
+    if (widget.type == TweetType.Tweet && !widget.isDisplayOnProfile) {
       feedState.clearAllDetailAndReplyTweetStack();
     }
-    feedState.getPostDetailFromDatabase(null, model: model);
-    Navigator.push(context, FeedPostDetail.getRoute(model.key!));
+    feedState.getPostDetailFromDatabase(null, model: widget.model);
+    Navigator.push(context, FeedPostDetail.getRoute(widget.model.key!));*/
+    setState(() {
+      isButtonVisible = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var feedState = Provider.of<FeedState>(context, listen: false);
     return Stack(
       alignment: Alignment.topLeft,
       children: <Widget>[
@@ -84,53 +98,51 @@ class TimelinePosts extends StatelessWidget {
           onTap: () {
             onTapTweet(context);
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                child: type == TweetType.Tweet || type == TweetType.Reply
-                    ? Center(
-                        child: _TweetBody(
-                          isDisplayOnProfile: isDisplayOnProfile,
-                          model: model,
-                          trailing: trailing,
-                          type: type,
-                        ),
-                      )
-                    : _TweetDetailBody(
-                        model: model,
-                        trailing: trailing,
-                        type: type,
-                      ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-              ),
-              /*model.childRetwetkey == null
-                  ? const SizedBox.shrink()
-                  : RetweetWidget(
-                      childRetwetkey: model.childRetwetkey!,
-                      type: type,
-                      isImageAvailable: model.imagePath != null &&
-                          model.imagePath!.isNotEmpty,
-                    ),*/
-              //TODO: Comments section
-              /*Padding(
-                padding:
-                EdgeInsets.only(left: type == TweetType.Detail ? 10 : 60),
-                child: TweetIconsRow(
-                  type: type,
-                  model: model,
-                  isTweetDetail: type == TweetType.Detail,
-                  iconColor: Theme.of(context).textTheme.bodySmall!.color!,
-                  iconEnableColor: TwitterColor.ceriseRed,
-                  size: 20,
-                  scaffoldKey: GlobalKey<ScaffoldState>(),
+          child: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      child: widget.type == TweetType.Tweet || widget.type == TweetType.Reply
+                          ? Center(
+                              child: _TweetBody(
+                                isDisplayOnProfile: widget.isDisplayOnProfile,
+                                isEnd: widget.isFirst,
+                                model: widget.model,
+                                trailing: widget.trailing,
+                                type: widget.type,
+                                isFirst: widget.isLast,
+                              ),
+                            )
+                          : _TweetDetailBody(
+                              model: widget.model,
+                              trailing: widget.trailing,
+                              type: widget.type,
+                            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                    ),
+                  ],
                 ),
-              ),*/
-              //const Divider(height: .5, thickness: .5)
-            ],
-          ),
+                AnimatedPositioned(
+                  duration: Duration(milliseconds: 300),
+                  top: isButtonVisible ? 1 : -40,
+                  right: 10,
+                  child: Visibility(
+                    visible: isButtonVisible,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        feedState.deletePost(widget.model.key!);
+                        print("Button pressed");
+                      },
+                      child: Icon(Icons.remove),
+                      backgroundColor: AppColor.PROGRESS_COLOR,
+                    ),
+                  ),
+                ),
+              ])
         ),
       ],
     );
@@ -138,6 +150,8 @@ class TimelinePosts extends StatelessWidget {
 }
 
 class _TweetBody extends StatefulWidget {
+  final bool isFirst;
+  final bool isEnd;
   final FeedModel model;
   final Widget? trailing;
   final TweetType type;
@@ -147,7 +161,9 @@ class _TweetBody extends StatefulWidget {
       required this.model,
       this.trailing,
       required this.type,
-      required this.isDisplayOnProfile})
+      required this.isDisplayOnProfile,
+      required this.isEnd,
+      required this.isFirst})
       : super(key: key);
 
   @override
@@ -254,27 +270,51 @@ class _TweetBodyState extends State<_TweetBody> {
                   SizedBox(
                     height: 30,
                     width: 330,
-                    child: CustomProgressBar(
-                      progress: widget.model.isHabit == false
-                          ? tempModel!.GoalAchieved! / tempModel!.GoalSum!
-                          : tempModel!.checkInList!
-                                  .where((item) => item == true)
-                                  .length /
-                              8,
-                      height: 30,
-                      width: 330,
-                      backgroundColor: Colors.grey[300]!,
-                      progressColor: AppColor.PROGRESS_COLOR,
-                      daysLeft: DateTime(
-                              int.parse(tempModel!.deadlineDate!.split('-')[0]),
-                              int.parse(tempModel!.deadlineDate!.split('-')[1]),
-                              int.parse(tempModel!.deadlineDate!.split('-')[2]))
-                          .difference(DateTime(DateTime.now().year,
-                              DateTime.now().month, DateTime.now().day))
-                          .inDays,
-                      isHabit: tempModel!.isHabit,
-                      checkInDays: tempModel!.checkInList!,
-                    ),
+                    child: widget.model.isHabit == true
+                        ? CustomProgressBar(
+                            progress: widget.model.checkInListPost!
+                                    .where((item) => item == true)
+                                    .length /
+                                8,
+                            backgroundColor: Colors.grey[300]!,
+                            progressColor: AppColor.PROGRESS_COLOR,
+                      percentage: 0,
+                            isHabit: tempModel!.isHabit,
+                            checkInDays: widget.model.checkInListPost!, isPost: false, isCreate: false, isTimeline: true,
+                          )
+                        : CustomProgressBar2(
+                            GoalAchieved: tempModel!.GoalAchieved!,
+                            GoalSum: tempModel!.GoalSum!,
+                            oldProgress: widget.isEnd && widget.isFirst
+                                ? 0
+                                : widget.isFirst && !widget.isEnd
+                                    ? widget.model.GoalAchievedToday! /
+                                        widget.model.GoalSum!
+                                    : widget.isEnd && !widget.isFirst
+                                        ? (widget.model.GoalAchieved! -
+                                                widget
+                                                    .model.GoalAchievedToday!) /
+                                            widget.model.GoalSum!
+                                        : widget.model.GoalAchieved! /
+                                            widget.model.GoalSum!,
+                            height: 30,
+                            width: 330,
+                            backgroundColor: Colors.grey[300]!,
+                            progressColor: AppColor.PROGRESS_COLOR,
+                            percentage: widget.model.GoalAchieved! /
+                                widget.model.GoalSum!,
+                            isHabit: tempModel!.isHabit,
+                            checkInDays: tempModel!.checkInList!,
+                            newProgress: widget.isEnd && widget.isFirst
+                                ? widget.model.GoalAchieved! /
+                                    widget.model.GoalSum!
+                                : widget.isFirst && !widget.isEnd
+                                    ? 0
+                                    : widget.isEnd && !widget.isFirst
+                                        ? widget.model.GoalAchievedToday! /
+                                            widget.model.GoalSum!
+                                        : 0,
+                          ),
                   ),
                   SizedBox(height: 5),
                   widget.model.goalPhotoList != null

@@ -525,7 +525,7 @@ class TweetBottomSheet {
             );
           },
         ),
-        const SizedBox(height: 8),
+        /*const SizedBox(height: 8),
         _widgetBottomSheetRow(
           context,
           AppIcon.link,
@@ -571,8 +571,7 @@ class TweetBottomSheet {
                   socialMetaTagParameters: socialMetaTagParameters),
             );
           },
-        ),
-        const SizedBox(height: 12),
+        ),*/
       ],
     );
   }

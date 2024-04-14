@@ -218,7 +218,7 @@ class FeedState extends AppState {
     return list;
   }
 
-  Future<void> addNumberToGoal(FeedModel tempFeed, int tempInt) async {
+  Future<void> addNumberToGoal(FeedModel tempFeed, double tempInt) async {
     await kDatabase.child('tweet').child(tempFeed.key!).update({
       'GoalAchieved': tempFeed.GoalAchieved == null
           ? tempInt
@@ -486,6 +486,32 @@ class FeedState extends AppState {
     return tweetKey;
   }
 
+  deletePost(String tweetId) async {
+    try {
+      kDatabase.child('tweet').child(tweetId).remove();
+      final query =
+      kDatabase.child('tweet').orderByChild('parentkey').equalTo(tweetId);
+      final snapshot = await query.once();
+      if (snapshot.snapshot.value != null) {
+        // dataSnapshot.snapshot.value is a Map of child keys and their data
+        Map<dynamic, dynamic> data =
+        snapshot.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('tweet').child(key).remove().then((_) {
+            print('Post with parentkey $key removed successfully');
+          }).catchError((error) {
+            print('Error removing post with key $key: $error');
+          });
+        });
+      } else {
+        print('No posts found with parentKey');
+      }
+    } catch (error) {
+      cprint(error, errorIn: 'deleteTweet');
+    }
+  }
   /// [Delete tweet] in Firebase kDatabase
   /// Remove Tweet if present in home page Tweet list
   /// Remove Tweet if present in Tweet detail page or in comment
@@ -596,9 +622,67 @@ class FeedState extends AppState {
     });
   }
 
+  addCommentToTweet(FeedModel tweet, UserModel userModel, String comment) {
+    kDatabase
+        .child('notification')
+        .child(tweet.userId)
+        .push().set({
+      'data':
+      UserModel(
+          displayName: userModel.displayName,
+          profilePic: userModel.profilePic,
+          isVerified: userModel.isVerified,
+          userId: userModel.userId,
+          bio: userModel.bio == "Edit profile to update bio"
+              ? ""
+              : userModel.bio,
+          userName: userModel.userName).toJson(),
+      'message': comment,
+      'type':
+          NotificationType.Reply.toString(),
+      'tweetKey': tweet.key!,
+      'updatedAt':
+          DateTime.now().toUtc().toString(),
+    });
+  }
+
+  addPokeNoti(FeedModel tweet, String displayName) async {
+    try {
+      var query = await kDatabase
+          .child('notification')
+          .child(tweet.userId)
+          .orderByChild('tweetKey')
+          .equalTo(tweet.key)
+          .once();
+      if (query.snapshot.value != null) {
+        Map<dynamic, dynamic> data =
+        query.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('notification').child(tweet.userId).child(key).update({
+            'updatedAt':
+            DateTime.now().toUtc().toString(),
+          });
+        });
+      } else{
+        kDatabase.child('notification').child(tweet.userId).push().set({
+          'type':
+          NotificationType.Accept.toString(),
+          'tweetKey': tweet.key!,
+          'message': '${displayName} poked you',
+          'updatedAt':
+          DateTime.now().toUtc().toString(),
+        });
+      }
+    } catch (error) {
+      cprint(error, errorIn: 'addPokeNoti');
+    }
+  }
+
   /// Add/Remove like on a Tweet
   /// [postId] is tweet id, [userId] is user's id who like/unlike Tweet
-  addLikeToTweet(FeedModel tweet, String userId) {
+  addLikeToTweet(FeedModel tweet, String userId) async {
     try {
       if (tweet.likeList != null &&
           tweet.likeList!.isNotEmpty &&
@@ -621,16 +705,32 @@ class FeedState extends AppState {
 
       // Sends notification to user who created tweet
       // UserModel owner can see notification on notification page
-      kDatabase
+      var query = await kDatabase
           .child('notification')
           .child(tweet.userId)
-          .child(tweet.key!)
-          .set({
-        'type':
-            tweet.likeList!.isEmpty ? null : NotificationType.Like.toString(),
-        'updatedAt':
+          .orderByChild('tweetKey')
+          .equalTo(tweet.key)
+          .once();
+      if (query.snapshot.value != null) {
+        Map<dynamic, dynamic> data =
+        query.snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          // Delete each post that matches the parentKey
+          kDatabase.child('notification').child(tweet.userId).child(key).update({
+            'updatedAt':
             tweet.likeList!.isEmpty ? null : DateTime.now().toUtc().toString(),
-      });
+          });
+        });
+      } else{
+        kDatabase.child('notification').child(tweet.userId).push().set({
+          'type':
+          tweet.likeList!.isEmpty ? null : NotificationType.Like.toString(),
+          'tweetKey': tweet.key!,
+          'updatedAt':
+          tweet.likeList!.isEmpty ? null : DateTime.now().toUtc().toString(),
+        });
+      }
     } catch (error) {
       cprint(error, errorIn: 'addLikeToTweet');
     }

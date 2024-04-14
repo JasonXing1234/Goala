@@ -1,3 +1,4 @@
+import 'package:Goala/Notifications.dart';
 import 'package:Goala/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,6 +24,10 @@ void main() async {
   );
   setupDependencies();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Start the notifications listener
+  Notifications().listenForForegroundNotifications();
+
   runApp(const MyApp());
 }
 

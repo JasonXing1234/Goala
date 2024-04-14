@@ -42,6 +42,7 @@ class FriendsPage extends StatelessWidget {
     return UsersListPage(
       pageTitle: 'Following',
       userIdsList: userList,
+      isMyProfile: profile.userId == state.userModel!.userId,
       emptyScreenText:
           '${profile.userName ?? profile.userName} isn\'t follow anyone',
       emptyScreenSubTileText: 'When they do they\'ll be listed here.',

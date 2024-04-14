@@ -40,23 +40,6 @@ class _TaskDetailState extends State<TaskDetailPage> {
     super.initState();
   }
 
-  Widget _floatingActionButton() {
-    var state = Provider.of<FeedState>(context, listen: false);
-    return FloatingActionButton(
-      onPressed: () {
-        ImagePicker()
-            .pickImage(source: ImageSource.gallery, imageQuality: 50)
-            .then((
-          XFile? file,
-        ) async {
-          imagePicked = File(file!.path);
-          state.addPhoto(tempFeed, await state.uploadFile(imagePicked!));
-        });
-      },
-      child: const Icon(Icons.add),
-    );
-  }
-
   void deleteTweet(TweetType type, String tweetId,
       {required String parentkey}) {
     var state = Provider.of<FeedState>(context, listen: false);
@@ -102,15 +85,17 @@ class _TaskDetailState extends State<TaskDetailPage> {
             children: [
               if (authState.userModel!.userId! == tempFeed.userId)
                 ElevatedButton(
-                    onPressed: () {
-                      var state =
-                          Provider.of<FeedState>(context, listen: false);
-                      state.setTweetToReply = tempFeed;
-                      Navigator.of(context).pushNamed('/ComposeTweetPage');
-                    },
-                    child: Text('Add Post')
-                    //isEditing == true ? Text('Finish') : Text('Edit')
-                    ),
+                  onPressed: () {
+                    var state =
+                        Provider.of<FeedState>(context, listen: false);
+                    state.setTweetToReply = tempFeed;
+                    Navigator.of(context).pushNamed('/ComposeTweetPage');
+                  },
+                  child: Text('Report', style: TextStyle(color: Colors.white)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(AppColor.PROGRESS_COLOR), // Set the desired color here
+                  ),
+                ),
               ListView(
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
@@ -129,57 +114,9 @@ class _TaskDetailState extends State<TaskDetailPage> {
                         ])
                       ]
                     : state.tweetReplyMap![widget.tempFeed.key!]!
-                        .map((x) => _commentRow(x))
+                        .map((x) => _commentRow(x, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == state.tweetReplyMap![widget.tempFeed.key!]!.length - 1, state.tweetReplyMap![widget.tempFeed.key!]!.indexOf(x) == 0))
                         .toList(),
               )
-
-              /*tempFeed.goalPhotoList == null ? SizedBox() :
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            padding: const EdgeInsets.all(8.0),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, // Adjust the number of columns here
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
-                            ),
-                            itemCount: tempFeed.goalPhotoList!.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FullScreenPhoto(photoUrl: tempFeed.goalPhotoList![index]),
-                                    ),
-                                  );
-                                },
-                                child: Hero(
-                                    tag: 'photo$index',
-                                    child:
-                                    Stack(children: [
-                                      Image.network(tempFeed.goalPhotoList![index], fit: BoxFit.cover),
-                                      isEditing == false ? SizedBox() :
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
-                                        child: TextButton(
-                                          onPressed: (){
-
-                                          },
-                                          style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                              fixedSize: MaterialStateProperty.all<Size>(Size(1, 1)),
-                                          ),
-                                          child: Text('-'),
-                                        ),
-                                      )
-                                    ],)
-
-                                ),
-                              );
-                            },
-                          ),*/
             ],
           ))
         ],
@@ -187,10 +124,12 @@ class _TaskDetailState extends State<TaskDetailPage> {
     );
   }
 
-  Widget _commentRow(FeedModel model) {
+  Widget _commentRow(FeedModel model, bool isLastOne, bool tempFirstOne) {
     return TimelinePosts(
+      isLast: isLastOne,
       model: model,
       type: TweetType.Reply,
+      isFirst: tempFirstOne,
       trailing: TweetBottomSheet().tweetOptionIcon(context,
           scaffoldKey: scaffoldKey, model: model, type: TweetType.Reply),
       scaffoldKey: scaffoldKey,

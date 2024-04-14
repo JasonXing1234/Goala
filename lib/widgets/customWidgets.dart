@@ -19,7 +19,7 @@ Widget customTitleText(String? title, {BuildContext? context}) {
 Widget customIcon(
   BuildContext context, {
   required IconData icon,
-  double size = 18,
+  double size = 30,
   Color? iconColor,
 }) {
   return Icon(

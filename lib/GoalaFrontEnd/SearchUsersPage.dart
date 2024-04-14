@@ -1,10 +1,11 @@
+import 'package:Goala/GoalaFrontEnd/widgets/SearchAppBar.dart';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/searchState.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customAppBar.dart';
@@ -46,13 +47,12 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
       context: context,
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
+          appBar: SearchAppBar(
             scaffoldKey: widget.scaffoldKey,
             //icon: AppIcon.settings,
             //onActionPressed: onSettingIconPressed,
             onSearchChanged: (text) {
               state.filterByUsername(text);
-              state.filterByGroup(text);
             },
           ),
           body: RefreshIndicator(
@@ -61,7 +61,6 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
               return Future.value();
             },
             child: Column(children: [
-              Center(child: Text('People', style: TextStyles.bigSubtitleStyle)),
               Expanded(
                 child: ListView.separated(
                   addAutomaticKeepAlives: false,
@@ -78,19 +77,6 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
                 height: 1.0,
                 color: Colors.grey,
               ),
-              Center(child: Text('Groups', style: TextStyles.bigSubtitleStyle)),
-              Expanded(
-                child: ListView.separated(
-                  addAutomaticKeepAlives: false,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      _GroupTile(user: groupList![index]),
-                  separatorBuilder: (_, index) => const Divider(
-                    height: 0,
-                  ),
-                  itemCount: groupList?.length ?? 0,
-                ),
-              )
             ]),
           )),
     );

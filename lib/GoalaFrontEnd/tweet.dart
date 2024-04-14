@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/enum.dart';
 import 'package:Goala/helper/utility.dart';
 import 'package:Goala/model/feedModel.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/title_text.dart';
@@ -19,6 +20,7 @@ import '../state/authState.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/tweet/widgets/PokeButton.dart';
 import '../widgets/tweet/widgets/tweetImage.dart';
+import 'TaskDetailPage.dart';
 
 class Tweet extends StatelessWidget {
   final FeedModel model;
@@ -44,7 +46,7 @@ class Tweet extends StatelessWidget {
     }
   }
 
-  void onTapTweet(BuildContext context) {
+  Future<void> onTapTweet(BuildContext context) async {
     var feedState = Provider.of<FeedState>(context, listen: false);
     if (type == TweetType.Detail || type == TweetType.ParentTweet) {
       return;
@@ -53,7 +55,8 @@ class Tweet extends StatelessWidget {
       feedState.clearAllDetailAndReplyTweetStack();
     }
     feedState.getPostDetailFromDatabase(null, model: model);
-    Navigator.push(context, FeedPostDetail.getRoute(model.key!));
+    FeedModel? parent = await feedState.fetchTweet(model.parentkey!);
+    Navigator.push(context, TaskDetailPage.getRoute(parent!));
   }
 
   @override
@@ -202,6 +205,8 @@ class _TweetBodyState extends State<_TweetBody> {
     } catch (e) {
       print('error');
     }
+    var state = Provider.of<FeedState>(context, listen: false);
+    state.addPokeNoti(tempModel!, displayName!);
     /*try {
       HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('sendPokeNotification');
       final result = await callable.call({
@@ -223,7 +228,6 @@ class _TweetBodyState extends State<_TweetBody> {
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<FeedState>(context, listen: false);
     var authState = Provider.of<AuthState>(context, listen: false);
     double descriptionFontSize = widget.type == TweetType.Tweet
         ? 15
@@ -247,10 +251,10 @@ class _TweetBodyState extends State<_TweetBody> {
     return FutureBuilder(
         future: getParentModel(),
         builder: (context, snapshot) {
-          /*if (snapshot.connectionState != ConnectionState.done) {
+          if (snapshot.connectionState != ConnectionState.done) {
             // Future hasn't finished yet, return a placeholder
-            return Text('Loading');
-          }*/
+            return const Center(child: CircularProgressIndicator());}
+            else {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -337,24 +341,11 @@ class _TweetBodyState extends State<_TweetBody> {
                                               .where((item) => item == true)
                                               .length /
                                           8,
-                                  height: 25,
-                                  width: 230,
                                   backgroundColor: Colors.grey[300]!,
                                   progressColor: AppColor.PROGRESS_COLOR,
-                                  daysLeft: DateTime(
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[0]),
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[1]),
-                                          int.parse(tempModel!.deadlineDate!
-                                              .split('-')[2]))
-                                      .difference(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day))
-                                      .inDays,
+                                  percentage: tempModel!.GoalAchieved! / tempModel!.GoalSum!,
                                   isHabit: tempModel!.isHabit,
-                                  checkInDays: tempModel!.checkInList!,
+                                  checkInDays: tempModel!.checkInList!, isPost: true, isCreate: false, isTimeline: false,
                                 ),
                               ),
                               SizedBox(width: 20),
@@ -408,7 +399,7 @@ class _TweetBodyState extends State<_TweetBody> {
               ),
               const SizedBox(width: 10),
             ],
-          );
+          );};
         });
   }
 }
@@ -528,77 +519,6 @@ class _TweetDetailBody extends StatelessWidget {
             ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-class CustomProgressBar extends StatelessWidget {
-  final double width;
-  final double height;
-  final double progress;
-  final Color backgroundColor;
-  final Color progressColor;
-  final int daysLeft;
-  final bool isHabit;
-  final List<bool> checkInDays;
-
-  const CustomProgressBar({
-    Key? key,
-    required this.width,
-    required this.height,
-    required this.progress,
-    required this.backgroundColor,
-    required this.progressColor,
-    required this.daysLeft,
-    required this.isHabit,
-    required this.checkInDays,
-  }) : super(key: key);
-
-  int calculateStreak(List<bool> values) {
-    int streak = 0;
-
-    // Iterate over the list from the end to the beginning
-    for (int i = values.length - 1; i >= 0; i--) {
-      // If the value is true, increment the streak
-      if (values[i]) {
-        streak++;
-      } else {
-        // If a false is encountered, break the loop as we only want consecutive trues from the end
-        break;
-      }
-    }
-    return streak;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        Container(
-          width: progress <= 1 ? width * progress : width,
-          height: height,
-          decoration: BoxDecoration(
-            color: progressColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        Center(
-            child: isHabit == true
-                ? Text(calculateStreak(checkInDays).toString() + ' days streak',
-                    style: TextStyle(fontSize: height * 0.6))
-                : Text(
-                    daysLeft.toString() + ' days left',
-                    style: TextStyle(fontSize: height * 0.6),
-                  )),
       ],
     );
   }

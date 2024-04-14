@@ -10,6 +10,8 @@ import 'package:Goala/GoalaFrontEnd/tweet.dart';
 import 'package:Goala/widgets/tweet/widgets/tweetBottomSheet.dart';
 import 'package:provider/provider.dart';
 
+import '../ui/page/notification/notificationPage.dart';
+
 class FeedPage extends StatelessWidget {
   const FeedPage(
       {Key? key, required this.scaffoldKey, this.refreshIndicatorKey})
@@ -40,7 +42,7 @@ class FeedPage extends StatelessWidget {
                 //only show posts under the main goals, don't show the comments under the posts
                 final List<FeedModel>? list = state
                     .getCommentList(authState.userModel)
-                    ?.where((x) => x.grandparentKey == null)
+                    ?.where((x) => x.grandparentKey == null && ((!x.isPrivate && x.visibleUsersList!.length == 1) || (!x.isPrivate && x.visibleUsersList!.length > 1 && x.visibleUsersList!.contains(authState.userModel!.userId))))
                     .toList();
                 return CustomScrollView(
                   slivers: <Widget>[
@@ -116,7 +118,12 @@ class FeedPage extends StatelessWidget {
                       return IconButton(
                           icon: Icon(Icons.notifications_active),
                           onPressed: () {
-                            scaffoldKey.currentState!.openEndDrawer();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationPage(scaffoldKey: scaffoldKey),
+                              ),
+                            );
                           });
                     },
                   ),

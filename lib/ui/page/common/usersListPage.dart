@@ -21,9 +21,10 @@ class UsersListPage extends StatefulWidget {
     this.userIdsList,
     this.onFollowPressed,
     this.isFollowing,
-    this.pendingList,
+    this.pendingList, required this.isMyProfile,
   }) : super(key: key);
 
+  final bool isMyProfile;
   final String pageTitle;
   final String emptyScreenText;
   final String emptyScreenSubTileText;
@@ -71,16 +72,16 @@ class _UsersListPageState extends State<UsersListPage> {
                 var pendingRequestList =
                     (data['pendingRequestList'] as List?)?.cast<String>() ?? [];
                 return Column(children: [
-                  if (!pendingRequestList.isEmpty)
+                  if (!pendingRequestList.isEmpty && widget.isMyProfile)
                     Text('Friend Requests', style: TextStyles.bigSubtitleStyle),
-                  if (!pendingRequestList.isEmpty)
+                  if (!pendingRequestList.isEmpty && widget.isMyProfile)
                     Consumer<SearchState>(
                       builder: (context, state, child) {
                         if (pendingRequestList.isNotEmpty) {
                           pendingUserList =
                               state.getuserDetail(pendingRequestList);
                         }
-                        return pendingRequestList!.isNotEmpty
+                        return pendingRequestList.isNotEmpty
                             ? pendingListWidget(
                                 list: pendingUserList!,
                                 emptyScreenText: widget.emptyScreenText,
@@ -105,14 +106,17 @@ class _UsersListPageState extends State<UsersListPage> {
                         userList = state.getuserDetail(friendList);
                       }
                       return userList != null && userList!.isNotEmpty
-                          ? UserListWidget(
-                              list: userList!,
-                              emptyScreenText: widget.emptyScreenText,
-                              emptyScreenSubTileText:
-                                  widget.emptyScreenSubTileText,
-                              onFollowPressed: widget.onFollowPressed,
-                              isFollowing: widget.isFollowing,
-                            )
+                          ? Column(children: [
+                              Text('Friends', style: TextStyles.bigSubtitleStyle,),
+                              UserListWidget(
+                                list: userList!,
+                                emptyScreenText: widget.emptyScreenText,
+                                emptyScreenSubTileText:
+                                    widget.emptyScreenSubTileText,
+                                onFollowPressed: widget.onFollowPressed,
+                                isFollowing: widget.isFollowing,
+                              )
+                            ])
                           : Container(
                               width: double.infinity,
                               padding: const EdgeInsets.only(

@@ -89,8 +89,7 @@ class ChatState extends AppState {
     if (data.isNotEmpty) {
       serverToken = jsonDecode(data)["key"];
     } else {
-      cprint("Please configure Remote config in firebase",
-          errorIn: "getFCMServerKey");
+      cprint("Couldn't decode FCMServerKey", errorIn: "getFCMServerKey");
     }
   }
 

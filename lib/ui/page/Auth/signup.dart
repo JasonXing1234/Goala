@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/ui/page/Auth/widget/authTextEntry.dart';
 import 'package:Goala/ui/page/Auth/widget/loginOptions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Goala/helper/constant.dart';
 import 'package:Goala/helper/enum.dart';
@@ -96,7 +97,7 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  void _submitForm(BuildContext context) {
+  Future<void> _submitForm(BuildContext context) async {
     if (_nameController.text.isEmpty) {
       Utility.customSnackBar(
         context,
@@ -155,7 +156,7 @@ class _SignupState extends State<Signup> {
     var state = Provider.of<AuthState>(context, listen: false);
     Random random = Random();
     int randomNumber = random.nextInt(Constants.dummyProfilePicList.length);
-
+    String? token = await FirebaseMessaging.instance.getToken();
     UserModel user = UserModel(
       email: _emailController.text.toLowerCase(),
       bio: "Edit profile to update bio",
@@ -166,6 +167,7 @@ class _SignupState extends State<Signup> {
       location: "Somewhere in universe",
       profilePic: Constants.dummyProfilePicList[randomNumber],
       isVerified: false,
+      deviceToken: token
     );
     state
         .signUp(

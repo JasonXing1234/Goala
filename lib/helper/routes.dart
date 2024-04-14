@@ -33,7 +33,7 @@ import '../ui/page/Auth/forgetPasswordPage.dart';
 import '../ui/page/Auth/signup.dart';
 import '../ui/page/feed/feedPostDetail.dart';
 import '../ui/page/message/chatScreenPage.dart';
-import '../GoalaFrontEnd/profilePage.dart';
+import '../GoalaFrontEnd/ProfilePage.dart';
 import '../widgets/customWidgets.dart';
 
 class Routes {
@@ -122,6 +122,7 @@ class Routes {
       case "ForgetPasswordPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => const ForgetPasswordPage());
+      // TODO: This is not right...
       case "SearchPage":
         return CustomRoute<bool>(
             builder: (BuildContext context) => CurrentUserProfilePage());
@@ -192,7 +193,7 @@ class Routes {
         );
       case "FollowerListPage":
         return CustomRoute<bool>(
-          builder: (BuildContext context) => FollowerListPage(),
+          builder: (BuildContext context) => FollowerListPage(isMyProfile: false,),
         );
       case "VerifyEmailPage":
         return CustomRoute<bool>(

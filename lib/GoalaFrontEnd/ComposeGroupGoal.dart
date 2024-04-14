@@ -51,6 +51,12 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _addUserController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
+  late final List<String> visibleListTemp = [
+
+  ];
+  bool _showDropdown = false;
+  bool isPrivate = false;
+  int _selectedButtonIndex = 0;
   List<bool> isSelected = [true, false];
   TimeOfDay? pickedTime;
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
@@ -119,14 +125,33 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     }
   }
 
+  void _showErrorMessage(BuildContext context, String error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          error,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   /// Submit tweet to save in firebase database
   /// TODO: We need to make a snackbar to show the user why they can't submit their goal if they don't fill everything out right.
   void _submitButton() async {
     if (_descriptionController.text.isEmpty ||
-        _descriptionController.text.length > 50 ||
-        _titleController.text.isEmpty ||
-        _titleController.text.length > 10 ||
-        pickedTime == null) {
+        _descriptionController.text.length > 200) {
+      _showErrorMessage(context, 'Please fill out description');
+      return;
+    }
+    if (_titleController.text.isEmpty ||
+        _titleController.text.length > 15) {
+      _showErrorMessage(context, 'Please fill out title');
+      return;
+    }
+    if (pickedTime == null) {
+      _showErrorMessage(context, 'Please pick notification time');
       return;
     }
     var state = Provider.of<FeedState>(context, listen: false);
@@ -231,6 +256,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
     var myUser = authState.userModel;
     var profilePic = myUser!.profilePic ?? Constants.dummyProfilePic;
     memberListTemp.add(myUser.userId!);
+    visibleListTemp.add(myUser.userId!);
     //memberListTemp.add(_addUserController.text);
     /// User who are creating reply tweet
     var commentedUser = UserModel(
@@ -264,7 +290,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               : null,
       userId: myUser.userId!,
       isCheckedIn: false,
-      isPrivate: false,
+      isPrivate: isPrivate,
+      visibleUsersList: visibleListTemp,
       checkInList: [false],
       parentName: widget.isTweet
           ? null
@@ -277,17 +304,36 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               : true
           : state.tweetToReplyModel!.isHabit,
       GoalSum: isSelected[0] == true
-          ? null
+          ? 0
           : widget.isTweet
               ? isSelected[0]
                   ? 0
                   : int.parse(_goalSumController.text)
               : 0,
+      GoalAchieved: 0,
+      GoalAchievedToday: 0,
       goalUnit: _goalUnitController.text,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
     );
     return reply;
+  }
+
+  void _toggleDropdownVisibility(int index) {
+    setState(() {
+      _selectedButtonIndex = index;
+      if (index == 0) {
+        isPrivate = true;
+      }
+      else {
+        isPrivate = false;
+      }
+      if (index == 2) {
+        _showDropdown = true;
+      } else {
+        _showDropdown = false;
+      }
+    });
   }
 
   @override
@@ -391,7 +437,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                 Theme.of(context).colorScheme.secondary,
                             controller: _titleController,
                             textAlign: TextAlign.center,
-                            maxLength: 50,
+                            maxLength: 15,
                             decoration: kTextFieldDecoration.copyWith(
                                 hintText: "title"),
                           ),
@@ -408,6 +454,8 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                 Theme.of(context).colorScheme.secondary,
                             controller: _descriptionController,
                             textAlign: TextAlign.center,
+                            maxLength: 200,
+                            maxLines: null,
                             decoration: kTextFieldDecoration.copyWith(
                                 hintText: "description"),
                           ),
@@ -477,11 +525,10 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      height: 20,
+                    if (widget.isTweet && isSelected[0] == false)SizedBox(
+                      height: 30,
                     ),
-                    ChildWidget(
+                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
                       friends: FriendList,
                       onSelectionChanged: (updatedFriends) {
                         setState(() {
@@ -540,109 +587,55 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         ),
                       ],
                     ),
-                    Flexible(
-                      child: Stack(
-                        children: <Widget>[
-                          ComposeTweetImage(
-                            image: _image,
-                            onCrossIconPressed: _onCrossIconPressed,
-                          ),
-                          _UserList(
-                            list: Provider.of<SearchState>(context).userlist,
-                            textEditingController: _descriptionController,
-                          )
-                        ],
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                                child:
+                            ToggleButtons(
+                              children: [
+                                Text('Private'),
+                                Text('Public'),
+                                Text('Customize'),
+                              ],
+                              isSelected: List.generate(3, (index) => index == _selectedButtonIndex),
+                              onPressed: (int index) {
+                                setState(() {
+                                  _toggleDropdownVisibility(index);
+                                });
+                              },
+                            ),
+                            ),
+                            SizedBox(height: 10),
+                            if (_showDropdown)
+                              Center(
+                                child: ChildWidget(
+                                    friends: FriendList,
+                                    onSelectionChanged: (updatedFriends) {
+                                      setState(() {
+                                        visibleListTemp.clear();
+                                        List<String> temp = [];
+                                        for (int i = 0; i < updatedFriends.length; i++) {
+                                          temp.add(updatedFriends[i]!.userId!);
+                                        }
+                                        visibleListTemp.addAll(temp);
+                                      });
+                                    },
+                                  ),
+                            ),
+                          ],
+                        )
+
                   ],
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _UserList extends StatelessWidget {
-  const _UserList({Key? key, this.list, required this.textEditingController})
-      : super(key: key);
-  final List<UserModel>? list;
-  final TextEditingController textEditingController;
-
-  @override
-  Widget build(BuildContext context) {
-    return !Provider.of<ComposeTweetState>(context).displayUserList ||
-            list == null ||
-            list!.length < 0 ||
-            list!.isEmpty
-        ? const SizedBox.shrink()
-        : Container(
-            padding: const EdgeInsetsDirectional.only(bottom: 50),
-            color: TwitterColor.white,
-            constraints:
-                const BoxConstraints(minHeight: 30, maxHeight: double.infinity),
-            child: ListView.builder(
-              itemCount: list!.length,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return _UserTile(
-                  user: list![index],
-                  onUserSelected: (user) {
-                    textEditingController.text =
-                        Provider.of<ComposeTweetState>(context, listen: false)
-                                .getDescription(user.userName!) +
-                            " ";
-                    textEditingController.selection = TextSelection.collapsed(
-                        offset: textEditingController.text.length);
-                    Provider.of<ComposeTweetState>(context, listen: false)
-                        .onUserSelected();
-                  },
-                );
-              },
-            ),
-          );
-  }
-}
-
-class _UserTile extends StatelessWidget {
-  const _UserTile({Key? key, required this.user, required this.onUserSelected})
-      : super(key: key);
-  final UserModel user;
-  final ValueChanged<UserModel> onUserSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return KeyboardDismisser(
-      context: context,
-      child: ListTile(
-        onTap: () {
-          onUserSelected(user);
-        },
-        leading: CircularImage(path: user.profilePic, height: 35),
-        title: Row(
-          children: <Widget>[
-            ConstrainedBox(
-              constraints:
-                  BoxConstraints(minWidth: 0, maxWidth: context.width * .5),
-              child: TitleText(user.displayName!,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  overflow: TextOverflow.ellipsis),
-            ),
-            const SizedBox(width: 3),
-            user.isVerified!
-                ? customIcon(
-                    context,
-                    icon: AppIcon.blueTick,
-                    iconColor: AppColor.primary,
-                    size: 13,
-                  )
-                : const SizedBox(width: 0),
-          ],
-        ),
-        subtitle: Text(user.userName!),
       ),
     );
   }

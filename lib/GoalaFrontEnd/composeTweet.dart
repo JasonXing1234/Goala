@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Goala/GoalaFrontEnd/tweet.dart';
+import 'package:Goala/GoalaFrontEnd/widgets/CustomProgressBar.dart';
 import 'package:Goala/helper/uiUtility.dart';
 import 'package:Goala/ui/styleConstants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -56,6 +57,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, false);
   List<bool> _selections = [false, false];
+  List<bool> tempCheckInList = [false];
   String tempString = '';
   @override
   void dispose() {
@@ -76,6 +78,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     _titleController = TextEditingController();
     scrollController.addListener(_scrollListener);
     _tabController = TabController(length: 2, vsync: this);
+    tempCheckInList = model!.checkInList!;
     super.initState();
   }
 
@@ -104,6 +107,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
+    tempCheckInList[tempCheckInList.length - 1] = true;
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -156,6 +160,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
           tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
+          tweetModel.checkInList = tempTweet.checkInList!;
+          tweetModel.isCheckedIn = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -171,6 +177,8 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
           var state = Provider.of<FeedState>(context, listen: false);
           var tempTweet = await state.fetchTweet(model!.key!);
           tempTweet!.checkInList![tempTweet.checkInList!.length - 1] = true;
+          tweetModel.checkInList = tempTweet.checkInList!;
+          tweetModel.isCheckedIn = true;
           FirebaseDatabase.instance
               .reference()
               .child("tweet")
@@ -178,12 +186,13 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               .update({
             "checkInList": tempTweet.checkInList,
             "isCheckedIn": true,
+            "GoalAchievedToday": double.parse(_goalAchievedController.text)
           }).catchError((onError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(onError)));
           });
           state.addNumberToGoal(
-              model!, int.parse(_goalAchievedController.text));
+              model!, double.parse(_goalAchievedController.text));
         }
       }
     }
@@ -256,13 +265,11 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? model!.key
               : null,
       userId: myUser.userId!,
-      isCheckedIn: false,
-      isPrivate: false,
-      checkInList: widget.isTweet
-          ? [false]
-          : widget.isRetweet
-              ? null
-              : state.tweetToReplyModel!.checkInList,
+      isCheckedIn: true,
+      isPrivate: state.tweetToReplyModel!.isPrivate,
+      visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
+      checkInListPost: tempCheckInList,
+      checkInList: [false], //this is dummy list for posts so feedpage doesn't return null pointer
       goalPhotoList: selectedImages,
       parentName: widget.isTweet
           ? null
@@ -274,11 +281,18 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? false
               : true
           : state.tweetToReplyModel!.isHabit,
-      GoalSum: widget.isTweet
-          ? isSelected[0]
-              ? 0
-              : int.parse(_goalAchievedController.text)
-          : 0,
+      GoalAchievedToday: _goalAchievedController.text == ''
+          ? 0
+          : int.parse(_goalAchievedController.text) + 0,
+      GoalAchieved: _goalAchievedController.text == ''
+          ? 0
+          : model?.GoalAchieved == null
+              ? int.parse(_goalAchievedController.text)
+              : model!.GoalAchieved! + int.parse(_goalAchievedController.text),
+      GoalSum: state.tweetToReplyModel!.isHabit ||
+              state.tweetToReplyModel!.GoalSum == null
+          ? 0
+          : state.tweetToReplyModel!.GoalSum,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
       deviceToken: token,
@@ -396,28 +410,15 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                                   .where((item) => item == true)
                                                   .length /
                                               8,
-                                  height: 41,
-                                  width: 300,
                                   backgroundColor: Colors.grey[300]!,
                                   progressColor: model!.isCheckedIn ||
                                           _goalAchievedController.text != '' ||
                                           _selections[0] == true
                                       ? AppColor.PROGRESS_COLOR
                                       : Colors.black,
-                                  daysLeft: DateTime(
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[0]),
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[1]),
-                                          int.parse(model!.deadlineDate!
-                                              .split('-')[2]))
-                                      .difference(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day))
-                                      .inDays,
+                                  percentage: model!.GoalAchieved! / model!.GoalSum!,
                                   isHabit: model!.isHabit,
-                                  checkInDays: model!.checkInList!,
+                                  checkInDays: model!.checkInList!, isPost: false, isCreate: true, isTimeline: false,
                                 ),
                               ),
                               SizedBox(
@@ -515,7 +516,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                                 _goalAchievedController.text;
                                           });
                                         },
-                                        keyboardType: TextInputType.number,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         style: TextStyle(
                                             fontSize: 25,
                                             color: Theme.of(context)

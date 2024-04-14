@@ -4,7 +4,7 @@ import 'package:Goala/model/user.dart';
 import 'package:Goala/state/feedState.dart';
 import 'package:Goala/state/notificationState.dart';
 import 'package:Goala/ui/page/feed/feedPostDetail.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customWidgets.dart';
@@ -14,10 +14,12 @@ import 'package:provider/provider.dart';
 
 class PostLikeTile extends StatelessWidget {
   final FeedModel model;
+
   const PostLikeTile({Key? key, required this.model}) : super(key: key);
   Widget _userList(BuildContext context, List<String>? list) {
     int length = list?.length ?? 0;
     List<Widget> avaterList = [];
+    String firstUser = list?.last ?? '';
     var state = Provider.of<NotificationState>(context);
     if (list != null) {
       if (list.length > 5) {
@@ -55,7 +57,7 @@ class PostLikeTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 60, bottom: 5, top: 5),
           child: TitleText(
-            '$length people like your Tweet',
+            '${length} people like your post',
             fontSize: 18,
             color: Colors.black87,
             fontWeight: FontWeight.w500,

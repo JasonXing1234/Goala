@@ -5,6 +5,7 @@ class UserModel extends Equatable {
   String? key;
   String? email;
   String? userId;
+  String? deviceToken;
   String? displayName;
   String? userName;
   String? webSite;
@@ -32,6 +33,7 @@ class UserModel extends Equatable {
   UserModel(
       {this.email,
       this.userId,
+        this.deviceToken,
       this.displayName,
       this.profilePic,
       this.bannerImage,
@@ -64,6 +66,7 @@ class UserModel extends Equatable {
     followersList ??= [];
     email = map['email'];
     userId = map['userId'];
+    deviceToken = map['deviceToken'];
     displayName = map['displayName'];
     profilePic = map['profilePic'];
     bannerImage = map['bannerImage'];
@@ -130,6 +133,7 @@ class UserModel extends Equatable {
       'key': key,
       "userId": userId,
       "email": email,
+      "deviceToken": deviceToken,
       'displayName': displayName,
       'profilePic': profilePic,
       'bannerImage': bannerImage,
@@ -160,6 +164,7 @@ class UserModel extends Equatable {
       {String? email,
       String? userId,
       String? displayName,
+        String? deviceToken,
       String? profilePic,
       String? key,
       String? contact,
@@ -185,6 +190,7 @@ class UserModel extends Equatable {
     return UserModel(
         email: email ?? this.email,
         bio: bio ?? this.bio,
+        deviceToken: deviceToken ?? this.deviceToken,
         contact: contact ?? this.contact,
         createdAt: createdAt ?? this.createdAt,
         displayName: displayName ?? this.displayName,
@@ -230,6 +236,7 @@ class UserModel extends Equatable {
         key,
         email,
         userId,
+        deviceToken,
         displayName,
         userName,
         webSite,

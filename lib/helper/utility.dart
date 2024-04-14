@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -24,16 +23,12 @@ void cprint(
   dynamic data, {
   String? errorIn,
   String? event,
-  String label = 'Log',
 }) {
   if (kDebugMode) {
     if (errorIn != null) {
       print('**************************** error *****************************');
-      developer.log('[Error]',
-          time: DateTime.now(), error: data, name: errorIn);
+      debugPrint("time: ${DateTime.now()}, data: $data, name: $errorIn");
       print('**************************** error *****************************');
-    } else if (data != null) {
-      developer.log(data, time: DateTime.now(), name: label);
     }
     if (event != null) {
       Utility.logEvent(event, parameter: {});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Goala/model/user.dart';
 import 'package:Goala/state/authState.dart';
-import 'package:Goala/GoalaFrontEnd/profilePage.dart';
+import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/ui/page/profile/widgets/circular_image.dart';
 import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/customWidgets.dart';
@@ -28,6 +28,9 @@ class UserListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<AuthState>(context, listen: false);
+    // TODO: Here is the problem with showing friends!!!
+    // Currently it will only show your friends.
+    // This needs to be changed so the currentUser is the current selected user.
     final currentUser = state.userModel!;
     return ListView.separated(
       shrinkWrap: true,
