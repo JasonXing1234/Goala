@@ -89,8 +89,8 @@ class _SignupState extends State<Signup> {
                 color: AppColor.PROGRESS_COLOR,
               ),
             ),
-            const Divider(height: 30),
-            otherLoginOptions(context),
+            // const Divider(height: 30),
+            // otherLoginOptions(context),
           ],
         ),
       ),
@@ -158,17 +158,16 @@ class _SignupState extends State<Signup> {
     int randomNumber = random.nextInt(Constants.dummyProfilePicList.length);
     String? token = await FirebaseMessaging.instance.getToken();
     UserModel user = UserModel(
-      email: _emailController.text.toLowerCase(),
-      bio: "Edit profile to update bio",
-      // contact:  _mobileController.text,
-      displayName: _nameController.text,
-      dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
-          .toString(),
-      location: "Somewhere in universe",
-      profilePic: Constants.dummyProfilePicList[randomNumber],
-      isVerified: false,
-      deviceToken: token
-    );
+        email: _emailController.text.toLowerCase(),
+        bio: "Edit profile to update bio",
+        // contact:  _mobileController.text,
+        displayName: _nameController.text,
+        dob: DateTime(1950, DateTime.now().month, DateTime.now().day + 3)
+            .toString(),
+        location: "Somewhere in universe",
+        profilePic: Constants.dummyProfilePicList[randomNumber],
+        isVerified: false,
+        deviceToken: token);
     state
         .signUp(
       user,

@@ -124,8 +124,8 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             const Spacer(),
-            otherLoginOptions(context),
-            const SizedBox(height: 20),
+            // otherLoginOptions(context),
+            // const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -3,6 +3,7 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:Goala/widgets/newWidget/customLoader.dart';
 import 'package:flutter/material.dart';
 
+// TODO: This is currently not being used
 Widget otherLoginOptions(BuildContext context) {
   return Column(
     children: [
