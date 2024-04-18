@@ -21,7 +21,10 @@ class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Text(
             subtitle ?? '',
-            style: const TextStyle(color: AppColor.darkGrey, fontSize: 18),
+            style: const TextStyle(
+              color: AppColor.darkGrey,
+              fontSize: 18,
+            ),
           )
         ],
       ),

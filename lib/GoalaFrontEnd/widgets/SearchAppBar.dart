@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const SearchAppBar(
-      {Key? key,
-        this.title,
-        this.scaffoldKey,
-        this.icon,
-        this.onActionPressed,
-        this.textController,
-        this.isBackButton = true,
-        this.isCrossButton = false,
-        this.submitButtonText,
-        this.isSubmitDisable = true,
-        this.isBottomLine = true,
-        this.onSearchChanged})
-      : super(key: key);
+  const SearchAppBar({
+    Key? key,
+    this.title,
+    this.scaffoldKey,
+    this.icon,
+    this.onActionPressed,
+    this.textController,
+    this.isBackButton = true,
+    this.isCrossButton = false,
+    this.submitButtonText,
+    this.isSubmitDisable = true,
+    this.isBottomLine = true,
+    this.onSearchChanged,
+  }) : super(key: key);
 
   final Size appBarHeight = const Size.fromHeight(56.0);
   final IconData? icon;
@@ -58,8 +58,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: CustomScrollView(
-        slivers: <Widget>[
+        slivers: [
           SliverAppBar(
             iconTheme: const IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
@@ -74,14 +75,6 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               preferredSize: const Size.fromHeight(0.0),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 800,
-              child: Center(
-                child: Text("Blah Blah Blah"),
-              ),
-            ),
-          )
         ],
       ),
     );
