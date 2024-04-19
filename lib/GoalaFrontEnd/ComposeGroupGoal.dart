@@ -139,9 +139,9 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   /// Submit tweet to save in firebase database
   /// TODO: We need to make a snackbar to show the user why they can't submit their goal if they don't fill everything out right.
   void _submitButton() async {
-    if (_descriptionController.text.isEmpty ||
+    if (
         _descriptionController.text.length > 200) {
-      _showErrorMessage(context, 'Please fill out description');
+      _showErrorMessage(context, 'Please keep description shorter than 200 characters');
       return;
     }
     if (_titleController.text.isEmpty || _titleController.text.length > 15) {
