@@ -51,13 +51,12 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   late TextEditingController _addUserController;
   late TabController _tabController;
   late final List<String> memberListTemp = [];
-  late final List<String> visibleListTemp = [
-
-  ];
+  late final List<String> visibleListTemp = [];
   bool _showDropdown = false;
   bool isPrivate = false;
   int _selectedButtonIndex = 0;
   List<bool> isSelected = [true, false];
+  List<bool> visibility = [true, false, false];
   TimeOfDay? pickedTime;
   final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
   List<bool> daySelected = List.filled(7, true);
@@ -145,8 +144,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       _showErrorMessage(context, 'Please fill out description');
       return;
     }
-    if (_titleController.text.isEmpty ||
-        _titleController.text.length > 15) {
+    if (_titleController.text.isEmpty || _titleController.text.length > 15) {
       _showErrorMessage(context, 'Please fill out title');
       return;
     }
@@ -322,10 +320,11 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   void _toggleDropdownVisibility(int index) {
     setState(() {
       _selectedButtonIndex = index;
+      visibility = [false, false, false];
+      visibility[index] = true;
       if (index == 0) {
         isPrivate = true;
-      }
-      else {
+      } else {
         isPrivate = false;
       }
       if (index == 2) {
@@ -525,22 +524,24 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    if (widget.isTweet && isSelected[0] == false)SizedBox(
-                      height: 30,
-                    ),
-                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
-                      friends: FriendList,
-                      onSelectionChanged: (updatedFriends) {
-                        setState(() {
-                          memberListTemp.clear();
-                          List<String> temp = [];
-                          for (int i = 0; i < updatedFriends.length; i++) {
-                            temp.add(updatedFriends[i]!.userId!);
-                          }
-                          memberListTemp.addAll(temp);
-                        });
-                      },
-                    ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      SizedBox(
+                        height: 30,
+                      ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      ChildWidget(
+                        friends: FriendList,
+                        onSelectionChanged: (updatedFriends) {
+                          setState(() {
+                            memberListTemp.clear();
+                            List<String> temp = [];
+                            for (int i = 0; i < updatedFriends.length; i++) {
+                              temp.add(updatedFriends[i]!.userId!);
+                            }
+                            memberListTemp.addAll(temp);
+                          });
+                        },
+                      ),
                     SizedBox(
                       height: 20,
                     ),
@@ -590,46 +591,82 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                     SizedBox(
                       height: 15,
                     ),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                                child:
-                            ToggleButtons(
-                              children: [
-                                Text('Private'),
-                                Text('Public'),
-                                Text('Customize'),
-                              ],
-                              isSelected: List.generate(3, (index) => index == _selectedButtonIndex),
-                              onPressed: (int index) {
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: ToggleButtons(
+                            borderColor: Colors.grey,
+                            fillColor: AppColor.PROGRESS_COLOR,
+                            borderWidth: 2,
+                            selectedBorderColor: AppColor.PROGRESS_COLOR,
+                            selectedColor: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Personal',
+                                  style: TextStyle(
+                                    color: visibility[0] == true
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Public',
+                                  style: TextStyle(
+                                    color: visibility[1] == true
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Customize',
+                                  style: TextStyle(
+                                    color: visibility[2] == true
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            isSelected: List.generate(
+                                3, (index) => index == _selectedButtonIndex),
+                            onPressed: (int index) {
+                              setState(() {
+                                _toggleDropdownVisibility(index);
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        if (_showDropdown)
+                          Center(
+                            child: ChildWidget(
+                              friends: FriendList,
+                              onSelectionChanged: (updatedFriends) {
                                 setState(() {
-                                  _toggleDropdownVisibility(index);
+                                  visibleListTemp.clear();
+                                  List<String> temp = [];
+                                  for (int i = 0;
+                                      i < updatedFriends.length;
+                                      i++) {
+                                    temp.add(updatedFriends[i]!.userId!);
+                                  }
+                                  visibleListTemp.addAll(temp);
                                 });
                               },
                             ),
-                            ),
-                            SizedBox(height: 10),
-                            if (_showDropdown)
-                              Center(
-                                child: ChildWidget(
-                                    friends: FriendList,
-                                    onSelectionChanged: (updatedFriends) {
-                                      setState(() {
-                                        visibleListTemp.clear();
-                                        List<String> temp = [];
-                                        for (int i = 0; i < updatedFriends.length; i++) {
-                                          temp.add(updatedFriends[i]!.userId!);
-                                        }
-                                        visibleListTemp.addAll(temp);
-                                      });
-                                    },
-                                  ),
-                            ),
-                          ],
-                        )
-
+                          ),
+                      ],
+                    )
                   ],
                 ),
               ),
