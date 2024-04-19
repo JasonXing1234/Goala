@@ -45,7 +45,7 @@ class CustomProgressBar extends StatelessWidget {
           else
             Container(
               width: maxWidth,
-              height: PROGRESS_BAR_HEIGHT,
+              height: isCreate ? 40 : PROGRESS_BAR_HEIGHT,
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(4),
@@ -64,7 +64,7 @@ class CustomProgressBar extends StatelessWidget {
             GoalBar(
               width: maxWidth,
               progress: progress,
-              progressColor: progressColor,
+              progressColor: progressColor, isCreate: isCreate,
             ),
           // The Goal or Habit text
           if (isHabit)

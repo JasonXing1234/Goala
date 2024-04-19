@@ -20,11 +20,11 @@ exports.dailyCheckInUpdate = functions.runWith({timeoutSeconds: 300}).pubsub
       db.ref("tweet").once("value").then((snapshot) => {
         snapshot.forEach((snap) => {
           const tempList = snap.val().checkInList;
-          if (snap.val().checkInList.length < 8) {
+          if (snap.val().checkInList.length < 7) {
             tempList.push(false);
             console.log("haha");
           } else {
-            if (snap.val().currentDays > 8) {
+            if (snap.val().currentDays > 7) {
               tempList.push(false);
               delete tempList[0];
             }

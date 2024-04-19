@@ -108,7 +108,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
     if(_selections[0] == true){
-      if(model!.currentDays! < 8){
+      if(model!.currentDays! < 7){
         tempCheckInList[model!.currentDays!] = true;
       }
       else{

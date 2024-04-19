@@ -50,7 +50,7 @@ class HabitBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-                  width: isTimeline ? 38.0 : isPost ? 30.0 : isCreate ? 34.0 : 17.6,
+                  width: isTimeline ? 43.43 : isPost ? 29.5 : isCreate ? 38.9 : 20.1,
                   //color: checkInDays[index] == true ? progressColor : Colors.amber,
                 ) : Stack(
                   alignment: Alignment.center,
@@ -62,7 +62,7 @@ class HabitBar extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-                          width: isTimeline ? 38.0 : isPost ? 30.0 : isCreate ? 34.0 : 17.6,
+                          width: isTimeline ? 43.43 : isPost ? 29.5 : isCreate ? 38.9 : 20.1,
                           //color: checkInDays[index] == true ? progressColor : Colors.amber,
                         ),
                         Text(

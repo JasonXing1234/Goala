@@ -290,7 +290,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       isCheckedIn: false,
       isPrivate: isPrivate,
       visibleUsersList: visibleListTemp,
-      checkInList: [false, false, false, false, false, false, false, false],
+      checkInList: [false, false, false, false, false, false, false],
       parentName: widget.isTweet
           ? null
           : widget.isRetweet
