@@ -388,7 +388,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                                 feedstate.tweetToReplyModel!.memberList!;
                             friendTemp.addAll(memberListTemp);
                           });
-                        },
+                        }, buttonText: '+ Add Group Members',
                       ),
                     SizedBox(
                       height: 20,

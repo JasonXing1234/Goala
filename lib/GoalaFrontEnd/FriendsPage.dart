@@ -53,6 +53,7 @@ class FriendsPage extends StatelessWidget {
         return context.watch<FollowListState>().isFollowing(user);
       },
       pendingList: state.userModel!.pendingRequestList!,
+      userID: profile.userId!,
     );
   }
 }

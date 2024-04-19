@@ -290,7 +290,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       isCheckedIn: false,
       isPrivate: isPrivate,
       visibleUsersList: visibleListTemp,
-      checkInList: [false],
+      checkInList: [false, false, false, false, false, false, false, false],
       parentName: widget.isTweet
           ? null
           : widget.isRetweet
@@ -310,6 +310,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               : 0,
       GoalAchieved: 0,
       GoalAchievedToday: 0,
+      currentDays: 0,
       goalUnit: _goalUnitController.text,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
@@ -524,24 +525,22 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    if (widget.isTweet && isSelected[0] == false)
-                      SizedBox(
-                        height: 30,
-                      ),
-                    if (widget.isTweet && isSelected[0] == false)
-                      ChildWidget(
-                        friends: FriendList,
-                        onSelectionChanged: (updatedFriends) {
-                          setState(() {
-                            memberListTemp.clear();
-                            List<String> temp = [];
-                            for (int i = 0; i < updatedFriends.length; i++) {
-                              temp.add(updatedFriends[i]!.userId!);
-                            }
-                            memberListTemp.addAll(temp);
-                          });
-                        },
-                      ),
+                    if (widget.isTweet && isSelected[0] == false)SizedBox(
+                      height: 30,
+                    ),
+                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
+                      friends: FriendList,
+                      onSelectionChanged: (updatedFriends) {
+                        setState(() {
+                          memberListTemp.clear();
+                          List<String> temp = [];
+                          for (int i = 0; i < updatedFriends.length; i++) {
+                            temp.add(updatedFriends[i]!.userId!);
+                          }
+                          memberListTemp.addAll(temp);
+                        });
+                      }, buttonText: '+ Add Group Members',
+                    ),
                     SizedBox(
                       height: 20,
                     ),
@@ -662,11 +661,12 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                   }
                                   visibleListTemp.addAll(temp);
                                 });
-                              },
+                              }, buttonText: '+ Add Friends',
                             ),
-                          ),
-                      ],
-                    )
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        )
                   ],
                 ),
               ),

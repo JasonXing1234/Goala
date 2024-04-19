@@ -49,7 +49,7 @@ class FollowingListPage extends StatelessWidget {
       },
       isFollowing: (user) {
         return context.watch<FollowListState>().isFollowing(user);
-      },
+      }, userID: profile.userId!,
     );
   }
 }

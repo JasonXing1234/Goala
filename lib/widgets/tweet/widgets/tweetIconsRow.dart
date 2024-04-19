@@ -71,12 +71,60 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
                     : widget.iconColor,
             size: 25,
           ),
-          _iconWidget(context, text: '', icon: null, sysIcon: Icons.share,
-              onPressed: () {
-            shareTweet(context);
-          }, iconColor: widget.iconColor, size: widget.size ?? 20),
+          _widgetBottomSheetRow(
+            context,
+            AppIcon.bookmark,
+            isEnable: true,
+            text: '',
+            onPressed: () async {
+              var state = Provider.of<FeedState>(context, listen: false);
+              await state.addBookmark(model.key!);
+              Navigator.pop(context);
+              ScaffoldMessenger.maybeOf(context)!.showSnackBar(
+                const SnackBar(content: Text("Bookmark saved!!")),
+              );
+            },
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _widgetBottomSheetRow(BuildContext context, IconData icon,
+      {required String text, Function? onPressed, bool isEnable = false}) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          children: <Widget>[
+            customIcon(
+              context,
+              icon: icon,
+              size: 25,
+              iconColor:
+              onPressed != null ? AppColor.darkGrey : AppColor.lightGrey,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            customText(
+              text,
+              context: context,
+              style: TextStyle(
+                color: isEnable ? AppColor.secondary : AppColor.lightGrey,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            )
+          ],
+        ),
+      ).ripple(() {
+        if (onPressed != null) {
+          onPressed();
+        } else {
+          Navigator.pop(context);
+        }
+      }),
     );
   }
 

@@ -65,8 +65,8 @@ class BookmarkPageBody extends StatelessWidget {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: EmptyList(
-          'No Bookmark available yet',
-          subTitle: 'When new bookmark found, they\'ll show up here.',
+          'No Bookmark yet',
+          subTitle: '',
         ),
       );
     }

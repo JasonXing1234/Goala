@@ -2,9 +2,11 @@
   "dependencies": {
     "@google-cloud/debug-agent": "^9.0.1",
     "@google-cloud/functions-framework": "^3.3.0",
-    "firebase-auth": "^0.1.2"
+    "firebase-auth": "^0.1.2",
+    "firebase-functions": "^4.3.10"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-promise": "^6.1.1"
   }

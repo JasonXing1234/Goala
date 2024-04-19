@@ -54,7 +54,7 @@ class FollowerListPage extends StatelessWidget {
       },
       onFollowPressed: (user) {
         context.read<FollowListState>().followUser(user);
-      },
+      }, userID: profile!.userId!,
     );
   }
 }
