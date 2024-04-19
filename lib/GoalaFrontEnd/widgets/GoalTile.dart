@@ -88,7 +88,7 @@ class GoalTileState extends State<GoalTile> {
     }
 
     return Container(
-      padding: EdgeInsets.all(4),
+      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -96,7 +96,7 @@ class GoalTileState extends State<GoalTile> {
           BoxShadow(
             color: Colors.grey.shade100,
             spreadRadius: 2,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: Offset(1, 1), // changes position of shadow down1 right1
           ),
         ],
       ),

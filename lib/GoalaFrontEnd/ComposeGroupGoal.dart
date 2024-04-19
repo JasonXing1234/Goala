@@ -525,22 +525,25 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    if (widget.isTweet && isSelected[0] == false)SizedBox(
-                      height: 30,
-                    ),
-                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
-                      friends: FriendList,
-                      onSelectionChanged: (updatedFriends) {
-                        setState(() {
-                          memberListTemp.clear();
-                          List<String> temp = [];
-                          for (int i = 0; i < updatedFriends.length; i++) {
-                            temp.add(updatedFriends[i]!.userId!);
-                          }
-                          memberListTemp.addAll(temp);
-                        });
-                      }, buttonText: '+ Add Group Members',
-                    ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      SizedBox(
+                        height: 30,
+                      ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      ChildWidget(
+                        friends: FriendList,
+                        onSelectionChanged: (updatedFriends) {
+                          setState(() {
+                            memberListTemp.clear();
+                            List<String> temp = [];
+                            for (int i = 0; i < updatedFriends.length; i++) {
+                              temp.add(updatedFriends[i]!.userId!);
+                            }
+                            memberListTemp.addAll(temp);
+                          });
+                        },
+                        buttonText: '+ Add Group Members',
+                      ),
                     SizedBox(
                       height: 20,
                     ),
@@ -647,26 +650,38 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         ),
                         SizedBox(height: 10),
                         if (_showDropdown)
-                          Center(
-                            child: ChildWidget(
-                              friends: FriendList,
-                              onSelectionChanged: (updatedFriends) {
-                                setState(() {
-                                  visibleListTemp.clear();
-                                  List<String> temp = [];
-                                  for (int i = 0;
-                                      i < updatedFriends.length;
-                                      i++) {
-                                    temp.add(updatedFriends[i]!.userId!);
-                                  }
-                                  visibleListTemp.addAll(temp);
-                                });
-                              }, buttonText: '+ Add Friends',
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade100,
+                                  spreadRadius: 2,
+                                  offset: Offset(1, 1),
+                                ),
+                              ],
                             ),
+                            child: Center(
+                              child: ChildWidget(
+                                friends: FriendList,
+                                onSelectionChanged: (updatedFriends) {
+                                  setState(() {
+                                    visibleListTemp.clear();
+                                    List<String> temp = [];
+                                    for (int i = 0;
+                                        i < updatedFriends.length;
+                                        i++) {
+                                      temp.add(updatedFriends[i]!.userId!);
+                                    }
+                                    visibleListTemp.addAll(temp);
+                                  });
+                                },
+                                buttonText: '+ Add Friends',
+                              ),
                             ),
-                            SizedBox(height: 10),
-                          ],
-                        )
+                          ),
+                        SizedBox(height: 10),
+                      ],
+                    )
                   ],
                 ),
               ),
