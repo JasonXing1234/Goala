@@ -27,6 +27,7 @@ class FeedModel {
   int? GoalAchieved;
   int? GoalAchievedToday;
   late String createdAt;
+  int? currentDays;
   String? deadlineDate;
   String? imagePath;
   List<String>? tags;
@@ -62,6 +63,7 @@ class FeedModel {
       this.GoalAchieved,
       this.GoalSum,
         this.GoalAchievedToday,
+        this.currentDays,
       required this.createdAt,
       this.deadlineDate,
       this.imagePath,
@@ -97,6 +99,7 @@ class FeedModel {
       "retweetCount": retweetCount ?? 0,
       "memberCount": memberCount ?? 0,
       "GoalAchieved": GoalAchieved,
+      "currentDays":currentDays ?? 0,
       "createdAt": createdAt,
       "deadlineDate": deadlineDate,
       "imagePath": imagePath,
@@ -137,6 +140,7 @@ class FeedModel {
     GoalAchieved = map["GoalAchieved"];
     GoalSum = map["GoalSum"];
     GoalAchievedToday = map["GoalAchievedToday"];
+    currentDays = map["currentDays"];
     imagePath = map['imagePath'];
     createdAt = map['createdAt'];
     deadlineDate = map['deadlineDate'];

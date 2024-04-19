@@ -1,3 +1,4 @@
+import 'package:Goala/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class PokeButton extends StatefulWidget {
@@ -12,9 +13,16 @@ class PokeButton extends StatefulWidget {
 class PokeButtonState extends State<PokeButton> {
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: widget.onPressed,
-      icon: Text("👉", style: TextStyle(fontSize: 20, color: Colors.black)),
+    return RotatedBox(
+      quarterTurns: 1,
+      child: IconButton(
+        onPressed: widget.onPressed,
+        icon: Icon(
+          Icons.touch_app,
+          size: 32,
+          color: AppColor.DARK_GREY_COLOR,
+        ),
+      ),
     );
   }
 }

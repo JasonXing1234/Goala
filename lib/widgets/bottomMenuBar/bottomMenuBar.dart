@@ -27,10 +27,13 @@ class _BottomMenubarState extends State<BottomMenubar> {
       selectedItemColor: AppColor.PROGRESS_COLOR,
       unselectedItemColor: Colors.black,
       onTap: (int index) {
-        setState(() {
-          state.setPageIndex = index;
-          pageIndex = index;
-        });
+        // Check that we aren't reloading the same page
+        if (index != pageIndex) {
+          setState(() {
+            state.setPageIndex = index;
+            pageIndex = index;
+          });
+        }
       },
       items: [
         BottomNavigationBarItem(

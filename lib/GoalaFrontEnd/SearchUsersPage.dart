@@ -46,22 +46,23 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
     return KeyboardDismisser(
       context: context,
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: SearchAppBar(
-            scaffoldKey: widget.scaffoldKey,
-            //icon: AppIcon.settings,
-            //onActionPressed: onSettingIconPressed,
-            onSearchChanged: (text) {
-              state.filterByUsername(text);
-            },
-          ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              state.getDataFromDatabase();
-              return Future.value();
-            },
-            child: Column(children: [
-              Expanded(
+        resizeToAvoidBottomInset: false,
+        appBar: SearchAppBar(
+          scaffoldKey: widget.scaffoldKey,
+          //icon: AppIcon.settings,
+          //onActionPressed: onSettingIconPressed,
+          onSearchChanged: (text) {
+            state.filterByUsername(text);
+          },
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            state.getDataFromDatabase();
+            return Future.value();
+          },
+          child: Column(
+            children: [
+              Flexible(
                 child: ListView.separated(
                   addAutomaticKeepAlives: false,
                   physics: const BouncingScrollPhysics(),
@@ -77,8 +78,10 @@ class _SearchUsersPageState extends State<SearchUsersPage> {
                 height: 1.0,
                 color: Colors.grey,
               ),
-            ]),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

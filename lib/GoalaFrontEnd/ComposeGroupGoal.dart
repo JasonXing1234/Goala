@@ -292,7 +292,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
       isCheckedIn: false,
       isPrivate: isPrivate,
       visibleUsersList: visibleListTemp,
-      checkInList: [false],
+      checkInList: [false, false, false, false, false, false, false, false],
       parentName: widget.isTweet
           ? null
           : widget.isRetweet
@@ -312,6 +312,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
               : 0,
       GoalAchieved: 0,
       GoalAchievedToday: 0,
+      currentDays: 0,
       goalUnit: _goalUnitController.text,
       deadlineDate:
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
@@ -539,7 +540,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           }
                           memberListTemp.addAll(temp);
                         });
-                      },
+                      }, buttonText: '+ Add Group Members',
                     ),
                     SizedBox(
                       height: 20,
@@ -624,7 +625,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                         }
                                         visibleListTemp.addAll(temp);
                                       });
-                                    },
+                                    }, buttonText: '+ Visible to Friends',
                                   ),
                             ),
                           ],

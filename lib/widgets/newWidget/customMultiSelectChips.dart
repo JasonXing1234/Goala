@@ -7,8 +7,9 @@ import '../customWidgets.dart';
 class ChildWidget extends StatefulWidget {
   final List<UserModel?> friends;
   final Function(List<UserModel?>) onSelectionChanged;
+  final String buttonText;
 
-  ChildWidget({required this.friends, required this.onSelectionChanged});
+  ChildWidget({required this.friends, required this.onSelectionChanged, required this.buttonText});
 
   @override
   _ChildWidgetState createState() => _ChildWidgetState();
@@ -41,7 +42,7 @@ class _ChildWidgetState extends State<ChildWidget> {
         Center(
           child: TextButton(
             onPressed: _showSelectFriendsDialog,
-            child: customTitleText('+ Add Friends'),
+            child: customTitleText(widget.buttonText),
             style: TextButton.styleFrom(
               foregroundColor: Colors.black,
               backgroundColor: Color(0xDEEFEFEF), // Button background color

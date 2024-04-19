@@ -101,7 +101,6 @@ class _SidebarMenuState extends State<SidebarMenu> {
     }
   }
 
-
   ListTile _menuListRowButton(String title,
       {Function? onPressed, IconData? icon, bool isEnable = false}) {
     return ListTile(
@@ -206,7 +205,7 @@ class _SidebarMenuState extends State<SidebarMenu> {
                         context, ProfilePage.getRoute(profileId: state.userId));
                   }),
                   _menuListRowButton(
-                    'Bookmark',
+                    "Bookmark",
                     icon: AppIcon.bookmark,
                     isEnable: true,
                     onPressed: () {
