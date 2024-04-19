@@ -77,7 +77,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Text(
                   submitButtonText!,
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                      TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold,),
                 ),
               ).ripple(
                 () {

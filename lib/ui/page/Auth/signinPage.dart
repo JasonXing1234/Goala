@@ -88,7 +88,7 @@ class _SignInPageState extends State<SignInPage> {
           children: [
             const SizedBox(height: 20),
             Image.asset(
-              "assets/images/icon_512.png",
+              "assets/images/img.png",
               height: 175,
             ),
             Text(
