@@ -12,7 +12,7 @@ flutter clean
 flutter build ipa
 
 # Get password
-source secrets.sh
+source automate/secrets.sh
 
 # Upload the app
 xcrun altool --upload-app --type ios \

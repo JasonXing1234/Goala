@@ -14,7 +14,10 @@ class HabitBar extends StatelessWidget {
     required this.width,
     required this.progress,
     required this.progressColor,
-    required this.checkInDays, required this.isTimeline, required this.isPost, required this.isCreate,
+    required this.checkInDays,
+    required this.isTimeline,
+    required this.isPost,
+    required this.isCreate,
   });
 
   @override
@@ -33,49 +36,70 @@ class HabitBar extends StatelessWidget {
     }
 
     return Container(
-      width: width,
-      height: 25,
-      child:
-        ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          itemCount: checkInDays.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Align(
-              alignment: Alignment.centerLeft,
-                child: (index != checkInDays.length - 1) ? Container(
-                  margin: EdgeInsets.only(right: 3),
-                  decoration: BoxDecoration(
-                    color: checkInDays[index] == true ? AppColor.PROGRESS_COLOR : Color(0xff888888),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-                  width: isTimeline ? 43.43 : isPost ? 29.5 : isCreate ? 38.9 : 20.1,
-                  //color: checkInDays[index] == true ? progressColor : Colors.amber,
-                ) : Stack(
-                  alignment: Alignment.center,
-                      children: [
-                        Container(
+        width: width,
+        height: 25,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: checkInDays.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Align(
+                  alignment: Alignment.centerLeft,
+                  child: (index != checkInDays.length - 1)
+                      ? Container(
                           margin: EdgeInsets.only(right: 3),
                           decoration: BoxDecoration(
-                            color: checkInDays[index] == true ? AppColor.PROGRESS_COLOR : Color(0xff888888),
+                            color: checkInDays[index] == true
+                                ? AppColor.PROGRESS_COLOR
+                                : Color(0xff888888),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
-                          width: isTimeline ? 43.43 : isPost ? 29.5 : isCreate ? 38.9 : 20.1,
+                          width: isTimeline
+                              ? 43.43
+                              : isPost
+                                  ? 29.5
+                                  : isCreate
+                                      ? 38.9
+                                      : 20.1,
                           //color: checkInDays[index] == true ? progressColor : Colors.amber,
-                        ),
-                        Text(
-                            calculateStreak(checkInDays).toString(),
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
                         )
-                      ],
-                )
-            );
-          }
-      ));
+                      : Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 3),
+                              decoration: BoxDecoration(
+                                color: checkInDays[index] == true
+                                    ? AppColor.PROGRESS_COLOR
+                                    : Color(0xff888888),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              //height: CustomProgressBar.PROGRESS_BAR_HEIGHT,
+                              width: isTimeline
+                                  ? 43.43
+                                  : isPost
+                                      ? 29.5
+                                      : isCreate
+                                          ? 38.9
+                                          : 20.1,
+                              //color: checkInDays[index] == true ? progressColor : Colors.amber,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 3.0),
+                              child: Text(
+                                calculateStreak(checkInDays).toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            )
+                          ],
+                        ));
+            }));
   }
 }
