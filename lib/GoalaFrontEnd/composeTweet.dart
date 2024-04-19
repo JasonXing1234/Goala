@@ -54,7 +54,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
   late TabController _tabController;
   List<bool> isSelected = [true, false];
   TimeOfDay? pickedTime;
-  final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+  final List<String> days = [' M ', ' T ', ' W ', 'Th', ' F ', ' S ', 'Su'];
   List<bool> daySelected = List.filled(7, false);
   List<bool> _selections = [false, false];
   List<bool> tempCheckInList = [false];
@@ -107,15 +107,13 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
-    if(_selections[0] == true){
-      if(model!.currentDays! < 7){
+    if (_selections[0] == true) {
+      if (model!.currentDays! < 7) {
         tempCheckInList[model!.currentDays!] = true;
-      }
-      else{
+      } else {
         tempCheckInList[tempCheckInList.length - 1] = true;
       }
-    }
-    else{
+    } else {
       tempCheckInList[tempCheckInList.length - 1] = false;
     }
     FeedModel tweetModel = await createTweetModel();
@@ -279,7 +277,9 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
       isPrivate: state.tweetToReplyModel!.isPrivate,
       visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
       checkInListPost: tempCheckInList,
-      checkInList: [false], //this is dummy list for posts so feedpage doesn't return null pointer
+      checkInList: [
+        false
+      ], //this is dummy list for posts so feedpage doesn't return null pointer
       goalPhotoList: selectedImages,
       parentName: widget.isTweet
           ? null
@@ -426,9 +426,13 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
                                           _selections[0] == true
                                       ? AppColor.PROGRESS_COLOR
                                       : Colors.black,
-                                  percentage: model!.GoalAchieved! / model!.GoalSum!,
+                                  percentage:
+                                      model!.GoalAchieved! / model!.GoalSum!,
                                   isHabit: model!.isHabit,
-                                  checkInDays: model!.checkInList!, isPost: false, isCreate: true, isTimeline: false,
+                                  checkInDays: model!.checkInList!,
+                                  isPost: false,
+                                  isCreate: true,
+                                  isTimeline: false,
                                 ),
                               ),
                               SizedBox(

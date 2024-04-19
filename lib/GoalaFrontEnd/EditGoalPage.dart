@@ -51,7 +51,7 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
   List<bool> isSelected = [true, false];
   List<bool> _selections = [false, false];
   TimeOfDay? pickedTime;
-  final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+  final List<String> days = [' M ', ' T ', ' W ', 'Th', ' F ', ' S ', 'Su'];
   List<bool> daySelected = List.filled(7, true);
   List<String?> friendTemp = [];
 
@@ -388,7 +388,8 @@ class _ComposeTweetReplyPageState extends State<EditGoal>
                                 feedstate.tweetToReplyModel!.memberList!;
                             friendTemp.addAll(memberListTemp);
                           });
-                        }, buttonText: '+ Add Group Members',
+                        },
+                        buttonText: '+ Add Group Members',
                       ),
                     SizedBox(
                       height: 20,
