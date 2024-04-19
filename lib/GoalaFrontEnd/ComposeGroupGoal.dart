@@ -648,33 +648,22 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                         ),
                         SizedBox(height: 10),
                         if (_showDropdown)
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade100,
-                                  spreadRadius: 2,
-                                  offset: Offset(1, 1),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: ChildWidget(
-                                friends: FriendList,
-                                onSelectionChanged: (updatedFriends) {
-                                  setState(() {
-                                    visibleListTemp.clear();
-                                    List<String> temp = [];
-                                    for (int i = 0;
-                                        i < updatedFriends.length;
-                                        i++) {
-                                      temp.add(updatedFriends[i]!.userId!);
-                                    }
-                                    visibleListTemp.addAll(temp);
-                                  });
-                                },
-                                buttonText: '+ Add Friends',
-                              ),
+                          Center(
+                            child: ChildWidget(
+                              friends: FriendList,
+                              onSelectionChanged: (updatedFriends) {
+                                setState(() {
+                                  visibleListTemp.clear();
+                                  List<String> temp = [];
+                                  for (int i = 0;
+                                      i < updatedFriends.length;
+                                      i++) {
+                                    temp.add(updatedFriends[i]!.userId!);
+                                  }
+                                  visibleListTemp.addAll(temp);
+                                });
+                              },
+                              buttonText: '+ Add Friends',
                             ),
                           ),
                         SizedBox(height: 10),
