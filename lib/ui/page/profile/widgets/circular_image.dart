@@ -32,7 +32,7 @@ CachedNetworkImageProvider customAdvanceNetworkImage(String? path) {
     path ??= Constants.dummyProfilePic;
   }
   return CachedNetworkImageProvider(
-    path,
+    'file:/' + path,
     cacheKey: path,
   );
 }

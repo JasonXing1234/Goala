@@ -345,6 +345,28 @@ class AuthState extends AppState {
     }
   }
 
+  Future<void> updateProfileImage(UserModel? userModel,
+      {File? image}) async {
+    try {
+      if (image == null) {
+        createUser(userModel!);
+      } else {
+        userModel!.profilePic = await _uploadFileToStorage(image,
+            'user/profile/${userModel.userName}/${path.basename(image.path)}');
+        // print(fileURL);
+        var name = userModel.displayName ?? user!.displayName;
+        _firebaseAuth.currentUser!.updateDisplayName(name);
+        _firebaseAuth.currentUser!.updatePhotoURL(userModel.profilePic);
+        Utility.logEvent('user_profile_image');
+
+      }
+
+      Utility.logEvent('update_user');
+    } catch (error) {
+      cprint(error, errorIn: 'updateUserProfile');
+    }
+  }
+
   Future<String> _uploadFileToStorage(File file, path) async {
     var task = _firebaseStorage.ref().child(path);
     var status = await task.putFile(file);

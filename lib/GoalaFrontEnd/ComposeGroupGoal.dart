@@ -439,7 +439,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                             textAlign: TextAlign.center,
                             maxLength: 15,
                             decoration: kTextFieldDecoration.copyWith(
-                                hintText: "title"),
+                                hintText: "Title"),
                           ),
                         ),
                       ),
@@ -457,7 +457,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                             maxLength: 200,
                             maxLines: null,
                             decoration: kTextFieldDecoration.copyWith(
-                                hintText: "description"),
+                                hintText: "Description"),
                           ),
                         ),
                       ),

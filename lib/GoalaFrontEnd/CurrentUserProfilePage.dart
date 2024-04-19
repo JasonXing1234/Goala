@@ -11,6 +11,7 @@ import 'package:Goala/ui/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../ui/page/profile/EditProfilePage.dart';
 import '../ui/page/profile/profileImageView.dart';
 import '../widgets/newWidget/rippleButton.dart';
 
