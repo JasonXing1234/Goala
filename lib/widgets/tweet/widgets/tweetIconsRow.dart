@@ -79,9 +79,8 @@ class _TweetIconsRowState extends State<TweetIconsRow> {
             onPressed: () async {
               var state = Provider.of<FeedState>(context, listen: false);
               await state.addBookmark(model.key!);
-              Navigator.pop(context);
               ScaffoldMessenger.maybeOf(context)!.showSnackBar(
-                const SnackBar(content: Text("Bookmark saved!!")),
+                const SnackBar(content: Text("Bookmark saved!")),
               );
             },
           ),

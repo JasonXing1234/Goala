@@ -47,7 +47,7 @@ class HabitBar extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: (index != checkInDays.length - 1)
                       ? Container(
-                          margin: EdgeInsets.only(right: 3),
+                          margin: EdgeInsets.symmetric(horizontal: 1.5),
                           decoration: BoxDecoration(
                             color: checkInDays[index] == true
                                 ? AppColor.PROGRESS_COLOR
@@ -68,7 +68,7 @@ class HabitBar extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(right: 3),
+                              margin: EdgeInsets.symmetric(horizontal: 1.5),
                               decoration: BoxDecoration(
                                 color: checkInDays[index] == true
                                     ? AppColor.PROGRESS_COLOR
