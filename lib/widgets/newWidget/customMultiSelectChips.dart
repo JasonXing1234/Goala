@@ -4,12 +4,18 @@ import '../../model/user.dart';
 import '../../ui/theme/theme.dart';
 import '../customWidgets.dart';
 
+// Why the frick is this called "ChildWidget"?!
+// TODO: Make it some useful name...
+
 class ChildWidget extends StatefulWidget {
   final List<UserModel?> friends;
   final Function(List<UserModel?>) onSelectionChanged;
   final String buttonText;
 
-  ChildWidget({required this.friends, required this.onSelectionChanged, required this.buttonText});
+  ChildWidget(
+      {required this.friends,
+      required this.onSelectionChanged,
+      required this.buttonText});
 
   @override
   _ChildWidgetState createState() => _ChildWidgetState();
@@ -40,14 +46,9 @@ class _ChildWidgetState extends State<ChildWidget> {
     return Column(
       children: [
         Center(
-          child: TextButton(
+          child: ElevatedButton(
             onPressed: _showSelectFriendsDialog,
             child: customTitleText(widget.buttonText),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Color(0xDEEFEFEF), // Button background color
-              // You can add more styling properties here
-            ),
           ),
         ),
         Center(

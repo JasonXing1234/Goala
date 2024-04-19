@@ -88,14 +88,17 @@ class GoalTileState extends State<GoalTile> {
     }
 
     return Container(
-
-      padding: EdgeInsets.all(4),
+      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(
-          color: Colors.grey.shade300,
-          width: 2.0,
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade100,
+            spreadRadius: 2,
+            offset: Offset(1, 1), // changes position of shadow down1 right1
+          ),
+        ],
       ),
       child: GestureDetector(
         onLongPress: () => _showBottomMenu(context),
@@ -126,9 +129,13 @@ class GoalTileState extends State<GoalTile> {
                   progressColor: widget.tweet.isCheckedIn == true
                       ? AppColor.PROGRESS_COLOR
                       : AppColor.DARK_GREY_COLOR,
-                  percentage: widget.tweet.GoalAchieved! / widget.tweet.GoalSum!,
+                  percentage:
+                      widget.tweet.GoalAchieved! / widget.tweet.GoalSum!,
                   isHabit: widget.tweet.isHabit,
-                  checkInDays: widget.tweet.checkInList!, isPost: false, isCreate: false, isTimeline: false,
+                  checkInDays: widget.tweet.checkInList!,
+                  isPost: false,
+                  isCreate: false,
+                  isTimeline: false,
                 ),
                 Spacer(),
                 // Cover Photo
@@ -155,9 +162,13 @@ class _CoverPhoto extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: imageSrc == null
-          ? Image.asset(
-              'assets/images/icon_512.png',
-              fit: BoxFit.cover,
+          // ? Image.asset(
+          //     'assets/images/icon_512.png',
+          //     fit: BoxFit.cover,
+          //     height: 150,
+          //   )
+          // Empty container when there isn't an image.
+          ? Container(
               height: 150,
             )
           : Image.network(

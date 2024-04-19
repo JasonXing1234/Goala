@@ -58,7 +58,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
   List<bool> isSelected = [true, false];
   List<bool> visibility = [true, false, false];
   TimeOfDay? pickedTime;
-  final List<String> days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+  final List<String> days = [' M ', ' T ', ' W ', 'Th', ' F ', ' S ', 'Su'];
   List<bool> daySelected = List.filled(7, true);
 
   @override
@@ -525,43 +525,44 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                           ),
                         ],
                       ),
-                    if (widget.isTweet && isSelected[0] == false)SizedBox(
-                      height: 30,
-                    ),
-                    if (widget.isTweet && isSelected[0] == false) ChildWidget(
-                      friends: FriendList,
-                      onSelectionChanged: (updatedFriends) {
-                        setState(() {
-                          memberListTemp.clear();
-                          List<String> temp = [];
-                          for (int i = 0; i < updatedFriends.length; i++) {
-                            temp.add(updatedFriends[i]!.userId!);
-                          }
-                          memberListTemp.addAll(temp);
-                        });
-                      }, buttonText: '+ Add Group Members',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      SizedBox(
+                        height: 30,
+                      ),
+                    if (widget.isTweet && isSelected[0] == false)
+                      ChildWidget(
+                        friends: FriendList,
+                        onSelectionChanged: (updatedFriends) {
+                          setState(() {
+                            memberListTemp.clear();
+                            List<String> temp = [];
+                            for (int i = 0; i < updatedFriends.length; i++) {
+                              temp.add(updatedFriends[i]!.userId!);
+                            }
+                            memberListTemp.addAll(temp);
+                          });
+                        },
+                        buttonText: '+ Add Group Members',
+                      ),
+                    SizedBox(height: 20),
                     Column(
                       children: [
                         Center(
-                          child: Wrap(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: List.generate(days.length, (index) {
-                              return Padding(
-                                padding: EdgeInsets.all(1.0),
-                                child: ChoiceChip(
-                                  selectedColor: AppColor.PROGRESS_COLOR,
-                                  showCheckmark: false,
-                                  label: Text(days[index]),
-                                  selected: daySelected[index],
-                                  onSelected: (bool selected) {
-                                    setState(() {
-                                      daySelected[index] = selected;
-                                    });
-                                  },
+                              return ChoiceChip(
+                                selectedColor: AppColor.PROGRESS_COLOR,
+                                showCheckmark: false,
+                                label: Text(
+                                  days[index],
                                 ),
+                                selected: daySelected[index],
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    daySelected[index] = selected;
+                                  });
+                                },
                               );
                             }),
                           ),
@@ -661,12 +662,13 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
                                   }
                                   visibleListTemp.addAll(temp);
                                 });
-                              }, buttonText: '+ Add Friends',
+                              },
+                              buttonText: '+ Add Friends',
                             ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        )
+                          ),
+                        SizedBox(height: 10),
+                      ],
+                    )
                   ],
                 ),
               ),
