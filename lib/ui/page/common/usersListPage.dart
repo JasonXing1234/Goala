@@ -16,14 +16,16 @@ class UsersListPage extends StatefulWidget {
   const UsersListPage({
     Key? key,
     this.pageTitle = "",
+
     required this.emptyScreenText,
     required this.emptyScreenSubTileText,
     this.userIdsList,
     this.onFollowPressed,
     this.isFollowing,
-    this.pendingList, required this.isMyProfile,
+    this.pendingList, required this.isMyProfile, required this.userID,
   }) : super(key: key);
 
+  final String userID;
   final bool isMyProfile;
   final String pageTitle;
   final String emptyScreenText;
@@ -62,7 +64,7 @@ class _UsersListPageState extends State<UsersListPage> {
         body: StreamBuilder(
             stream: kDatabase
                 .child('profile')
-                .child(state.userModel!.userId!)
+                .child(widget.userID)
                 .onValue,
             builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
               if (snapshot.hasData && snapshot.data!.snapshot.value != null) {

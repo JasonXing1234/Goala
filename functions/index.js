@@ -24,14 +24,18 @@ exports.dailyCheckInUpdate = functions.runWith({timeoutSeconds: 300}).pubsub
             tempList.push(false);
             console.log("haha");
           } else {
-            tempList.push(false);
-            delete tempList[0];
+            if (snap.val().currentDays > 8) {
+              tempList.push(false);
+              delete tempList[0];
+            }
           }
           console.log(tempList);
           const tempKey = snap.key;
+          const tempDays = snap.val().currentDays;
           promises.push(db.ref("tweet").child(tempKey).ref.update({
             checkInList: tempList,
             isCheckedIn: false,
+            currentDays: tempDays + 1,
           }));
           console.log("done!");
         });

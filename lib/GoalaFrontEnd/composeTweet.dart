@@ -107,7 +107,17 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     }*/
     var state = Provider.of<FeedState>(context, listen: false);
     kScreenLoader.showLoader(context);
-    tempCheckInList[tempCheckInList.length - 1] = true;
+    if(_selections[0] == true){
+      if(model!.currentDays! < 8){
+        tempCheckInList[model!.currentDays!] = true;
+      }
+      else{
+        tempCheckInList[tempCheckInList.length - 1] = true;
+      }
+    }
+    else{
+      tempCheckInList[tempCheckInList.length - 1] = false;
+    }
     FeedModel tweetModel = await createTweetModel();
 
     String? tweetId;
@@ -167,7 +177,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               .child("tweet")
               .child(model!.key!)
               .update({
-            "checkInList": tempTweet.checkInList,
+            "checkInList": tempCheckInList,
             "isCheckedIn": true,
           }).catchError((onError) {
             ScaffoldMessenger.of(context)
@@ -184,7 +194,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               .child("tweet")
               .child(model!.key!)
               .update({
-            "checkInList": tempTweet.checkInList,
+            "checkInList": tempCheckInList,
             "isCheckedIn": true,
             "GoalAchievedToday": double.parse(_goalAchievedController.text)
           }).catchError((onError) {
@@ -265,7 +275,7 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
               ? model!.key
               : null,
       userId: myUser.userId!,
-      isCheckedIn: true,
+      isCheckedIn: _selections[0] == true ? true : false,
       isPrivate: state.tweetToReplyModel!.isPrivate,
       visibleUsersList: state.tweetToReplyModel!.visibleUsersList,
       checkInListPost: tempCheckInList,

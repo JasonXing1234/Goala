@@ -46,10 +46,11 @@ class _NotificationPageState extends State<NotificationPage> {
       backgroundColor: TwitterColor.mystic,
       appBar: CustomAppBar(
         scaffoldKey: widget.scaffoldKey,
-        title: customTitleText(
+        title: Text(
           'Notifications',
+          style: TextStyles.bigSubtitleStyle,
         ),
-        icon: AppIcon.settings,
+        //icon: AppIcon.settings,
         onActionPressed: onSettingIconPressed,
       ),
       body: const NotificationPageBody(),
@@ -110,11 +111,12 @@ class NotificationPageBody extends StatelessWidget {
     } else if (list == null || list.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
-        child: EmptyList(
-          'No Notification available yet',
-          subTitle: 'When new notification found, they\'ll show up here.',
+        child: Center(
+          child: Text(
+            'No Notification yet',
+            style: TextStyle(fontSize: 25),
         ),
-      );
+      ));
     }
     return ListView.builder(
       addAutomaticKeepAlives: true,
