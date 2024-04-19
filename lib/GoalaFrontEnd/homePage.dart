@@ -226,6 +226,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const SidebarMenu(),
       endDrawer: const groupSidebarMenu(),
       body: _body(),
+      resizeToAvoidBottomInset: false,
     );
   }
 

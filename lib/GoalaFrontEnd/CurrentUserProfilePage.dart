@@ -77,6 +77,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
         children: [
           Column(
             children: [
+              const SizedBox(height: 16),
               Row(
                 children: [
                   const SizedBox(width: 16),
@@ -85,7 +86,8 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                     child: ProfileImage(
                       path: authState.userModel?.profilePic,
                     ),
-                    borderRadius: BorderRadius.circular(ProfileImage.BORDER_RADIUS),
+                    borderRadius:
+                        BorderRadius.circular(ProfileImage.BORDER_RADIUS),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -110,25 +112,18 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage>
                       ),
                     ),
                   ),
-                  // Emoji
-                  const SizedBox(width: 16),
-                  Text(
-                    "🌋",
-                    style: Theme.of(context).textTheme.displayLarge,
+                  FriendButton(
+                    friendsList: authState.userModel?.friendList ?? [],
+                    user: authState.userModel,
+                    isCurrentUser: true,
+                    pendingRequestList:
+                        authState.userModel?.pendingRequestList ?? [],
                   ),
-                  const SizedBox(width: 16),
                 ],
               ),
               SizedBox(
                 height: 10,
               ),
-              FriendButton(
-                friendsList: authState.userModel?.friendList ?? [],
-                user: authState.userModel,
-                isCurrentUser: true,
-                pendingRequestList: authState.userModel?.pendingRequestList ?? [],
-              ),
-
             ],
           ),
           Expanded(
