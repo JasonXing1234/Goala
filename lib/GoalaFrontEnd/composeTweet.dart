@@ -221,16 +221,6 @@ class _ComposeTweetReplyPageState extends State<ComposeTweetPage>
     });
   }
 
-  Future<GoalNotiModel> createNotiModel(int day, String feedID) async {
-    var authState = Provider.of<AuthState>(context, listen: false);
-    var myUser = authState.userModel;
-    final _messaging = FirebaseMessaging.instance;
-    String? tempToken = await _messaging.getToken();
-    GoalNotiModel temp = GoalNotiModel(
-        tempToken!, day, feedID, '${pickedTime!.hour}:${pickedTime!.minute}');
-    return temp;
-  }
-
   /// Return Tweet model which is either a new Tweet , retweet model or comment model
   /// If tweet is new tweet then `parentkey` and `childRetwetkey` should be null
   /// IF tweet is a comment then it should have `parentkey`

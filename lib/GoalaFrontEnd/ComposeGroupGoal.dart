@@ -195,7 +195,7 @@ class _ComposeTweetReplyPageState extends State<ComposeGroupGoal>
         for (int i = 0; i < daySelected.length; i++) {
           if (daySelected[i]) {
             // Send each selected day with the time to the database
-            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetId!);
+            GoalNotiModel NotiModel = await createNotiModel(i + 1, tweetModel.title!);
             NotiModelList.add(NotiModel);
           }
         }

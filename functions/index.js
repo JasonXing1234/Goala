@@ -71,7 +71,7 @@ exports.sendUserNotifications = functions.pubsub.schedule("* * * * *")
         console.log((snap.val().notiTime + " / " + currentTime));
         if (notificationTime === currentTime) {
           console.log("sent!");
-          sendPushNotification(snap.val().userID, "goal");
+          sendPushNotification(snap.val().userID, " " + snap.val().GoalID);
         }
       }
     },
