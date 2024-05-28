@@ -1,6 +1,5 @@
 # Goala
 Social media for go-getters!
+Social media for goal setting and management.
 
-## Building and Releasing
-### iOS
-Make sure the ```automate/secrets.sh``` file contains the correct keys. You may need to create this file. Then run ```./automate/upload.sh``` on your Mac.
+![Goala7](https://github.com/JasonXing1234/Goala/assets/113735814/28142402-09b6-4dac-97bd-39b80c1d0ee2)
