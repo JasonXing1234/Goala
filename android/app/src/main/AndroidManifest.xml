@@ -12,7 +12,9 @@
         android:label="Goala"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
-        >
+        ><meta-data
+             android:name="com.google.android.geo.API_KEY"
+             android:value="AIzaSyBsnPP2chg7YTtFyp2gVGech6HpM4zmb9A"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

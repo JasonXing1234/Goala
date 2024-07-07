@@ -45,8 +45,8 @@ class _BottomMenubarState extends State<BottomMenubar> {
           label: "Feed",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: "Search",
+          icon: Icon(Icons.public),
+          label: "Feed",
         ),
       ],
     );

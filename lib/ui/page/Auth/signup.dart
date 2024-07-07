@@ -167,7 +167,9 @@ class _SignupState extends State<Signup> {
         location: "Somewhere in universe",
         profilePic: Constants.dummyProfilePicList[randomNumber],
         isVerified: false,
-        deviceToken: token);
+        deviceToken: token,
+      equipmentList: ["haha"]
+    );
     state
         .signUp(
       user,

@@ -20,6 +20,7 @@ import 'state/notificationState.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    name:"DeliveryTracker",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   setupDependencies();
