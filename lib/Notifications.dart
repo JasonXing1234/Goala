@@ -32,6 +32,10 @@ class Notifications {
         cprint('pushing goals!');
         cprint('Message data: ${message.data}');
 
+        const DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+            presentAlert: true, presentBadge: true, presentSound: true);
+
         const AndroidNotificationChannel channel = AndroidNotificationChannel(
           'high_importance_channel',
           'High Importance Notifications',
@@ -61,6 +65,7 @@ class Notifications {
                 channelDescription: channel.description,
                 icon: '@mipmap/ic_launcher',
               ),
+                iOS: darwinNotificationDetails
             ),
           );
         }
