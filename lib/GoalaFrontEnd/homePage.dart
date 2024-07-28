@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:Goala/NewApp/NewPage.dart';
-import 'package:Goala/NewApp/ProductPage.dart';
-import 'package:Goala/NewApp/adminPage.dart';
 import 'package:Goala/ui/page/common/groupGoalSideBar.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
@@ -22,8 +19,6 @@ import 'package:Goala/GoalaFrontEnd/ProfilePage.dart';
 import 'package:Goala/GoalaFrontEnd/SearchUsersPage.dart';
 import 'package:Goala/widgets/bottomMenuBar/bottomMenuBar.dart';
 import 'package:provider/provider.dart';
-
-import '../NewApp/orderListPage.dart';
 import '../ui/page/common/sidebar.dart';
 import 'FeedPage1.dart';
 import 'CurrentUserProfilePage.dart';
@@ -192,19 +187,16 @@ class _HomePageState extends State<HomePage> {
     final state = context.watch<AuthState>();
     switch (index) {
       case 0:
-        return state.userModel?.email == "cxing1@byu.edu" ? adminPage() : OrderListPage();
-      case 1:
-        return ProductPage();
-        /*return FeedPage(
+        return CurrentUserProfilePage(
           scaffoldKey: _scaffoldKey,
-          refreshIndicatorKey: refreshIndicatorKey,
-        );*/
-      case 2:
+        );
+      case 1:
         return FeedPage(
           scaffoldKey: _scaffoldKey,
           refreshIndicatorKey: refreshIndicatorKey,
         );
-        //return SearchUsersPage(scaffoldKey: _scaffoldKey);
+      case 2:
+        return SearchUsersPage(scaffoldKey: _scaffoldKey);
 
       /*case 3:
         return ChatListPage(scaffoldKey: _scaffoldKey);*/
