@@ -57,6 +57,10 @@ dependencies:
   multi_select_flutter: ^4.1.3
   flutter_progress_hud: ^2.0.2
   uuid: ^4.3.3
+  google_maps_flutter: ^2.7.0
+  location: ^7.0.0
+  geolocator_android: ^4.6.0
+  geolocator_apple: ^2.3.7
   # link_preview_generator: ^1.2.0
 
 dev_dependencies:
@@ -94,6 +98,14 @@ flutter:
     - assets/images/google_logo.png
     - assets/images/error_image.png
     - assets/images/img.png
+    - assets/images/Backhoe.jpeg
+    - assets/images/Dozer.jpeg
+    - assets/images/Excavator.jpeg
+    - assets/images/Grader.jpeg
+    - assets/images/SkidSteer.jpeg
+    - assets/images/TrackLoader.jpeg
+    - assets/images/Truck.jpeg
+    - assets/images/WheelLoader.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

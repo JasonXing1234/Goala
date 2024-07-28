@@ -30,6 +30,8 @@ class UserModel extends Equatable {
   int? numFriends;
   List<String>? grouplist;
 
+  List<String>? equipmentList;
+
   UserModel(
       {this.email,
       this.userId,
@@ -57,7 +59,10 @@ class UserModel extends Equatable {
       this.pendingRequestList,
       this.closenessMap,
       this.friendList,
-      this.numFriends});
+      this.numFriends,
+
+        this.equipmentList
+      });
 
   UserModel.fromJson(Map<dynamic, dynamic>? map) {
     if (map == null) {
@@ -125,6 +130,12 @@ class UserModel extends Equatable {
         friendList!.add(value);
       });
     }
+    if (map['equipmentList'] != null) {
+      equipmentList = <String>[];
+      map['equipmentList'].forEach((value) {
+        equipmentList!.add(value);
+      });
+    }
     numFriends = friendList != null ? friendList!.length : null;
     groups = grouplist != null ? grouplist!.length : null;
   }
@@ -156,7 +167,8 @@ class UserModel extends Equatable {
       'grouplist': grouplist,
       'groups': grouplist,
       'closenessMap': closenessMap,
-      'pendingRequestList': pendingRequestList
+      'pendingRequestList': pendingRequestList,
+      'equipmentList': equipmentList
     };
   }
 
@@ -186,7 +198,9 @@ class UserModel extends Equatable {
       int? numFriends,
       List<String>? grouplist,
       List<String>? closenessMap,
-      int? groups}) {
+      int? groups,
+        List<String>? equipmentList,
+      }) {
     return UserModel(
         email: email ?? this.email,
         bio: bio ?? this.bio,
@@ -212,7 +226,9 @@ class UserModel extends Equatable {
         friendList: friendList ?? this.friendList,
         numFriends: numFriends ?? this.numFriends,
         grouplist: grouplist ?? this.grouplist,
-        closenessMap: closenessMap ?? this.closenessMap);
+        closenessMap: closenessMap ?? this.closenessMap,
+        equipmentList: equipmentList ?? this.equipmentList
+    );
   }
 
   String get getFollower {
@@ -258,6 +274,7 @@ class UserModel extends Equatable {
         closenessMap,
         pendingRequests,
         pendingRequestList,
-        friendList
+        friendList,
+    equipmentList
       ];
 }
